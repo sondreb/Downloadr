@@ -1,0 +1,24 @@
+{
+	"original": true,
+	"minified": true,
+	"version": false,
+	"license": false,
+	"./app/js/": {
+		"jquery": "",
+		"jquery-signalr": "",
+		"angular": "",
+		"angular-animate": "",
+		"angular-route": "",
+		"angular-hotkeys": "",
+		"angular-safeapply": ""
+	},
+	"./app/test/": {
+		"angular-mocks": "",
+		"mocha": "",
+		"mocha-css": "",
+		"chai": ""
+	},
+	"./app/css/": {
+		"angular-csp": ""
+	}
+}

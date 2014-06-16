@@ -19,7 +19,30 @@ photos from Flickr.com photo service.
 The app is deployed on Chrome Web Store and can easily be installed there.
 If you want to develop and modify the source code yourself, you can easily fork the GitHub repository
 and then load it by going into Chrome/Settings/Extensions and choose the
-"Load unpacked extension" button. Pick the "DOwnloadr" folder within the repository.
+"Load unpacked extension" button. Pick the "app" folder within the repository.
+
+If you want too, you can run your own instance of the Flickr Downloadr OAuth Gateway Service, located
+in the "service" folder. Make sure you replace the consumer key and secret from Flickr API, either
+directly in the web.config file, or by adding your own Secret.config, or by adding the two key/value 
+pairs to the app settings section on your Azure Website Configure tab.
+
+## Build:
+
+If you want to work with the source code of Flickr Downloadr, make a clone of the GitHub repository
+and then run:
+
+```sh
+$ npm install
+```
+
+This will download dependencies, such as Grunt, Karma, upm, Chai and more.
+
+Next step is simply running Grunt, which will launch the app in a browser. Beware that Flickr Downloadr is built to run inside the Chrome Apps runtime, so a lot of the features won't work properly.
+
+```sh
+$ grunt live
+```
+
 
 ## Help:
 

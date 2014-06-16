@@ -1,0 +1,37 @@
+﻿{
+  "manifest_version": 2,
+  "name": "Flickr Downloadr",
+  "description": "Simple and elegant photo downloading tool for the Flickr.com photo service. ",
+  "version": "3.0.0",
+  "permissions": [
+	  "storage",
+	  "webview",
+	  "fileBrowserHandler",
+	  "fileSystem",
+    "system.storage",
+	  "unlimitedStorage",
+    "notifications",
+	  "fullscreen",
+	   "https://api.flickr.com/*",
+	   "http://*.staticflickr.com/*",
+	   "http://brain.no/*"],
+
+  "web_accessible_resources": [
+    "test.html",
+    "debug.html"
+  ],
+
+  "minimum_chrome_version": "23",
+  "offline_enabled": true,
+  "icons": {
+    "256": "img/icon_256.png",
+    "128": "img/icon_128.png",
+    "48": "img/icon_48.png",
+    "16": "img/icon_16.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["js/background.js"]
+    }
+  }
+}
