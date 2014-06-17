@@ -5,8 +5,7 @@
 # These are ignored so we can safely store the 
 # consumer key and secret for OAuth with Flickr API.
 
-# Ignored for a single check-in so we get an empty Secret.config that other developers can edit.
-# Secret.config
+Secret.config
 
 node_modules/
 packages/
