@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloadr", "service\Downloadr.csproj", "{E605731D-99FC-4347-8766-28FCCEFCD8DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloadr.Tests", "Downloadr.Tests\Downloadr.Tests.csproj", "{5386FE65-F1A5-4FFD-B7BF-04002E2FFD17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloadr.Tests", "test\service\Downloadr.Tests.csproj", "{5386FE65-F1A5-4FFD-B7BF-04002E2FFD17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
