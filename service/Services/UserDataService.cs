@@ -6,6 +6,7 @@
 
 namespace Downloadr.Services
 {
+    using Downloadr.Models;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Table;
     using System;
@@ -29,30 +30,29 @@ namespace Downloadr.Services
             _table.CreateIfNotExists();
         }
 
-        public void Insert(Models.UserData userData)
+        public Models.UserData Retrieve(string connectionId)
         {
-            TableOperation insert = TableOperation.Insert(userData);
-            _table.Execute(insert);
+            var operation = TableOperation.Retrieve <UserData>("users", connectionId);
+            var result = _table.Execute(operation);
+
+            if (result.Result == null)
+            {
+                return null;
+            }
+
+            return (UserData)result.Result;
         }
 
-        public Models.UserData Retrieve()
+        public void Delete(string connectionId)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Models.UserData userData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Models.UserData userData)
-        {
-            throw new NotImplementedException();
+            var delete = TableOperation.Delete(new UserData(connectionId) { ETag = "*" });
+            _table.Execute(delete);
         }
 
         public void InsertOrUpdate(Models.UserData userData)
         {
-            TableOperation.InsertOrReplace(userData);
+            var operation = TableOperation.InsertOrReplace(userData);
+            _table.Execute(operation);
         }
     }
 }

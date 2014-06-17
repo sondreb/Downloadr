@@ -246,8 +246,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Auth\Index.cshtml" />
-    <Content Include="Secret.config" />
     <Content Include="Secret.template.config" />
+    <Content Include="Secret.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

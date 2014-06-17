@@ -22,6 +22,8 @@ namespace Downloadr
     {
         protected void Application_Start()
         {
+            var key = System.Configuration.ConfigurationManager.AppSettings["cloud:StorageConnection"];
+
             IoC.Container = ComponentConfig.Build();
             var resolver = new AutofacDependencyResolver(IoC.Container);
             GlobalHost.DependencyResolver = resolver;

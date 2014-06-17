@@ -263,6 +263,7 @@ namespace Downloadr.Hubs
         public override Task OnConnected()
         {
             _log.Info("Client Connected.");
+
             return base.OnConnected();
         }
 
@@ -271,7 +272,7 @@ namespace Downloadr.Hubs
             _log.Info("Client Disconnected.");
 
             // Remove users that have been disconnected.
-            //Users.RemoveAll(u => u.ConnectionId == Context.ConnectionId);
+            _dataService.Delete(Context.ConnectionId);
 
             return base.OnDisconnected();
         }

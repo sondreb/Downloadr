@@ -9,6 +9,7 @@ namespace Downloadr.Models
     using Microsoft.WindowsAzure.Storage.Table;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using System.Web;
 
@@ -22,13 +23,16 @@ namespace Downloadr.Models
 
         public UserData()
         {
-
+            this.PartitionKey = "users";
         }
 
-        public string ConnectionId { get; set; }
+        [NotMapped]
+        public string ConnectionId { get { return RowKey; } }
 
         public string Token { get; set; }
 
         public string TokenSecret { get; set; }
+
+        public bool IsAccessToken { get; set; }
     }
 }

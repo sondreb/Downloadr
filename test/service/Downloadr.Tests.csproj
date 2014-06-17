@@ -84,8 +84,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <Content Include="Secret.config" />
     <Content Include="Secret.template.config" />
+    <Content Include="Secret.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\service\Downloadr.csproj">
@@ -120,10 +120,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="Secret.Template.config" DestinationFiles="Secret.config" SkipUnchangedFiles="true" Condition="!Exists('Secret.config')">
-    </Copy>
-  </Target>
-  
 </Project>
