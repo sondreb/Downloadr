@@ -111,6 +111,9 @@
             { key: 'nb-NO', value: 'Norwegian' },
         ];
 
+        /* These will make properties available on the scope and auto-persist to local storage. */
+        storage.bind($scope, 'language', 'en-US');
+        storage.bind($scope, 'theme', 'dark');
 
         /* These will make properties available on the scope and auto-persist to local storage. */
         storage.bind($scope, 'language', 'en-US');

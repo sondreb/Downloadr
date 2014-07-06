@@ -10,6 +10,7 @@
 		"angular-animate": "",
 		"angular-route": "",
 		"angular-hotkeys": "",
+		"angular-storage": "",
 		"angular-safeapply": ""
 	},
 	"./app/test/": {
