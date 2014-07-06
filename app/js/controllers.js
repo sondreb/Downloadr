@@ -115,8 +115,10 @@
     }]);
 
 
-    controllers.controller('DebugController', ['$scope', function ($scope) {
+    controllers.controller('DebugController', ['$scope', '$rootScope', function ($scope, $rootScope) {
         
+        $scope.enableLogConsole = false;
+        $scope.enableAllLicenses = false;
 
         hotkeys.add({
             combo: 's',

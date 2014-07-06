@@ -541,7 +541,17 @@ margin-top: -10px;
 
 }
 
-#debugView
+ul
+{
+margin-left: 20px;
+}
+
+li
+{
+    padding-left: 0px;
+}
+
+#debugConsole
 {
     z-index: 10000;
     position: absolute;

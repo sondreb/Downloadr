@@ -33554,8 +33554,10 @@ var _packaged = (window.chrome && chrome.runtime && chrome.runtime.id);
     }]);
 
 
-    controllers.controller('DebugController', ['$scope', function ($scope) {
+    controllers.controller('DebugController', ['$scope', '$rootScope', function ($scope, $rootScope) {
         
+        $scope.enableLogConsole = false;
+        $scope.enableAllLicenses = false;
 
         hotkeys.add({
             combo: 's',
