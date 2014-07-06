@@ -151,6 +151,7 @@ module.exports = function(grunt) {
           'app/js/angular.js',
           'app/js/angular-route.js',
           'app/js/angular.safeapply.js',
+          'app/js/angular-storage.js',
           'app/js/mousetrap.js',
           'app/js/hotkeys.js',
 
