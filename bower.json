@@ -1,0 +1,22 @@
+{
+  "name": "downloadr",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "*",
+    "json3": "*",
+    "es5-shim": "*",
+    "angular-resource": "*",
+    "angular-cookies": "*",
+    "angular-sanitize": "*",
+    "angular-animate": "*",
+    "angular-touch": "*",
+    "angular-route": "*",
+    "angularLocalStorage": "*",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.2",
+    "font-awesome": "~4.1.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "*",
+    "angular-scenario": "*"
+  }
+}
