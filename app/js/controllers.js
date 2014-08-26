@@ -5,7 +5,7 @@
  */
 
 (function () {
-    
+
     'use strict';
 
     var controllers = angular.module('downloadr.controllers', []);
@@ -34,10 +34,9 @@
         };*/
 
     }]);
-    
 
-    controllers.controller('HomeController', ['$scope', function ($scope) {
 
+    controllers.controller('HomeController', ['$scope', 'hotkeys', function ($scope, hotkeys) {
 
         hotkeys.add({
             combo: 's',
@@ -47,12 +46,22 @@
             }
         });
 
+
+        $scope.state = { isLoggedIn: false };
+
+
+    }]);
+
+    controllers.controller('ProfileController', ['$scope', function($scope){
+
+
+
+
     }]);
 
 
-
     controllers.controller('AboutController', ['$scope', 'hotkeys', function ($scope, hotkeys) {
-        
+
 
         hotkeys.add({
             combo: 'ctrl+up',
@@ -78,6 +87,8 @@
             }
         });
 
+        $scope.state = { isLoggedIn: false };
+
         $scope.credits = [
           { type: 'Developed', text: 'Sondre Bjellås', url: 'http://sondreb.com/' },
           { type: 'Icon', text: 'HADezign', url: 'http://hadezign.com/' },
@@ -93,19 +104,19 @@
 
 
     controllers.controller('LoginController', ['$scope', function ($scope) {
-        
+
     }]);
 
 
 
     controllers.controller('SearchController', ['$scope', function ($scope) {
-        
+
     }]);
 
 
 
     controllers.controller('SettingsController', ['$scope', 'storage', function ($scope, storage) {
-        
+
         $scope.languages = [
             { key: 'en-US', value: 'English' },
             { key: 'nb-NO', value: 'Norwegian' },
@@ -123,7 +134,7 @@
 
 
     controllers.controller('DebugController', ['$scope', '$rootScope', function ($scope, $rootScope) {
-        
+
         $scope.enableLogConsole = false;
         $scope.enableAllLicenses = false;
 
@@ -140,7 +151,7 @@
 
 
 
-controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', function ($rootScope, $scope, $http, flickr, util) {
+controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log) {
 
     var resources = {
         connectionError: "Connection is in an invalid state, there is no transport active.",
@@ -156,6 +167,16 @@ controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'fl
         $scope.authenticatingEvent(null);
 
     });
+
+    /* Add a hotkey to display the debug menu option. */
+    /*
+    hotkeys.add({
+        combo: 'ctrl+up',
+        description: 'Move selection up',
+        callback: function() {
+            $scope.credits = null;
+        }
+    });*/
 
     $scope.$on('Event:NavigateBack', function () {
         $scope.goBack();
@@ -233,11 +254,13 @@ controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'fl
     // Change the UI when user has authenticated.
     $scope.$on('authenticated', function (event, token) {
 
+        $log.info('User is authenticated.');
+
         $scope.isLoggedIn = true;
 
         // Retrieve the user profile.
         var id = decodeURI(token.UserId);
-        
+
         flickr.people.getInfo(id, function(data)
         {
             $scope.parseProfile(data);
@@ -408,7 +431,7 @@ controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'fl
 
             //});
 
-            
+
 
             //$('#buddyIconImg').attr('src', url);
         }
@@ -433,25 +456,25 @@ controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'fl
     $scope.isMaximized = false;
 
     }
-  
+
     $scope.handleWindowEvents = function () {
-        
+
         if (_packaged)
         {
             // Happens when user uses the window bar or shortcuts to maximize.
             $scope.isMaximized = chrome.app.window.current().isMaximized();
 
             // This happens from an event and therefore we need to run $apply to make the UI update.
-            $scope.$apply();    
+            $scope.$apply();
         }
-        
+
     };
-    
+
     if (_packaged)
     {
         chrome.app.window.current().onMaximized.addListener($scope.handleWindowEvents);
         chrome.app.window.current().onMinimized.addListener($scope.handleWindowEvents);
-        chrome.app.window.current().onRestored.addListener($scope.handleWindowEvents);        
+        chrome.app.window.current().onRestored.addListener($scope.handleWindowEvents);
     }
 
 
@@ -525,6 +548,9 @@ controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'fl
     $scope.searchValue = "";
     $scope.isOnStartScreen = true;
     $scope.LoginTitle = "LOGIN";
+
+    $scope.DisplayName = "sondreb";
+
     $scope.isLoggedIn = false;
     $scope.previousScreen = null;
     $scope.selectedScreen = "";

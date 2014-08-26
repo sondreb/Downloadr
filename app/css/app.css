@@ -9,14 +9,37 @@
     padding: 0;
 }
 
+
+html
+{
+    border: 1px solid green;
+
+}
+
+body
+{
+    border: 1px solid yellow;
+
+}
+
+.container
+{
+    border: 1px solid red;
+
+}
+
+
 body, html{
-  
+    overflow: hidden;
+    overflow: hidden;
 }
 
 html {
     font-family: sans-serif;
-    overflow-y: auto;
+    overflow-y: hidden;
     height: 100%;
+
+    
 
     /* Removes touch delay for IE */
     -ms-touch-action: manipulation;
@@ -56,12 +79,15 @@ body {
     height: 100%;
     width: 100%;
     z-index: 100;
+
+overflow:auto;
+
 }
 
 .content {
     display: table-cell;
-    height: 100%; 
-    background: white; 
+    height: 100%;
+    background: white;
     z-index: 100;
 }
 
@@ -84,7 +110,7 @@ body {
     bottom: 0px;
     z-index: 0;
     padding-top: 50px;
-    background: url(../img/wallpaper-1.jpg) no-repeat center center fixed; 
+    background: url(../img/wallpaper-1.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -150,7 +176,7 @@ body {
     position: fixed;
     /*position: absolute;*/
     float: left;
-    
+
     top: 20px;
     left: 0px;
     right: 0px;
@@ -169,11 +195,11 @@ body {
 }
 
     .search-container > * {
-    
+
             height: 100%;
             float: left;
             display: inline-block;
-    
+
         }
 
     .search-container h1 {
@@ -197,15 +223,15 @@ body {
 }
 
     .search-type:hover {
-    
+
         color: silver;
-    
+
     }
 
 
 .search-button {
 
-    
+
     background-color: rgba(255, 255, 255, 0.50);
     cursor: pointer;
     color: white;
@@ -252,7 +278,7 @@ body {
 }
 
     .search-large input {
-    
+
         width: 200px;
         font-size: 1em;
     }
@@ -334,14 +360,14 @@ body {
 }
 
     .dropdown a:hover {
-    
+
         color: #3e3e3e;
         cursor: pointer;
-    
+
     }
 
-input[type=search] { 	
-	padding: 4px;            /* Overridden by padding: 1px; */
+input[type=search] {
+  padding: 4px;            /* Overridden by padding: 1px; */
     border: 0px;
     background-color: white;
 }
@@ -414,7 +440,7 @@ a { text-decoration:none; }
 
 #buddyIcon img {
 
-    margin-top: 10px; 
+    margin-top: 10px;
     /*
     margin-right: 4px;*/
     width: 30px;
@@ -451,6 +477,12 @@ li
     padding-left: 0px;
 }
 
+
+.cfp-hotkeys-container {
+    display: none;
+}
+
+
 #debugConsole
 {
     z-index: 10000;
@@ -476,8 +508,8 @@ li
 @media screen and (max-width: 768px) {
 
 
-    input[type=search] { 	
-	width: 100px;
+    input[type=search] {
+  width: 100px;
 }
 
 
@@ -490,13 +522,13 @@ li
     .wallpaper {
         top: 96px;
     }
-    
+
     .container {
         padding-top: 96px;
     }
 
-    .toolbar { 	
-	    height: 96px;
+    .toolbar {
+      height: 96px;
 }
     /* Make the margin around the logo bigger, forcing the toolbar to flow. */
     /*#logo {

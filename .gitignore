@@ -2,13 +2,24 @@
 ## Downloadr
 #################
 
-# These are ignored so we can safely store the 
+# These are ignored so we can safely store the
 # consumer key and secret for OAuth with Flickr API.
 
 Secret.config
 
-node_modules/
-packages/
+packages
+package
+components
+app/components
+test/components
+node_modules
+temp
+.tmp
+dist
+.sass-cache
+app/bower_components
+test/bower_components
+
 
 #################
 ## Eclipse

@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.0)
+Flickr Downloadr 3 (3.0.5)
 ============
 
 ## Description:
@@ -23,7 +23,7 @@ and then load it by going into Chrome/Settings/Extensions and choose the
 
 If you want too, you can run your own instance of the Flickr Downloadr OAuth Gateway Service, located
 in the "service" folder. Make sure you replace the consumer key and secret from Flickr API, either
-directly in the web.config file, or by adding your own Secret.config, or by adding the two key/value 
+directly in the web.config file, or by adding your own Secret.config, or by adding the two key/value
 pairs to the app settings section on your Azure Website Configure tab.
 
 ## Build:

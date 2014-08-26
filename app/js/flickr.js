@@ -77,7 +77,7 @@ var Flickr = (function () {
             //    console.dir(token);
             //    cb(token);
             //});
-        }    
+        }
     };
 
     //var getToken = function (callback) {
@@ -148,7 +148,7 @@ var Flickr = (function () {
 
 
     var initialize = function(hasToken) {
-    
+
         //photos.search();
 
         // Open WebSocket connection with service and ask for Request Token.
@@ -220,6 +220,8 @@ var Flickr = (function () {
 
     function startAuthentication() {
 
+  return;
+
         console.log("METHOD: startAuthentication");
 
         loadToken(function(token) {
@@ -282,12 +284,12 @@ var Flickr = (function () {
 
         $.getJSON(url, function( data ) {
 
-            
+
           var items = [];
           $.each( data, function( key, val ) {
             items.push( "<li id='" + key + "'>" + val + "</li>" );
           });
-         
+
           $( "<ul/>", {
             "class": "my-new-list",
             html: items.join( "" )
@@ -315,8 +317,8 @@ var Flickr = (function () {
 
     // Public properties and functions.
     return {
-        //the method inside the return object are 
-        //called as privileged method because it has access 
+        //the method inside the return object are
+        //called as privileged method because it has access
         //to the private methods and variables of the module.
 
         //OnAuthenticatingHandler: {},
@@ -353,8 +355,8 @@ var Flickr = (function () {
         people: people
 
         //privilegedMethod: function () {
-        //    //this method can access its private variable and method 
-        //    //by using the principle of closure. 
+        //    //this method can access its private variable and method
+        //    //by using the principle of closure.
         //    alert(privateVariable); //accessing private variable.
         //    privateMethod(); //calling private method
         //}
@@ -376,15 +378,15 @@ Flickr.Authentication = (function () {
     //    };
     //returning one anonymous object literal that would expose privileged methods.
     return {
-        //the method inside the return object are 
-        //called as privileged method because it has access 
+        //the method inside the return object are
+        //called as privileged method because it has access
         //to the private methods and variables of the module.
 
         AuthenticationUrl: getUrl,
 
         //privilegedMethod: function () {
-        //    //this method can access its private variable and method 
-        //    //by using the principle of closure. 
+        //    //this method can access its private variable and method
+        //    //by using the principle of closure.
         //    alert(privateVariable); //accessing private variable.
         //    privateMethod(); //calling private method
         //}

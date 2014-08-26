@@ -10,6 +10,9 @@
  * @see http://developer.chrome.com/trunk/apps/app.runtime.html
  * @see http://developer.chrome.com/trunk/apps/app.window.html
  */
+
+ 'use strict';
+
 chrome.app.runtime.onLaunched.addListener(function () {
     // Center window on screen.
     var screenWidth = screen.availWidth;
@@ -49,4 +52,3 @@ chrome.runtime.onSuspend.addListener(function () {
 //        console.log("Oops, I'm asking too frequently - I need to back off.");
 //    }
 //});
-

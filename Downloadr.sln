@@ -1,11 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloadr", "service\Downloadr.csproj", "{E605731D-99FC-4347-8766-28FCCEFCD8DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Downloadr.Tests", "test\service\Downloadr.Tests.csproj", "{5386FE65-F1A5-4FFD-B7BF-04002E2FFD17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{197741A3-5BB4-4E95-80EA-E519E42D31CD}"
+	ProjectSection(SolutionItems) = preProject
+		.bowerrc = .bowerrc
+		.deployment = .deployment
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		bower.json = bower.json
+		CHANGELOG.md = CHANGELOG.md
+		DEVELOPMENT.md = DEVELOPMENT.md
+		gruntfile.js = gruntfile.js
+		LICENSE = LICENSE
+		package.json = package.json
+		README.md = README.md
+		upm.json = upm.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
