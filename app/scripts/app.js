@@ -30,7 +30,9 @@
             isLoggedIn: false,
 
             // Used to see if we're running inside Chrome Packaged App.
-            packaged: chrome.runtime !== undefined
+            packaged: chrome.runtime !== undefined,
+
+            background: 'wallpaper'
 
         };
 

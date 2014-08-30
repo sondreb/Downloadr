@@ -16,21 +16,28 @@
         <!-- build:css styles/app.css -->
         <link rel="stylesheet" href="styles/app.css">
         <!-- endbuild -->
-    </head>
-    <body>
 
-        <header class="row" ng-controller="ScreenController as screen">
+        <script src="bower_components/pace/pace.min.js"></script>
+    </head>
+    <body class="{{state.background}}">
+
+        <header class="row header" ng-controller="ScreenController as screen">
             <div class="frame">
 
                 <!-- Debug Tools - Advanced Settings & Test Runner -->
-                <a href="#/tests" ng-click="test_view();" id="window-tests" title="Tests">&#44;</a>
-                <a href="#/debug" ng-click="debug_view();" id="window-debug" title="Debug">&#64;</a>
-                <!--<webview id="browserView"></webview>-->
-
-                <a href="#" ng-click="minimize();" id="window-minimize" title="Minimize">&#48;</a>
-                <a href="#" ng-click="restore();" ng-show="isMaximized" title="Restore Down" id="window-restore">&#50;</a>
-                <a href="#" ng-click="maximize();" ng-hide="isMaximized" title="Maximize" id="window-maximize">&#49;</a>
-                <a href="#" ng-click="close();" id="window-close" title="Close">&#114;</a>
+                <a href="#/tests" ng-click="test_view();" id="window-tests"
+                title="Tests">&#44;</a><a href="#/debug"
+                ng-click="debug_view();" id="window-debug"
+                title="Debug">&#64;</a><a href="#"
+                ng-click="minimize();"
+                id="window-minimize"
+                title="Minimize">&#48;</a><a href="#" ng-click="restore();"
+                ng-show="isMaximized" title="Restore Down"
+                id="window-restore">&#50;</a><a href="#"
+                ng-click="maximize();" ng-hide="isMaximized"
+                title="Maximize" id="window-maximize">&#49;</a><a href="#"
+                ng-click="close();" id="window-close"
+                title="Close">&#114;</a>
 
             </div>
 

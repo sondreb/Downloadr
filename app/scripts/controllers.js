@@ -36,7 +36,9 @@
     }]);
 
 
-    controllers.controller('HomeController', ['$scope', 'hotkeys', function ($scope, hotkeys) {
+    controllers.controller('HomeController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+
+        $rootScope.state.background = 'wallpaper';
 
         hotkeys.add({
             combo: 's',
@@ -50,17 +52,19 @@
         $scope.state = { isLoggedIn: false };
 
 
+
     }]);
 
-    controllers.controller('ProfileController', ['$scope', function($scope){
+    controllers.controller('ProfileController', ['$scope', '$rootScope', function($scope, $rootScope){
 
         $scope.user = { displayName: 'Sondre' };
 
     }]);
 
 
-    controllers.controller('AboutController', ['$scope', 'hotkeys', function ($scope, hotkeys) {
+    controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
 
+        $rootScope.state.background = 'wallpaper-3';
 
         hotkeys.add({
             combo: 'ctrl+up',
@@ -88,6 +92,7 @@
 
         $scope.state = { isLoggedIn: false };
 
+
         $scope.credits = [
             { type: 'Developed', text: 'Sondre Bjellås', url: 'http://sondreb.com/' },
             { type: 'Icon', text: 'HADezign', url: 'http://hadezign.com/' },
@@ -110,7 +115,9 @@
 
 
 
-    controllers.controller('SearchController', ['$scope', function ($scope) {
+    controllers.controller('SearchController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+        $rootScope.state.background = 'wallpaper';
 
         $scope.search = { text: '' };
 
@@ -118,26 +125,25 @@
 
 
 
-    controllers.controller('SettingsController', ['$scope', 'storage', function ($scope, storage) {
+    controllers.controller('SettingsController', ['$scope', '$rootScope', 'storage', function ($scope, $rootScope, storage) {
+
+        $rootScope.state.background = 'wallpaper-2';
 
         $scope.languages = [
             { key: 'en-US', value: 'English' },
             { key: 'nb-NO', value: 'Norwegian' },
         ];
 
-
-
         /* These will make properties available on the scope and auto-persist to local storage. */
         storage.bind($scope, 'language', 'en-US');
         storage.bind($scope, 'theme', 'dark');
-
-
 
     }]);
 
 
     controllers.controller('DebugController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
 
+        $rootScope.state.background = 'wallpaper-3';
         $scope.enableLogConsole = false;
         $scope.enableAllLicenses = false;
 
