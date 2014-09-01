@@ -2,27 +2,10 @@
 
         <div id="wallpaperControls">
 
-            <div class="search-container search-large">
+            <div class="search-container search-large center">
+
                 <h1>Hi, what are you looking for?</h1><br>
-                <input type="search" ng-model="searchValue" name="search" placeholder="Kittens?..." />
-
-                <div class="dropdown">
-
-                    <a href="#" class="search-type" ng-click="dropDown();">
-                        <span class="fa fa-camera fa-fw"></span>
-                        <span class="fa fa-caret-down"></span>
-                    </a>
-
-                    <ul class="search-options">
-                        <li><a href="#"><i class="fa fa-camera"></i> Photos</a></li>
-                        <li><a href="#"><i class="fa fa-video-camera"></i> Videos</a></li>
-                        <li><a href="#"><i class="fa fa-user"></i> User</a></li>
-                        <li><a href="#"><i class="fa fa-group"></i> Groups</a></li>
-                    </ul>
-
-                </div>
-
-                <a href="#" ng-click="search();" class="search-button"><span class="fa fa-search"></span></a>
+                <search class="larger"></search>
             </div>
 
         </div>

@@ -43,78 +43,34 @@
 
             <div class="toolbar">
 
-                <a href="#" ng-click="changeScreen('start');" id="homeLink"><img src="img/downloadr.png" id="logo"></a>
-
                 <!--<div ng-include="'views/view-thumbnail.html'"></div>-->
                 <!--<view-thumbnail>
                 </view-thumbnail>-->
 
-                <div id="navigation">
+                <a href="#/" class="logo"><img src="img/downloadr.png"></a>
 
-                    <div ng-hide="isOnStartScreen" class="search-container search-small">
-                        <input type="search" name="search" ng-model="searchValue" placeholder="Search..." />
-                        <div class="dropdown">
+                <ul class="menu" nav-menu="selected">
 
-                            <a href="#" class="search-type" ng-click="dropDown();">
-                                <span class="fa fa-camera fa-fw"></span>
-                                <span class="fa fa-caret-down"></span>
-                            </a>
+                  <li ng-hide="isOnStartScreen">
+                    <search class="search-control-smaller right"></search>
+                  </li>
 
-                            <ul class="search-options">
-                                <li><a href="#"><i class="fa fa-camera"></i> Photos</a></li>
-                                <li><a href="#"><i class="fa fa-video-camera"></i> Videos</a></li>
-                                <li><a href="#"><i class="fa fa-user"></i> User</a></li>
-                                <li><a href="#"><i class="fa fa-group"></i> Groups</a></li>
-                            </ul>
+                  <li><a href="#/settings">SETTINGS</a></li>
+                  <li><a href="#/about" >ABOUT</a></li>
 
-                        </div>
-                        <a href="#" ng-click="search();" class="search-button"><span class="fa fa-search"></span></a>
-                    </div>
-
-                    <!--<a href="#" class="menu-item" ng-click="changeScreen('search');" id="searchLink">SEARCH</a>-->
-
-                    <a href="#/settings" class="menu-item" ng-click="changeScreen('settings');" id="settingsLink">SETTINGS</a>
-                    <a href="#/about" class="menu-item">ABOUT</a>
-
-
-                    <a href="#/login" class="menu-item wide" style="width: 40px;" title="Sign in" ng-hide="isLoggedIn" id="loginLink">
-                        <i class="fa fa-sign-in"></i>
-                    </a>
-
-                    <a href="#/logout" class="menu-item wide" style="width: 40px;" title="Sign out" ng-click="changeScreen('logout');" ng-show="isLoggedIn" id="logoutLink">
-                        <i class="fa fa-sign-out"></i>
-                    </a>
-
-                    <!--
-                    <div class="menu-item" ng-show="isProfileLoading">
-                        <i class="fa fa-refresh fa-spin"></i>
-                    </div>-->
-    <!--
-                    <span ng-show="isInitializing">
-                        <span class="menu-item"><img src="/img/animation.gif"></span>
-                    </span>-->
-
-                    <span ng-hide="isInitializing">
-    <!--
-                        <a href="#" class="menu-item" ng-click="changeScreen('login');" ng-disable="true" ng-hide="isLoggedIn" id="loginLink">
-                            <i class="fa fa-sign-in"></i> {{LoginTitle}} <img src="/img/animation.gif">
-                        </a>-->
-
-                        <a href="#/profile" class="menu-item" ng-click="changeScreen('login');" ng-show="isLoggedIn" id="loginLink">
-                            <span id="buddyIcon">
-                              <!--<img id="buddyIconImg" ng-src="profileIconUrl" height="16" align="right">--></span>
-                           {{DisplayName}}
-                        </a>
-
-
-    <!--                    <a href="#" class="menu-item wide" ng-click="changeScreen('logout');" ng-show="isLoggedIn" id="logoutLink">
-                            <i class="fa fa-sign-out"></i>LOGOUT
-                            <span id="buddyIcon"><img id="buddyIconImg" ng-src="profileIconUrl" height="16" align="right"></span>
-                        </a>-->
-
-                    </span>
+                  <li><a href="#/login" style="width: 40px;" title="Sign in" ng-hide="isLoggedIn" id="loginLink">
+                      <i class="fa fa-sign-in"></i>
+                  </a></li>
+                  <li><a href="#/logout" style="width: 40px;" title="Sign out" ng-show="isLoggedIn" id="logoutLink">
+                      <i class="fa fa-sign-out"></i>
+                  </a></li>
+                  <li ng-hide="isInitializing"><a href="#/profile" ng-show="isLoggedIn" id="loginLink">
+                      <span id="buddyIcon">
+                        <!--<img id="buddyIconImg" ng-src="profileIconUrl" height="16" align="right">--></span>
+                     {{DisplayName}}
+                  </a></li>
+                </ul>
                 </div>
-            </div>
         </header>
 
         <div class="container row scroll-y" ng-view></div>

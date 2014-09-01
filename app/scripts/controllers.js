@@ -166,7 +166,31 @@
     }]);
 
 
-    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log) {
+    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', '$location', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log, $location) {
+
+        $scope.activeLink = function(viewLocation)
+        {
+            return viewLocation == $location.path();
+        };
+
+        $rootScope.$on("$locationChangeStart", function(event, next, current) {
+
+        });
+
+        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+
+          var path = $location.path();
+
+          if (path == "/" || path == "")
+          {
+            $scope.isOnStartScreen = true;
+          }
+          else
+          {
+            $scope.isOnStartScreen = false;
+          }
+
+        });
 
         /*
         var resources = {
@@ -570,50 +594,6 @@
 
         $scope.isInitializing = true;
 
-        $scope.changeScreen = function (screen) {
-
-            // If the selected is the same as requested, we won't do anything.
-            if ($scope.selectedScreen === screen)
-            {
-                return;
-            }
-
-            console.log('Switching Screens: ' + screen);
-
-            if ($scope.selectedScreen !== null) {
-                var previouslink = $('#' + $scope.selectedScreen + 'Link');
-                previouslink.removeClass('selected');
-
-                $('#' + $scope.selectedScreen + 'View').hide();
-            }
-
-            // Keep track of the previous before replacing.
-            $scope.previousScreen = $scope.selectedScreen;
-
-            // Change from the old to the new screen.
-            $scope.selectedScreen = screen;
-
-            // Make the clicked menu item active.
-            var link = $('#' + screen + 'Link');
-            link.addClass('selected');
-
-            // Make the view displayed.
-            $('#' + $scope.selectedScreen + 'View').css('display', 'table');
-
-            // Due to variations in scrolling, we'll handle some screens differently.
-            if ($scope.selectedScreen === 'login' || $scope.selectedScreen === 'start') {
-                // Login screen has it's own scrollbar on the Yahoo/Flickr-authentication page.
-                $('body').css('height', '100%');
-                $('html').css('overflow-y', 'hidden');
-            }
-            else {
-                $('body').css('height', '');
-                $('html').css('overflow-y', 'auto');
-            }
-
-            // Used to show and hide the search bar on top.
-            $scope.isOnStartScreen = $scope.selectedScreen === 'start';
-        };
     }]);
 })();
 

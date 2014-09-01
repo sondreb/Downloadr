@@ -186,44 +186,44 @@ p {
     background-color: #2f2f2f;
     height: 50px;
     position: fixed;
+
     /*position: absolute;*/
-    float: left;
 
     top: 20px;
     left: 0px;
     right: 0px;
 
     color: white;
-    font-size: 0.9em;
+    /*font-size: 0.9em;*/
 }
 
-.toolbar a, .toolbar div, .toolbar input, .toolbar img {
--webkit-app-region: no-drag;
+.toolbar a, .toolbar div, .toolbar input, .toolbar img, .toolbar select {
+  -webkit-app-region: no-drag;
 }
 
-.search-container {
+.center
+ {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   margin-top: -100px;
+   margin-left: -160px;
+   margin-top: 6px;
+ }
 
+.search-container h1 {
+    font-size: 1.1em;
+    width: 260px;
+    clear: both;
     display: inline-block;
+    height: 80px;
+    margin-top: -110px;
+    font-size: 1.6em;
+    color: white;
+    text-shadow: 2px 2px rgba(0, 0, 0, 0.50);
 }
 
-    .search-container > * {
-
-            height: 100%;
-            float: left;
-            display: inline-block;
-
-        }
-
-    .search-container h1 {
-        font-size: 1.1em;
-        width: 260px;
-        float: none;
-        clear: both;
-        display: inline-block;
-        height: 80px;
-        margin-top: -70px;
-    }
-
+/*
 .search-type {
     float: left;
     font-size: 0.8em;
@@ -240,24 +240,12 @@ p {
 
     }
 
-
-.search-button {
-
-
-    background-color: rgba(255, 255, 255, 0.50);
-    cursor: pointer;
-    color: white;
-    padding-left: 8px;
-    padding-right: 8px;
-}
-
-    .search-button:hover {
-
-        color: #cecece;
-
-    }
+*/
 
 
+
+
+/*
 .search-small {
 
     font-size: 1.2em;
@@ -284,9 +272,7 @@ p {
     margin-left: -160px;
     margin-top: 6px;
     height: 40px;
-    font-size: 1.6em;
-    color: white;
-    text-shadow: 2px 2px rgba(0, 0, 0, 0.50);
+
 }
 
     .search-large input {
@@ -294,7 +280,7 @@ p {
         width: 200px;
         font-size: 1em;
     }
-
+*/
 
 .dropdown > ul {
 
@@ -362,6 +348,8 @@ p {
     font-size: 20px;
 }
 
+
+/*
 .dropdown a {
 
     text-decoration: none;
@@ -377,16 +365,14 @@ p {
         cursor: pointer;
 
     }
+*/
 
+/*
 input[type=search] {
-  padding: 4px;            /* Overridden by padding: 1px; */
+    padding: 4px;
     border: 0px;
     background-color: white;
-}
-
-#navigation {
-    float: right;
-}
+}*/
 
 /*a:-webkit-any-link{
     text-decoration:none !important;
@@ -395,44 +381,169 @@ input[type=search] {
 a { text-decoration:none; }
 
 
-.menu-item {
-    width: 120px;
-    height: 50px;
-    color: #9f9f9f;
-    display: inline-block;
-    text-decoration: none;
-    text-align: center;
-    line-height: 50px;
+.smaller
+{
+  font-size: 0.8em;
 }
 
-    .menu-item:hover {
-        background-color: gray;
-        color: silver;
+.larger
+{
+    font-size: 1.2em;
+}
+
+.right
+{
+  float: right;
+}
+
+
+/* SEARCH-CONTROL: Styles for the search control, custom directive control. */
+.search-control
+{
+
+}
+
+/* Apply only to first level of child elements */
+.search-control > * {
+  float: left;
+  height: 40px;
+}
+
+  .search-control input {
+    font-size: 1.0em;
+    width: 200px;
+    padding: 4px;
+    border: 0px;
+  }
+
+  .search-control select {
+    width: 80px;
+    font-size: 0.60em;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  .search-control a {
+      background-color: rgba(255, 255, 255, 0.50);
+      cursor: pointer;
+      color: white;
+      display: inline-block;
+  }
+
+      .search-control a:hover {
+          color: #cecece;
+      }
+
+      .search-control a span
+       {
+         margin-top: 7px;
+         margin-left: 6px;
+         margin-right: 6px;
+       }
+
+
+.search-control-smaller
+{
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+/* Apply only to first level of child elements */
+.search-control-smaller > * {
+  height: 30px;
+}
+
+.search-control-smaller input
+{
+  width: 120px;
+  font-size: 0.8em;
+}
+
+.search-control-smaller select
+{
+  width: 60px;
+}
+
+
+/* LOGO: Styles for the logo in the header menu. */
+.logo
+{
+  float: left;
+  margin-top: 0px;
+  display: inline-block;
+  padding: 12px 0px 8px 20px;
+  margin-top: -10px;
+}
+
+.logo img
+{
+  width: 200px;
+}
+
+.logo a:hover
+{
+    background-color: transparent;
+}
+
+
+/* MENU: Styles for the top header menu. */
+.menu
+{
+  float: right;
+  display: inline-block;
+}
+
+  .menu li
+  {
+    list-style-type: none;
+    display: inline;
+    float: left;
+  }
+
+  .menu li > a
+  {
+  width: 120px;
+  height: 50px;
+  color: #9f9f9f;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  line-height: 50px;
+  }
+
+    .menu li > a:hover
+    {
+      background-color: gray;
+      color: silver;
     }
 
-    .menu-item:active {
+    .menu li > a:active {
         background: #171717;
         color: white !important;
     }
 
-    .menu-item:visited {
+    .menu li > a:visited {
         background: #171717;
         color: white !important;
     }
 
-    .menu-item.selected {
+    .menu li > a.selected {
         background: white;
     }
+
+    .menu li > a.active
+    {
+      background: red;
+      color: blue;
+    }
+
 
 .thumbs img {
 
     height: 128px;
 
-}
-
-#logo {
-    width: 200px;
-    padding: 12px 0px 8px 20px;
 }
 
 
@@ -463,20 +574,6 @@ a { text-decoration:none; }
 .wrapper {
     /*You can add padding and margins here.*/
    padding-top: 50px;
-}
-
-#homeLink {
-    margin-top: -40px;
-}
-
-#logo {
-margin-top: -10px;
-
-}
-
-#homeLink a:hover {
-    background-color: transparent;
-
 }
 
 ul

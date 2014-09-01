@@ -21,7 +21,7 @@
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
 
-    downloadr.run(['$rootScope', function($rootScope)
+    downloadr.run(['$rootScope', '$location', function($rootScope, $location)
     {
         console.log('downloadr.run: ');
 
