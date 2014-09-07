@@ -1,9 +1,9 @@
 <div class="search-control {{class}}">
-  <input type="search" ng-model="searchValue" name="search" placeholder="Kittens?..." />
+  <input type="search" ng-model="searchValue" ng-enter="/search" name="search" placeholder="Kittens?..." />
   <select><option value="photos">Photos</option>
     <option value="videos">Videos</option>
     <option value="user">User</option>
     <option value="groups">Groups</option>
   </select>
-  <a href="#" ng-click="search();"><span class="fa fa-search"></span></a>
+  <a href="#/search"><span class="fa fa-search"></span></a>
 </div>

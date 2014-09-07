@@ -115,7 +115,7 @@
 
 
 
-    controllers.controller('SearchController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+    controllers.controller('SearchController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 
         $rootScope.state.background = 'wallpaper';
 

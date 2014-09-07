@@ -10,6 +10,22 @@
 
     var downloadr = angular.module('downloadr.services', []);
 
+    downloadr.factory('searchProvider', function($location, $timeout)
+    {
+      var service = {};
+
+      service.performSearch = function()
+      {
+        console.log("PERFORM SEARCH!!!");
+
+
+      }
+      
+      service.searchText = 'Hello World';
+
+      return service;
+    });
+
     downloadr.service('util', function ()
     {
         this.format = function (text, params) {

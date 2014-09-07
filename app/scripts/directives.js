@@ -16,13 +16,37 @@
       };
   }]);
 
+  /*
+  This directive allows us to pass a function in on an enter key to do what we want.
+   */
+  directives.directive('ngEnter', function ($location, $timeout) {
+      return function (scope, element, attrs) {
+          element.bind("keydown keypress", function (event) {
+              if(event.which === 13) {
+
+                  $timeout(function() {
+                    $location.path(attrs.ngEnter);
+                  }, 0);
+
+                  event.preventDefault();
+
+                  //$location.path(attrs.ngEnter);
+
+                  //scope.$apply(function (){
+                  //    scope.$eval(attrs.ngEnter);
+                  //});
+              }
+          });
+      };
+  });
 
   directives.directive('search', function () {
 
       return {
           restrict: 'E',
           scope: {
-            class: '@'
+            class: '@',
+            value: '='
           },
           templateUrl: 'views/template_search.html'
       };

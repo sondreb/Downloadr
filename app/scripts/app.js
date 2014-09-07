@@ -21,7 +21,7 @@
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
 
-    downloadr.run(['$rootScope', '$location', function($rootScope, $location)
+    downloadr.run(['$rootScope', '$location', 'searchProvider', function($rootScope, $location, searchProvider)
     {
         console.log('downloadr.run: ');
 
@@ -32,7 +32,9 @@
             // Used to see if we're running inside Chrome Packaged App.
             packaged: chrome.runtime !== undefined,
 
-            background: 'wallpaper'
+            background: 'wallpaper',
+
+            searchText: 'Yeeeh'
 
         };
 
