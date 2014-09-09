@@ -14,10 +14,10 @@ namespace Downloadr.Services
 
     public interface IUserDataService
     {
-        UserData Retrieve(string connectionId);
+        UserData2 Retrieve(string connectionId);
 
         void Delete(string connectionId);
 
-        void InsertOrUpdate(UserData userData);
+        void InsertOrUpdate(UserData2 userData);
     }
 }

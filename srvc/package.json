@@ -1,0 +1,20 @@
+{
+  "name": "FlickrDownloadrService",
+  "version": "0.2.0",
+  "author": "Sondre Bjellås",
+  "description": "Service for WebSocket, Token Exchange and more",
+  "main": "./server.js",
+  "dependencies": {
+    "documentdb": "^0.9.1",
+    "express": "~3.1.0",
+    "jade": "*",
+    "mocha": "^1.21.4",
+    "nconf": "^0.6.9",
+    "q": "^1.0.1"
+  },
+  "noAnalyze": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6.14"
+  }
+}

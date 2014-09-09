@@ -39,7 +39,7 @@ html {
     overflow-y: hidden;
     height: 100%;
 
-    
+
 
     /* Removes touch delay for IE */
     -ms-touch-action: manipulation;

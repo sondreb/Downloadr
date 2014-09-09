@@ -7,15 +7,23 @@
 namespace Downloadr.Controllers
 {
     using Downloadr.Hubs;
-    using Microsoft.AspNet.SignalR;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
+using Downloadr.Services;
+using Microsoft.AspNet.SignalR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
     public class AuthController : Controller
     {
+        private IUserDataService _service;
+
+        public AuthController(IUserDataService service)
+        {
+            _service = service;
+        }
+
         // GET: Auth
         public ActionResult Index(string oauth_token, string oauth_verifier)
         {

@@ -4,7 +4,7 @@
  * License: MIT
  */
 
-namespace Downloadr
+namespace Downloadr.Tests
 {
     using Autofac;
     using Autofac.Integration.SignalR;
@@ -16,7 +16,7 @@ namespace Downloadr
     using System.Reflection;
     using System.Web;
 
-    public class ComponentConfig
+    public class ComponentTestConfig
     {
         public static IContainer Build()
         {
@@ -28,6 +28,7 @@ namespace Downloadr
 
             builder.RegisterType<LoggingPipelineModule>().AsSelf();
 
+            // Register the hubs within the web project, and not the test project.
             builder.RegisterHubs(typeof(ComponentConfig).Assembly);
 
             return builder.Build();

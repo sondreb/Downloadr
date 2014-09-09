@@ -1,58 +1,36 @@
-﻿/*!
- * Flickr Downloadr
- * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
- * License: MIT
- */
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Documents.Linq;
+using Microsoft.Azure.Documents;  
 
 namespace Downloadr.Services
 {
-    using Downloadr.Models;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Table;
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Web;
-
     public class UserDataService : IUserDataService
     {
-        CloudTableClient _storage;
-        CloudTable _table;
-
         public UserDataService()
         {
-            var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["cloud:StorageConnection"]);
 
-            _storage = storageAccount.CreateCloudTableClient();
-            _table = _storage.GetTableReference("userdata");
-
-            _table.CreateIfNotExists();
         }
 
-        public Models.UserData Retrieve(string connectionId)
+
+        public Models.UserData2 Retrieve(string connectionId)
         {
-            var operation = TableOperation.Retrieve <UserData>("users", connectionId);
-            var result = _table.Execute(operation);
 
-            if (result.Result == null)
-            {
-                return null;
-            }
 
-            return (UserData)result.Result;
+            throw new NotImplementedException();
         }
 
         public void Delete(string connectionId)
         {
-            var delete = TableOperation.Delete(new UserData(connectionId) { ETag = "*" });
-            _table.Execute(delete);
+            throw new NotImplementedException();
         }
 
-        public void InsertOrUpdate(Models.UserData userData)
+        public void InsertOrUpdate(Models.UserData2 userData)
         {
-            var operation = TableOperation.InsertOrReplace(userData);
-            _table.Execute(operation);
+            throw new NotImplementedException();
         }
     }
 }

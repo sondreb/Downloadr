@@ -66,7 +66,7 @@ namespace Downloadr.Hubs
 
         public static Dictionary<string, string> TokenSecrets = new Dictionary<string, string>();
 
-        public static List<UserData> Users = new List<UserData>();
+        public static List<UserData2> Users = new List<UserData2>();
 
         /// <summary>
         /// Used by the service to handle the oauth_verifier and request the OAuth token.
@@ -267,14 +267,14 @@ namespace Downloadr.Hubs
             return base.OnConnected();
         }
 
-        public override Task OnDisconnected()
+        public override Task OnDisconnected(bool stopCalled)
         {
             _log.Info("Client Disconnected.");
 
             // Remove users that have been disconnected.
             _dataService.Delete(Context.ConnectionId);
 
-            return base.OnDisconnected();
+            return base.OnDisconnected(stopCalled);
         }
 
         public override Task OnReconnected()

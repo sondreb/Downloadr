@@ -6,6 +6,7 @@
 # consumer key and secret for OAuth with Flickr API.
 
 Secret.config
+config.json
 
 packages
 package
