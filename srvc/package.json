@@ -7,10 +7,13 @@
   "dependencies": {
     "documentdb": "^0.9.1",
     "express": "~3.1.0",
+    "flickr-oauth-and-upload": "^0.6.0",
     "jade": "*",
     "mocha": "^1.21.4",
     "nconf": "^0.6.9",
-    "q": "^1.0.1"
+    "oauth": "^0.9.12",
+    "q": "^1.0.1",
+    "socket.io": "^1.1.0"
   },
   "noAnalyze": true,
   "license": "MIT",

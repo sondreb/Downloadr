@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Flickr Downloadr",
     "description": "Simple and elegant photo downloading tool.",
-    "version": "3.0.15",
+    "version": "3.0.23",
     "permissions": [
         "storage",
         "webview",

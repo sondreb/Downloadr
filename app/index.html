@@ -7,8 +7,9 @@
 
         <!-- build:css styles/libraries.css -->
         <!-- bower:css -->
-        <link rel="stylesheet" href="bower_components/angular-hotkeys/build/hotkeys.min.css" />
-        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="bower_components/angular-hotkeys/build/hotkeys.min.css">
+        <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
+        <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -31,7 +32,7 @@
                 ng-click="minimize();"
                 id="window-minimize"
                 title="Minimize">&#48;</a><a href="" ng-click="restore();"
-                ng-show="isMaximized" title="Restore Down"
+                ng-show="isMaximized" ng-cloak title="Restore Down"
                 id="window-restore">&#50;</a><a hreF=""
                 ng-click="maximize();" ng-hide="isMaximized"
                 title="Maximize" id="window-maximize">&#49;</a><a href=""
@@ -57,24 +58,28 @@
                   <li><a href="#/settings">SETTINGS</a></li>
                   <li><a href="#/about" >ABOUT</a></li>
 
-                  <li><a href="#/login" style="width: 40px;" title="Sign in" ng-hide="isLoggedIn" id="loginLink">
+                  <li ng-show="state.isConnecting"><span style="width: 40px;"><i class="fa fa-spinner fa-spin"></i></span></li>
+
+                  <li ng-show="!state.isConnecting && state.isAnonymous"><a href="#/login" style="width: 40px;" title="Sign in">
                       <i class="fa fa-sign-in"></i>
                   </a></li>
-                  <li><a href="#/logout" style="width: 40px;" title="Sign out" ng-show="isLoggedIn" id="logoutLink">
+
+                  <li ng-show="!state.isConnecting && !state.isAnonymous"><a href="#/logout" style="width: 40px;" title="Sign out">
                       <i class="fa fa-sign-out"></i>
                   </a></li>
-                  <li ng-hide="isInitializing"><a href="#/profile" ng-show="isLoggedIn" id="loginLink">
+<!--
+                  <li ng-cloak ng-hide="isInitializing"><a href="#/profile" ng-show="state.isLoggedIn">
                       <span id="buddyIcon">
-                        <!--<img id="buddyIconImg" ng-src="profileIconUrl" height="16" align="right">--></span>
+                        <img id="buddyIconImg" ng-src="profileIconUrl" height="16" align="right"></span>
                      {{DisplayName}}
-                  </a></li>
+                  </a></li>-->
                 </ul>
                 </div>
         </header>
 
         <div class="container row scroll-y" ng-view></div>
 
-        <div class="footer row">Connecting to the Flickr proxy service...</div>
+        <div class="footer row" ng-controller="StatusController">{{message}}</div>
 
         <!-- build:js scripts/libraries.js -->
         <!-- bower:js -->
@@ -89,7 +94,8 @@
         <script src="bower_components/angular-route/angular-route.js"></script>
         <script src="bower_components/angularLocalStorage/src/angularLocalStorage.js"></script>
         <script src="bower_components/angular-hotkeys/build/hotkeys.min.js"></script>
-        <script src="bower_components/pace/pace.js"></script>
+        <script src="bower_components/mousetrap/mousetrap.js"></script>
+        <script src="bower_components/socket.io-client/socket.io.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 

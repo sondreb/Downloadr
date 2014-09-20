@@ -39,14 +39,14 @@ var readOrCreateDatabase = function (databaseId, host, key) {
         }
         else {
           _database = database;
-          deferred.resolve();
+          deferred.resolve(_database);
         }
 
         });
     } else {
         // we found a database
         _database = results[0];
-        deferred.resolve();
+        deferred.resolve(_database);
     }
 
     });
@@ -59,6 +59,11 @@ var readOrCreateCollection = function (collectionId) {
 
   var deferred = Q.defer();
 
+    if (_database === null)
+    {
+      throw new Error('The database has not been loaded. Call openDatabase first.');
+    }
+
   _client.queryCollections(_database._self, 'SELECT * FROM root r WHERE r.id="' + collectionId + '"').toArray(function (err, results) {
       if (err) {
           // some error occured, rethrow up
@@ -68,7 +73,7 @@ var readOrCreateCollection = function (collectionId) {
       if (!err && results.length === 0) {
           // no error occured, but there were no results returned
           //indicating no collection exists in the provided database matching the query
-          _client.createCollection(database._self, { id: collectionId }, function (err, createdCollection) {
+          _client.createCollection(_database._self, { id: collectionId }, function (err, createdCollection) {
               deferred.resolve(createdCollection);
           });
       } else {
@@ -110,6 +115,49 @@ var readDocuments = function(collection){
 
   return deferred.promise;
 };
+
+
+var readDocumentByToken = function(token, collection)
+{
+
+  var deferred = Q.defer();
+
+  console.log('Searching for document with token = ', token);
+
+  _client.queryDocuments(collection._self, 'SELECT * FROM tokens t WHERE t.token="' + token + '"').toArray(function (err, results) {
+        if (err) {
+          console.log('Error: ', err);
+          deferred.reject(err);
+          return;
+        }
+
+        //console.log('Results: ', results);
+
+        deferred.resolve(results[0]);
+    });
+
+    return deferred.promise;
+
+}
+
+var readDocumentBySessionId = function(id, collection)
+{
+
+  var deferred = Q.defer();
+
+  _client.queryDocuments(collection._self, 'SELECT * FROM root r WHERE r.connectionId="' + id + '"').toArray(function (err, results) {
+        if (err) {
+          deferred.reject(err);
+          return;
+        }
+
+        deferred.resolve(results[0]);
+    });
+
+    return deferred.promise;
+
+}
+
 
 var readDocument = function(id, collection){
 
@@ -166,13 +214,31 @@ var deleteDocument = function(document) {
 
 };
 
+var cleanup = function() {
+
+    _client.deleteDatabase(_database._self, function(err)
+    {
+      if (err) {
+        console.log('Failed to delete database: ', err);
+      }
+      else
+        {
+          console.log('Database deleted.');
+        }
+
+    });
+
+};
 
 module.exports = {
   openDatabase: readOrCreateDatabase,
   openCollection: readOrCreateCollection,
   list: readDocuments,
   read: readDocument,
+  readDocumentByToken: readDocumentByToken,
+  readDocumentBySessionId: readDocumentBySessionId,
   insert: insertDocument,
   delete: deleteDocument,
-  database: _database
+  database: _database,
+  cleanup: cleanup
 };

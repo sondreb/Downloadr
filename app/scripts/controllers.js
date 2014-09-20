@@ -36,6 +36,27 @@
     }]);
 
 
+    controllers.controller('StatusController', ['$scope', '$rootScope', 'socket', function ($scope, $rootScope, socket) {
+
+        $scope.message = 'Loading...';
+
+        $scope.$on('status', function(event, args) {
+
+          console.log('Status: ', args.message);
+          $scope.message = args.message;
+          //console.log(args.message);
+          //$scope.message = args.message;
+
+        });
+
+        socket.on('status', function(message) {
+          console.log('Status: ', message);
+          $scope.message = message.text;
+
+        });
+
+    }]);
+
     controllers.controller('HomeController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
 
         $rootScope.state.background = 'wallpaper';
@@ -106,13 +127,63 @@
     }]);
 
 
-
-    controllers.controller('LoginController', ['$scope', function ($scope) {
+    controllers.controller('LoginController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 
         $scope.user = { username: '', password: '' };
 
+        console.log('Login URL', $rootScope.state.loginUrl);
+
+        // Was unable to bind to the src attribute, so have to use DOM.
+        var webview = document.querySelector('webview');
+
+        // Set the source to be login URL.
+        webview.src = $rootScope.state.loginUrl;
+
+        // Add a listener, to navigate back to home page when user
+        // have successfully authorized the app.
+        webview.addEventListener("loadstop", function () {
+
+            if (webview.src.indexOf('oauth_verifier') > -1) {
+
+              console.log('navigating to home!');
+
+              $scope.$apply(function () {
+
+                $rootScope.state.isAnonymous = false;
+
+                $rootScope.$emit('status', { message: 'Authenticated.' });
+
+                // Navigate to home.
+                $location.path('/#');
+              });
+
+            }
+
+            console.log("webview loaded: " + webview.src);
+
+        });
+
     }]);
 
+
+controllers.controller('LogoutController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
+
+
+    $scope.logout = function ()
+    {
+        console.log('Logout Command');
+        $rootScope.$broadcast('Event:Logout');
+
+        flickr.DeleteToken();
+
+        $scope.authenticatingEvent(null);
+    };
+
+    //$rootScope.state.background = 'wallpaper';
+
+    //$scope.search = { text: '' };
+
+}]);
 
 
     controllers.controller('SearchController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
@@ -166,7 +237,9 @@
     }]);
 
 
-    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', '$location', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log, $location) {
+    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', '$location', 'socket', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log, $location, socket) {
+
+
 
         $scope.activeLink = function(viewLocation)
         {

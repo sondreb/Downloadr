@@ -21,22 +21,39 @@
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
 
-    downloadr.run(['$rootScope', '$location', 'searchProvider', function($rootScope, $location, searchProvider)
+    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', function($rootScope, $location, searchProvider, socket)
     {
         console.log('downloadr.run: ');
 
         $rootScope.state = {
 
-            isLoggedIn: false,
+            isAnonymous: true,
+
+            isConnecting: true,
 
             // Used to see if we're running inside Chrome Packaged App.
             packaged: chrome.runtime !== undefined,
 
             background: 'wallpaper',
 
-            searchText: 'Yeeeh'
+            searchText: 'Yeeeh',
+
+            loginUrl: ''
 
         };
+
+        $rootScope.$emit('status', { message: 'Starting...' });
+
+        // Whenever login URL is received, we will update the UI and enable
+        // the login button.
+        socket.on('url', function(message) {
+
+          console.log('Flickr auth URL: ', message.url);
+
+          $rootScope.state.loginUrl = message.url;
+          $rootScope.state.isConnecting = false;
+
+        });
 
         // This will read oauth_token from local storage if it exists, if not, it will
         // connect to the WebSocket service and notify a request for authentication URL.

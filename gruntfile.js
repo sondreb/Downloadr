@@ -21,6 +21,7 @@ module.exports = function (grunt) {
     // Configurable paths
     var config = {
         app: 'app',
+        service: 'srvc',
         dist: 'dist',
         tasks: grunt.cli.tasks
     };
@@ -36,6 +37,25 @@ module.exports = function (grunt) {
             bower: {
                 files: ['bower.json'],
                 tasks: ['bowerInstall']
+            },
+            express: {
+              files: [  '<%= config.service %>/*.js',
+                        '<%= config.service %>/services/*.js',
+                        '<%= config.service %>/routes/*.js',
+                        '<%= config.service %>/views/*.jade' ],
+              tasks: [
+                      'express:dev'],
+              options: {
+                    livereload: true,
+                    spawn: false}
+            },
+            test: {
+              files: [
+                        '<%= config.app %>/test/*.js',
+                        '<%= config.service %>/test/*.js',
+              ],
+              tasks: ['mochacli'],
+              options: { livereload: true }
             },
             js: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
@@ -69,6 +89,30 @@ module.exports = function (grunt) {
                 ]
             }
         },
+
+        express: {
+            options: {
+              // Override defaults here
+              // Does this have any effect?
+              baseUrl: '<%= config.service %>'
+            },
+            dev: {
+              options: {
+                script: '<%= config.service %>/server.js'
+              }
+            },
+            prod: {
+              options: {
+                script: '<%= config.service %>/server.js',
+                node_env: 'production'
+              }
+            },
+            test: {
+              options: {
+                script: '<%= config.service %>/server.js'
+              }
+            }
+          },
 
         // Grunt server and debug server settings
         connect: {
@@ -147,6 +191,14 @@ module.exports = function (grunt) {
                     urls: ['http://localhost:<%= connect.options.port %>/index.html']
                 }
             }
+        },
+
+        mochacli: {
+            options: {
+              reporter: "spec",
+              ui: "tdd"
+            },
+            all: ["<%= config.service %>/test/*.js"]
         },
 
         // Automatically inject Bower components into the HTML file
@@ -339,16 +391,22 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('debug', function (platform) {
-        var watch = grunt.config('watch');
-        platform = platform || 'chrome';
+    grunt.loadNpmTasks("grunt-contrib-watch");
+    grunt.loadNpmTasks("grunt-contrib-jshint");
+    //grunt.loadNpmTasks("grunt-contrib-jasmine");
+    grunt.loadNpmTasks("grunt-mocha-cli");
+    grunt.loadNpmTasks('grunt-express-server');
 
+    grunt.registerTask('debug', function (platform) {
+
+        var watch = grunt.config('watch');
+
+        platform = platform || 'chrome';
 
         // Configure style task for debug:server task
         if (platform === 'server') {
             watch.styles.tasks = ['newer:copy:styles'];
             watch.styles.options.livereload = false;
-
         }
 
         // Configure updated watch task
@@ -357,14 +415,20 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:' + platform,
             'concurrent:' + platform,
+            'mochacli',
+            'express:dev',
             'connect:' + platform,
             'watch'
         ]);
     });
 
+    grunt.registerTask('server', [
+        'express:dev',
+        'watch' ])
+
     grunt.registerTask('test', [
         'connect:test',
-        'mocha'
+        'mochacli'
     ]);
 
     grunt.registerTask('build', [
