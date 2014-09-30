@@ -3,13 +3,15 @@
  * GET home page.
  */
 
-var storage = new require('../services/storage.js')
-  , nconf = require('nconf')
-
-
 exports.index = function(req, res){
 
-  nconf.file('../config.json').env();
+  // Get path to the correct config.json.
+  //var configPath = path.resolve(__dirname, 'config.json');
+
+  // Load config from file, then environment.
+  //nconf.file(configPath).env();
+
+  console.log('WHEEE!!!!', req.storage);
 
   var token = req.query.oauth_token;
   var verifier = req.query.oauth_verifier;

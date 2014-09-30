@@ -1,24 +1,25 @@
+/*!
+ * Flickr Downloadr
+ * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
+ * License: MIT
+ */
+
+// Before we load any requirements, we'll get the configuration loaded.
+var nconf = require('nconf')
+  , path = require('path');
+
+// Load config from file, then environment.
+nconf.file(path.resolve(__dirname, 'config.json')).env();
+
 var assert = require("assert")
   , should = require('chai').should()
-  , storage = require('../services/storage')
+  , storage = require('../services/storage.js')(nconf.get('DB_HOST'), nconf.get('DB_KEY'))
   , nconf = require('nconf')
   , path = require('path')
   , chaiAsPromised = require("chai-as-promised")
   , chai = require('chai')
 
 chai.use(chaiAsPromised);
-
-// Get path to the correct config.json.
-var configPath = path.resolve(__dirname, 'config.json');
-
-// Configure the test environment. Keep a copy of the config.json within the
-// test folder, so we can have mocked or test environments configured.
-nconf.file(configPath).env();
-
-// The environment variables should be configured as app settings on
-// the Azure Website.
-var host = nconf.get('DB_HOST');
-var key = nconf.get('DB_KEY');
 
 describe('Array', function(){
   describe('#indexOf()', function(){
@@ -35,7 +36,7 @@ describe('Storage', function() {
   // have to re-open the database.
   describe('openDatabase', function() {
     it('should not return error', function(done) {
-      storage.openDatabase('downloadr', host, key).should.be.fulfilled.and.notify(done);
+      storage.openDatabase('downloadr').should.be.fulfilled.and.notify(done);
     })
   })
 

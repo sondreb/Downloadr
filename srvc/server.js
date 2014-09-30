@@ -4,115 +4,86 @@
  * License: MIT
  */
 
-/**
- * Module dependencies.
- */
+'use strict';
 
+// Before we load any requirements, we'll get the configuration loaded.
+var nconf = require('nconf')
+  , path = require('path');
+
+// Load config from file, then environment.
+nconf.file(path.resolve(__dirname, 'config.json')).env();
+
+var http_port = process.env.PORT || 3000;
+var websocket_port = 5000;
+
+// Load all the dependencies.
 var express = require('express')
+  , app = express()
   , routes = require('./routes')
   , user = require('./routes/user')
   , auth = require('./routes/auth')
   , http = require('http')
-  , path = require('path')
   , nconf = require('nconf')
-  , storage = new require('./services/storage.js');
+  , storage = require('./services/storage.js')(nconf.get('DB_HOST'), nconf.get('DB_KEY'))
+  , socket = require('./services/socket.js')(app, { port: websocket_port })
+  , flickr = require('./services/flickr.js')(
+    nconf.get('FLICKR_KEY'),
+    nconf.get('FLICKR_SECRET'),
+    { url: 'http://localhost:' + http_port + '/auth/' })
 
 
-// Get path to the correct config.json.
-var configPath = path.resolve(__dirname, 'config.json');
+// Bind the socket events with the Flickr API and storage API.
+socket.on('connection', function(client) {
 
-// Load config from file, then environment.
-nconf.file(configPath).env();
+  client.on('message', function(msg){
+    console.log('!!!! MESSAGE: ', msg);
+  });
 
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+  // When user requests auth URL, generate using the Flickr service.
+  client.on('getUrl', function() {
 
-/*
-var OAuth= require('oauth').OAuth;
+    console.log('io: User requests login url.');
 
-var oa = new OAuth(
-	"https://api.twitter.com/oauth/request_token",
-	"https://api.twitter.com/oauth/access_token",
-	"YourConsumerKeyProvidedByTwitter",
-	"YourConsumerSecretProvidedByTwitter",
-	"1.0",
-	"http://yourdomain/auth/twitter/callback",
-	"HMAC-SHA1"
-);
-*/
+    flickr.getAuthUrl(function(err, data) {
 
-server.listen(5000);
+      if (err)
+      {
+        console.log('Error with getAuthUrl: ', err);
+        return;
+      }
 
-io.on('connection', function(socket) {
-  console.log('a user connected, session id: ', socket.id);
+      // Store these details in storage on the current client id.
+      var oauthToken = data.oauthToken;
+      var oauthTokenSecret = data.oauthTokenSecret;
+      var clientId = client.id;
 
-  socket.on('message', function () { return "Hello World!"; });
+      console.log('oauthToken: ', oauthToken);
+      console.log('oauthTokenSecret: ', oauthTokenSecret);
+      console.log('clientId: ', clientId);
 
-  io.emit('status', { text: 'Connected.' });
-  //io.emit('url', { url: 'http://www.flickr.com/services/oauth/request_token' });
-  //io.emit('this', { will: 'aawwwesome!!' });
+      // Return the login url to the user.
+      client.emit('url', data.url);
 
-  var flickrApi = require('flickr-oauth-and-upload');
+      storage.openCollection('token').then(function(collection){
 
-  var myCallback = function (err, data) {
-    if (!err) {
-      console.log('Remember the credentials:');
-      console.log('oauthToken: ' + data.oauthToken);
-      console.log('oauthTokenSecret: ' + data.oauthTokenSecret);
-      console.log('Ask user to go here for authorization: ' + data.url);
 
-      storage.openCollection('tokens').then(function(collection) {
-
-        // Create a new session.
-        var session = { connectionId: socket.id, token: data.oauthToken, tokenSecret: data.oauthTokenSecret, tokenVerifier: '', isAccessToken: false };
-
-        storage.insert(session, collection).then(function(document)
-        {
-          console.log('Document Created: ', document);
-          //return storage.delete(document);
-        })
-        .fail(function(error){
-          console.log(error);
-        });
-
+        
       });
 
-      io.emit('url', {url: data.url});
+      var document = storage.readDocumentBySessionId(clientId);
 
-    } else {
-      console.log('Error: ' + err);
-    }
-  };
-
-  var args = {
-    flickrConsumerKey: nconf.get('FLICKR_KEY'),
-    flickrConsumerKeySecret: nconf.get('FLICKR_SECRET'),
-    permissions: 'read',
-    redirectUrl: 'http://localhost:3000/auth/',
-    callback: myCallback
-  };
-
-  flickrApi.getRequestToken(args);
-
-
-  //socket.broadcast.emit('user connected');
-  //socket.broadcast.emit('this', { will: 'asdfasdfasdfadfs!!' });
-
-  socket.on('private message', function(from, msg){
-    console.log('I received a private message by ', from, ' saying ', msg)
+    });
   });
+});
 
-  socket.on('disconnect', function() {
-
-    console.log('user disconnected');
-
-  });
-
+// Make our storage accessible to our router
+app.use(function(req,res,next){
+    req.storage = storage;
+    next();
 });
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', http_port);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -134,113 +105,5 @@ app.get('/auth', auth.index);
 http.createServer(app).listen(app.get('port'), function(){
 
   console.log("Express server listening on port " + app.get('port'));
-
-
-  // The environment variables should be configured as app settings on
-  // the Azure Website.
-  var host = nconf.get('DB_HOST');
-  var key = nconf.get('DB_KEY');
-
-  console.log("DocumentDB host: " + host);
-
-  storage.openDatabase('downloadr', host, key).then(function()
-  {
-    console.log('Database opened successfully.');
-
-    //storage.cleanup();
-    //return;
-
-    return storage.openCollection('tokens');
-  })
-  .then(function(collection)
-  {
-    /*
-    var session = { connectionId: '222', token: '', tokenSecret: '', isAccessToken: false };
-
-    storage.insert(session, collection).then(function(document)
-    {
-      console.log('Document Created: ', document);
-      return storage.delete(document);
-    })
-    .fail(function(error){
-      console.log(error);
-    });*/
-
-    storage.list(collection).then(function(documents){
-      console.log('All Documents: ', documents);
-    })
-    .fail(function(error){
-      console.log(error);
-    });
-
-  })
-  .fail(function(error){
-    console.log(error);
-  });
-
-/*
-  var database, colletion, document;
-
-  client.createDatabaseAsync(databaseDefinition)
-    .then(function(databaseResponse) {
-      database = databaseResponse.resource;
-      return client.createCollectionAsync(database._self, collectionDefinition);
-    })
-    .then(function(collectionResponse)
-    {
-      collection = collectionResponse.resource;
-      return client.createDocumentAsync(collection._self, documentDefinition);
-    })
-    .then(function(documentResponse) {
-      var document = documentResponse.resource;
-      console.log('Created Document: ', document);
-      cleanup(client, database);
-    })
-    .fail(function(error){
-      console.log('An error occcured', error);
-    });
-
-*/
-
-  /*
-
-  SIMPLE DOCUMENT CREATION WITH CALLBACK.
-
-  var client = new DocumentClient(host, {masterKey: key});
-  var databaseDefinition = { id: 'downloadr' };
-  var collectionDefinition = { id: 'tokens' };
-  var documentDefinition = { connectionId: '12345', token: '', tokenSecret: '', isAccessToken: false };
-
-  client.createDatabase(databaseDefinition, function(err, database) {
-    if (err) return console.log(err);
-
-    console.log('Created DocumentDB');
-
-    client.createCollection(database._self, collectionDefinition, function(err, collection) {
-      if (err) return console.log(err);
-      console.log('Created Collection');
-
-      client.createDocument(collection._self, documentDefinition, function(err, document) {
-        if (err) return console.log(err);
-
-        console.log('Created document with content: ', document);
-
-      });
-
-    });
-  });
-
-
-  function cleanup(client, database)
-  {
-    client.deleteDatabase(database._self, function(err) {
-      if (err) console.log(err);
-    });
-  }
-
-
-  */
-
-  console.log("DocumentDB Initialized Successfully.");
 
 });

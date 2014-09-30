@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.5)
+Flickr Downloadr 3 (3.0.7)
 ============
 
 ## Description:
@@ -35,12 +35,15 @@ and then run:
 $ npm install
 ```
 
-This will download dependencies, such as Grunt, Karma, upm, Chai and more.
+This will download dependencies, such as Grunt, Bower, Mocha, Chai and more.
 
-Next step is simply running Grunt, which will launch the app in a browser. Beware that Flickr Downloadr is built to run inside the Chrome Apps runtime, so a lot of the features won't work properly.
+Next step is simply running Grunt, this will host the app and the service on
+your local machine. It won't launch the Chrome App, you have to manually open
+it. After you open the Chrome App, it should auto-reload whenever you make
+any changes to the app-code.
 
 ```sh
-$ grunt live
+$ grunt debug
 ```
 
 

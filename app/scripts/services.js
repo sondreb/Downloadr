@@ -43,6 +43,10 @@
 
         console.log('socket.io connected to service.');
         
+        socket.emit('message', { text : 'hello world from app!!!' });
+
+        socket.emit('getUrl');
+
       });
 
       return {

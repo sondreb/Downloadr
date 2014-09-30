@@ -53,6 +53,8 @@
           $rootScope.state.loginUrl = message.url;
           $rootScope.state.isConnecting = false;
 
+          $rootScope.$emit('status', { message: 'Connected.' });
+
         });
 
         // This will read oauth_token from local storage if it exists, if not, it will

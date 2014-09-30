@@ -16,6 +16,23 @@ The client is built on HTML5 technologies and to access private photos,
 the user needs to authenticate with the Flickr service through the
 Flickr Token Hub built in this project.
 
+## Layers and Services:
+
+storage.js - Stores and queries persistent data.
+socket.js - Establishes connections and handle communication with clients.
+flickr.js - Handles queries against Flickr.com and authentication.
+
+Flow:
+
+1. Server (Express) initiates and hosts static files.
+2. Creates the socket instance, which hosts socket.io.
+3. Awaits requests from users to get OAuth URL.
+4. Upon user approval, stores the temporary oauth token.
+5. Requests a permanent token and sends to the user. We do not store
+    the permanent auth token on the server to avoid the risk of loosing
+    them. This way, it's only on the users machines and synced with
+    Chrome storage across their devices.
+
 ## Building:
 
 grunt

@@ -4,6 +4,8 @@
  * License: MIT
  */
 
+'use strict';
+
 /**
  * Storage Service for DocumentDB. This service relies on Q promises.
  */
@@ -11,16 +13,12 @@
 var Q = require('q')
   , DocumentClient = require('documentdb').DocumentClient;
 
-var _client = null;
-var _database = null;
+var _client, _database, _host, _key = null;
 
 // if the database does not exist, then create it, else return the database object
-var readOrCreateDatabase = function (databaseId, host, key) {
+var readOrCreateDatabase = function(databaseId) {
 
     var deferred = Q.defer();
-
-    // Create a new DocumentDB Client that is shared across this storage instance.
-    _client = new DocumentClient(host, { masterKey: key});
 
     var query = _client.queryDatabases('SELECT * FROM root r WHERE r.id="' + databaseId + '"').toArray(function(err, results){
 
@@ -55,7 +53,7 @@ var readOrCreateDatabase = function (databaseId, host, key) {
 };
 
 // if the collection does not exist for the database provided, create it, else return the collection object
-var readOrCreateCollection = function (collectionId) {
+var readOrCreateCollection = function(collectionId) {
 
   var deferred = Q.defer();
 
@@ -142,7 +140,6 @@ var readDocumentByToken = function(token, collection)
 
 var readDocumentBySessionId = function(id, collection)
 {
-
   var deferred = Q.defer();
 
   _client.queryDocuments(collection._self, 'SELECT * FROM root r WHERE r.connectionId="' + id + '"').toArray(function (err, results) {
@@ -230,15 +227,26 @@ var cleanup = function() {
 
 };
 
-module.exports = {
-  openDatabase: readOrCreateDatabase,
-  openCollection: readOrCreateCollection,
-  list: readDocuments,
-  read: readDocument,
-  readDocumentByToken: readDocumentByToken,
-  readDocumentBySessionId: readDocumentBySessionId,
-  insert: insertDocument,
-  delete: deleteDocument,
-  database: _database,
-  cleanup: cleanup
+module.exports = function(host, key)
+{
+  // Set the configuration keys. We might need to reuse if we need to re-create
+  // the DocumentClient object if certain error occurs.
+  _host = host;
+  _key = key;
+
+  // Create a new DocumentDB Client that is shared across this storage instance.
+  _client = new DocumentClient(_host, { masterKey: _key});
+
+  return {
+      openDatabase: readOrCreateDatabase,
+      openCollection: readOrCreateCollection,
+      list: readDocuments,
+      read: readDocument,
+      readDocumentByToken: readDocumentByToken,
+      readDocumentBySessionId: readDocumentBySessionId,
+      insert: insertDocument,
+      delete: deleteDocument,
+      database: _database,
+      cleanup: cleanup
+      }
 };
