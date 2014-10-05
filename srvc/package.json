@@ -5,6 +5,8 @@
   "description": "Service for WebSocket, Token Exchange and more",
   "main": "./server.js",
   "dependencies": {
+    "chai": "^1.9.2",
+    "chai-as-promised": "^4.1.1",
     "documentdb": "^0.9.1",
     "express": "~3.1.0",
     "flickr-oauth-and-upload": "^0.6.0",

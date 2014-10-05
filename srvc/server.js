@@ -24,7 +24,10 @@ var express = require('express')
   , auth = require('./routes/auth')
   , http = require('http')
   , nconf = require('nconf')
-  , storage = require('./services/storage.js')(nconf.get('DB_HOST'), nconf.get('DB_KEY'))
+  , storage = require('./services/storage.js')(
+    nconf.get('DB_HOST'),
+    nconf.get('DB_KEY'),
+    'downloadr')
   , socket = require('./services/socket.js')(app, { port: websocket_port })
   , flickr = require('./services/flickr.js')(
     nconf.get('FLICKR_KEY'),
@@ -37,6 +40,65 @@ socket.on('connection', function(client) {
 
   client.on('message', function(msg){
     console.log('!!!! MESSAGE: ', msg);
+  });
+
+  client.on('accessGranted', function(msg) {
+
+    console.log('accessGranted: ', msg);
+
+    var token = msg.oauth_token;
+    var verifier = msg.oauth_verifier;
+
+    storage.openCollection('tokens').then(function(collection) {
+    console.log('Opening collection... reading document by token..');
+
+    var document = storage.readByToken(token, collection).then(function(document) {
+          if (document === undefined)
+          {
+              console.log('This should not happen. When the user have received verified, this document should exist in the database.');
+              throw new Error('Cannot find existing session. Cannot continue.');
+          }
+          else
+          {
+            var doc = document;
+
+            console.log('Found document: ', doc);
+
+            doc.modified = new Date();
+            doc.tokenVerifier = verifier;
+
+            var secret = doc.tokenSecret;
+
+            flickr.getAccessToken(token, secret, verifier, function(err, message) {
+
+              if (err)
+              {
+                throw err;
+              }
+
+              console.log('Get Access Token: ', message);
+
+              // Return the access token to the user for local permanent storage.
+              client.emit('token', message);
+
+              // Now we should delete the session token from storage.
+              // Perhaps we should have some sort of timeout, if there
+              // is a connection issue with the WebSocket?
+              
+              storage.delete(doc);
+
+            });
+
+          }
+        }
+      ).fail(function(err){
+
+        console.log('Failed to read document!! Error: ' + err);
+
+      });
+    });
+
+
   });
 
   // When user requests auth URL, generate using the Flickr service.
@@ -62,23 +124,46 @@ socket.on('connection', function(client) {
       console.log('clientId: ', clientId);
 
       // Return the login url to the user.
-      client.emit('url', data.url);
+      client.emit('url', { url: data.url});
 
-      storage.openCollection('token').then(function(collection){
+      storage.openCollection('tokens').then(function(collection){
 
+        console.log('COLLECTION OPENED!! Searching for: ' + clientId);
 
-        
+        var document = storage.readBySessionId(clientId, collection).then(function(document) {
+            if (document === undefined)
+            {
+                var doc = { modified: new Date(), connectionId: clientId, token: oauthToken, tokenSecret: oauthTokenSecret, tokenVerifier: '', isAccessToken: false };
+
+                storage.insert(doc, collection).then(function(document){
+                  console.log('Saved document: ' + document);
+
+                });
+            }
+            else
+            {
+              console.log('Found document: ' + document);
+
+                document.modified = new Date();
+
+                storage.update(document, collection);
+
+            }
+          }
+        ).fail(function(err){
+
+          console.log('Failed to read document!! Error: ' + err);
+
+        });
       });
-
-      var document = storage.readDocumentBySessionId(clientId);
-
     });
   });
 });
 
-// Make our storage accessible to our router
+// Make our objects accessible to our routers
 app.use(function(req,res,next){
     req.storage = storage;
+    req.flickr = flickr;
     next();
 });
 

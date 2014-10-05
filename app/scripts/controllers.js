@@ -127,7 +127,7 @@
     }]);
 
 
-    controllers.controller('LoginController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
+    controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'socket', function ($scope, $rootScope, $location, socket) {
 
         $scope.user = { username: '', password: '' };
 
@@ -139,6 +139,13 @@
         // Set the source to be login URL.
         webview.src = $rootScope.state.loginUrl;
 
+        var getParameterByName = function(url, name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(url);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        };
+
         // Add a listener, to navigate back to home page when user
         // have successfully authorized the app.
         webview.addEventListener("loadstop", function () {
@@ -147,7 +154,14 @@
 
               console.log('navigating to home!');
 
+              var oauth_token = getParameterByName(webview.src, 'oauth_token');
+              var oauth_verifier = getParameterByName(webview.src, 'oauth_verifier');
+
               $scope.$apply(function () {
+
+                // Notify the server so we can transform this token into
+                // a proper access token the user can store permanently.
+                socket.emit('accessGranted', { oauth_token: oauth_token, oauth_verifier: oauth_verifier })
 
                 $rootScope.state.isAnonymous = false;
 
@@ -172,15 +186,26 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     $scope.logout = function ()
     {
         console.log('Logout Command');
+
         $rootScope.$broadcast('Event:Logout');
 
-        flickr.DeleteToken();
+        // Navigate to home.
+        $location.path('/#');
 
-        $scope.authenticatingEvent(null);
+        //flickr.DeleteToken();
+        //$scope.authenticatingEvent(null);
     };
 
-    //$rootScope.state.background = 'wallpaper';
+    $scope.back = function()
+    {
+      console.log('Go back!');
 
+      // Navigate to home.
+      $location.path('/#');
+
+    }
+
+    //$rootScope.state.background = 'wallpaper';
     //$scope.search = { text: '' };
 
 }]);
@@ -271,15 +296,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             invalidState: 'Invalid state.'
         };*/
 
-        $scope.$on('Event:Logout', function () {
 
-            console.log('Logout Initialized...');
-
-            flickr.DeleteToken();
-
-            $scope.authenticatingEvent(null);
-
-        });
 
         /* Add a hotkey to display the debug menu option. */
         /*

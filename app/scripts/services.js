@@ -42,9 +42,8 @@
       socket.on('connect', function () {
 
         console.log('socket.io connected to service.');
-        
-        socket.emit('message', { text : 'hello world from app!!!' });
 
+        socket.emit('message', { text : 'hello world from app!!!' });
         socket.emit('getUrl');
 
       });
@@ -73,8 +72,35 @@
 
     downloadr.service('flickr', function ($rootScope) {
 
+      var token = '';
+      var secret = '';
+      var userId = '';
+      var userName = '';
+      var fullName = '';
+
+      var removeToken = function()
+      {
+        token = '';
+        secret = '';
+        userId = '';
+        userName = '';
+        fullName = '';
+      }
+
+      var parseToken = function(message)
+      {
+          token = message.oauthToken;
+          secret = message.oauthTokenSecret;
+          userId = message.userNsId;
+          userName = message.userName;
+          fullName = message.fullName;
+      };
 
 
+    return {
+        parseToken : parseToken,
+        removeToken : removeToken
+    };
 
     //$scope.format = function (text, params) {
     //    var str = text.replace(/\{(.*?)\}/g, function (i, match) {
@@ -91,6 +117,7 @@
 
     // Event that is raised when authentication is fully complete and secure oauth calls
     // can be done against the Flickr API.
+    /*
         Flickr.OnAuthenticated = function (token) {
 
             console.log('Flickr:OnAuthenticated');
@@ -129,7 +156,7 @@
             $rootScope.$broadcast('authenticating', url);
         };
 
-        return Flickr;
+        return Flickr;*/
 
     });
 })();

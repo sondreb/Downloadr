@@ -192,6 +192,25 @@ var insertDocument = function(item, collection){
 
 };
 
+var updateDocument = function(item){
+
+  var deferred = Q.defer();
+
+  _client.replaceDocument(item._self, item, function(err, document) {
+
+    if (err) {
+      deferred.reject(err);
+      return;
+    }
+
+    deferred.resolve(document);
+
+  });
+
+  return deferred.promise;
+
+};
+
 var deleteDocument = function(document) {
 
   var deferred = Q.defer();
@@ -227,8 +246,12 @@ var cleanup = function() {
 
 };
 
-module.exports = function(host, key)
+module.exports = function(host, key, databaseId)
 {
+  if (!host) throw new Error('"host" is required');
+  if (!key) throw new Error('"key" is required');
+  if (!databaseId) throw new Error('"databaseId" is required');
+
   // Set the configuration keys. We might need to reuse if we need to re-create
   // the DocumentClient object if certain error occurs.
   _host = host;
@@ -237,14 +260,21 @@ module.exports = function(host, key)
   // Create a new DocumentDB Client that is shared across this storage instance.
   _client = new DocumentClient(_host, { masterKey: _key});
 
+  // We assume that connecting to the database will finish before any queries
+  // are run. This might be an issue with slow connections, verify.
+  readOrCreateDatabase(databaseId).then(function(database){
+    console.log('The database "' + databaseId + '" was created/opened successfully');
+  });
+
   return {
       openDatabase: readOrCreateDatabase,
       openCollection: readOrCreateCollection,
       list: readDocuments,
       read: readDocument,
-      readDocumentByToken: readDocumentByToken,
-      readDocumentBySessionId: readDocumentBySessionId,
+      readByToken: readDocumentByToken,
+      readBySessionId: readDocumentBySessionId,
       insert: insertDocument,
+      update: updateDocument,
       delete: deleteDocument,
       database: _database,
       cleanup: cleanup

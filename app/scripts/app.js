@@ -21,7 +21,7 @@
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
 
-    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', function($rootScope, $location, searchProvider, socket)
+    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', function($rootScope, $location, searchProvider, socket, flickr)
     {
         console.log('downloadr.run: ');
 
@@ -44,6 +44,60 @@
 
         $rootScope.$emit('status', { message: 'Starting...' });
 
+        $rootScope.$on('Event:Logout', function () {
+
+            console.log('Logout Initialized...');
+
+            chrome.storage.sync.set({'token': null}, function() {
+              // Notify that we saved.
+              message('Settings saved');
+            });
+
+            flickr.removeToken();
+
+            $rootScope.state.isAnonymous = true;
+
+            //$scope.authenticatingEvent(null);
+
+        });
+
+        // Make sure we listen to whenever the local storage value have changed.
+        chrome.storage.onChanged.addListener(function(changes, namespace) {
+              for (key in changes) {
+                var storageChange = changes[key];
+                console.log('Storage key "%s" in namespace "%s" changed. ' +
+                            'Old value was "%s", new value is "%s".',
+                            key,
+                            namespace,
+                            storageChange.oldValue,
+                            storageChange.newValue);
+
+                if (key == 'token')
+                {
+                  //flickr.parseToken(storageChange.newValue);
+                }
+              }
+        });
+
+        // Try to find existing token.
+        chrome.storage.sync.get('token', function(result){
+
+          if (result === undefined)
+          {
+            console.log('No existing token found.');
+          }
+          else if (result.token === undefined)
+          {
+            console.log('No existing token found.');
+          }
+          else
+          {
+            console.log('Found in local storage: ', result.token);
+            flickr.parseToken(result.token);
+            $rootScope.state.isAnonymous = false;
+          }
+        });
+
         // Whenever login URL is received, we will update the UI and enable
         // the login button.
         socket.on('url', function(message) {
@@ -54,6 +108,22 @@
           $rootScope.state.isConnecting = false;
 
           $rootScope.$emit('status', { message: 'Connected.' });
+
+        });
+
+        // When we receive access token, make sure we store it permanently.
+        socket.on('token', function(message) {
+
+          // Save it using the Chrome extension storage API.
+          // This will ensure the token is synced across devices.
+          chrome.storage.sync.set({'token': message}, function() {
+            // Notify that we saved.
+            message('Settings saved');
+          });
+
+          console.log('Received Access Token: ', message);
+          flickr.parseToken(message);
+          $rootScope.state.isAnonymous = false;
 
         });
 
@@ -69,7 +139,7 @@
         $routeProvider.when('/', { templateUrl: '/views/home.html', controller: 'HomeController' });
         $routeProvider.when('/about', { templateUrl: '/views/about.html', controller: 'AboutController' });
         $routeProvider.when('/login', { templateUrl: '/views/login.html', controller: 'LoginController' });
-        $routeProvider.when('/logout', { templateUrl: '/views/logout.html', controller: 'LoginController' });
+        $routeProvider.when('/logout', { templateUrl: '/views/logout.html', controller: 'LogoutController' });
         $routeProvider.when('/search', { templateUrl: '/views/search.html', controller: 'SearchController' });
         $routeProvider.when('/settings', { templateUrl: '/views/settings.html', controller: 'SettingsController' });
         $routeProvider.when('/profile', { templateUrl: '/views/profile.html', controller: 'ProfileController' });

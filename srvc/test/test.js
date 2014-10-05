@@ -13,7 +13,7 @@ nconf.file(path.resolve(__dirname, 'config.json')).env();
 
 var assert = require("assert")
   , should = require('chai').should()
-  , storage = require('../services/storage.js')(nconf.get('DB_HOST'), nconf.get('DB_KEY'))
+  , storage = require('../services/storage.js')(nconf.get('DB_HOST'), nconf.get('DB_KEY'), 'downloadr')
   , nconf = require('nconf')
   , path = require('path')
   , chaiAsPromised = require("chai-as-promised")
@@ -53,7 +53,7 @@ describe('Storage', function() {
 
       return storage.openCollection('tokens').then(function(collection) {
 
-        return storage.readDocumentByToken('72157647688791676-0476982f92e0c9c3', collection).then(function(document) {
+        return storage.readByToken('72157647688791676-0476982f92e0c9c3', collection).then(function(document) {
 
         });
       })

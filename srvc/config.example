@@ -1,4 +1,6 @@
 {
-  "DB_HOST": "[FILL OUT]",
-  "DB_KEY": "[FILL OUT]"
+  "DB_HOST": "",
+  "DB_KEY": "",
+  "FLICKR_KEY": "",
+  "FLICKR_SECRET": ""
 }

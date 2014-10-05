@@ -47,6 +47,25 @@ var search = function(text)
 
 }
 
+var getAccessToken = function(token, secret, verifier, cb)
+{
+  console.log("Requesting to get permanent Access Token");
+
+  var args = {
+    flickrConsumerKey: _key,
+    flickrConsumerKeySecret: _secret,
+    oauthToken: token,
+    oauthTokenSecret: secret,
+    oauthVerifier: verifier,
+    callback: cb
+  };
+
+  console.log(args);
+
+  flickrApi.useRequestTokenToGetAccessToken(args);
+
+}
+
 var getAuthUrl = function(cb)
 {
   console.log("!!!!!!!!!!!!!");
@@ -66,6 +85,9 @@ var getAuthUrl = function(cb)
 
 module.exports = function(key, secret, settings)
 {
+  if (!key) throw new Error('"key" is required');
+  if (!secret) throw new Error('"secret" is required');
+
   var port = settings.port || 3000;
 
   _url = settings.url || 'http://localhost:' + port + '/auth/';
@@ -79,6 +101,7 @@ module.exports = function(key, secret, settings)
 
   return {
       getAuthUrl: getAuthUrl,
+      getAccessToken: getAccessToken,
       search: search
       }
 };
