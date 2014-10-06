@@ -225,6 +225,13 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         $rootScope.state.background = 'wallpaper-2';
 
+       $scope.getAcceptLanguages = function() {
+          chrome.i18n.getAcceptLanguages(function(languageList) {
+            var languages = languageList.join(",");
+            document.getElementById("languageSpan").innerHTML = languages;
+          })
+        };
+
         $scope.languages = [
             { key: 'en-US', value: 'English' },
             { key: 'nb-NO', value: 'Norwegian' },

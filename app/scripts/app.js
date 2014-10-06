@@ -25,6 +25,11 @@
     {
         console.log('downloadr.run: ');
 
+        // i18n example:
+        var resourceText = chrome.i18n.getMessage("settings_title");
+
+        console.log('Resource Text: ', resourceText);
+
         $rootScope.state = {
 
             isAnonymous: true,

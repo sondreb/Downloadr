@@ -1,0 +1,18 @@
+{
+  "settings_title": {
+      "message": "INNSTILLINGER",
+      "description": "Top menu item."
+  },
+  "about_title": {
+      "message": "OM",
+      "description": "Top menu item."
+  },
+  "appName": {
+    "message": "Flickr Downloadr",
+    "description": "The title of the application, displayed in the web store."
+  },
+  "appDesc": {
+    "message": "Enkelt og elegant verktøy for nedlasting av bilder.",
+    "description":"The description of the application, displayed in the web store."
+  }
+}
