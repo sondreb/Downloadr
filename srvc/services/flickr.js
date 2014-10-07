@@ -96,8 +96,6 @@ module.exports = function(key, secret, settings)
 
   console.log('Flickr Service configured: ');
   console.log(' URL: ', _url);
-  console.log(' KEY: ', _key);
-  console.log(' SECRET: ', _secret);
 
   return {
       getAuthUrl: getAuthUrl,

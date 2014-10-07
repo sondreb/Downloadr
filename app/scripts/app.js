@@ -47,6 +47,7 @@
 
         };
 
+
         $rootScope.$emit('status', { message: 'Starting...' });
 
         $rootScope.$on('Event:Logout', function () {
@@ -61,9 +62,12 @@
             flickr.removeToken();
 
             $rootScope.state.isAnonymous = true;
+            //$rootScope.state.isConnecting = true;
+
+            // Make sure we get a new login url.
+            socket.emit('getUrl');
 
             //$scope.authenticatingEvent(null);
-
         });
 
         // Make sure we listen to whenever the local storage value have changed.
@@ -87,19 +91,27 @@
         // Try to find existing token.
         chrome.storage.sync.get('token', function(result){
 
-          if (result === undefined)
+          if (result === undefined || result === null)
           {
             console.log('No existing token found.');
+
+            // When no token is found, we'll issue a command to get login url.
+            socket.emit('getUrl');
           }
-          else if (result.token === undefined)
+          else if (result.token === undefined || result.token === null)
           {
             console.log('No existing token found.');
+
+            // When no token is found, we'll issue a command to get login url.
+            socket.emit('getUrl');
           }
           else
           {
             console.log('Found in local storage: ', result.token);
             flickr.parseToken(result.token);
             $rootScope.state.isAnonymous = false;
+            $rootScope.state.isConnecting = false;
+            $rootScope.$broadcast('status', { message: 'Authenticated. Hi ' + result.token.userName + '!' });
           }
         });
 
@@ -111,8 +123,7 @@
 
           $rootScope.state.loginUrl = message.url;
           $rootScope.state.isConnecting = false;
-
-          $rootScope.$emit('status', { message: 'Connected.' });
+          $rootScope.$broadcast('status', { message: 'Connected.' });
 
         });
 
@@ -128,7 +139,9 @@
 
           console.log('Received Access Token: ', message);
           flickr.parseToken(message);
+
           $rootScope.state.isAnonymous = false;
+          $rootScope.$broadcast('status', { message: 'Authenticated. Hi ' + message.userName + '!' });
 
         });
 
@@ -136,7 +149,7 @@
         // connect to the WebSocket service and notify a request for authentication URL.
         // After the URL is generated, we'll show it to the user. When returned, it will
         // return to the WebSocket service, which in return will return the answers.
-        Flickr.Authenticate();
+        //Flickr.Authenticate();
     }]);
 
     downloadr.config(['$routeProvider', function($routeProvider)

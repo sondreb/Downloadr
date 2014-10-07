@@ -38,14 +38,14 @@
 
     controllers.controller('StatusController', ['$scope', '$rootScope', 'socket', function ($scope, $rootScope, socket) {
 
+      console.log('STATUS CONTROLLER!');
+
         $scope.message = 'Loading...';
 
         $scope.$on('status', function(event, args) {
 
           console.log('Status: ', args.message);
           $scope.message = args.message;
-          //console.log(args.message);
-          //$scope.message = args.message;
 
         });
 
@@ -84,6 +84,8 @@
 
 
     controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+
+
 
         $rootScope.state.background = 'wallpaper-3';
 

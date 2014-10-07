@@ -39,12 +39,12 @@ var express = require('express')
 socket.on('connection', function(client) {
 
   client.on('message', function(msg){
-    console.log('!!!! MESSAGE: ', msg);
+    console.log('socket.io:message: ', msg);
   });
 
   client.on('accessGranted', function(msg) {
 
-    console.log('accessGranted: ', msg);
+    console.log('socket.io:accessGranted: ', msg);
 
     var token = msg.oauth_token;
     var verifier = msg.oauth_verifier;
@@ -84,7 +84,7 @@ socket.on('connection', function(client) {
               // Now we should delete the session token from storage.
               // Perhaps we should have some sort of timeout, if there
               // is a connection issue with the WebSocket?
-              
+
               storage.delete(doc);
 
             });
@@ -133,7 +133,7 @@ socket.on('connection', function(client) {
         var document = storage.readBySessionId(clientId, collection).then(function(document) {
             if (document === undefined)
             {
-                var doc = { modified: new Date(), connectionId: clientId, token: oauthToken, tokenSecret: oauthTokenSecret, tokenVerifier: '', isAccessToken: false };
+                var doc = { modified: new Date(), connectionId: clientId, token: oauthToken, tokenSecret: oauthTokenSecret, tokenVerifier: '' };
 
                 storage.insert(doc, collection).then(function(document){
                   console.log('Saved document: ' + document);

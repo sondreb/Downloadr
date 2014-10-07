@@ -42,9 +42,9 @@
       socket.on('connect', function () {
 
         console.log('socket.io connected to service.');
-
+        $rootScope.$emit('status', { message: 'Connected to service.' });
         socket.emit('message', { text : 'hello world from app!!!' });
-        socket.emit('getUrl');
+
 
       });
 
