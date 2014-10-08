@@ -47,6 +47,27 @@ var search = function(text)
 
 }
 
+
+var signUrl = function(token, secret, method, args, cb)
+{
+  console.log("Requesting to sign URL");
+  console.log(args);
+
+  var args = {
+    method: method,
+    flickrConsumerKey: _key,
+    flickrConsumerKeySecret: _secret,
+    oauthToken: token,
+    oauthTokenSecret: secret,
+    callback: cb,
+    optionalArgs : args
+  };
+
+  var method = flickrApi.signApiMethod(args);
+  cb(null, method);
+
+}
+
 var getAccessToken = function(token, secret, verifier, cb)
 {
   console.log("Requesting to get permanent Access Token");
@@ -63,7 +84,6 @@ var getAccessToken = function(token, secret, verifier, cb)
   console.log(args);
 
   flickrApi.useRequestTokenToGetAccessToken(args);
-
 }
 
 var getAuthUrl = function(cb)
@@ -100,6 +120,7 @@ module.exports = function(key, secret, settings)
   return {
       getAuthUrl: getAuthUrl,
       getAccessToken: getAccessToken,
+      signUrl: signUrl,
       search: search
       }
 };

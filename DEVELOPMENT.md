@@ -65,6 +65,14 @@ within the srvc folder.
 Remember, the config.json is excluded from the repo to make sure no secrets
 or passwords is exposed publicly in the git repo.
 
+## Security:
+
+- The service should be hosted using a secure channel like HTTPS.
+- The service does not store the permanent access token, for security reasons
+the token is eventually only stored on the client. That means the service
+cannot make any Flickr-requests on behalf of the user, without first receiving
+a copy of the token. This reduces the potential harm of a service compromise.
+
 ## Notes:
 
 To add a new JavaScript component, run the following node command:

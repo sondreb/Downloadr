@@ -14,8 +14,9 @@
         "notifications",
         "fullscreen",
         "https://api.flickr.com/*",
-        "http://*.staticflickr.com/*",
-        "http://brain.no/*"
+        "https://*.staticflickr.com/*",
+        "http://brain.no/*",
+        "<all_urls>"
     ],
     "minimum_chrome_version": "23",
     "offline_enabled": true,

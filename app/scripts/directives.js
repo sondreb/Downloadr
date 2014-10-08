@@ -19,56 +19,45 @@
   /*
   This directive allows us to pass a function in on an enter key to do what we want.
    */
-  directives.directive('ngEnter', function ($location, $timeout) {
+  directives.directive('ngEnter', function ($rootScope, $location, $timeout) {
       return function (scope, element, attrs) {
           element.bind("keydown keypress", function (event) {
               if(event.which === 13) {
 
                   $timeout(function() {
+
+                    // First make sure we navigate to the page.
                     $location.path(attrs.ngEnter);
+
+                    // This should check for both undefined and null.
+                    if (scope.eventHandler != null)
+                    {
+                      // If there is any event handler defined on the directive
+                      // call the function.
+                      scope.eventHandler();
+                    }
                   }, 0);
 
                   event.preventDefault();
-
-                  //$location.path(attrs.ngEnter);
-
-                  //scope.$apply(function (){
-                  //    scope.$eval(attrs.ngEnter);
-                  //});
               }
           });
       };
   });
 
+  // This directive is used to show the search input with options dropdown
+  // and the search icon/button.
   directives.directive('search', function () {
 
       return {
           restrict: 'E',
           scope: {
             class: '@',
-            value: '='
+            value: '=',
+            eventHandler: '&ngSearch'
           },
           templateUrl: 'views/template_search.html'
       };
   });
-
-
-  /*
-
-  '<div class="dropdown">' +
-      '<a href="#" class="search-type" ng-click="dropDown();">' +
-          '<span class="fa fa-camera fa-fw"></span>' +
-          '<span class="fa fa-caret-down"></span>' +
-      '</a>' +
-      '<ul class="search-options">' +
-          '<li><a href="#"><i class="fa fa-camera"></i> Photos</a></li>' +
-          '<li><a href="#"><i class="fa fa-video-camera"></i> Videos</a></li>' +
-          '<li><a href="#"><i class="fa fa-user"></i> User</a></li>' +
-          '<li><a href="#"><i class="fa fa-group"></i> Groups</a></li>' +
-      '</ul>' +
-  '</div>' +
-
-  */
 
   directives.directive('navMenu', function($location) {
     return function(scope, element, attrs) {
@@ -98,8 +87,6 @@
 
       scope.$on('$routeChangeStart', function() {
         var pathLink = urlMap[$location.path()];
-
-        console.log('YES!!!');
 
         if (pathLink) {
           if (currentLink) {

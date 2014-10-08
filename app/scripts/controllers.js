@@ -69,10 +69,7 @@
             }
         });
 
-
-        $scope.state = { isLoggedIn: false };
-
-
+        //$scope.state = { isLoggedIn: false };
 
     }]);
 
@@ -167,7 +164,7 @@
 
                 $rootScope.state.isAnonymous = false;
 
-                $rootScope.$emit('status', { message: 'Authenticated.' });
+                $rootScope.$broadcast('status', { message: 'Authenticated.' });
 
                 // Navigate to home.
                 $location.path('/#');
@@ -213,11 +210,152 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 }]);
 
 
-    controllers.controller('SearchController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
+    controllers.controller('SearchController', ['$scope', '$rootScope', '$location', '$http', '$timeout', 'socket', 'flickr', function ($scope, $rootScope, $location, $http, $timeout, socket, flickr) {
+
+        //$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
 
         $rootScope.state.background = 'wallpaper';
 
-        $scope.search = { text: '' };
+        $rootScope.$on('Event:Search', function (event, data) {
+
+          console.log('User did a new search...');
+          $rootScope.state.searchText = data.value;
+          $scope.performSearch($rootScope.state.searchText);
+
+        });
+
+        $scope.loadImage = function(item, callback) {
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.onload = function() {
+            callback(window.webkitURL.createObjectURL(xhr.response), item);
+          }
+          xhr.open('GET', item.uri, true);
+          xhr.send();
+        };
+
+        // for each image with no imageUrl, start a new loader
+        $scope.loadImages = function() {
+
+          var photos = $scope.photos;
+
+          for (var i=0; i<photos.length; i++) {
+
+            var item = photos[i];
+            item.uri = 'https://farm' + item.farm + '.staticflickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_m.jpg';
+
+            $scope.loadImage(item, function(blob_uri, originalItem) {
+
+              $timeout(function() {
+
+                console.log('BLOB: ', blob_uri);
+                originalItem.url = blob_uri;
+                                
+              }, 0);
+
+/*
+              $scope.$apply(function(scope) {
+
+                  item.url = blob_uri;
+                  console.log('BLOB: ', blob_uri);
+
+
+                for (var k=0; k<scope.todos.length; k++) {
+                  if (scope.todos[k].uri==requested_uri) {
+                    scope.todos[k].imageUrl = blob_uri;
+                  }
+                }
+              });*/
+
+            });
+
+            /*
+            if (photo.imageUrl === PLACEHOLDER_IMAGE) {
+
+              $scope.loadImage(todo.uri, function(blob_uri, requested_uri) {
+
+                $scope.$apply(function(scope) {
+
+                  for (var k=0; k<scope.todos.length; k++) {
+
+                    if (scope.todos[k].uri==requested_uri) {
+
+                      scope.todos[k].imageUrl = blob_uri;
+
+                    }
+                  }
+                });
+
+              });
+            }
+            */
+          }
+        };
+
+        $scope.photos = [];
+
+        // Register handler for callbacks of signing URLs.
+        socket.on('urlSigned', function(message) {
+          console.log('Signed URL callback: ', message);
+
+          var url = 'https://' + message.hostname + message.path;
+          console.log('FULL URL:', url);
+
+          $http.post(url).success(function(data, status, headers, config) {
+              // this callback will be called asynchronously
+              // when the response is available
+              console.log(data);
+              console.log('HTTP Status: ', status);
+
+              var list = data.photos.photo;
+
+              // Could we perhaps use prototype instead of this silly loop?
+              for (var i=0; i<list.length; i++) {
+                  var item = list[i];
+                  item.url = 'img/loading.gif';
+
+              }
+
+              // Bind to the UI.
+              $scope.photos = list;
+
+              $scope.loadImages();
+
+              // URL format: https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_[mstzb].jpg
+              // Specification: https://www.flickr.com/services/api/misc.urls.html
+
+            }).
+            error(function(data, status, headers, config) {
+              // called asynchronously if an error occurs
+              // or server returns response with an error status.
+              console.log(data);
+              console.log('HTTP Status: ', status);
+            });
+
+        });
+
+        $scope.performSearch = function(searchTerm)
+        {
+            console.log('Performing search on: ', searchTerm);
+
+            // Get a prepared message that includes token.
+            //var message = flickr.createMessage('flickr.cameras.getBrandModels', {brand: 'Nikon'});
+            var message = flickr.createMessage('flickr.photos.search', {text: searchTerm});
+            console.log(message);
+            socket.emit('signUrl', message);
+        };
+
+
+        $scope.init = function() {
+
+          // This is first run, meaning user have probably performed search from
+          // home view. Read the state and perform search now.
+          $scope.performSearch($rootScope.state.searchText);
+
+        };
+
+
+        $scope.init();
 
     }]);
 
@@ -274,7 +412,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', '$location', 'socket', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log, $location, socket) {
 
 
-
+/*
         $scope.activeLink = function(viewLocation)
         {
             return viewLocation == $location.path();
@@ -283,6 +421,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         $rootScope.$on("$locationChangeStart", function(event, next, current) {
 
         });
+*/
 
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
 
@@ -299,14 +438,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         });
 
-        /*
-        var resources = {
-            connectionError: 'Connection is in an invalid state, there is no transport active.',
-            invalidState: 'Invalid state.'
-        };*/
-
-
-
         /* Add a hotkey to display the debug menu option. */
         /*
         hotkeys.add({
@@ -321,26 +452,25 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             $scope.goBack();
         });
 
-        $scope.$on('Event:Search', function (event, args) {
-            $scope.searchValue = args;
-            $scope.search();
-        });
+        //$scope.$on('Event:Search', function (event, args) {
+            //$scope.searchValue = args;
+            //$scope.search();
+        //});
 
         // Change the UI when user has authenticated.
-        $scope.$on('authenticating', function (event, token) {
+        //$scope.$on('authenticating', function (event, token) {
+        //    $scope.authenticatingEvent(token);
+        //});
 
-            $scope.authenticatingEvent(token);
-        });
+        //$scope.authenticatingEvent = function (token)
+        //{
+          //  $scope.isProfileLoading = false;
 
-        $scope.authenticatingEvent = function (token)
-        {
-            $scope.isProfileLoading = false;
-
-            if (token === null)
-            {
-                $scope.goHome();
-                return;
-            }
+            //if (token === null)
+            //{
+              //  $scope.goHome();
+                //return;
+            //}
 
             //var apiUrl = 'http://api.flickr.com/services/rest/?method=';
             //var method = 'flickr.test.echo';
@@ -356,12 +486,12 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             //console.log(url);
 
             // This happens from an event and therefore we need to run $apply to make the UI update.
-            $scope.$apply();
+            //$scope.$apply();
 
-            console.log('GO HOME!!!');
+            //console.log('GO HOME!!!');
 
             // After user authenticates, we'll go back to the home screen.
-            $scope.goHome();
+            //$scope.goHome();
 
             //console.log(url);
             //console.log(flickr);
@@ -388,9 +518,10 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             //    $scope.parseProfile(data);
 
             //});
-        };
+        //};
 
         // Change the UI when user has authenticated.
+        /*
         $scope.$on('authenticated', function (event, token) {
 
             $log.info('User is authenticated.');
@@ -406,7 +537,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
             });
 
-        });
+        });*/
 
         $scope.parseProfile = function (data) {
 

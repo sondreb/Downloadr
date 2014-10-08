@@ -6,6 +6,8 @@ Flickr Downloadr 3 (3.0.7)
 Elegant and simple app that allows you to search and download
 photos from Flickr.com photo service.
 
+![Version 3 Prototype](/web/images/Flickr_3_prototype_1.jpg?raw=true "Version 3 Prototype")
+
 ## Features:
 - Search for photos based upon name, the user account or groups.
 - View and select photos for download.

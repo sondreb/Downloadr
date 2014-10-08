@@ -52,7 +52,7 @@
                 <ul class="menu" nav-menu="selected">
 
                   <li ng-hide="isOnStartScreen">
-                    <search class="search-control-smaller right" value="state.searchText"></search>
+                    <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
                   </li>
 
                   <li><a href="#/settings">SETTINGS</a></li>

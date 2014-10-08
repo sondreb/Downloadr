@@ -101,6 +101,21 @@ socket.on('connection', function(client) {
 
   });
 
+
+  client.on('signUrl', function(msg) {
+
+    console.log('Sign this method: ', msg);
+
+    flickr.signUrl(msg.token, msg.secret, msg.method, msg.args, function(err, data) {
+
+    console.log('URL SIGNED: ', data);
+
+    // Return the login url to the user.
+    client.emit('urlSigned', data);
+
+   });
+  });
+
   // When user requests auth URL, generate using the Flickr service.
   client.on('getUrl', function() {
 

@@ -42,7 +42,7 @@
       socket.on('connect', function () {
 
         console.log('socket.io connected to service.');
-        $rootScope.$emit('status', { message: 'Connected to service.' });
+        $rootScope.$broadcast('status', { message: 'Connected to service.' });
         socket.emit('message', { text : 'hello world from app!!!' });
 
 
@@ -70,6 +70,52 @@
       };
     });
 
+    downloadr.service('flickr2', function ($rootScope) {
+
+      var token = '';
+      var secret = '';
+      var userId = '';
+      var userName = '';
+      var fullName = '';
+
+      var removeToken = function()
+      {
+        token = '';
+        secret = '';
+        userId = '';
+        userName = '';
+        fullName = '';
+      }
+
+      var parseToken = function(message)
+      {
+          token = message.oauthToken;
+          secret = message.oauthTokenSecret;
+          userId = message.userNsId;
+          userName = message.userName;
+          fullName = message.fullName;
+      };
+
+      var createMessage = function(method, args)
+      {
+          var message = {
+            method: method,
+            args: args,
+            token: flickr.token,
+            secret: flickr.secret
+            };
+
+          return message;
+      };
+
+
+    return {
+        parseToken : parseToken,
+        removeToken : removeToken,
+        createMessage: createMessage
+    };
+  });
+
     downloadr.service('flickr', function ($rootScope) {
 
       var token = '';
@@ -96,10 +142,22 @@
           fullName = message.fullName;
       };
 
+      var createMessage = function(method, args)
+      {
+          var message = {
+            method: method,
+            args: args,
+            token: token,
+            secret: secret
+            };
+
+        return message;
+      };
 
     return {
         parseToken : parseToken,
-        removeToken : removeToken
+        removeToken : removeToken,
+        createMessage: createMessage
     };
 
     //$scope.format = function (text, params) {

@@ -5,7 +5,10 @@
             <div class="search-container search-large center">
 
                 <h1>Hi, what are you looking for?</h1><br>
-                <search class="larger" value="state.searchText"></search>
+
+                <!-- Was unable to bind the "value" property as defined
+                below. Instead I had to use a broadcast within directive -->
+                <search class="larger" value="state.searchText" ng-search="performSearch()"></search>
             </div>
 
         </div>

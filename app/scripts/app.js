@@ -23,7 +23,7 @@
 
     downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', function($rootScope, $location, searchProvider, socket, flickr)
     {
-        console.log('downloadr.run: ');
+        console.log('downloadr.run: ', flickr);
 
         // i18n example:
         var resourceText = chrome.i18n.getMessage("settings_title");
@@ -41,14 +41,33 @@
 
             background: 'wallpaper',
 
-            searchText: 'Yeeeh',
+            searchText: '',
 
             loginUrl: ''
 
         };
 
+        $rootScope.performSearch = function(){
 
-        $rootScope.$emit('status', { message: 'Starting...' });
+          console.log('CLICK PERFORM SEARCH: ', $rootScope.state.searchText);
+
+          $rootScope.$broadcast('Event:Search', { value: $rootScope.state.searchText });
+
+        };
+
+
+        $rootScope.$broadcast('status', { message: 'Starting...' });
+
+        // Whenever the search directive raises the search event,
+        // we'll update the rootScope.state.
+        /*$rootScope.$on('Event:Search', function (event, data) {
+
+          $rootScope.state.searchText = data.value;
+
+        });*/
+
+
+        //$rootScope.$broadcast('Event:Search', { value: 'Sweeet' });
 
         $rootScope.$on('Event:Logout', function () {
 
@@ -165,6 +184,16 @@
         $routeProvider.when('/tests', { templateUrl: '/views/tests.html', controller: 'TestController' });
 
         $routeProvider.otherwise({ redirectTo: '/' });
+
+    }]);
+
+    downloadr.config( ['$compileProvider', function($compileProvider)
+    {
+      // This has to be done or else Angular will append "unsafe:" to URLs.
+      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome‌​-extension|blob:chrome-extension):/);
+
+      var oldWhiteList = $compileProvider.imgSrcSanitizationWhitelist();
+      $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|chrome-extension):|data:image\//);
 
     }]);
 
