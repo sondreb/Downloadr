@@ -41,11 +41,32 @@
 
             background: 'wallpaper',
 
+            showActions: false,
+
             searchText: '',
 
             loginUrl: ''
 
         };
+
+        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+
+          var path = $location.path();
+
+          // Whenever the user navigate, we'll hide the actions bar.
+          // It will manually be re-enabled by controllers that use it.
+          $rootScope.state.showActions = false;
+
+          if (path == "/" || path == "")
+          {
+            $rootScope.state.isOnStartScreen = true;
+          }
+          else
+          {
+            $rootScope.state.isOnStartScreen = false;
+          }
+
+        });
 
         $rootScope.performSearch = function(){
 

@@ -38,6 +38,17 @@ chrome.runtime.onSuspend.addListener(function () {
     // Do some simple clean-up tasks.
 });
 
+
+/*
+"management" api is not available for Chrome Apps. Was unable to find any
+events that can be listened on when app is being uninstalled. Verify if the
+synced Chrome storage is deleted upon uninstall, to ensure that the auth
+tokens does not persist on the users machine.
+*/
+chrome.management.onUninstalled.addListener(function() {
+  alert("Uninstalling");
+});*/
+
 //chrome.runtime.onUpdateAvailable.addListener(function (details) {
 //    console.log("updating to version " + details.version);
 //    chrome.runtime.reload();

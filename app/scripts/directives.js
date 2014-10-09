@@ -26,8 +26,11 @@
 
                   $timeout(function() {
 
-                    // First make sure we navigate to the page.
-                    $location.path(attrs.ngEnter);
+                    if (attrs.ngEnter != null)
+                    {
+                      // First make sure we navigate to the page.
+                      $location.path(attrs.ngEnter);
+                    }
 
                     // This should check for both undefined and null.
                     if (scope.eventHandler != null)
@@ -46,16 +49,36 @@
 
   // This directive is used to show the search input with options dropdown
   // and the search icon/button.
-  directives.directive('search', function () {
+  directives.directive('search', function ($location) {
 
       return {
           restrict: 'E',
           scope: {
             class: '@',
             value: '=',
+            target: '@',
             eventHandler: '&ngSearch'
           },
-          templateUrl: 'views/template_search.html'
+          templateUrl: 'views/template_search.html',
+          link: function($scope, element, attrs) {
+
+              // Click Handler handles when user clicks the
+              // search button, then we will navigate and perform search.
+              $scope.clickHandler = function()
+              {
+                  if ($scope.target != null)
+                  {
+                    $location.path($scope.target);
+                  }
+
+                  if ($scope.eventHandler != null)
+                  {
+                    // If there is any event handler defined on the directive
+                    // call the function.
+                    $scope.eventHandler();
+                  }
+              };
+          }
       };
   });
 

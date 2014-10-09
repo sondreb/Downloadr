@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="downloadr">
+<html ng-app="downloadr" ng-csp="">
     <head>
         <meta charset="utf-8">
         <title>Flickr Downloadr 3</title>
@@ -51,8 +51,8 @@
 
                 <ul class="menu" nav-menu="selected">
 
-                  <li ng-hide="isOnStartScreen">
-                    <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
+                  <li ng-hide="state.isOnStartScreen">
+                    <search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()"></search>
                   </li>
 
                   <li><a href="#/settings">SETTINGS</a></li>
@@ -77,7 +77,25 @@
                 </div>
         </header>
 
-        <div class="container row scroll-y" ng-view></div>
+        <div class="container row scroll-y" ng-class="{extended: state.showActions}" ng-view></div>
+
+        <div class="actions row" ng-show="state.showActions" ng-controller="ActionsController">
+          <ul class="menu smaller" nav-menu="selected">
+
+            <!--
+            <li>
+              <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
+            </li>-->
+            <li>
+              <select><option value="photos">Large</option>
+                <option value="videos">Small</option>
+                <option value="user">Album</option>
+                <option value="groups">List</option>
+              </select>
+            </li>
+            <li><a href="#/about" >NEXT</a></li>
+          </ul>
+        </div>
 
         <div class="footer row" ng-controller="StatusController">{{message}}</div>
 

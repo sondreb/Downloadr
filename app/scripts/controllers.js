@@ -214,7 +214,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         //$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
 
-        $rootScope.state.background = 'wallpaper';
+        $rootScope.state.background = 'wallpaper-gray';
+        $rootScope.state.showActions = true;
 
         $rootScope.$on('Event:Search', function (event, data) {
 
@@ -381,6 +382,16 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         storage.bind($scope, 'language', 'en-US');
         storage.bind($scope, 'theme', 'dark');
 
+
+
+
+    }]);
+
+    controllers.controller('ActionsController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+
+
+
     }]);
 
 
@@ -423,20 +434,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         });
 */
 
-        $rootScope.$on("$routeChangeStart", function (event, next, current) {
 
-          var path = $location.path();
-
-          if (path == "/" || path == "")
-          {
-            $scope.isOnStartScreen = true;
-          }
-          else
-          {
-            $scope.isOnStartScreen = false;
-          }
-
-        });
 
         /* Add a hotkey to display the debug menu option. */
         /*
@@ -815,7 +813,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         $scope.isDebug = false;
 
         $scope.searchValue = '';
-        $scope.isOnStartScreen = true;
         $scope.LoginTitle = 'LOGIN';
 
         $scope.DisplayName = 'sondreb';

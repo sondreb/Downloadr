@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.7)
+Flickr Downloadr 3 (3.0.25)
 ============
 
 ## Description:
