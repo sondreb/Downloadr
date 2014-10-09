@@ -549,10 +549,40 @@ a { text-decoration:none; }
     }
 
 
-.thumbs img {
-
+.thumbs ul li a img {
+    float: left;
     height: 128px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
 
+.thumbs ul li a img:hover {
+    opacity: 0.6;
+}
+
+.thumbs ul
+{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.thumbs ul li
+{
+    display: inline;
+}
+
+.thumbs ul li a
+{
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.thumbs ul li a:hover
+{
 }
 
 
@@ -587,7 +617,7 @@ a { text-decoration:none; }
 
 ul
 {
-margin-left: 20px;
+    margin-left: 20px;
 }
 
 li

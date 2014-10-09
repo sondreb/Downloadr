@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="downloadr" ng-csp="">
+<html ng-app="downloadr">
     <head>
         <meta charset="utf-8">
         <title>Flickr Downloadr 3</title>
@@ -25,9 +25,9 @@
             <div class="frame">
 
                 <!-- Debug Tools - Advanced Settings & Test Runner -->
-                <a href="#/tests" ng-click="test_view();" id="window-tests"
-                title="Tests">&#44;</a><a href="#/debug"
-                ng-click="debug_view();" id="window-debug"
+                <a href="#/tests" ng-show="isDebug" ng-click="test_view();"
+                id="window-tests" title="Tests">&#44;</a><a href="#/debug"
+                ng-show="isDebug" ng-click="debug_view();" id="window-debug"
                 title="Debug">&#64;</a><a href=""
                 ng-click="minimize();"
                 id="window-minimize"

@@ -1,45 +1,8 @@
-    <div id="searchView" class="thumbs container">
-        <div class="content">
-
-          <div ng-repeat="photo in photos" style="float: left;">
-            <img style="float: left;" ng-src="{{photo.url}}">
-            <!--<img style="max-height: 48px; max-width: 120px;" style="float: left;" ng-src="{{photo.url}}"></img>-->
-          </div>
-          <br class="clear">
-          <p>Fetching more photos...</p>
-
-            <!--<li ng-repeat="phone in phones">
-                {{phone.name}}
-                <p>{{phone.snippet}}</p>
-            </li>-->
-            <!--<fd-thumbnail src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-
-            </fd-thumbnail>-->
-<!--
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">
-            <img src="img/Beautiful-Island-Wallpaper-640x360.jpg">
-            <img src="img/Blue-Green-beautiful-nature-21891805-1920-1200.jpg">
-            <img src="img/Picture-4.jpg">-->
-
-        </div>
-    </div>
+<div id="searchView" class="thumbs container">
+  <ul>
+    <li ng-repeat="photo in photos"><a href=""><img ng-src="{{photo.url}}"><span>TITLE!</span></a></li>
+  </ul>
+  <!--
+  <p>Fetching more photos...</p>
+  -->
+</div>

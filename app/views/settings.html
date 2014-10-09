@@ -1,6 +1,31 @@
 <div id="settingsView" class="container">
     <div class="content padding">
-        <h1>Settings</h1>
+        <p>
+        <h2>Safe Search</h2>
+              <input type="radio" name="safe_search" id="safe_search_0" value="0"> <label for="safe_search_0" id="safe_search_0_label">SafeSearch on</label><br />
+              <input type="radio" name="safe_search" id="safe_search_1" value="1"> <label for="safe_search_1" id="safe_search_1_label">SafeSearch moderate</label><br />
+    			    <input type="radio" name="safe_search" id="safe_search_2" value="2" checked> <label for="safe_search_2" id="safe_search_2_label">SafeSearch off</label>
+        </p>
+        <h2>License</h2>
+        <p>
+
+        You are allowed to search and view photos with any licenses, but only those with Creative Commons license is
+        allowed to be downloaded to your local computer.
+      </p>
+      <p>
+<input type=checkbox id="ccsearch" name="cc_search" onchange="F.search.updateCCBoxes();">
+			<label for="ccsearch">Only search within <strong>Creative Commons</strong>-licensed content</label>
+			<br />
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type=checkbox id="cccommercial" name="cc_commercial" disabled />
+			<label for="cccommercial">Find content to use commercially</label> <br />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type=checkbox id="ccderivs" name="cc_derivs" disabled />
+			<label for="ccderivs"> Find content to modify, adapt, or build upon</label>
+      </p>
+
+
         <p>
             <input type="text" ng-model="defaultPath" />
         </p>

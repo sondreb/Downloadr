@@ -250,7 +250,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
                 console.log('BLOB: ', blob_uri);
                 originalItem.url = blob_uri;
-                                
+
               }, 0);
 
 /*
@@ -811,6 +811,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
             $scope.changeScreen('search');
         };
+
+        $scope.isDebug = false;
 
         $scope.searchValue = '';
         $scope.isOnStartScreen = true;

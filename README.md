@@ -6,6 +6,12 @@ Flickr Downloadr 3 (3.0.7)
 Elegant and simple app that allows you to search and download
 photos from Flickr.com photo service.
 
+Home Screen:
+
+![Version 3 Home Screen](/web/images/Flickr_3_1.jpg?raw=true "Version 3 Home Screen")
+
+Search Results:
+
 ![Version 3 Prototype](/web/images/Flickr_3_prototype_1.jpg?raw=true "Version 3 Prototype")
 
 ## Features:
