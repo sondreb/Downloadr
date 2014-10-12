@@ -235,6 +235,25 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
           xhr.send();
         };
 
+        $scope.selectPhoto = function(photo)
+        {
+          if (photo.selected === true)
+          {
+            photo.selected = false;
+          }
+          else
+          {
+            photo.selected = true;
+            $scope.selectedPhotos.push(photo);
+          }
+
+          $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $scope.selectedPhotos });
+
+          console.log('Select photo: ', photo);
+        }
+
+        $scope.selectedPhotos = [];
+
         // for each image with no imageUrl, start a new loader
         $scope.loadImages = function() {
 
@@ -314,7 +333,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
               for (var i=0; i<list.length; i++) {
                   var item = list[i];
                   item.url = 'img/loading.gif';
-
+                  item.selected = false;
               }
 
               // Bind to the UI.
@@ -382,15 +401,192 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         storage.bind($scope, 'language', 'en-US');
         storage.bind($scope, 'theme', 'dark');
 
+    }]);
+
+
+    controllers.controller('ActionsController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+      $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
+
+        console.log('Event:SelectedPhotosChanged: ', data);
+
+        $scope.count = data.photos.length;
+
+
+      });
+
+      $scope.count = 0;
+
 
 
 
     }]);
 
-    controllers.controller('ActionsController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+    controllers.controller('FolderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
 
 
+      /**
+       * @param {string} File name.
+       * @return {string} Sanitized File name.
+       * Returns a sanitized version of a File Name.
+       */
+      $scope.sanitizeFileName = function(fileName) {
+        return fileName.replace(/[^a-z0-9\-]/gi, ' ').substr(0, 50).trim();
+      }
+
+
+      /*
+      var folder = document.getElementById('folderDialog');
+
+      folder.addEventListener("change", function(event) {
+        console.log('ON CHANGED!!!', event);
+      });
+      */
+
+      //$scope.folderDialog = folder;
+      $scope.count = 0;
+      $scope.path = '';
+
+
+      $scope.lastError = function()
+      {
+        console.log(chrome.runtime.lastError);
+
+        var filePath = '~\\Pictures\\Flickr\\downloadr.jpg';
+
+        chrome.fileSystem.getWritableEntry(filePath, function(writableFileEntry) {
+
+          console.log('WRITEABLE!');
+
+
+        });
+
+
+        console.log('Last error completed');
+
+
+      }
+
+      function errorHandler(err)
+      {
+        console.log('ERROR!! : ', err);
+        console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+
+      }
+
+      $scope.chooseFolder = function()
+      {
+          chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function(entry) {
+
+            // Small validation, perhaps not needed?
+            if (entry.isDirectory !== true)
+            {
+                console.log('Selected path is not a directory. Aborts.');
+                return;
+            }
+
+            entry.getFile('flickr.txt', {create: true, exclusive: true}, function(writableFileEntry) {
+
+              console.log('FILE: ', writableFileEntry);
+
+              writableFileEntry.createWriter(function(writer) {
+              writer.onerror = errorHandler;
+              writer.onwriteend = function(e) {
+                console.log('write complete');
+              };
+              writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
+            }, errorHandler);
+
+
+            }, function(err){ console.log(err);});
+
+          /*
+            chrome.fileSystem.getWritableEntry(entry, function(writableFileEntry) {
+
+
+              console.log('WRITEABLE: ', writableFileEntry);
+
+            });*/
+
+/*
+            console.log(entry.createReader);
+*/
+
+            chrome.fileSystem.getDisplayPath(entry, function(path) {
+              console.log("FULL PATH: ", path);
+
+              $scope.path = path;
+
+/*
+              var filePath = path + "\\downloadr.jpg";
+
+              console.log("filePath: ", filePath);
+
+              function errorHandler()
+              {
+                console.log('ERROR!!!');
+
+              }
+
+
+              chrome.fileSystem.getWritableEntry(filePath, function(writableFileEntry) {
+
+              console.log('YES!!!!');
+
+                  writableFileEntry.createWriter(function(writer) {
+                    writer.onerror = errorHandler;
+                    writer.onwriteend = callback;
+
+                  chosenFileEntry.file(function(file) {
+                    writer.write(file);
+                  });
+
+                }, errorHandler);
+              });
+*/
+
+/*
+              chrome.fileSystem.getWritableEntry(filePath, function(entry) {
+
+                console.log('WRITABLE: ', entry);
+                console.log(chrome.runtime.lastError);
+
+              });*/
+
+
+
+            });
+
+            console.log('DIALOG: ', entry);
+            //console.log(chrome.runtime.lastError);
+
+            /*
+            chrome.fileSystem.getWritableEntry(chosenFileEntry, function(writableFileEntry) {
+                writableFileEntry.createWriter(function(writer) {
+                  writer.onerror = errorHandler;
+                  writer.onwriteend = callback;
+
+                chosenFileEntry.file(function(file) {
+                  writer.write(file);
+                });
+              }, errorHandler);
+            });*/
+
+
+
+
+
+
+
+
+
+
+
+          });
+
+      };
 
     }]);
 

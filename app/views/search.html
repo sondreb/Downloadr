@@ -1,6 +1,6 @@
 <div id="searchView" class="thumbs container">
   <ul>
-    <li ng-repeat="photo in photos"><a href=""><img ng-src="{{photo.url}}"><span>TITLE!</span></a></li>
+    <li ng-repeat="photo in photos"><a href="" ng-click="selectPhoto(photo)"><img ng-src="{{photo.url}}" ng-class="{selectedThumbnail: photo.selected}" title="{{photo.title}}" alt="{{photo.title}}"></a></li>
   </ul>
   <!--
   <p>Fetching more photos...</p>

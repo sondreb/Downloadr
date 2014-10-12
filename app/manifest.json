@@ -5,10 +5,11 @@
     "description": "__MSG_appDesc__",
     "version": "3.0.25",
     "permissions": [
+        {
+          "fileSystem": ["write", "retainEntries", "directory"]
+        },
         "storage",
         "webview",
-        "fileBrowserHandler",
-        "fileSystem",
         "system.storage",
         "unlimitedStorage",
         "notifications",

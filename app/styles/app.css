@@ -608,14 +608,18 @@ a { text-decoration:none; }
 
 
 
-
+.thumbs ul li
+{
+  float: left;
+}
 
 .thumbs ul li a img {
-    float: left;
+
     height: 128px;
-    border: 0;
+    border: 1px solid transparent;
+    /*border: 0;
     margin: 0;
-    padding: 0;
+    padding: 0;*/
     /*
     box-shadow: 0 0 12px rgba(0, 0, 0, .9);
     */
@@ -628,12 +632,20 @@ a { text-decoration:none; }
 
     -webkit-transition-property: opacity;
     transition-property: opacity;
-
-
 }
 
+.thumbs ul li a img.selectedThumbnail {
+
+  border: 1px solid white;
+}
+
+
 .thumbs ul li a img:hover {
-    opacity: 0.6;
+    opacity: 0.5;
+}
+
+.thumbs ul li a:focus img {
+    opacity: 0.5;
 }
 
 .thumbs ul
@@ -651,9 +663,9 @@ a { text-decoration:none; }
 .thumbs ul li a
 {
     text-decoration: none;
-    margin: 0;
+    /*margin: 0;
     padding: 0;
-    border: 0;
+    border: 0;*/
 }
 
 .thumbs ul li a:hover

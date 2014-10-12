@@ -24,6 +24,7 @@
         <header class="row header" ng-controller="ScreenController as screen">
             <div class="frame">
 
+
                 <!-- Debug Tools - Advanced Settings & Test Runner -->
                 <a href="#/tests" ng-show="isDebug" ng-click="test_view();"
                 id="window-tests" title="Tests">&#44;</a><a href="#/debug"
@@ -87,13 +88,16 @@
               <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
             </li>-->
             <li>
+            Selected: {{count}}
+            </li>
+            <li>
               <select><option value="photos">Large</option>
                 <option value="videos">Small</option>
                 <option value="user">Album</option>
                 <option value="groups">List</option>
               </select>
             </li>
-            <li><a href="#/about" >NEXT</a></li>
+            <li><a href="#/folder">NEXT</a></li>
           </ul>
         </div>
 

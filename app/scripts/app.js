@@ -70,6 +70,12 @@
 
         $rootScope.performSearch = function(){
 
+
+          if ($rootScope.state.searchText === null || $rootScope.state.searchText === '')
+          {
+            $rootScope.state.searchText = 'Kittens';
+          }
+
           console.log('CLICK PERFORM SEARCH: ', $rootScope.state.searchText);
 
           $rootScope.$broadcast('Event:Search', { value: $rootScope.state.searchText });
@@ -201,6 +207,7 @@
         $routeProvider.when('/search', { templateUrl: '/views/search.html', controller: 'SearchController' });
         $routeProvider.when('/settings', { templateUrl: '/views/settings.html', controller: 'SettingsController' });
         $routeProvider.when('/profile', { templateUrl: '/views/profile.html', controller: 'ProfileController' });
+        $routeProvider.when('/folder', { templateUrl: '/views/folder.html', controller: 'FolderController' });
         $routeProvider.when('/debug', { templateUrl: '/views/debug.html', controller: 'DebugController' });
         $routeProvider.when('/tests', { templateUrl: '/views/tests.html', controller: 'TestController' });
 
