@@ -45,7 +45,9 @@
 
             searchText: '',
 
-            loginUrl: ''
+            loginUrl: '',
+
+            selectedPhotos: []
 
         };
 

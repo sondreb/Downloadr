@@ -244,15 +244,15 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
           else
           {
             photo.selected = true;
-            $scope.selectedPhotos.push(photo);
+            $rootScope.state.selectedPhotos.push(photo);
           }
 
-          $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $scope.selectedPhotos });
+          $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $rootScope.state.selectedPhotos });
 
           console.log('Select photo: ', photo);
         }
 
-        $scope.selectedPhotos = [];
+        //$scope.selectedPhotos = [];
 
         // for each image with no imageUrl, start a new loader
         $scope.loadImages = function() {
@@ -262,7 +262,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
           for (var i=0; i<photos.length; i++) {
 
             var item = photos[i];
-            item.uri = 'https://farm' + item.farm + '.staticflickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_m.jpg';
+
+            item.uri = item.getUrl('m');
 
             $scope.loadImage(item, function(blob_uri, originalItem) {
 
@@ -334,6 +335,10 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                   var item = list[i];
                   item.url = 'img/loading.gif';
                   item.selected = false;
+                  item.getUrl = function(size)
+                  {
+                    return 'https://farm' + this.farm + '.staticflickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_' + size + '.jpg';
+                  }
               }
 
               // Bind to the UI.
@@ -412,20 +417,14 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         $scope.count = data.photos.length;
 
-
       });
 
       $scope.count = 0;
-
-
-
 
     }]);
 
 
     controllers.controller('FolderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
-
-
 
       /**
        * @param {string} File name.
@@ -460,21 +459,27 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
           console.log('WRITEABLE!');
 
-
         });
 
-
         console.log('Last error completed');
-
-
       }
 
       function errorHandler(err)
       {
         console.log('ERROR!! : ', err);
         console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
-
       }
+
+      $scope.loadImage = function(item, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+          //callback(window.webkitURL.createObjectURL(xhr.response), item);
+          callback(xhr.response, item);
+        }
+        xhr.open('GET', item.getUrl('b'), true);
+        xhr.send();
+      };
 
       $scope.chooseFolder = function()
       {
@@ -487,20 +492,41 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                 return;
             }
 
-            entry.getFile('flickr.txt', {create: true, exclusive: true}, function(writableFileEntry) {
+            var photo = $rootScope.state.selectedPhotos[0];
 
-              console.log('FILE: ', writableFileEntry);
+            $scope.loadImage(photo, function(blob_uri, originalItem) {
 
-              writableFileEntry.createWriter(function(writer) {
-              writer.onerror = errorHandler;
-              writer.onwriteend = function(e) {
-                console.log('write complete');
-              };
-              writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
-            }, errorHandler);
+              console.log('blob_uri: ', blob_uri);
 
 
-            }, function(err){ console.log(err);});
+              entry.getFile('flickr.jpg', {create: true, exclusive: true}, function(writableFileEntry) {
+
+                console.log('FILE: ', writableFileEntry);
+
+                writableFileEntry.createWriter(function(writer) {
+                writer.onerror = errorHandler;
+                writer.onwriteend = function(e) {
+                  console.log('write complete');
+                };
+
+
+                writer.write(new Blob([blob_uri], {type: 'image/jpeg'}));
+                //writer.write(new Blob(blob_uri, {type: 'image/jpeg'}));
+                //writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
+                //writer.write(blob_uri);
+
+              }, errorHandler);
+
+
+              }, function(err){ console.log(err);});
+
+
+            });
+
+
+
+
+
 
           /*
             chrome.fileSystem.getWritableEntry(entry, function(writableFileEntry) {
@@ -529,7 +555,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                 console.log('ERROR!!!');
 
               }
-
 
               chrome.fileSystem.getWritableEntry(filePath, function(writableFileEntry) {
 
@@ -573,16 +598,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                 });
               }, errorHandler);
             });*/
-
-
-
-
-
-
-
-
-
-
 
           });
 
