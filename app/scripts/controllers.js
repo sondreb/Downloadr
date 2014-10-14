@@ -216,6 +216,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         $rootScope.state.background = 'wallpaper-gray';
         $rootScope.state.showActions = true;
+        $rootScope.state.actionTarget = 'folder';
 
         $rootScope.$on('Event:Search', function (event, data) {
 
@@ -338,7 +339,12 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                   item.getUrl = function(size)
                   {
                     return 'https://farm' + this.farm + '.staticflickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_' + size + '.jpg';
-                  }
+                  };
+
+                  item.getFileName = function(size)
+                  {
+                    return this.id + '_' + this.secret + '_' + size + '.jpg';
+                  };
               }
 
               // Bind to the UI.
@@ -423,8 +429,24 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
     }]);
 
+    controllers.controller('DownloadController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+      $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
+
+        console.log('Event:SelectedPhotosChanged: ', data);
+
+        $scope.count = data.photos.length;
+
+      });
+
+      $scope.count = 0;
+
+    }]);
 
     controllers.controller('FolderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+      $rootScope.state.actionTarget = 'download';
+      $rootScope.state.showActions = true;
 
       /**
        * @param {string} File name.
@@ -498,8 +520,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
               console.log('blob_uri: ', blob_uri);
 
-
-              entry.getFile('flickr.jpg', {create: true, exclusive: true}, function(writableFileEntry) {
+              entry.getFile(photo.getFileName('b'), {create: true, exclusive: true}, function(writableFileEntry) {
 
                 console.log('FILE: ', writableFileEntry);
 
@@ -509,11 +530,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                   console.log('write complete');
                 };
 
-
                 writer.write(new Blob([blob_uri], {type: 'image/jpeg'}));
-                //writer.write(new Blob(blob_uri, {type: 'image/jpeg'}));
                 //writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
-                //writer.write(blob_uri);
 
               }, errorHandler);
 
@@ -541,9 +559,15 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 */
 
             chrome.fileSystem.getDisplayPath(entry, function(path) {
-              console.log("FULL PATH: ", path);
 
-              $scope.path = path;
+
+                $scope.$apply(function () {
+
+                    console.log("FULL PATH: ", path);
+                    $rootScope.state.targetPath = path;
+                    $scope.path = path;
+                });
+
 
 /*
               var filePath = path + "\\downloadr.jpg";

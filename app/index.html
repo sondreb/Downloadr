@@ -90,14 +90,20 @@
             <li>
             Selected: {{count}}
             </li>
-            <li>
+            <li ng-show="state.actionTarget == 'folder'">
               <select><option value="photos">Large</option>
                 <option value="videos">Small</option>
                 <option value="user">Album</option>
                 <option value="groups">List</option>
               </select>
             </li>
-            <li><a href="#/folder">NEXT</a></li>
+
+            <!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
+            <li ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0"><a href="#/folder">NEXT</a></li>
+            <li ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="">NEXT</a></li>
+            <li ng-show="state.actionTarget == 'download' && state.targetPath != ''"><a href="#/download">DOWNLOAD</a></li>
+            <li ng-show="state.actionTarget == 'download' && state.targetPath == ''"><a href="">DOWNLOAD</a></li>
+
           </ul>
         </div>
 

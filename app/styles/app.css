@@ -99,6 +99,17 @@ p {
     margin-bottom: 5px;
 }
 
+button
+{
+  font-size: 1.0em;
+  padding: 6px;
+}
+
+.folder, .download
+{
+  color: white;
+}
+
 .content {
 
 }

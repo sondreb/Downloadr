@@ -101,6 +101,11 @@
         link = angular.element(links[i]);
         url = link.attr('href');
 
+        if (url === null || url === undefined)
+        {
+          continue;
+        }
+
         if ($location.$$html5) {
           urlMap[url] = link;
         } else {

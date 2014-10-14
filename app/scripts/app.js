@@ -43,6 +43,10 @@
 
             showActions: false,
 
+            actionTarget: 'folder',
+
+            targetPath: '',
+
             searchText: '',
 
             loginUrl: '',
@@ -210,6 +214,7 @@
         $routeProvider.when('/settings', { templateUrl: '/views/settings.html', controller: 'SettingsController' });
         $routeProvider.when('/profile', { templateUrl: '/views/profile.html', controller: 'ProfileController' });
         $routeProvider.when('/folder', { templateUrl: '/views/folder.html', controller: 'FolderController' });
+        $routeProvider.when('/download', { templateUrl: '/views/download.html', controller: 'DownloadController' });
         $routeProvider.when('/debug', { templateUrl: '/views/debug.html', controller: 'DebugController' });
         $routeProvider.when('/tests', { templateUrl: '/views/tests.html', controller: 'TestController' });
 
@@ -220,9 +225,10 @@
     downloadr.config( ['$compileProvider', function($compileProvider)
     {
       // This has to be done or else Angular will append "unsafe:" to URLs.
-      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome‌​-extension|blob:chrome-extension):/);
+      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome‌​-extension|blob:chrome-extension):\//);
+      $compileProvider.aHrefSanitizationWhitelist (/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
 
-      var oldWhiteList = $compileProvider.imgSrcSanitizationWhitelist();
+      //var oldWhiteList = $compileProvider.imgSrcSanitizationWhitelist();
       $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|chrome-extension):|data:image\//);
 
     }]);
