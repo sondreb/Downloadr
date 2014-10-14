@@ -47,11 +47,15 @@
 
             targetPath: '',
 
+            targetEntry: null,
+
             searchText: '',
 
             loginUrl: '',
 
-            selectedPhotos: []
+            selectedPhotos: [],
+
+            debug: false
 
         };
 

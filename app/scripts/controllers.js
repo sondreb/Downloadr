@@ -439,8 +439,89 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
       });
 
+      function errorHandler(err)
+      {
+        console.log('ERROR!! : ', err);
+        console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
+      }
+
+      $scope.loadImage = function(item, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+          //callback(window.webkitURL.createObjectURL(xhr.response), item);
+          callback(xhr.response, item);
+        }
+        xhr.open('GET', item.getUrl('b'), true);
+        xhr.send();
+      };
+
       $scope.count = 0;
 
+      $scope.processPhoto = function(index)
+      {
+        console.log('INDEX: ', index);
+
+        // Get a reference to the photo object.
+        var photo = $rootScope.state.selectedPhotos[index];
+
+        // Get a reference to the folder object.
+        var entry = $rootScope.state.targetEntry;
+
+        if (photo == null) // checks null or undefined
+        {
+          return;
+        }
+
+        console.log("Process Photo: ", photo);
+
+        // Download the photo
+        $scope.loadImage(photo, function(blob_uri, originalItem) {
+
+          console.log('blob_uri: ', blob_uri);
+
+          // Create the file on disk.
+          entry.getFile(photo.getFileName('b'), {create: true, exclusive: true}, function(writableFileEntry) {
+
+            console.log('FILE: ', writableFileEntry);
+
+            writableFileEntry.createWriter(function(writer) {
+            writer.onerror = errorHandler;
+            writer.onwriteend = function(e) {
+
+              console.log('write complete');
+
+              // Process the next photo
+              $scope.processPhoto(index + 1);
+
+            };
+
+            writer.write(new Blob([blob_uri], {type: 'image/jpeg'}));
+            //writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
+
+          }, errorHandler);
+
+
+          }, function(err){ console.log(err);});
+
+        });
+      };
+
+      // Start the download immediately when the view is loaded.
+      $scope.$on('$viewContentLoaded', function() {
+
+          var photos = $rootScope.state.selectedPhotos;
+
+          var index = 0;
+
+          $scope.processPhoto(index);
+
+          /*
+          for(var i=0;i<photos.length;i++) {
+
+          };*/
+
+      });
     }]);
 
     controllers.controller('FolderController', ['$scope', '$rootScope', function ($scope, $rootScope) {
@@ -510,37 +591,11 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             // Small validation, perhaps not needed?
             if (entry.isDirectory !== true)
             {
-                console.log('Selected path is not a directory. Aborts.');
+                console.log('Selected path is not a directory. Aborting.');
                 return;
             }
 
-            var photo = $rootScope.state.selectedPhotos[0];
-
-            $scope.loadImage(photo, function(blob_uri, originalItem) {
-
-              console.log('blob_uri: ', blob_uri);
-
-              entry.getFile(photo.getFileName('b'), {create: true, exclusive: true}, function(writableFileEntry) {
-
-                console.log('FILE: ', writableFileEntry);
-
-                writableFileEntry.createWriter(function(writer) {
-                writer.onerror = errorHandler;
-                writer.onwriteend = function(e) {
-                  console.log('write complete');
-                };
-
-                writer.write(new Blob([blob_uri], {type: 'image/jpeg'}));
-                //writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
-
-              }, errorHandler);
-
-
-              }, function(err){ console.log(err);});
-
-
-            });
-
+            $rootScope.state.targetEntry = entry;
 
 
 
@@ -1044,8 +1099,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
             $scope.changeScreen('search');
         };
-
-        $scope.isDebug = false;
 
         $scope.searchValue = '';
         $scope.LoginTitle = 'LOGIN';

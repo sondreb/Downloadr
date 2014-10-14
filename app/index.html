@@ -24,11 +24,10 @@
         <header class="row header" ng-controller="ScreenController as screen">
             <div class="frame">
 
-
                 <!-- Debug Tools - Advanced Settings & Test Runner -->
-                <a href="#/tests" ng-show="isDebug" ng-click="test_view();"
+                <a href="#/tests" ng-show="state.debug" ng-click="test_view();"
                 id="window-tests" title="Tests">&#44;</a><a href="#/debug"
-                ng-show="isDebug" ng-click="debug_view();" id="window-debug"
+                ng-show="state.debug" ng-click="debug_view();" id="window-debug"
                 title="Debug">&#64;</a><a href=""
                 ng-click="minimize();"
                 id="window-minimize"
@@ -91,10 +90,27 @@
             Selected: {{count}}
             </li>
             <li ng-show="state.actionTarget == 'folder'">
-              <select><option value="photos">Large</option>
+              <select ng-model="state.viewSize">
+                <option value="photos">Large</option>
                 <option value="videos">Small</option>
                 <option value="user">Album</option>
                 <option value="groups">List</option>
+              </select>
+            </li>
+
+            <!-- For user simplicity, we will hide most of the size options. -->
+            <li ng-show="state.actionTarget != 'folder'">
+              <select ng-model="state.photoSize">
+                <option value="o">Original</option>
+                <option value="b" selected="selected">Large (1024)</option>
+                <option ng-if="state.debug" value="c">Medium (800)</option>
+                <option value="z">Medim (640)</option>
+                <option ng-if="state.debug" value="-">Medium (500)</option>
+                <option value="n">Small (320)</option>
+                <option ng-if="state.debug" value="m">Small (240)</option>
+                <option ng-if="state.debug" value="t">Thumbnail (100)</option>
+                <option value="q">Square (150x150)</option>
+                <option ng-if="state.debug" value="s">Square (75x75)</option>
               </select>
             </li>
 
