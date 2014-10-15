@@ -55,7 +55,9 @@
 
             selectedPhotos: [],
 
-            debug: false
+            debug: false,
+
+            photoSize: 'o'
 
         };
 

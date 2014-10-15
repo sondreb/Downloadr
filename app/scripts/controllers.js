@@ -316,6 +316,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         $scope.photos = [];
 
+        $scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
+
         // Register handler for callbacks of signing URLs.
         socket.on('urlSigned', function(message) {
           console.log('Signed URL callback: ', message);
@@ -336,14 +338,58 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                   var item = list[i];
                   item.url = 'img/loading.gif';
                   item.selected = false;
-                  item.getUrl = function(size)
+
+                  // Returns the highest available image URL for the selected
+                  // size. Depending on the original photo, not all sizes are
+                  // available so this function will search for the largest.
+                  item.getUrl = function(photoSize)
                   {
-                    return 'https://farm' + this.farm + '.staticflickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_' + size + '.jpg';
+
+                    console.log('WHAT IS SIZE: ' , photoSize);
+
+                    // If the specified size exists, return that.
+                    if (this['url_' + photoSize] !== undefined)
+                    {
+                      return this['url_' + photoSize];
+                    }
+
+                    console.log('Find index of ' + photoSize + ' in sizes: ', $scope.sizes);
+
+                    var startIndex = $scope.sizes.indexOf(photoSize);
+
+                    console.log('Start Index: ', startIndex);
+
+                    // Search for the nearest correct size.
+                    for(var i=(startIndex + 1);i<$scope.sizes.length;i++) {
+
+                      console.log('SEARCHING SIZE: ', $scope.sizes[i]);
+
+                      if (this['url_' + $scope.sizes[i]] !== undefined)
+                      {
+                        return this['url_' + $scope.sizes[i]];
+                      }
+                    };
+
+                    throw new Error('Unable to find photo URL for the specified size');
+
+                    //return 'https://farm' + this.farm + '.staticflickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_' + size + '.jpg';
+
                   };
 
-                  item.getFileName = function(size)
+                  item.getFileName = function(photoSize)
                   {
-                    return this.id + '_' + this.secret + '_' + size + '.jpg';
+                    var url = this.getUrl(photoSize);
+                    var filename = url.replace(/^.*[\\\/]/, '');
+                    return filename;
+                    /*
+                    if (photoSize == 'o')
+                    {
+                      return this.id + '_' + this.originalsecret + '_' + photoSize + '.jpg';
+                    }
+                    else
+                    {
+                      return this.id + '_' + this.secret + '_' + photoSize + '.jpg';
+                    }*/
                   };
               }
 
@@ -371,7 +417,11 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
             // Get a prepared message that includes token.
             //var message = flickr.createMessage('flickr.cameras.getBrandModels', {brand: 'Nikon'});
-            var message = flickr.createMessage('flickr.photos.search', {text: searchTerm});
+            //var message = flickr.createMessage('flickr.photos.search', {text: searchTerm, extras: 'license,original_format,url_o'});
+
+            // Until we know exactly what metadata we need, we'll ask for all extras.
+            var message = flickr.createMessage('flickr.photos.search', {text: searchTerm, extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'});
+
             console.log(message);
             socket.emit('signUrl', message);
         };
@@ -431,57 +481,72 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
     controllers.controller('DownloadController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
-      $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
-
-        console.log('Event:SelectedPhotosChanged: ', data);
-
-        $scope.count = data.photos.length;
-
-      });
-
       function errorHandler(err)
       {
         console.log('ERROR!! : ', err);
         console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
       }
 
-      $scope.loadImage = function(item, callback) {
+      $scope.loadImage = function(item, size, callback) {
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'blob';
         xhr.onload = function() {
           //callback(window.webkitURL.createObjectURL(xhr.response), item);
           callback(xhr.response, item);
         }
-        xhr.open('GET', item.getUrl('b'), true);
+        xhr.open('GET', item.getUrl(size), true);
         xhr.send();
       };
 
       $scope.count = 0;
+      $scope.photoNumber = 1;
+      $scope.completed = false;
 
       $scope.processPhoto = function(index)
       {
-        console.log('INDEX: ', index);
-
         // Get a reference to the photo object.
         var photo = $rootScope.state.selectedPhotos[index];
 
         // Get a reference to the folder object.
         var entry = $rootScope.state.targetEntry;
 
+        // Get a reference to the user selected photo size.
+        var size = $rootScope.state.photoSize;
+
+        console.log('PHOTO SIZE: ', size);
+
         if (photo == null) // checks null or undefined
         {
+          $scope.$apply(function () {
+
+            // Reset everything to empty state.
+            $rootScope.state.searchText = '';
+            $rootScope.state.selectedPhotos = [];
+
+            $scope.completed = true;
+          });
+
           return;
         }
+
+        console.log('INDEX: ', index);
+
+        // We need to run apply here, cause in the loop it's called
+        // from outsiden the angular scope.
+        $scope.$apply(function () {
+          $scope.photoNumber = (index + 1);
+        });
+
 
         console.log("Process Photo: ", photo);
 
         // Download the photo
-        $scope.loadImage(photo, function(blob_uri, originalItem) {
+        $scope.loadImage(photo, size, function(blob_uri, originalItem) {
 
           console.log('blob_uri: ', blob_uri);
 
           // Create the file on disk.
-          entry.getFile(photo.getFileName('b'), {create: true, exclusive: true}, function(writableFileEntry) {
+          entry.getFile(photo.getFileName(size), {create: true, exclusive: true}, function(writableFileEntry) {
 
             console.log('FILE: ', writableFileEntry);
 
@@ -511,6 +576,9 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
       $scope.$on('$viewContentLoaded', function() {
 
           var photos = $rootScope.state.selectedPhotos;
+
+          // Set the image count.
+          $scope.count = photos.length;
 
           var index = 0;
 

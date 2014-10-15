@@ -2,8 +2,12 @@
 
     <div class="content middle">
 
-      <h2>Downloaded 3 of 3400</h2>
-      <button>Pause</button> <button>Cancel</button>
+      <h2 ng-hide="completed">Downloaded {{photoNumber}} of {{count}}</h2>
+      <h2 ng-show="completed">Downloaded {{count}} photos successfully</h2>
+      <button ng-hide="completed">Pause</button> <button ng-hide="completed">Cancel</button>
+      <p ng-show="completed">
+      <a href="#/">Search again</a>
+      </p>
       <p>&nbsp;</p>
       <p>
       If a photo is licensed with "All Rights Reserved", it won't be downloaded.
