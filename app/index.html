@@ -79,21 +79,15 @@
 
         <div class="container row scroll-y" ng-class="{extended: state.showActions}" ng-view></div>
 
-        <div class="actions row" ng-show="state.showActions" ng-controller="ActionsController">
+        <div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
           <ul class="menu smaller" nav-menu="selected">
 
-
             <li ng-show="state.actionTarget == 'folder'">
-                Sort: {{settings.sort}}
-              <select ng-model="settings.sort">
-                <option value="photos">Large</option>
-                <option value="videos">Small</option>
-                <option value="user">Album</option>
-                <option value="groups">List</option>
-              </select>
+              Sort:
+              <select ng-model="settings.sort" ng-options="k as v for (k,v) in sorting"></select>
             </li>
             <li ng-show="state.actionTarget == 'folder'">
-                License: Sort: {{settings.license}}
+                License:
               <select ng-model="settings.license">
                 <option value="">Any License</option>
                 <option value="1,2,3,4,5,6">Creative Commons</option>

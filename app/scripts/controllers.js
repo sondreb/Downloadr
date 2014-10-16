@@ -229,6 +229,13 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         });
 
+        $rootScope.$on('Event:Filter', function(event) {
+
+          console.log('User changed filter...');
+          $scope.performSearch($rootScope.state.searchText);
+
+        });
+
         $scope.loadImage = function(item, callback) {
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';
@@ -416,19 +423,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         $scope.performSearch = function(searchTerm)
         {
-            console.log('Performing search on: ', searchTerm);
-
             // Get a prepared message that includes token.
-            //var message = flickr.createMessage('flickr.cameras.getBrandModels', {brand: 'Nikon'});
-            //var message = flickr.createMessage('flickr.photos.search', {text: searchTerm, extras: 'license,original_format,url_o'});
-
-            console.log('Search arguments: ', {
-              text: searchTerm,
-              safe_search: settings.values.safe,
-              sort: settings.values.sort,
-              extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-            });
-
             // Until we know exactly what metadata we need, we'll ask for all extras.
             var message = flickr.createMessage('flickr.photos.search', {
               text: searchTerm,
@@ -486,13 +481,22 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
     controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
-        $scope.sort = {
+        $scope.sorting = {
           'relevance': 'Relevant',
           'date-posted-desc': 'Recent',
-          'interestingness-desc': 'date-posted-desc'
+          'interestingness-desc': 'Interesting'
         };
 
         $scope.settings = settings.values;
+
+        $scope.$watch(function() {
+          return $scope.settings.sort;
+          }, function(v)
+        {
+
+          $rootScope.$broadcast('Event:Filter');
+          console.log('NEW VALUE: ', v);
+        });
 
         console.log($scope.settings);
 
@@ -1190,6 +1194,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             //$scope.changeScreen('start');
         };
 
+/*
         $scope.search = function ()
         {
             console.log('Searching for: ' + $scope.searchValue);
@@ -1208,12 +1213,13 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             });
 
             $scope.changeScreen('search');
-        };
+        };*/
 
+/*
         $scope.searchValue = '';
         $scope.LoginTitle = 'LOGIN';
 
-        $scope.DisplayName = 'sondreb';
+        $scope.DisplayName = 'sondreb';*/
 
         $scope.isLoggedIn = false;
         $scope.previousScreen = null;
