@@ -35,8 +35,11 @@
 
       var values = {
         photoSize: 'o',
-        safe: '0',
-        license: ''
+        safe: '1',
+        license: '',
+        sort: 'relevance',
+        view: 'large',
+        background: true
       }
 
       // Before we return the service, we'll load the settings if they exists.

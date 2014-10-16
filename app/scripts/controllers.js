@@ -80,9 +80,11 @@
     }]);
 
 
-    controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+    controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', 'settings', function ($scope, $rootScope, hotkeys, settings) {
 
         $rootScope.state.background = 'wallpaper-3';
+
+        $scope.settings = settings.values;
 
         hotkeys.add({
             combo: 'ctrl+up',
@@ -208,7 +210,10 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 }]);
 
 
-    controllers.controller('SearchController', ['$scope', '$rootScope', '$location', '$http', '$timeout', 'socket', 'flickr', function ($scope, $rootScope, $location, $http, $timeout, socket, flickr) {
+    controllers.controller('SearchController', ['$scope', '$rootScope',
+    '$location', '$http',
+    '$timeout', 'socket',
+    'flickr', 'settings', function ($scope, $rootScope, $location, $http, $timeout, socket, flickr, settings) {
 
         //$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
 
@@ -417,8 +422,20 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             //var message = flickr.createMessage('flickr.cameras.getBrandModels', {brand: 'Nikon'});
             //var message = flickr.createMessage('flickr.photos.search', {text: searchTerm, extras: 'license,original_format,url_o'});
 
+            console.log('Search arguments: ', {
+              text: searchTerm,
+              safe_search: settings.values.safe,
+              sort: settings.values.sort,
+              extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+            });
+
             // Until we know exactly what metadata we need, we'll ask for all extras.
-            var message = flickr.createMessage('flickr.photos.search', {text: searchTerm, extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'});
+            var message = flickr.createMessage('flickr.photos.search', {
+              text: searchTerm,
+              safe_search: settings.values.safe,
+              sort: settings.values.sort,
+              extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+            });
 
             console.log(message);
             socket.emit('signUrl', message);
@@ -460,22 +477,34 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         //storage.bind($scope, 'language', 'en-US');
         //storage.bind($scope, 'theme', 'dark');
 
-        $scope.safe = '0';
+        $scope.settings = settings.values;
+
+        //$scope.safe = '0';
 
     }]);
 
 
-    controllers.controller('ActionsController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+    controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
-      $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
+        $scope.sort = {
+          'relevance': 'Relevant',
+          'date-posted-desc': 'Recent',
+          'interestingness-desc': 'date-posted-desc'
+        };
 
-        console.log('Event:SelectedPhotosChanged: ', data);
+        $scope.settings = settings.values;
 
-        $scope.count = data.photos.length;
+        console.log($scope.settings);
 
-      });
+        $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
 
-      $scope.count = 0;
+            console.log('Event:SelectedPhotosChanged: ', data);
+
+            $scope.count = data.photos.length;
+
+        });
+
+        $scope.count = 0;
 
     }]);
 

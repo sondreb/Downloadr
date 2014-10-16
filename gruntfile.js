@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         watch: {
             bower: {
                 files: ['bower.json'],
-                tasks: ['bowerInstall']
+                tasks: ['wiredep']
             },
             express: {
               files: [  '<%= config.service %>/*.js',
@@ -202,11 +202,28 @@ module.exports = function (grunt) {
         },
 
         // Automatically inject Bower components into the HTML file
-        bowerInstall: {
+        /*bowerInstall: {
             app: {
                 src: ['<%= config.app %>/index.html'],
                 ignorePath: '<%= config.app %>/'
             }
+        },*/
+
+        wiredep: {
+          task: {
+            // Point to the files that should be updated when
+            // you run `grunt wiredep`
+            src: [
+              '<%= config.app %>/index.html'
+            ],
+
+            options: {
+              // See wiredep's configuration documentation for the options
+              // you may pass:
+
+              // https://github.com/taptapship/wiredep#configuration
+            }
+          }
         },
 
         // Reads HTML for usemin blocks to enable smart builds that automatically
