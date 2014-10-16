@@ -8,11 +8,11 @@ photos from Flickr.com photo service.
 
 Home Screen:
 
-![Version 3 Home Screen](/web/images/Flickr_3_1.jpg?raw=true "Version 3 Home Screen")
+![Version 3 Home Screen](/web/public/images/Flickr_3_1.jpg?raw=true "Version 3 Home Screen")
 
 Search Results:
 
-![Version 3 Prototype](/web/images/Flickr_3_prototype_1.jpg?raw=true "Version 3 Prototype")
+![Version 3 Prototype](/web/public/images/Flickr_3_prototype_1.jpg?raw=true "Version 3 Prototype")
 
 ## Features:
 - Search for photos based upon name, the user account or groups.

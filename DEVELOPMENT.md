@@ -60,7 +60,7 @@ This will rund the app in the browser.
 The service requires some configuration settings (app settings). These are
 normally configured as environment variables on Microsoft Azure. For local
 development, make a copy of the config.example and name it config.json
-within the srvc folder.
+within the web folder.
 
 Remember, the config.json is excluded from the repo to make sure no secrets
 or passwords is exposed publicly in the git repo.

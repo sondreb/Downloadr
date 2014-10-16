@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     // Configurable paths
     var config = {
         app: 'app',
-        service: 'srvc',
+        service: 'web',
         dist: 'dist',
         tasks: grunt.cli.tasks
     };
