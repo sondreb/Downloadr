@@ -10,6 +10,47 @@
 
     var downloadr = angular.module('downloadr.services', []);
 
+    downloadr.factory('settings', function() {
+
+      var load = function()
+      {
+        chrome.storage.sync.get('settings', function(result){
+
+          if (result.settings == null) // Checks null and undefined
+          {
+            return;
+          }
+
+          values = result;
+          console.log('Settings loaded: ', values);
+        });
+      };
+
+      var save = function()
+      {
+        chrome.storage.sync.set({'settings': values}, function() {
+          console.log('Settings saved: ', values);
+        });
+      };
+
+      var values = {
+        photoSize: 'o',
+        safe: '0',
+        license: ''
+      }
+
+      // Before we return the service, we'll load the settings if they exists.
+      load();
+
+      return {
+          values : values,
+          load : load,
+          save: save
+      };
+
+    });
+
+
     downloadr.factory('searchProvider', function($location, $timeout)
     {
       var service = {};

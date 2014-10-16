@@ -21,7 +21,7 @@
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
 
-    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', function($rootScope, $location, searchProvider, socket, flickr)
+    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', function($rootScope, $location, searchProvider, socket, flickr, settings)
     {
         console.log('downloadr.run: ', flickr);
 

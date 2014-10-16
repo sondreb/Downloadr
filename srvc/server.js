@@ -22,7 +22,13 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , auth = require('./routes/auth')
-  , http = require('http')
+  , logger = require('morgan')
+  , multer = require('multer')
+  , methodOverride = require('method-override')
+  , favicon = require('serve-favicon')
+  , bodyParser = require('body-parser')
+  , errorHandler = require('errorhandler')
+//  , http = require('http')
   , nconf = require('nconf')
   , storage = require('./services/storage.js')(
     nconf.get('DB_HOST'),
@@ -182,28 +188,39 @@ app.use(function(req,res,next){
     next();
 });
 
-app.configure(function(){
-  app.set('port', http_port);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-});
+app.set('port', http_port);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(methodOverride());
 
-app.configure('development', function(){
-  app.use(express.errorHandler());
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//app.use(express.bodyParser());
+//app.use(express.methodOverride());
+
+app.use(multer());
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/auth', auth.index);
 
+// error handling middleware should be loaded after the loading the routes
+if ('development' == app.get('env')) {
+  app.use(errorHandler());
+}
+
+app.listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
+/*
 http.createServer(app).listen(app.get('port'), function(){
 
   console.log("Express server listening on port " + app.get('port'));
 
-});
+});*/

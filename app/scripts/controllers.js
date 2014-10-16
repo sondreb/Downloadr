@@ -82,8 +82,6 @@
 
     controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
 
-
-
         $rootScope.state.background = 'wallpaper-3';
 
         hotkeys.add({
@@ -442,9 +440,9 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
 
 
-    controllers.controller('SettingsController', ['$scope', '$rootScope', 'storage', function ($scope, $rootScope, storage) {
+    controllers.controller('SettingsController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
-        $rootScope.state.background = 'wallpaper-2';
+        $rootScope.state.background = 'wallpaper-3';
 
        $scope.getAcceptLanguages = function() {
           chrome.i18n.getAcceptLanguages(function(languageList) {
@@ -459,8 +457,10 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         ];
 
         /* These will make properties available on the scope and auto-persist to local storage. */
-        storage.bind($scope, 'language', 'en-US');
-        storage.bind($scope, 'theme', 'dark');
+        //storage.bind($scope, 'language', 'en-US');
+        //storage.bind($scope, 'theme', 'dark');
+
+        $scope.safe = '0';
 
     }]);
 
@@ -480,6 +480,19 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     }]);
 
     controllers.controller('DownloadController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+
+      // Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
+      $scope.licenses = {
+        '0': 'All Rights Reserved',
+        '1': 'Attribution-NonCommercial-ShareAlike License',
+        '2': 'Attribution-NonCommercial License',
+        '3': 'Attribution-NonCommercial-NoDerivs License',
+        '4': 'Attribution License',
+        '5': 'Attribution-ShareAlike License',
+        '6': 'Attribution-NoDerivs License',
+        '7': 'No known copyright restrictions',
+        '8': 'United States Government Work'
+      };
 
       function errorHandler(err)
       {

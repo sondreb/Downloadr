@@ -167,22 +167,16 @@ button
 
 .wallpaper-3
 {
-  background-image: url('../img/wallpaper-3.jpg');
-  background-size: cover;
-  /*color: black;
-  text-shadow: 0px 1px 0px rgba(0,0,0, 0.3);*/
+  background-image: none;
+  background-color: white;
+  background: linear-gradient(to bottom, rgb(255,255,255) 20%,rgb(120,120,120) 100%);
 }
 
 .wallpaper-gray
 {
   background-image: none;
-  background-color: silver;
-
-	background-color: #f0f0f0;
+	background-color: gray;
 	background: linear-gradient(to bottom,  rgb(60,60,60) 0%,rgb(30,30,30) 100%);
-
-  /*color: black;
-  text-shadow: 0px 1px 0px rgba(0,0,0, 0.3);*/
 }
 
 

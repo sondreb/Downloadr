@@ -3,10 +3,14 @@
     "default_locale": "en",
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
-    "version": "3.0.25",
+    "version": "3.0.26",
     "permissions": [
         {
-          "fileSystem": ["write", "retainEntries", "directory"]
+            "fileSystem": [
+                "write",
+                "retainEntries",
+                "directory"
+            ]
         },
         "storage",
         "webview",
