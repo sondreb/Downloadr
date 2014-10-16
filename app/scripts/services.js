@@ -79,9 +79,10 @@
         };
     });
 
-    downloadr.factory('socket', function ($rootScope) {
+    downloadr.factory('socket', function ($rootScope, config_socket_server) {
 
-      var socket = io.connect('http://localhost:5000');
+      console.log('connecting to socket server @ ', config_socket_server);
+      var socket = io.connect(config_socket_server);
 
       socket.on('connect', function () {
 

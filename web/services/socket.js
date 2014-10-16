@@ -98,6 +98,8 @@ module.exports = function(app, settings) {
 
   var port = settings.port || 5000;
 
+  console.log('socket.io hosted on port: ', port);
+
   // Create the socket.io server which runs on specified port.
   var server = require('http').Server(app);
   var io = require('socket.io')(server);
