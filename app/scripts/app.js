@@ -20,7 +20,7 @@
 
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
-    downloadr.value('config_socket_server', 'http://downloadr.azurewebsites.net');
+    downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
     //downloadr.value('config_socket_server', 'http://localhost:3000');
 
     downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', function($rootScope, $location, searchProvider, socket, flickr, settings)
