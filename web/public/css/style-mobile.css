@@ -24,7 +24,7 @@
 	{
 		font-size: 1em;
 	}
-	
+
 	h2
 	{
 		font-size: 1.25em;
@@ -40,20 +40,20 @@
 			ul.default
 			{
 			}
-			
+
 				ul.default li
 				{
 					padding-left: 0.5em;
-				}		
+				}
 
 			ul.icons
 			{
-			}	
-			
+			}
+
 				ul.icons li
 				{
 				}
-				
+
 					ul.icons a
 					{
 						width: 2em;
@@ -64,7 +64,7 @@
 			ul.menu
 			{
 			}
-			
+
 				ul.menu li
 				{
 					display: block;
@@ -72,7 +72,7 @@
 					border: 0;
 					margin: 1em 0 0 0;
 				}
-				
+
 				ul.menu li:first-child
 				{
 					margin-top: 0;
@@ -81,13 +81,13 @@
 			ul.actions
 			{
 			}
-			
+
 				ul.actions li
 				{
 					display: block;
 					margin: 1em 0 0 0;
 				}
-				
+
 				ul.actions li:first-child
 				{
 					margin-top: 0;
@@ -107,7 +107,7 @@
 				}
 
 	/* Button */
-		
+
 		input[type="button"],
 		input[type="submit"],
 		input[type="reset"],
@@ -130,7 +130,7 @@
 				top: -4.5em;
 				height: 4.5em;
 			}
-		
+
 			.box:before
 			{
 				width: 45px;
@@ -146,7 +146,7 @@
 				padding: 0;
 				text-align: center;
 			}
-			
+
 				.box.style1 .image
 				{
 					position: relative !important;
@@ -171,7 +171,7 @@
 			.box.style2
 			{
 			}
-			
+
 				.box.style2 .inner
 				{
 				}
@@ -179,7 +179,7 @@
 					.box.style2 .inner .row
 					{
 					}
-					
+
 						.box.style2 .inner .row:before
 						{
 							display: none;
@@ -211,7 +211,7 @@
 			padding-left: 2em;
 			padding-right: 2em;
 		}
-		
+
 			#header header h1
 			{
 				font-size: 1.75em;
@@ -230,7 +230,7 @@
 				left: 50%;
 				height: 4.5em;
 			}
-		
+
 			#header footer:before
 			{
 				width: 45px;
@@ -255,7 +255,7 @@
 		{
 			margin: 0 0 1em 0;
 		}
-		
+
 			#banner header h2
 			{
 				font-size: 1.5em;
@@ -265,7 +265,7 @@
 /*********************************************************************************/
 /* Footer                                                                        */
 /*********************************************************************************/
-	
+
 	#footer
 	{
 	}
@@ -274,7 +274,7 @@
 		{
 			padding: 0.5em 1.25em 0.5em 1.25em;
 		}
-		
+
 		#footer .copyright
 		{
 			font-size: 1em;
@@ -288,7 +288,7 @@
 	.poptrox-popup
 	{
 	}
-	
+
 		.poptrox-popup .nav-next,
 		.poptrox-popup .nav-previous
 		{
@@ -300,8 +300,22 @@
 			{
 				display: none;
 			}
-		
+
 		.poptrox-popup .closer
 		{
 			opacity: 0.5;
 		}
+
+
+
+.logo
+{
+	height: 28px;
+	margin-right: 2px;
+}
+
+.logo-dark
+{
+	height: 20px;
+	margin-right: 2px;
+}
