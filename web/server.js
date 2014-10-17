@@ -47,8 +47,8 @@ app.use(function(req,res,next){
 });
 
 app.set('port', http_port);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'jade');
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(methodOverride());
@@ -63,8 +63,8 @@ app.use(multer());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+//app.get('/', routes.index);
+//app.get('/users', user.list);
 app.get('/auth', auth.index);
 
 // error handling middleware should be loaded after the loading the routes
