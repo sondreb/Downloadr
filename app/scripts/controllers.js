@@ -57,17 +57,18 @@
 
     }]);
 
-    controllers.controller('HomeController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+    controllers.controller('HomeController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
         $rootScope.state.background = 'wallpaper';
 
+/*
         hotkeys.add({
             combo: 's',
             description: 'Move selection up',
             callback: function() {
                 $scope.credits = null;
             }
-        });
+        });*/
 
         //$scope.state = { isLoggedIn: false };
 
@@ -80,12 +81,13 @@
     }]);
 
 
-    controllers.controller('AboutController', ['$scope', '$rootScope', 'hotkeys', 'settings', function ($scope, $rootScope, hotkeys, settings) {
+    controllers.controller('AboutController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
         $rootScope.state.background = 'wallpaper-3';
 
         $scope.settings = settings.values;
 
+/*
         hotkeys.add({
             combo: 'ctrl+up',
             description: 'Move selection up',
@@ -108,21 +110,32 @@
             callback: function() {
                 //alert('Easter Egg!');
             }
-        });
+        });*/
 
         $scope.state = { isLoggedIn: false };
-
 
         $scope.credits = [
             { type: 'Developed', text: 'Sondre Bjellås', url: 'http://sondreb.com/' },
             { type: 'Icon', text: 'HADezign', url: 'http://hadezign.com/' },
             { type: 'Symbols', text: 'Font Awesome', url: 'http://fontawesome.io/' },
-            { type: 'Image', text: 'Ossi Petruska', url: 'http://www.flickr.com/photos/10134557@N08/2527630813' },
-            { type: 'Library', text: 'AngularJS', url: 'https://angularjs.org/' },
-            { type: 'Library', text: 'AngularHotkeys.js', url: 'http://chieffancypants.github.io/angular-hotkeys/' },
-            { type: 'Library', text: 'Mousetrap', url: 'http://craig.is/killing/mice/' },
-            { type: 'Library', text: 'jQuery', url: 'https://jquery.org/' }
+            { type: 'Wallpaper', text: 'Ossi Petruska', url: 'http://www.flickr.com/photos/10134557@N08/2527630813' }
         ];
+
+        $scope.libraries = [
+            { type: 'Library', text: 'AngularJS', url: 'https://angularjs.org/' },
+            { type: 'Library', text: 'jQuery', url: 'https://jquery.org/' },
+            { type: 'Library', text: 'Node.js', url: 'http://nodejs.org/' },
+            { type: 'Library', text: 'socket.io', url: 'http://socket.io/' },
+            { type: 'Library', text: 'express', url: 'http://expressjs.com/' },
+            { type: 'Library', text: 'documentdb', url: 'https://github.com/Azure/azure-documentdb-node' },
+            { type: 'Library', text: 'flickr-oauth-and-upload', url: 'https://github.com/mattiaserlo/flickr-oauth-and-upload' },
+            { type: 'Library', text: 'nconf', url: 'https://github.com/flatiron/nconf' },
+            { type: 'Library', text: 'pace', url: 'https://github.com/HubSpot/pace' },
+            { type: 'Library', text: 'angular-mousetrap', url: 'https://github.com/khasinski/angular-mousetrap' },
+            { type: 'Library', text: 'Grunt', url: 'http://gruntjs.com/' }
+
+        ];
+
     }]);
 
 
@@ -799,24 +812,17 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     }]);
 
 
-    controllers.controller('DebugController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+    controllers.controller('DebugController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
         $rootScope.state.background = 'wallpaper-3';
         $scope.enableLogConsole = false;
         $scope.enableAllLicenses = false;
 
-        hotkeys.add({
-            combo: 's',
-            description: 'Move selection up',
-            callback: function() {
-                $scope.credits = null;
-            }
-        });
 
     }]);
 
 
-    controllers.controller('TestController', ['$scope', '$rootScope', 'hotkeys', function ($scope, $rootScope, hotkeys) {
+    controllers.controller('TestController', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
         $scope.enableLogConsole = false;
         $scope.enableAllLicenses = false;
@@ -824,7 +830,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     }]);
 
 
-    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', 'hotkeys', '$log', '$location', 'socket', function ($rootScope, $scope, $http, flickr, util, hotkeys, $log, $location, socket) {
+    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', '$log', '$location', 'socket', function ($rootScope, $scope, $http, flickr, util, $log, $location, socket) {
 
 
 /*

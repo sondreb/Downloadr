@@ -6,12 +6,13 @@
     </p>
     <p>&nbsp;</p>
     <p>
-        Focus for the app have always been on simplicity and elegance. The main features needed, in the simplest form.
+        Focus for the app have always been on simplicity and elegance. The main features needed, in the simplest form. The software and service
+        is hosted and provided by <a href="http://brain.no/" target="_blank">brain.no</a>
     </p>
     <p>&nbsp;</p>
     <p>This application is a third party application and is not association with Flickr or Yahoo in any way or form.</p>
 <br>
-    <h3>License</h3>
+    <h3>Photos License</h3>
     <p>
 
     You are allowed to search and view photos with any licenses, but only those with Creative Commons license is
@@ -23,10 +24,15 @@
 
     <ul>
          <li ng-repeat="credit in credits">{{credit.type}} by <a href="{{credit.url}}" target="_blank">{{credit.text}}</a></li>
+
+         <li>
+         Components: <span ng-repeat="library in libraries"><a href="{{library.url}}" target="_blank">{{library.text}}</a>{{$last ? '' : ', '}}</span> and more...
+         </li>
     </ul>
 
+
 <br>
-    <h3>Changes</h3>
+    <h3>History</h3>
     <p>
         2014-11-01: Release of Flickr Downloadr 3.0
     </p>
@@ -34,7 +40,7 @@
         2014-08-30: Release of Flickr Downloadr 3.0 beta
     </p>
     <p>
-        2014-02-16: Release of Flickr Downloadr 3 alpha
+        2014-02-16: Release of Flickr Downloadr 3.0 alpha
     </p>
     <p>
         2009-11-01: Release of Flickr Downloadr 2.0.4
@@ -54,4 +60,28 @@
     <p>
         2007: Release of Flickr Downloadr 1.0
     </p>
+
+    <br>
+    <h3>Software License</h3>
+    <p>Copyright (C) 2007-2014 Sondre Bjellås -
+      <a href="http://sondreb.com/" target="_blank">http://sondreb.com/</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 </div>

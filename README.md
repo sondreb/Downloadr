@@ -54,7 +54,6 @@ any changes to the app-code.
 $ grunt debug
 ```
 
-
 ## Help:
 
 - Documentation: http://flickrdownloadr.codeplex.com/documentation
@@ -71,7 +70,11 @@ http://flickrdownloadr.codeplex.com/SourceControl/latest
 - Icon by HADezign: http://hadezign.com/
 - Symbols by Font Awesome: http://fontawesome.io/
 - Image by Ossi Petruska: http://www.flickr.com/photos/10134557@N08/2527630813
-- AngularJS: http://angularjs.org/
+- Components: https://angularjs.org/, https://jquery.org/, http://nodejs.org/,
+http://socket.io/, http://expressjs.com/, https://github.com/Azure/azure-documentdb-node,
+https://github.com/mattiaserlo/flickr-oauth-and-upload, https://github.com/flatiron/nconf,
+https://github.com/HubSpot/pace,  https://github.com/khasinski/angular-mousetrap,
+http://gruntjs.com/
 
 ## License (MIT):
 
