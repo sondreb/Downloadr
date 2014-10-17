@@ -1126,3 +1126,16 @@
     position: absolute;
     opacity: 0.4;
 }
+
+.logo
+{
+	vertical-align: text-top;
+	height: 60px;
+	margin-right: 4px;
+}
+
+.logo-dark
+{
+	height: 40px;
+	margin-right: 3px;
+}

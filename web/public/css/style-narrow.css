@@ -31,7 +31,7 @@
 	header
 	{
 	}
-	
+
 		header p
 		{
 			margin: 0.25em 0 0 0;
@@ -44,12 +44,12 @@
 		{
 			position: relative;
 		}
-		
+
 			.box section
 			{
 				margin: 0 0 2em 0;
 			}
-			
+
 			.box.style1
 			{
 				padding: 2.5em 2em 2.5em 2em;
@@ -58,16 +58,16 @@
 				.box.style1.right
 				{
 				}
-					
+
 					.box.style1.right .inner
 					{
 						padding-left: 2em;
 					}
-				
+
 				.box.style1.left
 				{
 				}
-					
+
 					.box.style1.left .inner
 					{
 						padding-right: 2em;
@@ -92,7 +92,7 @@
 			{
 				padding: 2.5em 2em 2.5em 2em;
 			}
-			
+
 /*********************************************************************************/
 /* Banner                                                                        */
 /*********************************************************************************/
@@ -107,3 +107,17 @@
 		{
 			display: none;
 		}
+
+
+
+.logo
+{
+	height: 40px;
+	margin-right: 3px;
+}
+
+.logo-dark
+{
+	height: 30px;
+	margin-right: 2px;
+}
