@@ -23,7 +23,7 @@
     //downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
     downloadr.value('config_socket_server', 'http://localhost:3000');
 
-    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', function($rootScope, $location, searchProvider, socket, flickr, settings)
+    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', function($rootScope, $location, searchProvider, socket, flickr, settings, notify)
     {
         console.log('downloadr.run: ', flickr);
 

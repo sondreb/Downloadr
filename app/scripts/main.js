@@ -23,14 +23,14 @@ chrome.app.runtime.onLaunched.addListener(function () {
     chrome.app.window.create('index.html', {
         id: 'downloadrWindow',
         frame: 'none',
-        bounds: {
+        outerBounds: {
             width: width,
             height: height,
             left: Math.round((screenWidth - width) / 2),
-            top: Math.round((screenHeight - height) / 2)
-        },
-        minWidth: 480,
-        minHeight: 460
+            top: Math.round((screenHeight - height) / 2),
+            minWidth: 400,
+            minHeight: 450
+        }
     });
 });
 

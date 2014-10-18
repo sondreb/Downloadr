@@ -83,6 +83,7 @@
 
     controllers.controller('AboutController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
+
         $rootScope.state.background = 'wallpaper-3';
 
         $scope.settings = settings.values;
@@ -525,7 +526,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
     }]);
 
-    controllers.controller('DownloadController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+    controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', function ($scope, $rootScope, notify) {
 
       // Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
       $scope.licenses = {
@@ -583,20 +584,19 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             $rootScope.state.selectedPhotos = [];
 
             $scope.completed = true;
+
+            notify('success', 'basic', 'Download Complete',
+              'All ' + $scope.count + ' photos have been saved successfully.',
+              function(id){
+                // Launch the local file browser at the target destination.
+            });
+
           });
 
           return;
         }
 
         console.log('INDEX: ', index);
-
-        // We need to run apply here, cause in the loop it's called
-        // from outsiden the angular scope.
-        $scope.$apply(function () {
-          $scope.photoNumber = (index + 1);
-        });
-
-
         console.log("Process Photo: ", photo);
 
         // Download the photo
@@ -614,6 +614,43 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             writer.onwriteend = function(e) {
 
               console.log('write complete');
+
+              // We need to run apply here, cause in the loop it's called
+              // from outsiden the angular scope.
+              $scope.$apply(function () {
+                $scope.photoNumber = (index + 1);
+              });
+
+              var percentage = $scope.photoNumber * 100/ $scope.count;
+
+              // Should we do Pause/Cancel buttons for this notification?
+              notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
+                'You will be notified when download is completed.',
+                function(id){}, Math.round(percentage));
+
+              /*
+              var options = {
+                type: "progress",
+                title: "Downloaded " + $scope.photoNumber + " of " + $scope.count,
+                message: "",
+                //message: "Used time 3:33 estimated 5:30 left",
+                iconUrl: 'img/icon_128.png',
+                buttons: [{
+                    title: "Pause",
+                    iconUrl: "img/icon_64.png"
+                }, {
+                    title: "Cancel",
+                    iconUrl: "img/icon_64.png"
+                }],
+                progress: Math.round(percentage)
+              };
+
+              chrome.notifications.create('progress', options, function(notificationId) {
+
+                console.log('Clicked: ', notificationId);
+
+              });*/
+
 
               // Process the next photo
               $scope.processPhoto(index + 1);

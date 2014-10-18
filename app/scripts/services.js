@@ -53,6 +53,57 @@
 
     });
 
+    downloadr.factory('notify', function() {
+
+/*
+      var onNotifyShow = function() {
+          console.log('notification was shown!');
+      }
+*/
+      return function(id, type, title, body, callback, progress) {
+
+          chrome.notifications.onClicked.addListener(function(id) {
+            // Launch the local file browser at the target destination.
+            callback(id);
+          });
+
+          var options = {
+            type: type,
+            title: title,
+            message: body,
+            iconUrl: 'img/icon_128.png',
+            progress: progress
+          };
+
+          chrome.notifications.create(id, options, function(notificationId) {});
+
+        /*
+        var opt = {
+          type: "progress",
+          title: "Primary Title",
+          message: "Primary message to display",
+          progress: 42
+        }
+
+        chrome.notifications.create('status', opt, function(notificationId) {
+
+          console.log('notification was shown!');
+
+        });*/
+
+
+/*
+        var notification = new Notification(title, {
+          body: body,
+          notifyShow: onNotifyShow
+        });
+*/
+        //notification.show();
+
+      };
+
+    });
+
 
     downloadr.factory('searchProvider', function($location, $timeout)
     {

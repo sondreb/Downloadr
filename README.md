@@ -1,6 +1,8 @@
 Flickr Downloadr 3 (3.0.26)
 ============
 
+http://flickr-downloadr.com/
+
 ## Description:
 
 Elegant and simple app that allows you to search and download
