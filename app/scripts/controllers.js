@@ -443,7 +443,8 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
               text: searchTerm,
               safe_search: settings.values.safe,
               sort: settings.values.sort,
-              extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+              per_page: '50',
+              extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
             });
 
             console.log(message);
