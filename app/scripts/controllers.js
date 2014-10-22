@@ -86,18 +86,6 @@
 
         }, false);
 
-
-/*
-        hotkeys.add({
-            combo: 's',
-            description: 'Move selection up',
-            callback: function() {
-                $scope.credits = null;
-            }
-        });*/
-
-        //$scope.state = { isLoggedIn: false };
-
     }]);
 
     controllers.controller('ProfileController', ['$scope', '$rootScope', function($scope, $rootScope){
@@ -916,12 +904,38 @@
     }]);
 
 
-    controllers.controller('DebugController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+    controllers.controller('DebugController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
         $rootScope.state.background = 'wallpaper-3';
         $scope.enableLogConsole = false;
         $scope.enableAllLicenses = false;
+        $scope.bytesInUseSync;
+        $scope.bytesInUseLocal;
 
+        $scope.userSettings = settings.values;
+
+        // Start the download immediately when the view is loaded.
+        $scope.$on('$viewContentLoaded', function() {
+
+          console.log('viewContentLoaded: DebugController');
+
+          chrome.storage.sync.getBytesInUse(null, function(bytesInUse) {
+
+            console.log('chrome.storage.sync.getBytesInUse callback: ', bytesInUse);
+            $scope.bytesInUseSync = bytesInUse;
+            $scope.$apply();
+
+          });
+
+          chrome.storage.local.getBytesInUse(null, function(bytesInUse) {
+
+            console.log('chrome.storage.local.getBytesInUse callback: ', bytesInUse);
+            $scope.bytesInUseLocal = bytesInUse;
+            $scope.$apply();
+
+          });
+
+        });
 
     }]);
 
@@ -940,6 +954,18 @@
             $scope.goBack();
         });
 
+        $scope.keyboard = {
+          'ctrl+t+d': function() {
+            console.log('Open up [T]est & [D]ebug mode for developers.');
+            $rootScope.state.debug = !$rootScope.state.debug;
+          },
+          'ctrl+s': function() { console.log('Begin search?'); }
+        }
+/*
+        $scope.keyboard = {
+          't': function('T was pressed, enable debug mode');
+        };
+*/
         $scope.parseProfile = function (data) {
 
             // Validate successfull results.

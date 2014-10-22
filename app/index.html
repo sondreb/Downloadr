@@ -25,7 +25,7 @@
             <div class="frame">
 
                 <!-- Debug Tools - Advanced Settings & Test Runner -->
-                <a href="#/tests" ng-show="state.debug" ng-click="test_view();"
+                <a href="#/tests" mousetrap-keypress="keyboard" ng-show="state.debug" ng-click="test_view();"
                 id="window-tests" title="Tests">&#44;</a><a href="#/debug"
                 ng-show="state.debug" ng-click="debug_view();" id="window-debug"
                 title="Debug">&#64;</a><a href=""
@@ -85,6 +85,7 @@
 <li ng-show="state.actionTarget == 'folder'">
     <label for="select-license" title="License"><i class="fa fa-copyright"></i></label>
   <select id="select-license" class="select-dark" ng-model="settings.values.license">
+    <option ng-if="state.debug" value="">All</option>
     <option value="0">All Rights Reserved</option>
     <option value="1,2,3,4,5,6,7,8">Creative Commons</option>
     <option value="4,5,6,7,8">CC: Commercial Use Allowed</option>

@@ -11,6 +11,7 @@
     // Create the app module and dependencies.
     var downloadr = angular.module('downloadr', [
         'ngRoute',
+        'mousetrap',
         'downloadr.filters',
         'downloadr.services',
         'downloadr.directives',
