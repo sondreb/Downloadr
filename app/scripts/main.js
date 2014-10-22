@@ -17,7 +17,7 @@ chrome.app.runtime.onLaunched.addListener(function () {
     // Center window on screen.
     var screenWidth = screen.availWidth;
     var screenHeight = screen.availHeight;
-    var width = 850;
+    var width = 900;
     var height = 600;
 
     chrome.app.window.create('index.html', {
@@ -28,8 +28,8 @@ chrome.app.runtime.onLaunched.addListener(function () {
             height: height,
             left: Math.round((screenWidth - width) / 2),
             top: Math.round((screenHeight - height) / 2),
-            minWidth: 400,
-            minHeight: 450
+            minWidth: 460,
+            minHeight: 240
         }
     });
 });

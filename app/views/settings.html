@@ -1,10 +1,13 @@
 <div id="settingsView" class="container">
     <div class="content padding">
-        <p>
         <h3>Safe Search</h3>
-              <input type="radio" ng-model="settings.safe" name="safe_search" id="safe_search_0" value="1"> <label for="safe_search_0">SafeSearch on</label><br />
-              <input type="radio" ng-model="settings.safe" name="safe_search" id="safe_search_1" value="2"> <label for="safe_search_1">SafeSearch moderate</label><br />
-    			    <input type="radio" ng-model="settings.safe" name="safe_search" id="safe_search_2" value="3" checked> <label for="safe_search_2">SafeSearch off</label>
+        <p>
+              <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_0" value="1"> <label for="safe_search_0">SafeSearch on</label><br />
+              <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_1" value="2"> <label for="safe_search_1">SafeSearch moderate</label><br />
+    			    <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_2" value="3" checked> <label for="safe_search_2">SafeSearch off</label>
+        </p>
+        <p ng-show="state.isAnonymous">
+          <em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service.</em>
         </p>
 
   <!--
@@ -25,10 +28,7 @@
       <h3>Layout</h3>
         <p>
             <label for="backgroundImageInput">Show Background Image</label>
-            <input id="backgroundImageInput" type="checkbox" ng-model="settings.background" />
-        </p>
-        <p>
-            <button ng-click="save();">Save</button>
+            <input id="backgroundImageInput" type="checkbox" ng-model="settings.values.background" />
         </p>
 
 

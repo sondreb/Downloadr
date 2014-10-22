@@ -51,7 +51,7 @@
 
                 <ul class="menu" nav-menu="selected">
 
-                  <li ng-hide="state.isOnStartScreen">
+                  <li class="not-responsive" ng-hide="state.isOnStartScreen">
                     <search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()"></search>
                   </li>
 
@@ -82,40 +82,42 @@
         <div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
           <ul class="menu smaller" nav-menu="selected">
 
+<li ng-show="state.actionTarget == 'folder'">
+    <label for="select-license" title="License"><i class="fa fa-copyright"></i></label>
+  <select id="select-license" class="select-dark" ng-model="settings.values.license">
+    <option value="0">All Rights Reserved</option>
+    <option value="1,2,3,4,5,6,7,8">Creative Commons</option>
+    <option value="4,5,6,7,8">CC: Commercial Use Allowed</option>
+    <option value="1,2,3">CC: Non Commercial Allowed</option>
+  </select>
+</li>
+
             <li ng-show="state.actionTarget == 'folder'">
-              Sort:
-              <select ng-model="settings.sort" ng-options="k as v for (k,v) in sorting"></select>
+              <label for="select-sort" title="Sort"><i class="fa fa-arrows-v"></i></label>
+              <select id="select-sort" class="select-dark" ng-model="settings.values.sort" ng-options="k as v for (k,v) in sorting"></select>
             </li>
-            <li ng-show="state.actionTarget == 'folder'">
-                License:
-              <select ng-model="settings.license">
-                <option value="">Any License</option>
-                <option value="1,2,3,4,5,6">Creative Commons</option>
-                <option value="4,5,6">CC: Commercial Use Allowed</option>
-                <option value="1,2,3">CC: Non Commercial Allowed</option>
-              </select>
-            </li>
+
 
             <!--
             <li>
               <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
             </li>-->
-            <li>
-            Selected: {{count}}
-            </li>
+
             <li ng-show="state.actionTarget == 'folder'">
-              View: {{settings.view}}
-              <select ng-model="settings.view">
-                <option value="photos">Large</option>
-                <option value="videos">Small</option>
-                <option value="user">Album</option>
-                <option value="groups">List</option>
+              <label for="select-list" title="View"><i class="fa fa-list-ul"></i></label>
+              <select id="select-list" class="select-dark" ng-model="settings.values.view">
+                <option value="large">Large</option>
+                <option value="small">Small</option>
+                <option value="list">List</option>
               </select>
             </li>
 
             <!-- For user simplicity, we will hide most of the size options. -->
             <li ng-show="state.actionTarget != 'folder'">
-              <select ng-model="state.photoSize">
+
+              <label for="select-size" title="Size"><i class="fa fa-file-photo-o"></i></label>
+
+              <select id="select-size" class="select-dark" ng-model="settings.values.size">
                 <option value="o">Original</option>
                 <option value="b">Large (1024)</option>
                 <option ng-if="state.debug" value="c">Medium (800)</option>
@@ -129,11 +131,15 @@
               </select>
             </li>
 
+            <li title="Photos selected for download" class="counter" ng-show="state.actionTarget == 'folder'">
+            {{count}}<a href="" ng-click="clearSelection()" class="counter-remove" title="Clear photos selection"><i class="fa fa-check"></i></a>
+            </li>
+
             <!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
-            <li ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0"><a href="#/folder">NEXT</a></li>
-            <li ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="">NEXT</a></li>
-            <li ng-show="state.actionTarget == 'download' && state.targetPath != ''"><a href="#/download">DOWNLOAD</a></li>
-            <li ng-show="state.actionTarget == 'download' && state.targetPath == ''"><a href="">DOWNLOAD</a></li>
+            <li class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0"><a href="#/folder">NEXT <i class="fa fa-arrow-right"></i></a></li>
+            <li class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="">NEXT <i class="fa fa-arrow-right"></i></a></li>
+            <li class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''"><a href="#/download">DOWNLOAD <i class="fa fa-download"></i></a></li>
+            <li class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''"><a href="">DOWNLOAD <i class="fa fa-download"></i></a></li>
 
           </ul>
         </div>

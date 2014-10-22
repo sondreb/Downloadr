@@ -41,6 +41,7 @@ li
   list-style-type: square;
 }
 
+
 .page { left: 0; right: 0; top: 0; bottom: 0; }
 
 .row, .col, .page { overflow: hidden; position: absolute; }
@@ -127,6 +128,26 @@ button
   padding: 6px;
 }
 
+a {
+  color: DimGray ;
+}
+
+a:hover
+{
+  text-decoration: underline;
+  color: black;
+}
+
+a:visited
+{
+  color: Gray;
+}
+
+a:visited:hover
+{
+  color: black;
+}
+
 .folder, .download
 {
   color: white;
@@ -184,6 +205,13 @@ button
   background-image: none;
   background-color: white;
   background: linear-gradient(to bottom, rgb(255,255,255) 20%,rgb(120,120,120) 100%);
+}
+
+.wallpaper-4
+{
+  background-image: none;
+  background-color: gray;
+  background: linear-gradient(to bottom, rgb(30,30,30) 20%,rgb(100,100,100) 100%);
 }
 
 .wallpaper-gray
@@ -644,6 +672,7 @@ a { text-decoration:none; }
 
     height: 128px;
     border: 1px solid transparent;
+    display: block;
     /*border: 0;
     margin: 0;
     padding: 0;*/
@@ -777,10 +806,52 @@ li
   display: none;
 }
 
+.table-header
+{
+  font-weight: bold;
+}
+
+.counter {
+  font-size: 1.3em;
+  margin-left: 30px;
+  margin-right: 10px;
+}
+
+.counter-remove
+{
+  margin-left: 3px;
+  width: 18px !important;
+}
+
+.counter-remove:hover .fa-check:before {
+    content: "\f00d";
+}
+
+.select-dark {
+
+  color: Gray;
+   background: transparent;
+   border: 1px solid gray;
+   border-radius: 0;
+   -webkit-appearance: none;
+}
 
 
+@font-face {
+  font-family: 'CreativeCommons';
+  src: url('../fonts/cc-icons.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
-@media screen and (max-width: 768px) {
+.cc
+{
+  font-family: 'CreativeCommons';
+  font-size: 1.2em;
+}
+
+
+@media screen and (max-width: 740px) {
 
     .search-text {
         display: none;
@@ -791,15 +862,14 @@ li
 
 @media screen and (max-width: 768px) {
 
-
+/*
     input[type=search] {
-  width: 100px;
+      width: 100px;
+    }*/
+
 }
 
-
-}
-
-
+/*
 @media screen and (max-width: 650px) {
 
 
@@ -814,10 +884,45 @@ li
 
     .toolbar {
       height: 107px;
+    }
+
+}*/
+
+@media screen and (max-width: 740px) {
+
+    .menu li:not(.not-responsive)
+    {
+      display: none;
+    }
+/*
+    input[type=search] {
+      width: 120px;
+    }*/
 }
-    /* Make the margin around the logo bigger, forcing the toolbar to flow. */
-    /*#logo {
-        margin-right: 80px;
-         }*/
+
+@media screen and (max-width: 456px) {
+
+    .menu li:not(.not-responsive)
+    {
+      display: none;
+    }
+/*
+    input[type=search] {
+      width: 120px;
+    }*/
+
+    /*
+    .wallpaper {
+        top: 107px;
+    }
+
+    .container {
+
+        top: 107px;
+    }
+
+    .toolbar {
+      height: 107px;
+    }*/
 
 }

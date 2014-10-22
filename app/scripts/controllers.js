@@ -35,7 +35,6 @@
 
     }]);
 
-
     controllers.controller('StatusController', ['$scope', '$rootScope', 'socket', function ($scope, $rootScope, socket) {
 
       console.log('STATUS CONTROLLER!');
@@ -57,9 +56,36 @@
 
     }]);
 
-    controllers.controller('HomeController', ['$scope', '$rootScope', function ($scope, $rootScope) {
+    controllers.controller('HomeController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
 
-        $rootScope.state.background = 'wallpaper';
+        $scope.refreshWallpaper = function() {
+
+          console.log('Refresh Wallpaper');
+
+          if (settings.values.background)
+          {
+            $rootScope.state.background = 'wallpaper';
+          }
+          else
+          {
+            $rootScope.state.background = 'wallpaper-4';
+          }
+
+        };
+
+        $scope.refreshWallpaper();
+
+        $scope.$watch(function() { return settings.values.background; }, function(newVal, oldVal) {
+
+          // Happens on first run.
+          if(newVal === oldVal){
+              return;
+          }
+
+            $scope.refreshWallpaper();
+
+        }, false);
+
 
 /*
         hotkeys.add({
@@ -80,9 +106,7 @@
 
     }]);
 
-
     controllers.controller('AboutController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
-
 
         $rootScope.state.background = 'wallpaper-3';
 
@@ -139,7 +163,6 @@
 
     }]);
 
-
     controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'socket', function ($scope, $rootScope, $location, socket) {
 
         $scope.user = { username: '', password: '' };
@@ -192,42 +215,43 @@
 
     }]);
 
+    controllers.controller('LogoutController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
 
-controllers.controller('LogoutController', ['$scope', '$rootScope', '$location', function ($scope, $rootScope, $location) {
+        $rootScope.state.background = 'wallpaper-3';
 
+        $scope.logout = function ()
+        {
+            console.log('Logout Command');
 
-    $scope.logout = function ()
-    {
-        console.log('Logout Command');
+            $rootScope.$broadcast('Event:Logout');
 
-        $rootScope.$broadcast('Event:Logout');
+            // Navigate to home.
+            $location.path('/#');
 
-        // Navigate to home.
-        $location.path('/#');
+            //flickr.DeleteToken();
+            //$scope.authenticatingEvent(null);
+        };
 
-        //flickr.DeleteToken();
-        //$scope.authenticatingEvent(null);
-    };
+        $scope.back = function()
+        {
+          console.log('Go back!');
 
-    $scope.back = function()
-    {
-      console.log('Go back!');
+          // Navigate to home.
+          $location.path('/#');
 
-      // Navigate to home.
-      $location.path('/#');
+        }
 
-    }
+        //$rootScope.state.background = 'wallpaper';
+        //$scope.search = { text: '' };
 
-    //$rootScope.state.background = 'wallpaper';
-    //$scope.search = { text: '' };
-
-}]);
+    }]);
 
 
     controllers.controller('SearchController', ['$scope', '$rootScope',
     '$location', '$http',
     '$timeout', 'socket',
     'flickr', 'settings', function ($scope, $rootScope, $location, $http, $timeout, socket, flickr, settings) {
+
 
         //$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
 
@@ -253,9 +277,11 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         $scope.loadImage = function(item, callback) {
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';
+
           xhr.onload = function() {
             callback(window.webkitURL.createObjectURL(xhr.response), item);
-          }
+          };
+
           xhr.open('GET', item.uri, true);
           xhr.send();
         };
@@ -291,6 +317,12 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             item.uri = item.getUrl('m');
 
             $scope.loadImage(item, function(blob_uri, originalItem) {
+
+              // We really should have a better way of maintaining a list of
+              // locally downloaded thumbnails, but this have to do for now to
+              // avoid memory leak.
+              //$rootScope.objectURLs = $rootScope.objectURLs || [];
+              //$rootScope.objectURLs.push(blob_uri);
 
               $timeout(function() {
 
@@ -344,16 +376,15 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         // Register handler for callbacks of signing URLs.
         socket.on('urlSigned', function(message) {
-          console.log('Signed URL callback: ', message);
 
+          console.log('Signed URL callback: ', message);
           var url = 'https://' + message.hostname + message.path;
-          console.log('FULL URL:', url);
 
           $http.post(url).success(function(data, status, headers, config) {
               // this callback will be called asynchronously
               // when the response is available
-              console.log(data);
-              console.log('HTTP Status: ', status);
+              console.log('Service results: ', data);
+              console.log('Service HTTP status: ', status);
 
               var list = data.photos.photo;
 
@@ -417,14 +448,14 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
                   };
               }
 
+              // Remove existing downloaded photos to avoid memory leak.
+              $scope.clearObjectURLs();
+
               // Bind to the UI.
               $scope.photos = list;
 
+              // Begin download the thumbnails.
               $scope.loadImages();
-
-              // URL format: https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}_[mstzb].jpg
-              // Specification: https://www.flickr.com/services/api/misc.urls.html
-
             }).
             error(function(data, status, headers, config) {
               // called asynchronously if an error occurs
@@ -435,6 +466,26 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         });
 
+        // Clears up all the blob files that was previously downloaded. For future
+        // informational reference, the blob-links under "Resources" in the Developer Tools
+        // does still list the old blobs, but their binary content is actually deleted.
+        $scope.clearObjectURLs = function()
+        {
+            if ($scope.photos) {
+
+              $scope.photos.forEach(function(photo) {
+
+                if (photo.url !== 'img/loading.gif')
+                {
+                    console.log('Disposing: ', photo.url);
+                    URL.revokeObjectURL(photo.url);
+                }
+              });
+
+              $scope.photos = [];
+            }
+        }
+
         $scope.performSearch = function(searchTerm)
         {
             // Get a prepared message that includes token.
@@ -443,11 +494,11 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
               text: searchTerm,
               safe_search: settings.values.safe,
               sort: settings.values.sort,
-              per_page: '50',
+              per_page: '10',
               extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
             });
 
-            console.log(message);
+            console.log('Sign URL message: ', message);
             socket.emit('signUrl', message);
         };
 
@@ -460,11 +511,9 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
         };
 
-
         $scope.init();
 
     }]);
-
 
 
     controllers.controller('SettingsController', ['$scope', '$rootScope', 'settings', function ($scope, $rootScope, settings) {
@@ -487,9 +536,25 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
         //storage.bind($scope, 'language', 'en-US');
         //storage.bind($scope, 'theme', 'dark');
 
-        $scope.settings = settings.values;
+        console.log('Current Settings.values.safe: ', settings.values.safe);
+        console.log('Current Settings: ', settings);
 
-        //$scope.safe = '0';
+        $scope.settings = settings;
+
+        $scope.$watch(function() { return $scope.settings; }, function(newVal, oldVal) {
+
+          console.log('newVal: ', newVal);
+          console.log('oldVal: ', oldVal);
+
+          // Happens on first run.
+          if(newVal === oldVal){
+              return;
+          }
+
+          console.log('Saving settings from settings...');
+
+          settings.save();
+        }, true);
 
     }]);
 
@@ -502,26 +567,38 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
           'interestingness-desc': 'Interesting'
         };
 
-        $scope.settings = settings.values;
+        $scope.settings = settings;
 
-        $scope.$watch(function() {
-          return $scope.settings.sort;
-          }, function(v)
-        {
+        $scope.$watch(function() { return settings.values; }, function(newVal, oldVal) {
 
-          $rootScope.$broadcast('Event:Filter');
-          console.log('NEW VALUE: ', v);
-        });
+          // Happens on first run.
+          if(newVal === oldVal){
+              return;
+          }
+
+          // Settings will be saved here upon loading, because first the default
+          // values will be loaded, and then after values is read from Chrome
+          // settings, the newVal and oldVal will be different, so a save will be
+          // triggered. Look for a solution in the future to skip this initial
+          // saving that occurs.
+
+          // Make sure we save settings when user changes dropdowns.
+          // We do this, to remember the selections for next search.
+          settings.save();
+
+        }, true);
 
         console.log($scope.settings);
 
         $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
-
             console.log('Event:SelectedPhotosChanged: ', data);
-
             $scope.count = data.photos.length;
-
         });
+
+        $scope.clearSelection = function() {
+          $rootScope.state.selectedPhotos = [];
+          $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $rootScope.state.selectedPhotos });
+        }
 
         $scope.count = 0;
 
@@ -529,18 +606,7 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
 
     controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', function ($scope, $rootScope, notify) {
 
-      // Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
-      $scope.licenses = {
-        '0': 'All Rights Reserved',
-        '1': 'Attribution-NonCommercial-ShareAlike License',
-        '2': 'Attribution-NonCommercial License',
-        '3': 'Attribution-NonCommercial-NoDerivs License',
-        '4': 'Attribution License',
-        '5': 'Attribution-ShareAlike License',
-        '6': 'Attribution-NoDerivs License',
-        '7': 'No known copyright restrictions',
-        '8': 'United States Government Work'
-      };
+
 
       function errorHandler(err)
       {
@@ -868,122 +934,11 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
     }]);
 
 
-    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', 'flickr', 'util', '$log', '$location', 'socket', function ($rootScope, $scope, $http, flickr, util, $log, $location, socket) {
-
-
-/*
-        $scope.activeLink = function(viewLocation)
-        {
-            return viewLocation == $location.path();
-        };
-
-        $rootScope.$on("$locationChangeStart", function(event, next, current) {
-
-        });
-*/
-
-
-
-        /* Add a hotkey to display the debug menu option. */
-        /*
-        hotkeys.add({
-            combo: 'ctrl+up',
-            description: 'Move selection up',
-            callback: function() {
-                $scope.credits = null;
-            }
-        });*/
+    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket) {
 
         $scope.$on('Event:NavigateBack', function () {
             $scope.goBack();
         });
-
-        //$scope.$on('Event:Search', function (event, args) {
-            //$scope.searchValue = args;
-            //$scope.search();
-        //});
-
-        // Change the UI when user has authenticated.
-        //$scope.$on('authenticating', function (event, token) {
-        //    $scope.authenticatingEvent(token);
-        //});
-
-        //$scope.authenticatingEvent = function (token)
-        //{
-          //  $scope.isProfileLoading = false;
-
-            //if (token === null)
-            //{
-              //  $scope.goHome();
-                //return;
-            //}
-
-            //var apiUrl = 'http://api.flickr.com/services/rest/?method=';
-            //var method = 'flickr.test.echo';
-            //var apiKey = '519594a5d8ab2bb0e42d75d54d2bca87';
-            //var query = '&user_id=32954227@N00&format=json&api_key=' + apiKey;
-
-            //method = 'flickr.photos.search';
-
-            //var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&user_id={user_id}&format=json&api_key=519594a5d8ab2bb0e42d75d54d2bca87";
-
-            //url = util.format(url, { user_id: token.UserId });
-
-            //console.log(url);
-
-            // This happens from an event and therefore we need to run $apply to make the UI update.
-            //$scope.$apply();
-
-            //console.log('GO HOME!!!');
-
-            // After user authenticates, we'll go back to the home screen.
-            //$scope.goHome();
-
-            //console.log(url);
-            //console.log(flickr);
-            //// Generate a signed URL.
-            //flickr.GenerateUrl(url, function (signedUrl) {
-
-            //    console.log("YES:" + signedUrl);
-
-            //});
-
-
-            // Retrieve the user profile.
-            //var id = decodeURI(token.UserId);
-            //console.log("WHEE!!!" + id);
-
-            //$http.get(apiUrl + method + query).success(function (data) {
-
-            //    // Remove the wrapper.
-            //    data = data.replace('jsonFlickrApi(', '');
-            //    data = data.replace(')', '');
-            //    data = JSON.parse(data);
-
-            //    console.log(data);
-            //    $scope.parseProfile(data);
-
-            //});
-        //};
-
-        // Change the UI when user has authenticated.
-        /*
-        $scope.$on('authenticated', function (event, token) {
-
-            $log.info('User is authenticated.');
-
-            $scope.isLoggedIn = true;
-
-            // Retrieve the user profile.
-            var id = decodeURI(token.UserId);
-
-            flickr.people.getInfo(id, function(data)
-            {
-                $scope.parseProfile(data);
-
-            });
-
-        });*/
 
         $scope.parseProfile = function (data) {
 
@@ -1075,8 +1030,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             }
             else
             {
-
-
                 //var xhr = new XMLHttpRequest();
                 //xhr.open('GET', url, true);
                 //xhr.responseType = 'blob';
@@ -1152,25 +1105,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             }
         };
 
-        $scope.isProfileLoading = true;
-
-        $scope.profileIconUrl = 'img/buddyicon.gif';
-
-        //$rootScope.$on('event:login', function (event, data) {
-        //    console.log("EVENT:LOGIN!");
-        //    console.log(data);
-        //});
-
-        if ($rootScope.state.packaged)
-        {
-          // Make sure we read the initial state as well, since the app might startup as maximized.
-            $scope.isMaximized = chrome.app.window.current().isMaximized();
-        }
-        else
-        {
-            $scope.isMaximized = false;
-        }
-
         $scope.handleWindowEvents = function () {
 
             if ($rootScope.state.packaged)
@@ -1183,13 +1117,6 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             }
 
         };
-
-        if ($rootScope.state.packaged)
-        {
-            chrome.app.window.current().onMaximized.addListener($scope.handleWindowEvents);
-            chrome.app.window.current().onMinimized.addListener($scope.handleWindowEvents);
-            chrome.app.window.current().onRestored.addListener($scope.handleWindowEvents);
-        }
 
         $scope.testView = function()
         {
@@ -1238,174 +1165,37 @@ controllers.controller('LogoutController', ['$scope', '$rootScope', '$location',
             //$scope.changeScreen('start');
         };
 
-/*
-        $scope.search = function ()
-        {
-            console.log('Searching for: ' + $scope.searchValue);
-
-            // This should probably be escaped/cleaned before applying to the URL?
-            var searchValue = $scope.searchValue;
-
-            var url = 'http://api.flickr.com/services/rest/?method=flickr.photos.search&text=' + searchValue + '&format=json&api_key=519594a5d8ab2bb0e42d75d54d2bca87';
-
-            console.log('Unsigned URL: ' + url);
-
-            flickr.GenerateUrl(url, function (signedUrl) {
-
-                console.log('Signed URL: ' + signedUrl);
-
-            });
-
-            $scope.changeScreen('search');
-        };*/
-
-/*
-        $scope.searchValue = '';
-        $scope.LoginTitle = 'LOGIN';
-
-        $scope.DisplayName = 'sondreb';*/
-
+        $scope.isProfileLoading = true;
+        $scope.profileIconUrl = 'img/buddyicon.gif';
         $scope.isLoggedIn = false;
         $scope.previousScreen = null;
         $scope.selectedScreen = '';
-
         $scope.isInitializing = true;
+
+        // Run this after all code have run once, to ensure that chrome.app.window
+        // is available fully.
+        $timeout(function() {
+
+          console.log('VIEW CONTENT LOADED!!');
+
+            if ($rootScope.state.packaged)
+            {
+              var current = chrome.app.window.current();
+
+              // Make sure we read the initial state as well, since the app might startup as maximized.
+              $scope.isMaximized = current.isMaximized();
+
+              current.onMaximized.addListener($scope.handleWindowEvents);
+              current.onMinimized.addListener($scope.handleWindowEvents);
+              current.onRestored.addListener($scope.handleWindowEvents);
+            }
+            else
+            {
+                $scope.isMaximized = false;
+            }
+
+        }, 0);
+
 
     }]);
 })();
-
-/*
-
-function TodoCtrl($scope) {
-    $scope.todos = [
-      { text: 'learn angular', done: true },
-      { text: 'build an angular Chrome packaged app', done: false }];
-
-    $scope.addTodo = function () {
-        $scope.todos.push({ text: $scope.todoText, done: false });
-        $scope.todoText = '';
-    };
-
-    $scope.remaining = function () {
-        var count = 0;
-        angular.forEach($scope.todos, function (todo) {
-            count += todo.done ? 0 : 1;
-        });
-        return count;
-    };
-
-    $scope.archive = function () {
-        var oldTodos = $scope.todos;
-        $scope.todos = [];
-        angular.forEach(oldTodos, function (todo) {
-            if (!todo.done) $scope.todos.push(todo);
-        });
-    };
-}
-
-*/
-
-
-
-
-/*
-
-// Create the settings controller.
-angular.module('downloadr').controller('SettingsController', function ($scope) {
-
-    var resources = {
-        connectionError: "Connection is in an invalid state, there is no transport active.",
-        invalidState: "Invalid state."
-    };
-
-    $scope.defaultPath = '';
-    $scope.backgroundImage = true;
-
-    $scope.save = function () {
-
-        if (!$rootScope.state.packaged) {
-            localStorage['path'] = $scope.defaultPath;
-            localStorage['background'] = $scope.backgroundImage;
-        }
-        else {
-            chrome.storage.sync.set({ 'path': $scope.defaultPath }, function () {
-                console.log('Path saved.');
-            });
-
-            chrome.storage.sync.set({ 'background': $scope.backgroundImage }, function () {
-                console.log('backgroundImage saved.');
-            });
-        }
-
-        console.log("Saving settings...");
-    };
-
-    $scope.initialize = function () {
-
-        //console.log(sharedProperties.getString());
-
-        var path = '';
-
-        if (!$rootScope.state.packaged) {
-
-            $scope.defaultPath = localStorage['path'];
-        }
-        else {
-
-            // Is this async? Then the return value will probably be null.
-            chrome.storage.sync.get('path', function (data) {
-                $scope.defaultPath = data;
-            });
-
-        }
-    }(); // Execute initialize
-});
-
-angular.module('downloadr').controller('SearchController', function ($scope) {
-
-});
-
-angular.module('downloadr').controller('LogoutController', function ($rootScope, $scope) {
-
-    $scope.logout = function ()
-    {
-        console.log('Logout Command');
-        $rootScope.$broadcast('Event:Logout');
-    }
-
-    $scope.back = function ()
-    {
-        console.log('Back Command');
-        $rootScope.$broadcast('Event:NavigateBack');
-    }
-});
-
-angular.module('downloadr').controller('HomeController', function ($rootScope, $scope) {
-
-    $scope.isDropdownVisible = false;
-    $scope.searchValue = "";
-
-    $scope.search = function ()
-    {
-        $rootScope.$broadcast('Event:Search', $scope.searchValue);
-    }
-
-    $scope.dropDown = function ()
-    {
-        console.log("DROPDOWN!!");
-
-        //$('.dropdown-options').css('opacity', 1);
-
-        if ($scope.isDropdownVisible)
-        {
-            $scope.isDropdownVisible = false;
-        }
-        else
-        {
-            $scope.isDropdownVisible = true;
-        }
-    }
-
-});
-
-*/

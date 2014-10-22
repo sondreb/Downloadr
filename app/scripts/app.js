@@ -11,7 +11,6 @@
     // Create the app module and dependencies.
     var downloadr = angular.module('downloadr', [
         'ngRoute',
-        'mousetrap',
         'downloadr.filters',
         'downloadr.services',
         'downloadr.directives',
@@ -26,6 +25,19 @@
     downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', function($rootScope, $location, searchProvider, socket, flickr, settings, notify)
     {
         console.log('downloadr.run: ', flickr);
+
+        // Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
+        $rootScope.licenses = [
+          {id: '0', title: 'All Rights Reserved', extension: 'ARR', font: ''},
+          {id: '1', title: 'Attribution-NonCommercial-ShareAlike License', extension: 'CC-BY-NC', font: 'c b n'},
+          {id: '2', title: 'Attribution-NonCommercial License', extension: 'CC-BY-NC-SA', font: 'c b n a'},
+          {id: '3', title: 'Attribution-NonCommercial-NoDerivs License', extension: 'CC-BY-NC-ND', font: 'c b n d'},
+          {id: '4', title: 'Attribution License', extension: 'CC-BY', font: 'c b'},
+          {id: '5', title: 'Attribution-ShareAlike License', extension: 'CC-BY-SA', font: 'c b a'},
+          {id: '6', title: 'Attribution-NoDerivs License', extension: 'CC-BY-ND', font: 'c b d'},
+          {id: '7', title: 'No known copyright restrictions', extension: '', font: ''},
+          {id: '8', title: 'United States Government Work', extension: 'GOV', font: ''}
+        ];
 
         // i18n example:
         var resourceText = chrome.i18n.getMessage("settings_title");
@@ -83,7 +95,6 @@
         });
 
         $rootScope.performSearch = function(){
-
 
           if ($rootScope.state.searchText === null || $rootScope.state.searchText === '')
           {

@@ -10,19 +10,31 @@
 
     var downloadr = angular.module('downloadr.services', []);
 
-    downloadr.factory('settings', function() {
+    downloadr.factory('settings', ['$rootScope', '$timeout', function($rootScope, $timeout) {
 
       var load = function()
       {
         chrome.storage.sync.get('settings', function(result){
 
-          if (result.settings == null) // Checks null and undefined
+          if (result.settings == null || Object.keys(result.settings).length === 0) // Checks null and undefined
           {
             return;
           }
 
-          values = result;
+          var settings = result.settings;
+
+          // When we load, we can't replace the whole "values" object, as that
+          // will remove link between controllers and this service.
+          values.safe = settings.safe;
+          values.size = settings.size;
+          values.sort = settings.sort;
+          values.license = settings.license;
+          values.view = settings.view;
+          values.background = settings.background;
+
           console.log('Settings loaded: ', values);
+          $scope.apply();
+
         });
       };
 
@@ -34,13 +46,13 @@
       };
 
       var values = {
-        photoSize: 'o',
         safe: '1',
-        license: '',
+        size: 'o',
         sort: 'relevance',
+        license: '1,2,3,4,5,6,7,8',
         view: 'large',
         background: true
-      }
+      };
 
       // Before we return the service, we'll load the settings if they exists.
       load();
@@ -51,7 +63,7 @@
           save: save
       };
 
-    });
+    }]);
 
     downloadr.factory('notify', function() {
 

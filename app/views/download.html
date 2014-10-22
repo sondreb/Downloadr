@@ -2,8 +2,8 @@
 
     <div class="content middle">
 
-      <h2 ng-hide="completed">Downloaded {{photoNumber}} of {{count}}</h2>
-      <h2 ng-show="completed">Downloaded {{count}} photos successfully</h2>
+      <h2 ng-hide="completed"><i class="fa fa-file-photo-o"></i> Downloaded {{photoNumber}} of {{count}}</h2>
+      <h2 ng-show="completed"><i class="fa fa-photo"></i> Downloaded {{count}} photos successfully</h2>
       <button ng-hide="completed">Pause</button> <button ng-hide="completed">Cancel</button>
       <p ng-show="completed">
       <a href="#/">Search again</a>
