@@ -32,6 +32,8 @@
           values.view = settings.view;
           values.background = settings.background;
           values.debug = settings.debug;
+          values.progress = settings.progress;
+          values.completed = settings.completed;
 
           if (values.debug === true)
           {
@@ -51,6 +53,9 @@
         });
       };
 
+      // Setting keys have been chosen to be small and simple for
+      // simplicity. Might not all be self-descriptive, but easy to learn.
+
       var values = {
         safe: '1',
         size: 'o',
@@ -58,7 +63,9 @@
         license: '1,2,3,4,5,6,7,8',
         view: 'large',
         background: true,
-        debug: false
+        debug: false,
+        progress: true,
+        completed: true
       };
 
       // Before we return the service, we'll load the settings if they exists.

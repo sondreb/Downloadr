@@ -84,6 +84,31 @@
       };
   });
 
+  directives.directive('justified', ['$timeout', function ($timeout) {
+      return {
+          restrict: 'AE',
+          link: function (scope, el, attrs) {
+              scope.$watch('$last', function (n, o) {
+                  if (n) {
+                      //$timeout(function () { $(el[0]).justifiedGallery(); });
+                  }
+              });
+          }
+      };
+  }]);
+
+  directives.directive('repeatDone', [function () {
+  return {
+    restrict: 'A',
+     link: function (scope, element, iAttrs) {
+          var parentScope = element.parent().scope();
+          if (scope.$last){
+               parentScope.$last = true;
+          }
+        }
+      };
+    }]);
+
   directives.directive('navMenu', function($location) {
     return function(scope, element, attrs) {
       var links = element.find('a'),

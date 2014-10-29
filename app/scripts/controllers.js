@@ -298,6 +298,8 @@
 
           var photos = $scope.photos;
 
+          //var gallery = $('#gallery');
+
           for (var i=0; i<photos.length; i++) {
 
             var item = photos[i];
@@ -316,6 +318,7 @@
 
                 console.log('BLOB: ', blob_uri);
                 originalItem.url = blob_uri;
+                //gallery.justifiedGallery();
 
               }, 0);
 
@@ -379,7 +382,7 @@
               // Could we perhaps use prototype instead of this silly loop?
               for (var i=0; i<list.length; i++) {
                   var item = list[i];
-                  item.url = 'img/loading.gif';
+                  //item.url = 'img/loading.gif';
                   item.selected = false;
 
                   // Returns the highest available image URL for the selected
@@ -442,7 +445,7 @@
               // Bind to the UI.
               $scope.photos = list;
 
-              $('#gallery').justifiedGallery();
+              //$('#gallery').justifiedGallery();
 
               // Begin download the thumbnails.
               $scope.loadImages();
@@ -484,7 +487,7 @@
               text: searchTerm,
               safe_search: settings.values.safe,
               sort: settings.values.sort,
-              per_page: '10',
+              per_page: '30',
               extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
             });
 
@@ -594,7 +597,7 @@
 
     }]);
 
-    controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', function ($scope, $rootScope, notify) {
+    controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', function ($scope, $rootScope, notify, settings) {
 
 
 
@@ -642,12 +645,14 @@
 
             $scope.completed = true;
 
-            notify('success', 'basic', 'Download Complete',
-              'All ' + $scope.count + ' photos have been saved successfully.',
-              function(id){
-                // Launch the local file browser at the target destination.
-            });
-
+            if (settings.values.completed)
+            {
+              notify('success', 'basic', 'Download Complete',
+                'All ' + $scope.count + ' photos have been saved successfully.',
+                function(id){
+                  // Launch the local file browser at the target destination.
+              });
+            }
           });
 
           return;
@@ -680,11 +685,15 @@
 
               var percentage = $scope.photoNumber * 100/ $scope.count;
 
-              // Should we do Pause/Cancel buttons for this notification?
-              notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
-                'You will be notified when download is completed.',
-                function(id){}, Math.round(percentage));
 
+              if (settings.values.progress)
+              {
+                // Should we do Pause/Cancel buttons for this notification?
+                notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
+                  'You will be notified when download is completed.',
+                  function(id){}, Math.round(percentage));
+
+              }
               /*
               var options = {
                 type: "progress",
