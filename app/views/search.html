@@ -1,7 +1,11 @@
-<div id="searchView" class="thumbs container">
+<div id="gallery" class="thumbs2 container2" ng-repeat="photo in photos">
+
+<a  href="" ng-click="selectPhoto(photo)"><img ng-src="{{photo.url}}" ng-class="{selectedThumbnail: photo.selected}" title="{{photo.title}}" alt="{{photo.title}}"></a>
+
+<!--
   <ul>
     <li ng-repeat="photo in photos"><a href="" ng-click="selectPhoto(photo)"><img ng-src="{{photo.url}}" ng-class="{selectedThumbnail: photo.selected}" title="{{photo.title}}" alt="{{photo.title}}"></a></li>
-  </ul>
+  </ul>-->
   <!--
   <p>Fetching more photos...</p>
   -->

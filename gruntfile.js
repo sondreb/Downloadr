@@ -74,15 +74,24 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
+            style: {
+            files: ['<%= config.app %>/styles/{,*/}*.styl'],
+                tasks: ['stylus'],
+                options: {
+                    livereload: true
+                }
+            },
             livereload: {
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
                     '.tmp/styles/{,*/}*.css',
-                    '<%= config.app %>/css/*.css',
+                    '<%= config.app %>/styles/*.css',
+                    '<%= config.app %>/styles/*.styl',
                     '<%= config.app %>/*.html',
                     '<%= config.app %>/views/*.html',
+                    '<%= config.app %>/index.html',
                     '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                     '<%= config.app %>/manifest.json',
                     '<%= config.app %>/_locales/{,*/}*.json'
@@ -167,6 +176,14 @@ module.exports = function (grunt) {
                     ]
                 }]
             }
+        },
+
+        stylus: {
+          compile: {
+            files: {
+              '<%= config.app %>/styles/app.css': '<%= config.app %>/styles/*.styl'
+            }
+          }
         },
 
         // Make sure code styles are up to par and there are no obvious mistakes
@@ -410,9 +427,9 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-jshint");
-    //grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-mocha-cli");
     grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks('grunt-contrib-stylus');
 
     grunt.registerTask('debug', function (platform) {
 
@@ -433,6 +450,7 @@ module.exports = function (grunt) {
             'clean:' + platform,
             'concurrent:' + platform,
             'mochacli',
+            'stylus',
             'express:dev',
             'connect:' + platform,
             'watch'
@@ -453,6 +471,7 @@ module.exports = function (grunt) {
         'chromeManifest:dist',
         'useminPrepare',
         'concurrent:dist',
+        'stylus',
         'concat',
         'cssmin',
         'uglify',

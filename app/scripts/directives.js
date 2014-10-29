@@ -66,6 +66,8 @@
               // search button, then we will navigate and perform search.
               $scope.clickHandler = function()
               {
+                  console.log('CLICK HANDLER FOR DIRECTIVE!!');
+
                   if ($scope.target != null)
                   {
                     $location.path($scope.target);

@@ -70,9 +70,7 @@
 
             selectedPhotos: [],
 
-            debug: false,
-
-            photoSize: 'o'
+            debug: false
 
         };
 

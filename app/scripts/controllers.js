@@ -442,6 +442,8 @@
               // Bind to the UI.
               $scope.photos = list;
 
+              $('#gallery').justifiedGallery();
+
               // Begin download the thumbnails.
               $scope.loadImages();
             }).
@@ -948,7 +950,7 @@
     }]);
 
 
-    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket) {
+    controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings) {
 
         $scope.$on('Event:NavigateBack', function () {
             $scope.goBack();
@@ -958,6 +960,8 @@
           'ctrl+t+d': function() {
             console.log('Open up [T]est & [D]ebug mode for developers.');
             $rootScope.state.debug = !$rootScope.state.debug;
+            settings.values.debug = true;
+            settings.save();
           },
           'ctrl+s': function() { console.log('Begin search?'); }
         }

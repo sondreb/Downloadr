@@ -31,6 +31,12 @@
           values.license = settings.license;
           values.view = settings.view;
           values.background = settings.background;
+          values.debug = settings.debug;
+
+          if (values.debug === true)
+          {
+              $rootScope.state.debug = true;
+          }
 
           console.log('Settings loaded: ', values);
           $scope.apply();
@@ -51,7 +57,8 @@
         sort: 'relevance',
         license: '1,2,3,4,5,6,7,8',
         view: 'large',
-        background: true
+        background: true,
+        debug: false
       };
 
       // Before we return the service, we'll load the settings if they exists.
