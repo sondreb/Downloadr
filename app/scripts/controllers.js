@@ -365,6 +365,8 @@
 
         $scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
 
+        $scope.total = 0;
+
         // Register handler for callbacks of signing URLs.
         socket.on('urlSigned', function(message) {
 
@@ -378,6 +380,9 @@
               console.log('Service HTTP status: ', status);
 
               var list = data.photos.photo;
+              $scope.total = data.photos.total;
+
+              $rootScope.$broadcast('Event:SelectedPhotosChanged', { total: $scope.total, photos: $rootScope.state.selectedPhotos });
 
               // Could we perhaps use prototype instead of this silly loop?
               for (var i=0; i<list.length; i++) {
@@ -586,6 +591,12 @@
         $scope.$on('Event:SelectedPhotosChanged', function(event, data) {
             console.log('Event:SelectedPhotosChanged: ', data);
             $scope.count = data.photos.length;
+
+            if (data.total)
+            {
+              $scope.total = data.total;
+            }
+
         });
 
         $scope.clearSelection = function() {

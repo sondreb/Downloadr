@@ -131,13 +131,17 @@
               </select>
             </li>
 
-            <li title="Photos selected for download" class="counter" ng-show="state.actionTarget == 'folder'">
+            <li title="Photos selected for download" class="counter" ng-show="state.actionTarget == 'folder' && count">
             {{count}}<a href="" ng-click="clearSelection()" class="counter-remove" title="Clear photos selection"><i class="fa fa-check"></i></a>
+            </li>
+
+            <li title="Photos selected for download" class="counter" ng-hide="count">
+            {{total}}<a href="" class="counter-total" title="Number of search results"><i class="fa fa-check"></i></a>
             </li>
 
             <!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
             <li class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0"><a href="#/folder">NEXT <i class="fa fa-arrow-right"></i></a></li>
-            <li class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="">NEXT <i class="fa fa-arrow-right"></i></a></li>
+            <li class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="#/folder">NEXT <i class="fa fa-arrow-right"></i></a></li>
             <li class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''"><a href="#/download">DOWNLOAD <i class="fa fa-download"></i></a></li>
             <li class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''"><a href="">DOWNLOAD <i class="fa fa-download"></i></a></li>
 
