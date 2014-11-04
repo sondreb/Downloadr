@@ -262,6 +262,18 @@
 
         });
 
+        $scope.loadMore = function() {
+            console.log('Load more...');
+
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+            $scope.photos.push({ url: 'content/img.jpg' });
+        };
+
         $scope.loadImage = function(item, callback) {
           var xhr = new XMLHttpRequest();
           xhr.responseType = 'blob';

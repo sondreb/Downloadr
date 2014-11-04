@@ -12,6 +12,7 @@
     var downloadr = angular.module('downloadr', [
         'ngRoute',
         'mousetrap',
+        'infinite-scroll',
         'downloadr.filters',
         'downloadr.services',
         'downloadr.directives',
