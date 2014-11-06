@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Flickr Downloadr
  * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
  * License: MIT
@@ -18,12 +18,12 @@ var Flickr = (function () {
     var _packaged = (typeof chrome != 'undefined' && typeof chrome.runtime != 'undefined');
 
     var resources = {
-        connectionError: "Connection is in an invalid state, there is no transport active.",
-        invalidState: "Invalid state."
+        connectionError: 'Connection is in an invalid state, there is no transport active.',
+        invalidState: 'Invalid state.'
     };
 
     // Private variables
-    var _url = "http";
+    var _url = 'http';
     var _consumerKey = '519594a5d8ab2bb0e42d75d54d2bca87';
     var getUrl = function () { return url; };
     var _connection = null;
@@ -33,7 +33,7 @@ var Flickr = (function () {
     {
         // Save the token with null should delete it.
         saveToken(null);
-    }
+    };
 
     var buildUrl = function (method, query)
     {
@@ -42,7 +42,7 @@ var Flickr = (function () {
         query += '&format=json&api_key=' + apiKey;
 
         return apiUrl + method + query;
-    }
+    };
 
     var saveToken = function (token) {
 
@@ -109,7 +109,7 @@ var Flickr = (function () {
 
     var generateUrl = function (url, callback)
     {
-        console.log("Flickr/generateUrl:" + url);
+        console.log('Flickr/generateUrl:' + url);
         //console.log(_proxy);
 
         _proxy.invoke('generateUrl', url).done(function (signedUrl) {
@@ -118,7 +118,7 @@ var Flickr = (function () {
         }).fail(function (error) {
             console.log('FAIL!!!:' + error);
         });
-    }
+    };
 
     var onLoginUrl = function (url)
     {
@@ -156,13 +156,13 @@ var Flickr = (function () {
         _connection = $.hubConnection();
         //_connection.url = "http://brain.no:8080/api";
         //_connection.url = "http://localhost:8080/api";
-        _connection.url = "http://localhost:8484/api";
+        _connection.url = 'http://localhost:8484/api';
 
         _connection.logging = true;
 
         _proxy = _connection.createHubProxy('tokenHub');
 
-        console.log("TOKEN SERVICE INITIALIZE");
+        console.log('TOKEN SERVICE INITIALIZE');
 
         // Raised whenever we retreive a login url.
         _proxy.on('loginUrl', onLoginUrl);
@@ -177,7 +177,7 @@ var Flickr = (function () {
 
         _connection.start().done(function () {
 
-            console.log("WebSocket Started: " + _connection.id);
+            console.log('WebSocket Started: ' + _connection.id);
 
 /*
             var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&user_id=32954227@N00&format=json&api_key=519594a5d8ab2bb0e42d75d54d2bca87";
@@ -223,7 +223,7 @@ var Flickr = (function () {
 
   return;
 
-        console.log("METHOD: startAuthentication");
+        console.log('METHOD: startAuthentication');
 
         loadToken(function(token) {
 
@@ -235,7 +235,7 @@ var Flickr = (function () {
             }
             else {
 
-                console.log("Has Token, Running initialize...");
+                console.log('Has Token, Running initialize...');
 
                 // Initialize the WebSocket connection.
                 initialize(true);
@@ -274,27 +274,27 @@ var Flickr = (function () {
 
     people.getInfo = function(id, callback)
     {
-        console.log("flickr.people.getInfo: " + id);
+        console.log('flickr.people.getInfo: ' + id);
 
         var method = 'flickr.people.getInfo';
         var query = '&user_id=' + id;
 
         var url = buildUrl(method, query);
 
-        console.log("TRY THIS URL: " + url);
+        console.log('TRY THIS URL: ' + url);
 
         $.getJSON(url, function( data ) {
 
 
           var items = [];
           $.each( data, function( key, val ) {
-            items.push( "<li id='" + key + "'>" + val + "</li>" );
+            items.push( '<li id="' + key + '">' + val + '</li>' );
           });
 
-          $( "<ul/>", {
-            "class": "my-new-list",
-            html: items.join( "" )
-          }).appendTo( "body" );
+          $( '<ul/>', {
+            "class": 'my-new-list',
+            html: items.join( '' )
+          }).appendTo( 'body' );
         });
 
 
@@ -369,7 +369,7 @@ var Flickr = (function () {
 Flickr.Authentication = (function () {
 
     // Private variables
-    var url = "http";
+    var url = 'http';
 
     var getUrl = function () { return url; };
 

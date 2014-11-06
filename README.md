@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.29)
+Flickr Downloadr 3 (3.0.36)
 ============
 
 http://flickr-downloadr.com/

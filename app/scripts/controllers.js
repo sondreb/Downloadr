@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Flickr Downloadr
  * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
  * License: MIT
@@ -35,6 +35,7 @@
 
     }]);
 
+    
     controllers.controller('StatusController', ['$scope', '$rootScope', 'socket', function ($scope, $rootScope, socket) {
 
       console.log('STATUS CONTROLLER!');
@@ -164,15 +165,15 @@
         webview.src = $rootScope.state.loginUrl;
 
         var getParameterByName = function(url, name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
                 results = regex.exec(url);
-            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         };
 
         // Add a listener, to navigate back to home page when user
         // have successfully authorized the app.
-        webview.addEventListener("loadstop", function () {
+        webview.addEventListener('loadstop', function () {
 
             if (webview.src.indexOf('oauth_verifier') > -1) {
 
@@ -197,7 +198,7 @@
 
             }
 
-            console.log("webview loaded: " + webview.src);
+            console.log('webview loaded: ' + webview.src);
 
         });
 
@@ -227,7 +228,7 @@
           // Navigate to home.
           $location.path('/#');
 
-        }
+        };
 
         //$rootScope.state.background = 'wallpaper';
         //$scope.search = { text: '' };
@@ -301,7 +302,7 @@
           $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $rootScope.state.selectedPhotos });
 
           console.log('Select photo: ', photo);
-        }
+        };
 
         //$scope.selectedPhotos = [];
 
@@ -431,7 +432,7 @@
                       {
                         return this['url_' + $scope.sizes[i]];
                       }
-                    };
+                    }
 
                     throw new Error('Unable to find photo URL for the specified size');
 
@@ -494,7 +495,7 @@
 
               $scope.photos = [];
             }
-        }
+        };
 
         $scope.performSearch = function(searchTerm)
         {
@@ -532,9 +533,9 @@
 
        $scope.getAcceptLanguages = function() {
           chrome.i18n.getAcceptLanguages(function(languageList) {
-            var languages = languageList.join(",");
-            document.getElementById("languageSpan").innerHTML = languages;
-          })
+            var languages = languageList.join(',');
+            document.getElementById('languageSpan').innerHTML = languages;
+          });
         };
 
         $scope.languages = [
@@ -614,7 +615,7 @@
         $scope.clearSelection = function() {
           $rootScope.state.selectedPhotos = [];
           $rootScope.$broadcast('Event:SelectedPhotosChanged', { photos: $rootScope.state.selectedPhotos });
-        }
+        };
 
         $scope.count = 0;
 
@@ -636,7 +637,7 @@
         xhr.onload = function() {
           //callback(window.webkitURL.createObjectURL(xhr.response), item);
           callback(xhr.response, item);
-        }
+        };
         xhr.open('GET', item.getUrl(size), true);
         xhr.send();
       };
@@ -658,7 +659,7 @@
 
         console.log('PHOTO SIZE: ', size);
 
-        if (photo == null) // checks null or undefined
+        if (photo === null || photo === undefined) // checks null or undefined
         {
           $scope.$apply(function () {
 
@@ -682,7 +683,7 @@
         }
 
         console.log('INDEX: ', index);
-        console.log("Process Photo: ", photo);
+        console.log('Process Photo: ', photo);
 
         // Download the photo
         $scope.loadImage(photo, size, function(blob_uri, originalItem) {
@@ -789,7 +790,7 @@
        */
       $scope.sanitizeFileName = function(fileName) {
         return fileName.replace(/[^a-z0-9\-]/gi, ' ').substr(0, 50).trim();
-      }
+      };
 
 
       /*
@@ -818,7 +819,7 @@
         });
 
         console.log('Last error completed');
-      }
+      };
 
       function errorHandler(err)
       {
@@ -832,7 +833,7 @@
         xhr.onload = function() {
           //callback(window.webkitURL.createObjectURL(xhr.response), item);
           callback(xhr.response, item);
-        }
+        };
         xhr.open('GET', item.getUrl('b'), true);
         xhr.send();
       };
@@ -871,7 +872,7 @@
 
                 $scope.$apply(function () {
 
-                    console.log("FULL PATH: ", path);
+                    console.log('FULL PATH: ', path);
                     $rootScope.state.targetPath = path;
                     $scope.path = path;
                 });
@@ -996,7 +997,7 @@
             settings.save();
           },
           'ctrl+s': function() { console.log('Begin search?'); }
-        }
+        };
 /*
         $scope.keyboard = {
           't': function('T was pressed, enable debug mode');

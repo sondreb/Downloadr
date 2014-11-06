@@ -21,11 +21,10 @@
 
     downloadr.value('version', '3.0');
     downloadr.value('author', 'Sondre Bjellås');
-    //downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-    downloadr.value('config_socket_server', 'http://localhost:3000');
+    downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
+    //downloadr.value('config_socket_server', 'http://localhost:3000');
 
-    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', function($rootScope, $location, searchProvider, socket, flickr, settings, notify)
-    {
+    downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', function( $rootScope, $location, searchProvider, socket, flickr, settings, notify) {
         console.log('downloadr.run: ', flickr);
 
         // Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
@@ -42,7 +41,7 @@
         ];
 
         // i18n example:
-        var resourceText = chrome.i18n.getMessage("settings_title");
+        var resourceText = chrome.i18n.getMessage('settings_title');
 
         console.log('Resource Text: ', resourceText);
 
@@ -75,7 +74,7 @@
 
         };
 
-        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
 
           var path = $location.path();
 
@@ -83,7 +82,7 @@
           // It will manually be re-enabled by controllers that use it.
           $rootScope.state.showActions = false;
 
-          if (path == "/" || path == "")
+          if (path === '/' || path === '')
           {
             $rootScope.state.isOnStartScreen = true;
           }
@@ -127,7 +126,8 @@
 
             chrome.storage.sync.set({'token': null}, function() {
               // Notify that we saved.
-              message('Settings saved');
+              //message('Settings saved');
+                console.log('Settings saved');
             });
 
             flickr.removeToken();
@@ -143,7 +143,7 @@
 
         // Make sure we listen to whenever the local storage value have changed.
         chrome.storage.onChanged.addListener(function(changes, namespace) {
-              for (key in changes) {
+              for (var key in changes) {
                 var storageChange = changes[key];
                 console.log('Storage key "%s" in namespace "%s" changed. ' +
                             'Old value was "%s", new value is "%s".',
@@ -152,7 +152,7 @@
                             storageChange.oldValue,
                             storageChange.newValue);
 
-                if (key == 'token')
+                if (key === 'token')
                 {
                   //flickr.parseToken(storageChange.newValue);
                 }
@@ -244,7 +244,7 @@
     downloadr.config( ['$compileProvider', function($compileProvider)
     {
       // This has to be done or else Angular will append "unsafe:" to URLs.
-      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome‌​-extension|blob:chrome-extension):\//);
+      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|chrome-extension|blob:chrome-extension):\//);
       $compileProvider.aHrefSanitizationWhitelist (/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
 
       //var oldWhiteList = $compileProvider.imgSrcSanitizationWhitelist();

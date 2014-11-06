@@ -7,6 +7,26 @@ This document tries to explain technical developer details that is usefull
 for future references. This document also have some guidelines for any
 developers who want to contribute.
 
+# Tools:
+
+There are some requirements and some suggestions on software you should use
+when developing on this app.
+
+Requirements:
+- Node.JS
+- Grunt
+- Bower
+
+Suggestions:
+- Brackets (Text editor)
+
+Brackets extensions:
+- JSHint
+- Brackets Git
+- Brackets File Icons
+- QuickDocsJS
+- Stylus Extension for Brackets
+
 ## Architecture:
 
 The solution is built with a server part built on ASP.NET and hosted on

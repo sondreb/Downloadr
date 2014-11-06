@@ -21,7 +21,7 @@
    */
   directives.directive('ngEnter', function ($rootScope, $location, $timeout) {
       return function (scope, element, attrs) {
-          element.bind("keydown keypress", function (event) {
+          element.bind('keydown keypress', function (event) {
               if(event.which === 13) {
 
                   $timeout(function() {
