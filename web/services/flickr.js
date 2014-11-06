@@ -41,86 +41,81 @@ var myCallback = function (err, data) {
   }
 };*/
 
-var search = function(text)
-{
+var search = function (text) {
 
 
 }
 
 
-var signUrl = function(token, secret, method, args, cb)
-{
-  console.log("Requesting to sign URL");
-  console.log(args);
+var signUrl = function (token, secret, method, args, cb) {
+	console.log("Requesting to sign URL");
+	console.log(args);
 
-  var args = {
-    method: method,
-    flickrConsumerKey: _key,
-    flickrConsumerKeySecret: _secret,
-    oauthToken: token,
-    oauthTokenSecret: secret,
-    callback: cb,
-    optionalArgs : args
-  };
+	var args = {
+		method: method,
+		flickrConsumerKey: _key,
+		flickrConsumerKeySecret: _secret,
+		oauthToken: token,
+		oauthTokenSecret: secret,
+		callback: cb,
+		optionalArgs: args
+	};
 
-  var method = flickrApi.signApiMethod(args);
-  cb(null, method);
+	var method = flickrApi.signApiMethod(args);
+	cb(null, method);
 
 }
 
-var getAccessToken = function(token, secret, verifier, cb)
-{
-  console.log("Requesting to get permanent Access Token");
+var getAccessToken = function (token, secret, verifier, cb) {
+	console.log("Requesting to get permanent Access Token");
 
-  var args = {
-    flickrConsumerKey: _key,
-    flickrConsumerKeySecret: _secret,
-    oauthToken: token,
-    oauthTokenSecret: secret,
-    oauthVerifier: verifier,
-    callback: cb
-  };
+	var args = {
+		flickrConsumerKey: _key,
+		flickrConsumerKeySecret: _secret,
+		oauthToken: token,
+		oauthTokenSecret: secret,
+		oauthVerifier: verifier,
+		callback: cb
+	};
 
-  console.log(args);
+	console.log(args);
 
-  flickrApi.useRequestTokenToGetAccessToken(args);
+	flickrApi.useRequestTokenToGetAccessToken(args);
 }
 
-var getAuthUrl = function(cb)
-{
-  console.log("!!!!!!!!!!!!!");
+var getAuthUrl = function (cb) {
+	console.log("!!!!!!!!!!!!!");
 
-  var args = {
-    flickrConsumerKey: _key,
-    flickrConsumerKeySecret: _secret,
-    permissions: 'read',
-    redirectUrl: _url,
-    callback: cb
-  };
+	var args = {
+		flickrConsumerKey: _key,
+		flickrConsumerKeySecret: _secret,
+		permissions: 'read',
+		redirectUrl: _url,
+		callback: cb
+	};
 
-  console.log(args);
+	console.log(args);
 
-  flickrApi.getRequestToken(args);
+	flickrApi.getRequestToken(args);
 }
 
-module.exports = function(key, secret, settings)
-{
-  if (!key) throw new Error('"key" is required');
-  if (!secret) throw new Error('"secret" is required');
+module.exports = function (key, secret, settings) {
+	if (!key) throw new Error('"key" is required');
+	if (!secret) throw new Error('"secret" is required');
 
-  var port = settings.port || 3000;
+	var port = settings.port || 3000;
 
-  _url = settings.url || 'http://localhost:' + port + '/auth/';
-  _key = key;
-  _secret = secret;
+	_url = settings.url || 'http://localhost:' + port + '/auth/';
+	_key = key;
+	_secret = secret;
 
-  console.log('Flickr Service configured: ');
-  console.log(' URL: ', _url);
+	console.log('Flickr Service configured: ');
+	console.log(' URL: ', _url);
 
-  return {
-      getAuthUrl: getAuthUrl,
-      getAccessToken: getAccessToken,
-      signUrl: signUrl,
-      search: search
-      }
+	return {
+		getAuthUrl: getAuthUrl,
+		getAccessToken: getAccessToken,
+		signUrl: signUrl,
+		search: search
+	}
 };

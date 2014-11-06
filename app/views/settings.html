@@ -1,16 +1,21 @@
 <div id="settingsView" class="container">
-    <div class="content padding">
-        <h3>Safe Search</h3>
-        <p>
-              <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_0" value="1"> <label for="safe_search_0">SafeSearch on</label><br />
-              <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_1" value="2"> <label for="safe_search_1">SafeSearch moderate</label><br />
-    			    <input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_2" value="3" checked> <label for="safe_search_2">SafeSearch off</label>
-        </p>
-        <p ng-show="state.isAnonymous">
-          <em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service.</em>
-        </p>
+	<div class="content padding">
+		<h3>Safe Search</h3>
+		<p>
+			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_0" value="1">
+			<label for="safe_search_0">SafeSearch on</label>
+			<br />
+			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_1" value="2">
+			<label for="safe_search_1">SafeSearch moderate</label>
+			<br />
+			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_2" value="3" checked>
+			<label for="safe_search_2">SafeSearch off</label>
+		</p>
+		<p ng-show="state.isAnonymous">
+			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service.</em>
+		</p>
 
-  <!--
+		<!--
       <p>
       <input type=checkbox id="ccsearch" name="cc_search" onchange="F.search.updateCCBoxes();">
 			<label for="ccsearch">Only search within <strong>Creative Commons</strong>-licensed content</label>
@@ -24,22 +29,22 @@
 			<label for="ccderivs"> Find content to modify, adapt, or build upon</label>
       </p>
 -->
-<br>
-      <h3>Layout</h3>
-        <p>
-            <label for="backgroundImageInput">Show Background Image</label>
-            <input id="backgroundImageInput" type="checkbox" ng-model="settings.values.background" />
-        </p>
-        <br>
-<h3>Notifications</h3>
-  <p>
-      <label for="progressNotificationInput">Progress Notification</label>
-      <input id="progressNotificationInput" type="checkbox" ng-model="settings.values.progress" />
-  </p>
-  <p>
-      <label for="completedNotificationInput">Completed Notification</label>
-      <input id="completedNotificationInput" type="checkbox" ng-model="settings.values.completed" />
-  </p>
+		<br>
+		<h3>Layout</h3>
+		<p>
+			<label for="backgroundImageInput">Show Background Image</label>
+			<input id="backgroundImageInput" type="checkbox" ng-model="settings.values.background" />
+		</p>
+		<br>
+		<h3>Notifications</h3>
+		<p>
+			<label for="progressNotificationInput">Progress Notification</label>
+			<input id="progressNotificationInput" type="checkbox" ng-model="settings.values.progress" />
+		</p>
+		<p>
+			<label for="completedNotificationInput">Completed Notification</label>
+			<input id="completedNotificationInput" type="checkbox" ng-model="settings.values.completed" />
+		</p>
 
-    </div>
+	</div>
 </div>

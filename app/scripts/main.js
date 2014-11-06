@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * Flickr Downloadr
  * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
  * License: MIT
@@ -14,28 +14,28 @@
 'use strict';
 
 chrome.app.runtime.onLaunched.addListener(function () {
-    // Center window on screen.
-    var screenWidth = screen.availWidth;
-    var screenHeight = screen.availHeight;
-    var width = 900;
-    var height = 600;
+	// Center window on screen.
+	var screenWidth = screen.availWidth;
+	var screenHeight = screen.availHeight;
+	var width = 900;
+	var height = 600;
 
-    chrome.app.window.create('index.html', {
-        id: 'downloadrWindow',
-        frame: 'none',
-        outerBounds: {
-            width: width,
-            height: height,
-            left: Math.round((screenWidth - width) / 2),
-            top: Math.round((screenHeight - height) / 2),
-            minWidth: 460,
-            minHeight: 240
-        }
-    });
+	chrome.app.window.create('index.html', {
+		id: 'downloadrWindow',
+		frame: 'none',
+		outerBounds: {
+			width: width,
+			height: height,
+			left: Math.round((screenWidth - width) / 2),
+			top: Math.round((screenHeight - height) / 2),
+			minWidth: 460,
+			minHeight: 240
+		}
+	});
 });
 
 chrome.runtime.onSuspend.addListener(function () {
-    // Do some simple clean-up tasks.
+	// Do some simple clean-up tasks.
 });
 
 
