@@ -1,12 +1,12 @@
 {
-	"manifest_version": 2,
-	"default_locale": "en",
-	"name": "__MSG_appName__",
-	"description": "__MSG_appDesc__",
-	"version": "3.0.36",
-	"permissions": [
-		{
-			"fileSystem": [
+    "manifest_version": 2,
+    "default_locale": "en",
+    "name": "__MSG_appName__",
+    "description": "__MSG_appDesc__",
+    "version": "3.0.39",
+    "permissions": [
+        {
+            "fileSystem": [
                 "write",
                 "retainEntries",
                 "directory"
@@ -23,20 +23,20 @@
         "http://brain.no/*",
         "<all_urls>"
     ],
-	"minimum_chrome_version": "38",
-	"offline_enabled": true,
-	"icons": {
-		"16": "img/icon_16.png",
-		"48": "img/icon_48.png",
-		"128": "img/icon_128.png",
-		"256": "img/icon_256.png"
-	},
-	"app": {
-		"background": {
-			"scripts": [
+    "minimum_chrome_version": "38",
+    "offline_enabled": true,
+    "icons": {
+        "16": "img/icon_16.png",
+        "48": "img/icon_48.png",
+        "128": "img/icon_128.png",
+        "256": "img/icon_256.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
                 "scripts/main.js",
                 "scripts/chromereload.js"
             ]
-		}
-	}
+        }
+    }
 }

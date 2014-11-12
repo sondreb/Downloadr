@@ -339,6 +339,32 @@ module.exports = function (grunt) {
 
 		// Copies remaining files to places other tasks can use
 		copy: {
+			dev: {
+				files: [{
+					cwd: '<%= config.app %>/bower_components/material-design-icons/',
+					src: ['navigation/svg/ic_refresh_24px.svg',
+						  'action/svg/ic_search_24px.svg',
+						  'action/svg/ic_help_24px.svg',
+						  'action/svg/ic_schedule_24px.svg',
+						  'action/svg/ic_bug_report_24px.svg',
+						  'content/svg/ic_remove_24px.svg',
+						  'hardware/svg/ic_keyboard_backspace_24px.svg',
+
+						  'action/svg/ic_settings_24px.svg',
+						  'navigation/svg/ic_menu_24px.svg',
+						  'navigation/svg/ic_arrow_back_24px.svg',
+						  'navigation/svg/ic_arrow_forward_24px.svg',
+
+						  'navigation/svg/ic_close_18px.svg',
+						  'navigation/svg/ic_close_24px.svg',
+						  'navigation/svg/ic_expand_more_24px.svg',
+						  'navigation/svg/ic_expand_less_24px.svg'
+						 ],
+					dest: '<%= config.app %>/images/icons/svg/',
+					flatten: true,
+					expand: true
+				}]
+			},
 			dist: {
 				files: [{
 						expand: true,
@@ -425,7 +451,20 @@ module.exports = function (grunt) {
 					dest: ''
                 }]
 			}
+		},
+
+		svgsprite: {
+			options: {
+				spritedir: ".",
+				sprite: "icons",
+				
+			},
+			icons: {
+				src      : '<%= config.app %>/images/icons/svg',
+  				dest     : '<%= config.app %>/images/icons'
+			},
 		}
+
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-watch");
@@ -433,6 +472,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-mocha-cli");
 	grunt.loadNpmTasks('grunt-express-server');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
+	grunt.loadNpmTasks('grunt-svg-sprite');
 
 	grunt.registerTask('debug', function (platform) {
 
@@ -454,6 +494,8 @@ module.exports = function (grunt) {
             'concurrent:' + platform,
             'mochacli',
             'stylus',
+			'copy:dev',
+			'svgsprite:icons',
             'express:dev',
             'connect:' + platform,
             'watch'
@@ -478,6 +520,8 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
+		'copy:dev',
+		'svgsprite:icons',
         'copy',
         'usemin',
         'htmlmin',

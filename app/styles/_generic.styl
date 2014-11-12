@@ -22,25 +22,38 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'RobotoDraft';
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RobotoDraft';
+  src: url('../fonts/Roboto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+/*
 body, html{
     height: 100%;
 }
-
+*/
 html {
-    font-family: $font-face;
+    
     overflow-y: hidden;
 
     /* Removes touch delay for IE */
     -ms-touch-action: manipulation;
     touch-action: manipulation;
 
-    background-color: #7db9e8;
-    -webkit-animation: 300s colors infinite;
-            animation: 300s colors infinite;
+
 }
 
 body {
-    /*background-color: gray;*/
+	font-family: $font-face;
     font-size: 1.0em;
     -webkit-text-size-adjust: 100%;
 }

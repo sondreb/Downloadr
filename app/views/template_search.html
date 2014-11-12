@@ -1,10 +1,19 @@
 <div class="search-control {{class}}">
+	<!--
 	<input type="search" ng-model="value" ng-enter="{{target}}" name="search" placeholder="Kittens?..." />
+	-->
+	<md-text-float style="display: inline-block !important;" placehlder="Kittens?..." ng-model="value" ng-model="state.search"></md-text-float>
+	
 	<select>
 		<option value="photos">Photos</option>
 		<!--<option value="videos">Videos</option>-->
 		<option value="user">User</option>
 		<option value="groups">Groups</option>
 	</select>
-	<a href="" data-ng-click="clickHandler()"><span class="fa fa-search"></span></a>
+	
+	<md-button ng-click="clickHandler()" class="md-primary">
+					<icon icon="ic_search_24px" />
+				</md-button>
+	<!--
+	<a href="" data-ng-click="clickHandler()"><span class="fa fa-search"></span></a>-->
 </div>

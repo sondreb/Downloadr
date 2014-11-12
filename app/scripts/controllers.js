@@ -1084,14 +1084,35 @@
 			$scope.enableAllLicenses = false;
 
     }]);
+			
+			controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
+		
+		
+		$scope.closeMenu = function() {
+				console.log('closeMenu');
+				$mdSidenav('left').close();
+			};
+		
+		}]);
 
 
-	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings',
-		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings) {
+	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
 
 			$scope.$on('Event:NavigateBack', function () {
 				$scope.goBack();
 			});
+
+			$scope.expandMenu = function()
+			{
+				$mdSidenav('left').toggle();
+			}
+			
+			$scope.tabSelected = function (url) {
+				console.log('tabSELECTED: ', url);
+				$location.path(url);
+			}
 
 			$scope.keyboard = {
 				'ctrl+t+d': function () {

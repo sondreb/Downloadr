@@ -1,18 +1,18 @@
-<div id="settingsView" class="container">
+<md-content id="settingsView" class="container md-padding">
 	<div class="content padding">
+
 		<h3>Safe Search</h3>
 		<p>
-			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_0" value="1">
-			<label for="safe_search_0">SafeSearch on</label>
-			<br />
-			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_1" value="2">
-			<label for="safe_search_1">SafeSearch moderate</label>
-			<br />
-			<input type="radio" ng-disabled="state.isAnonymous" ng-model="settings.values.safe" name="safe_search" id="safe_search_2" value="3" checked>
-			<label for="safe_search_2">SafeSearch off</label>
+			<md-radio-group ng-model="settings.values.safe">
+
+				<md-radio-button ng-disabled="state.isAnonymous" value="1">SafeSearch on</md-radio-button>
+				<md-radio-button ng-disabled="state.isAnonymous" value="2" noink>SafeSearch moderate</md-radio-button>
+				<md-radio-button ng-disabled="state.isAnonymous" value="3">SafeSearch off</md-radio-button>
+
+			</md-radio-group>
 		</p>
 		<p ng-show="state.isAnonymous">
-			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service.</em>
+			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service</em>
 		</p>
 
 		<!--
@@ -32,19 +32,16 @@
 		<br>
 		<h3>Layout</h3>
 		<p>
-			<label for="backgroundImageInput">Show Background Image</label>
-			<input id="backgroundImageInput" type="checkbox" ng-model="settings.values.background" />
+			<md-checkbox ng-model="settings.values.background">Show Background Image</md-checkbox>
 		</p>
 		<br>
 		<h3>Notifications</h3>
 		<p>
-			<label for="progressNotificationInput">Progress Notification</label>
-			<input id="progressNotificationInput" type="checkbox" ng-model="settings.values.progress" />
+			<md-checkbox ng-model="settings.values.progress">Progress Notification</md-checkbox>
 		</p>
 		<p>
-			<label for="completedNotificationInput">Completed Notification</label>
-			<input id="completedNotificationInput" type="checkbox" ng-model="settings.values.completed" />
+			<md-checkbox ng-model="settings.values.completed">Completed Notification</md-checkbox>
 		</p>
 
 	</div>
-</div>
+</md-content>

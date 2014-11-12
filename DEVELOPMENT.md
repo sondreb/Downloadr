@@ -27,6 +27,23 @@ Brackets extensions:
 - QuickDocsJS
 - Stylus Extension for Brackets
 
+SVG Sprite:
+npm install svg-sprite -g --msvs_version=2013
+
+Info: https://github.com/jkphl/svg-sprite
+
+Run the command inside the images/icons folder:
+
+svg-sprite --out .
+
+This will generate sprite.css and svg folder.
+
+You might need this if you want to modify the icons, this have not been 
+added as a dependency in the project, nor has it been included as a grunt
+task. It's a manual process and the results is part of the commited source.
+
+More details: http://sondreb.com/blog/post/packaging-material-design-icons.aspx
+
 ## Architecture:
 
 The solution is built with a server part built on ASP.NET and hosted on
@@ -108,3 +125,11 @@ grunt bowerInstall
 The bower.json currently is setup to take the latest version of all
 dependencies. While this is good for active development, it might be a problem
 in the future. Consider adding specific versions at a later time.
+
+# UI:
+
+The UI have been built on Material-design with AngularJS. Here are some resources
+that is helpful in learning and understanding Material design:
+
+http://www.google.com/design/spec/style/color.html#color-color-palette
+https://material.angularjs.org/

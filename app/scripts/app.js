@@ -13,6 +13,7 @@
         'ngRoute',
         'mousetrap',
         'infinite-scroll',
+		'ngMaterial',
         'downloadr.filters',
         'downloadr.services',
         'downloadr.directives',

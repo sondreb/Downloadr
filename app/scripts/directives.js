@@ -181,6 +181,18 @@
 		};
 
 	});
+	
+	
+	directives.directive('icon', function () {
+
+		return {
+			restrict: 'E',
+			scope: {
+				icon: '@'
+			},
+			template: '<div class="icon svg-{{icon}}"></div>'
+		};
+	});
 
 
 })();

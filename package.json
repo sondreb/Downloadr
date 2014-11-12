@@ -38,5 +38,8 @@
   },
   "engines": {
     "node": ">=0.10.16"
+  },
+  "dependencies": {
+    "grunt-svg-sprite": "^0.3.2"
   }
 }

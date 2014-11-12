@@ -15,10 +15,15 @@
     "angular-mousetrap": "~1.0.0",
     "pace": "~1.0.1",
     "ngInfiniteScroll": "~1.1.2",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "material-design-icons": "~1.0.0",
+    "angular-material": "master"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0",
     "angular-scenario": "~1.3.0"
+  },
+  "resolutions": {
+    "angular-material": "master"
   }
 }
