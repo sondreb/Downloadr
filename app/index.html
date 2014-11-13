@@ -41,18 +41,22 @@
 
 			</a>
 			<a href="" ng-click="minimize();" id="window-minimize" title="Minimize">
+				
+				<icon icon="minimize_gray_18px" size="18px" />
+				
 				<!--<md-icon style="width: 16px; height: 16px; margin-top: 6px;"  icon="/images/icons/ic_remove_24px.svg"></md-icon>-->
 
 			</a>
 			<a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak title="Restore Down" id="window-restore">
-				<img src="\bower_components\material-design-icons\navigation\1x_web\ic_expand_more_grey600_24dp.png">
+				<icon icon="maximize_restore_gray_18px" size="18px" />
 			</a>
 			<a hreF="" ng-click="maximize();" ng-hide="isMaximized" title="Maximize" id="window-maximize">
-				<img src="\bower_components\material-design-icons\navigation\1x_web\ic_expand_less_grey600_24dp.png">
+				
+				<icon icon="maximize_restore_gray_18px" size="18px" />
 
 			</a>
 			<a href="" ng-click="close();" id="window-close" title="Close">
-
+					<icon icon="close_gray_18px" size="18px" />
 				<!--<md-icon style="width: 16px; height: 16px; margin-top: 4px;"  icon="/images/icons/ic_close_24px.svg"></md-icon>-->
 
 			</a>
@@ -75,7 +79,7 @@
 				<span flex></span>
 				
 				<!--<div flex ng-hide="state.isOnStartScreen">-->
-				<search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()">					</search>
+			<!--	<search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()">					</search>-->
 				<!--</div>-->
 				
 				<md-button href="#/login" title="Sign in" ng-show="!state.isConnecting && state.isAnonymous">

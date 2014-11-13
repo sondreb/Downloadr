@@ -1,95 +1,137 @@
-.svg-ic_arrow_back_24px {
+.svg-close_gray_18px {
 	background-position: 0 0;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
+.svg-ic_arrow_back_24px {
+	background-position: 0 -18px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
 .svg-ic_arrow_forward_24px {
-	background-position: 0 -24px;
+	background-position: 0 -42px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_backspace_24px {
-	background-position: 0 -48px;
+	background-position: 0 -66px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_bug_report_24px {
-	background-position: 0 -72px;
+	background-position: 0 -90px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_close_18px {
-	background-position: 0 -96px;
-	background-repeat: no-repeat;
-	background-image: url(icons.svg);
-}
-
-.svg-ic_close_24px {
 	background-position: 0 -114px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
+.svg-ic_close_24px {
+	background-position: 0 -132px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
 .svg-ic_expand_less_24px {
-	background-position: 0 -138px;
+	background-position: 0 -156px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_expand_more_24px {
-	background-position: 0 -162px;
+	background-position: 0 -180px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_help_24px {
-	background-position: 0 -186px;
+	background-position: 0 -204px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_keyboard_backspace_24px {
-	background-position: 0 -210px;
+	background-position: 0 -228px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_menu_24px {
-	background-position: 0 -234px;
+	background-position: 0 -252px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_refresh_24px {
-	background-position: 0 -258px;
+	background-position: 0 -276px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_remove_24px {
-	background-position: 0 -282px;
+	background-position: 0 -300px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_schedule_24px {
-	background-position: 0 -306px;
+	background-position: 0 -324px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_search_24px {
-	background-position: 0 -330px;
+	background-position: 0 -348px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }
 
 .svg-ic_settings_24px {
-	background-position: 0 -354px;
+	background-position: 0 -372px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-maximize_restore_16px {
+	background-position: 0 -396px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-maximize_restore_18px {
+	background-position: 0 -412px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-maximize_restore_24px {
+	background-position: 0 -430px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-maximize_restore_gray_18px {
+	background-position: 0 -454px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-minimize_18px {
+	background-position: 0 -472px;
+	background-repeat: no-repeat;
+	background-image: url(icons.svg);
+}
+
+.svg-minimize_gray_18px {
+	background-position: 0 -490px;
 	background-repeat: no-repeat;
 	background-image: url(icons.svg);
 }

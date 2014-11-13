@@ -188,9 +188,10 @@
 		return {
 			restrict: 'E',
 			scope: {
-				icon: '@'
+				icon: '@',
+				size: '@'
 			},
-			template: '<div class="icon svg-{{icon}}"></div>'
+			template: '<div class="icon{{size}} svg-{{icon}}"></div>'
 		};
 	});
 
