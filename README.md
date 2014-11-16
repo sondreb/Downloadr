@@ -42,7 +42,8 @@ If you want to work with the source code of Flickr Downloadr, make a clone of th
 and then run:
 
 ```sh
-$ npm install
+$ npm install --msvs_version=2013
+$ bower install --msvs_version=2013
 ```
 
 This will download dependencies, such as Grunt, Bower, Mocha, Chai and more.

@@ -13,25 +13,50 @@
 
 'use strict';
 
+var DownloadrGlobal = { OS: '' };
+
 chrome.app.runtime.onLaunched.addListener(function () {
 	// Center window on screen.
 	var screenWidth = screen.availWidth;
 	var screenHeight = screen.availHeight;
 	var width = 900;
 	var height = 600;
-
-	chrome.app.window.create('index.html', {
-		id: 'downloadrWindow',
-		frame: 'none',
-		outerBounds: {
-			width: width,
-			height: height,
-			left: Math.round((screenWidth - width) / 2),
-			top: Math.round((screenHeight - height) / 2),
-			minWidth: 460,
-			minHeight: 240
+	
+	// First we need to get some platform info that we will use to
+	// render different window icons.
+	chrome.runtime.getPlatformInfo(function(platform) {
+	
+		
+		switch(platform.os)
+		{
+				case 'mac':
+					DownloadrGlobal.OS = 'mac';
+				break;
+				case 'win':
+					DownloadrGlobal.OS = 'win';
+				break;
+				default: // 'linux', 'android', 'cros', 'openbsd'
+					DownloadrGlobal.OS = 'linux';
+				break;
 		}
+		
+		chrome.app.window.create('index.html', {
+			id: 'downloadrWindow',
+			frame: 'none',
+			outerBounds: {
+				width: width,
+				height: height,
+				left: Math.round((screenWidth - width) / 2),
+				top: Math.round((screenHeight - height) / 2),
+				minWidth: 460,
+				minHeight: 240
+			}
+		});
+		
+		
 	});
+
+
 });
 
 chrome.runtime.onSuspend.addListener(function () {

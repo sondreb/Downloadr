@@ -10,7 +10,6 @@
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-	<link rel="stylesheet" href="bower_components/angular-material/themes/blue-grey-theme.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -18,19 +17,28 @@
 	<link rel="stylesheet" href="bower_components/angular/angular-csp.css">
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="images/icons/sprite.css">
+	<link rel="stylesheet" href="bower_components/angular-material/themes/cyan-theme.css" />
 	<!-- endbuild -->
 
 	<script src="bower_components/pace/pace.js"></script>
-
+	
 </head>
 
-<body md-theme="blue-grey" layout="vertical" layout-fill>
-
+<body md-theme="cyan" layout="vertical" layout-fill>
+	
+	<div id="loader-wrapper">
+		<div id="loader"></div>
+		<div class="loader-section section-left"></div>
+		<div class="loader-section section-right"></div>
+	</div>
+	
 	<header class="row header accent-500" ng-controller="ScreenController as screen">
 
 		<div class="frame">
 
 			<!-- Debug Tools - Advanced Settings & Test Runner -->
+			
+			<!--
 			<a href="#/tests" mousetrap-keypress="keyboard" ng-show="state.debug" ng-click="test_view();" id="window-tests" title="Tests">
 				<img style="margin-top: 2px" src="\bower_components\material-design-icons\action\1x_web\ic_schedule_grey600_18dp.png">
 
@@ -39,26 +47,28 @@
 
 				<img style="margin-top: 2px" src="\bower_components\material-design-icons\action\1x_web\ic_bug_report_grey600_18dp.png">
 
-			</a>
+			</a>-->
+			
+			<!-- Mac -->
+			
+			
+			<!-- Linux -->
+			
+			
+			<!-- Windows -->
 			<a href="" ng-click="minimize();" id="window-minimize" title="Minimize">
 				
 				<icon icon="minimize_gray_18px" size="18px" />
 				
-				<!--<md-icon style="width: 16px; height: 16px; margin-top: 6px;"  icon="/images/icons/ic_remove_24px.svg"></md-icon>-->
-
 			</a>
 			<a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak title="Restore Down" id="window-restore">
 				<icon icon="maximize_restore_gray_18px" size="18px" />
 			</a>
 			<a hreF="" ng-click="maximize();" ng-hide="isMaximized" title="Maximize" id="window-maximize">
-				
 				<icon icon="maximize_restore_gray_18px" size="18px" />
-
 			</a>
 			<a href="" ng-click="close();" id="window-close" title="Close">
 					<icon icon="close_gray_18px" size="18px" />
-				<!--<md-icon style="width: 16px; height: 16px; margin-top: 4px;"  icon="/images/icons/ic_close_24px.svg"></md-icon>-->
-
 			</a>
 
 		</div>

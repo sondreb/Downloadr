@@ -1088,9 +1088,10 @@
 			controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
 		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
 		
-		
 		$scope.closeMenu = function() {
 				console.log('closeMenu');
+				
+			
 				$mdSidenav('left').close();
 			};
 		

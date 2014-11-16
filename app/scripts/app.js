@@ -24,11 +24,17 @@
 	downloadr.value('author', 'Sondre Bjellås');
 	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
 	//downloadr.value('config_socket_server', 'http://localhost:3000');
-
+	
 	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify',
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify) {
 			console.log('downloadr.run: ', flickr);
 
+			// Register the tasks to complete before preloader is hidden.
+			setTimeout(function(){
+				$('body').addClass('loaded');
+				$('h1').css('color','#222222');
+			}, 3000);
+			
 			// Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
 			$rootScope.licenses = [
 				{
@@ -116,7 +122,7 @@
 				loginUrl: '',
 
 				selectedPhotos: [],
-
+				
 				debug: false
 
 			};
