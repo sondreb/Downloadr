@@ -1,111 +1,211 @@
-<md-content class="content md-padding">
+<md-content class="content">
+	
+	<md-tabs md-selected="selectedIndex">
+		
+		<md-tab label="Version">
+
+			<div class="page" layout="column" layout-fill layout-align="space-around center">
+
+				<div class="app-banner">
+					<img src="/img/icon_96.png" class="app-icon">
+					<h3>Flickr Downloadr</h3>
+					Release v<span app-version></span>
+				</div>
+				<p>
+					Flickr Downloadr is an app that enables you to find and pick photos to download from the Flickr.com service.
+				</p>
+
+				<p>&nbsp;</p>
+				<p>
+					Focus for the app have always been on simplicity and elegance. The main features needed, in the simplest form. The software and service is hosted and provided by <a href="http://brain.no/" target="_blank">brain.no</a>.
+				</p>
+				<p>&nbsp;</p>
+				<md-whiteframe class="md-whiteframe-z2 padding" layout layout-align="center center">
+
+					<p>Support: <a href="mailto:tickets@nobrain.uservoice.com" target="_blank">tickets@nobrain.uservoice.com</a>
+						<br>Feedback: <a href="http://nobrain.uservoice.com/" target="_blank">nobrain.uservoice.com</a>
+						<br>Website: <a href="http://www.flickr-downloadr.com/" target="_blank">www.flickr-downloadr.com</a>
+					</p>
+				</md-whiteframe>
+				<p>&nbsp;</p>
+				<p>This application is a third party application and is not association with Flickr or Yahoo in any way or form.</p>
+
+			</div>
+		</md-tab>
+
+		<md-tab label="Shortcuts">
+
+			<div class="page" layout="column" layout-fill layout-align="space-around center">
+				<div>
+					ALT+ENTER: Toggle fullscreen mode.
+					<br>CTRL+S: Perform search
+					<br>
+
+				</div>
+			</div>
+		</md-tab>
+
+		<md-tab label="Licenses">
+
+			<div class="page" layout="column" layout-fill layout-align="space-around">
+
+				<h3>Photo Licenses</h3>
+				<p>
+					You are allowed to search and view photos with any licenses, but only those with <a href="http://creativecommons.org/licenses/" target="_blank">Creative Commons license</a> is allowed to be downloaded to your local computer.</p>
+				<p>
+					The default selection will only show photos that can be downloaded, but in the bottom options you can enable showing search results of photos that are not downloadable. You can right-click on those photos, to take you directly to the Flickr page where you can send a message to the user, asking them to change permissions.</p>
+				<p>This is useful as many using Flickr is doing it with the intention of sharing memories, but doesn't necessary understand all the licensing issues.
+				</p>
+				<p>
+					Photos have their respective licenses appended to the file name, here is a description of the license types:
+				</p>
+
+				<br>
+
+				<table>
+					<tr class="table-header">
+						<td>Icons</td>
+						<td>License</td>
+						<td>Extension</td>
+					</tr>
+					<tr ng-repeat="license in licenses">
+						<td><span class="cc">{{license.font}}</span>&nbsp;&nbsp;</td>
+						<td>{{license.title}}</td>
+						<td>{{license.extension}}</td>
+					</tr>
+				</table>
+
+				<h3>Credits</h3>
+
+				<ul>
+					<li ng-repeat="credit in credits">{{credit.type}} by <a href="{{credit.url}}" target="_blank">{{credit.text}}</a>
+					</li>
+
+					<li>
+						Components: <span ng-repeat="library in libraries"><a href="{{library.url}}" target="_blank">{{library.text}}</a>{{$last ? '' : ', '}}</span> and more...
+					</li>
+				</ul>
+				<p>
+					<br>Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
+				</p>
 
 
+				<h3>Software License</h3>
+				<p>Copyright (C) 2007-2014 Sondre Bjellås -
+					<a href="http://sondreb.com/" target="_blank">http://sondreb.com/</a>
+				</p>
 
-	<p>
-		<img src="/img/icon_96.png" class="app-icon">
-		<h3 class="marginless">Flickr Downloadr</h3>
-		Release v<span app-version></span>
-	</p>
-	<p>
-		Flickr Downloadr is an app that enables you to find and pick photos to download from the Flickr.com service.
-	</p>
+				<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 
-	<p>&nbsp;</p>
-	<p>
-		Focus for the app have always been on simplicity and elegance. The main features needed, in the simplest form. The software and service is hosted and provided by <a href="http://brain.no/" target="_blank">brain.no</a>
-	</p>
-	<p>&nbsp;</p>
-	<md-whiteframe class="md-whiteframe-z2" layout layout-align="center center">
+				<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 
-		<p>Support: <a href="mailto:tickets@nobrain.uservoice.com" target="_blank">tickets@nobrain.uservoice.com</a>
-			<br>Feedback: <a href="http://nobrain.uservoice.com/" target="_blank">nobrain.uservoice.com</a>
-			<br>Website: <a href="http://www.flickr-downloadr.com/" target="_blank">www.flickr-downloadr.com</a>
-		</p>
-	</md-whiteframe>
-	<p>&nbsp;</p>
-	<p>This application is a third party application and is not association with Flickr or Yahoo in any way or form.</p>
+				<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
+			</div>
+		</md-tab>
 
-	<br>
-	<h3>Photo Licenses</h3>
-	<p>
-		You are allowed to search and view photos with any licenses, but only those with <a href="http://creativecommons.org/licenses/" target="_blank">Creative Commons license</a> is allowed to be downloaded to your local computer.</p>
-	<p>
-		The default selection will only show photos that can be downloaded, but in the bottom options you can enable showing search results of photos that are not downloadable. You can right-click on those photos, to take you directly to the Flickr page where you can send a message to the user, asking them to change permissions.</p>
-	<p>This is useful as many using Flickr is doing it with the intention of sharing memories, but doesn't necessary understand all the licensing issues.
-	</p>
-	<p>
-		Photos have their respective licenses appended to the file name, here is a description of the license types:
-	</p>
+		<md-tab label="Releases">
 
-	<table>
-		<tr class="table-header">
-			<td>Icons</td>
-			<td>License</td>
-			<td>Extension</td>
-		</tr>
-		<tr ng-repeat="license in licenses">
-			<td><span class="cc">{{license.font}}</span>&nbsp;&nbsp;</td>
-			<td>{{license.title}}</td>
-			<td>{{license.extension}}</td>
-		</tr>
-	</table>
+			<div class="page" layout="column" layout-fill layout-align="space-around">
 
-	<br>
-	<h3>Credits</h3>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">3.0</strong>
+						<br>2014-12-31
+					</div>
+					<ul flex>
+						<li>Added: Changed the visual layout to be based on Material design guidelines.</li>
+						<li>Improved: Window frame icons was updated and visual change for Mac users.</li>
+						<li>Improved: Changed the about screen into multiple with a tab control.</li>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0" target="_blank">https://github.com/sondreb/Downloadr/milestones/3.0.0</a>
+						</li>
+					</ul>
+				</div>
 
-	<ul>
-		<li ng-repeat="credit in credits">{{credit.type}} by <a href="{{credit.url}}" target="_blank">{{credit.text}}</a>
-		</li>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">3.0 beta</strong>
+						<br>2014-08-30
+					</div>
+					<ul flex>
+						<li>Improved: Better integration of authentication with Flickr.</li>
+						<li>Improved: Made the settings better.</li>
+					</ul>
+				</div>
 
-		<li>
-			Components: <span ng-repeat="library in libraries"><a href="{{library.url}}" target="_blank">{{library.text}}</a>{{$last ? '' : ', '}}</span> and more...
-		</li>
-	</ul>
-	<p>
-		<br>Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
-	</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">3.0 alpha</strong>
+						<br>2014-02-16
+					</div>
+					<ul flex>
+						<li>Full rewrite of the app, built on HTML5 technologies.</li>
+					</ul>
+				</div>
 
-	<br>
-	<h3>History</h3>
-	<p>
-		2014-11-30: Release of Flickr Downloadr 3.0
-	</p>
-	<p>
-		2014-08-30: Release of Flickr Downloadr 3.0 beta
-	</p>
-	<p>
-		2014-02-16: Release of Flickr Downloadr 3.0 alpha
-	</p>
-	<p>
-		2009-11-01: Release of Flickr Downloadr 2.0.4
-	</p>
-	<p>
-		2009-08-04: Release of Flickr Downloadr 2.0.3
-	</p>
-	<p>
-		2009-03-29: Release of Flickr Downloadr 2.0.2
-	</p>
-	<p>
-		2009-03-17: Release of Flickr Downloadr 2.0.1
-	</p>
-	<p>
-		2009-03-14: Release of Flickr Downloadr 2.0
-	</p>
-	<p>
-		2007: Release of Flickr Downloadr 1.0
-	</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">2.0.4</strong>
+						<br>2009-11-01
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 2.0.4</li>
+					</ul>
+				</div>
 
-	<br>
-	<h3>Software License</h3>
-	<p>Copyright (C) 2007-2014 Sondre Bjellås -
-		<a href="http://sondreb.com/" target="_blank">http://sondreb.com/</a>
-	</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">2.0.3</strong>
+						<br>2009-08-04
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 2.0.3</li>
+					</ul>
+				</div>
 
-	<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">2.0.2</strong>
+						<br>2009-03-29
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 2.0.2</li>
+					</ul>
+				</div>
 
-	<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">2.0.1</strong>
+						<br>2009-03-17
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 2.0.1</li>
+					</ul>
+				</div>
 
-	<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">2.0</strong>
+						<br>2009-03-14
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 2.0</li>
+					</ul>
+				</div>
+
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">1.0</strong>
+						<br>2007
+					</div>
+					<ul flex>
+						<li>Release of Flickr Downloadr 1.0</li>
+					</ul>
+				</div>
+
+			</div>
+		</md-tab>
+
+	</md-tabs>
+
 </md-content>

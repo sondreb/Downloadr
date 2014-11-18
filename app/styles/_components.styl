@@ -20,7 +20,7 @@
 
  .frame {
 	-webkit-app-region: drag;
-	height: 20px;
+	height: 24px;
 	text-align: right;
 	background-color: $accent-500;
 	color: black;
@@ -85,6 +85,21 @@
 .padding {
 	padding: 8px;
 }
+
+.page {
+	padding: 10px 20px 0px 20px;
+}
+
+strong.bigger
+{
+	font-size: 1.3em;
+}
+
+.page-row
+{
+	margin-bottom: 32px;
+}
+
 @media (min-width: 600px) {
 	.padding {
 		padding: 16px;
@@ -134,15 +149,15 @@
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
-	height: 20px;
-	padding: 3px 10px 1px 3px;
+	height: 24px;
+	padding: 3px 10px 5px 3px;
 }
 
 .win.window-icon-container /* This is required to ensure hover off is triggered on the icons. */
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
-	height: 20px;
+	height: 24px;
 	padding: 1px 1px 1px 10px;
 }
 
@@ -150,6 +165,8 @@
 {
 	padding-left: 6px;
 	padding-right: 6px;
+	height: 22px;
+	padding-top: 3px;
 }
 
 .win.window-icon-container a:hover
@@ -166,7 +183,7 @@
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
-	height: 20px;
+	height: 24px;
 	padding: 1px 1px 1px 10px;
 }
 
@@ -417,10 +434,28 @@
 	margin-left: -160px;
 	margin-top: 6px;
 }
+
 .app-icon {
 	float: left;
 	margin-right: 20px;
 }
+
+.app-banner {
+	width: 300px;
+
+}
+
+.app-banner h3 {
+	margin: 10px 0 0 0;
+	padding: 0;
+}
+
+.release-number {
+	width: 120px;
+
+}
+
+
 #loader-wrapper {
 	position: fixed;
 	top: 0;
@@ -577,3 +612,25 @@
         width: 80%;
         max-width: 978px;
     } */
+
+
+.cc {
+	font-family: 'CreativeCommons';
+	font-size: 1.2em;
+}
+
+.menu {
+	top: 88px; 
+	width: 200px;
+	text-align: left;
+	
+}
+
+.menu a {
+	color: black;
+	text-decoration: none;
+}
+
+.menu a:hover {
+	color: black;
+}
