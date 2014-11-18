@@ -29,10 +29,71 @@
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify) {
 			console.log('downloadr.run: ', flickr);
 
-			// Register the tasks to complete before preloader is hidden.
+			var loadingStatus = { settings: false, runtime: false };
+			
+			var updateLoadingStatus = function() {
+
+				console.log('updateLoadingStatus');
+				
+				$('body').addClass('loaded');
+				
+				// This ensures any data loaded in the async loading handlers is
+				// updated in the UI.
+				$rootScope.$apply();
+				
+				/*
+				if (loadingStatus.settings === true && loadingStatus.runtime === true)
+				{
+					$('body').addClass('loaded');
+				}*/
+				
+				if (loadingStatus.runtime === true)
+				{
+					$('body').addClass('loaded');
+				}
+			
+			};
+			
+			$rootScope.$on('Settings:Loaded', function (settings) {
+				
+				loadingStatus.settings = true;
+				
+				updateLoadingStatus();
+			});
+			
+			// First we need to get some platform info that we will use to
+			// render different window icons.
+			chrome.runtime.getPlatformInfo(function(platform) {
+				
+				switch(platform.os)
+				{
+						case 'mac':
+							$rootScope.state.OS = 'mac';
+						break;
+						case 'win':
+							$rootScope.state.OS = 'win';
+						
+							// Only for Windows will we show minimize/maximize/close on the right
+							// Default in latest Ubuntu is on the left, same applies for OS X.
+							$rootScope.state.showControlsLeft = false;
+						break;
+						default: // 'linux', 'android', 'cros', 'openbsd'
+							$rootScope.state.OS = 'linux';
+						break;
+				}
+				
+				//$rootScope.state.OS = 'mac'
+				//$rootScope.state.showControlsLeft = true;
+				
+				loadingStatus.runtime = true;
+				
+				updateLoadingStatus();
+			});
+			
+			// Used to override the async preloading tasks, if one of them fails,
+			// we'll still show the UI after the specified seconds.
 			setTimeout(function(){
 				$('body').addClass('loaded');
-				$('h1').css('color','#222222');
 			}, 3000);
 			
 			// Licenses: https://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
@@ -123,9 +184,28 @@
 
 				selectedPhotos: [],
 				
-				debug: false
+				OS: '',
+				
+				debug: false,
+				
+				showControlsLeft: true,
+				
+				focused: true
 
 			};
+			
+			$(window).focus(function() {
+				$rootScope.state.focused = true;
+				
+				// Do we need apply here?
+				$rootScope.$apply();
+				
+			}).blur(function() {
+				$rootScope.state.focused = false;
+				
+				// Do we need apply here?
+				$rootScope.$apply();
+			});
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
 

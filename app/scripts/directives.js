@@ -187,11 +187,25 @@
 
 		return {
 			restrict: 'E',
+			replace: false,
 			scope: {
 				icon: '@',
 				size: '@'
 			},
-			template: '<div class="icon{{size}} svg-{{icon}}"></div>'
+			templateUrl: 'views/template_icon.html'
+		};
+	});
+	
+	directives.directive('windowIcon', function ($rootScope) {
+
+		return {
+			restrict: 'E',
+			replace: false,
+			scope: {
+				icon: '@',
+				size: '@'
+			},
+			templateUrl: 'views/template_window_icon.html'
 		};
 	});
 

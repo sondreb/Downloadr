@@ -27,22 +27,22 @@ Brackets extensions:
 - QuickDocsJS
 - Stylus Extension for Brackets
 
-SVG Sprite:
-npm install svg-sprite -g --msvs_version=2013
+## Icons:
 
-Info: https://github.com/jkphl/svg-sprite
+Icons are SVG-based (vector) and their are processed by this command:
 
-Run the command inside the images/icons folder:
+```sh
+$ grunt svgstore
+```
 
-svg-sprite --out .
+This will generate the icons.svg within the images/icons folder, based upon
+all the individual .svg files located in the images/icons/svg folder.
 
-This will generate sprite.css and svg folder.
+To update the icons in the app, take the content from the generated file
+and paste it into the beginning of the body in the index.html file.
 
-You might need this if you want to modify the icons, this have not been 
-added as a dependency in the project, nor has it been included as a grunt
-task. It's a manual process and the results is part of the commited source.
-
-More details: http://sondreb.com/blog/post/packaging-material-design-icons.aspx
+(Until we find a grunt task that can inject the output into the html file,
+this have to be done manually)
 
 ## Architecture:
 

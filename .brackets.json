@@ -1,5 +1,6 @@
 {
     "jscodehints.detectedExclusions": [
-        "C:/Users/Sondre/Documents/GitHub/Downloadr/web/test/test.js"
+        "C:/Users/Sondre/Documents/GitHub/Downloadr/web/test/test.js",
+        "C:/Users/Sondre/Documents/GitHub/Downloadr/gruntfile.js"
     ]
 }

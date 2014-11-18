@@ -148,6 +148,11 @@
 					url: 'http://hadezign.com/'
 				},
 				{
+					type: 'Icon',
+					text: 'synetcon',
+					url: 'http://synetcon.deviantart.com/art/OSX-Yosemite-window-buttons-459868391'
+				},
+				{
 					type: 'Symbols',
 					text: 'Font Awesome',
 					url: 'http://fontawesome.io/'
@@ -1114,6 +1119,18 @@
 				console.log('tabSELECTED: ', url);
 				$location.path(url);
 			}
+			
+			$scope.toggleFullscreen = function() {
+			
+				if (chrome.app.window.current().isFullscreen())
+				{
+					chrome.app.window.current().restore();
+				}
+				else
+				{
+					chrome.app.window.current().fullscreen();
+				}
+			};
 
 			$scope.keyboard = {
 				'ctrl+t+d': function () {
@@ -1124,6 +1141,9 @@
 				},
 				'ctrl+s': function () {
 					console.log('Begin search?');
+				},
+				'alt+enter': function () {
+					$scope.toggleFullscreen();
 				}
 			};
 			/*

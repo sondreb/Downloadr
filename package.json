@@ -28,6 +28,7 @@
     "grunt-mocha-cli": "^1.10.0",
     "grunt-newer": "^0.7.0",
     "grunt-svgmin": "^1.0.0",
+    "grunt-svgstore": "^0.4.1",
     "grunt-usemin": "^2.4.0",
     "grunt-wiredep": "^1.9.0",
     "jshint-stylish": "^1.0.0",
@@ -38,8 +39,5 @@
   },
   "engines": {
     "node": ">=0.10.16"
-  },
-  "dependencies": {
-    "grunt-svg-sprite": "^0.3.2"
   }
 }

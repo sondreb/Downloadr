@@ -342,23 +342,27 @@ module.exports = function (grunt) {
 			dev: {
 				files: [{
 					cwd: '<%= config.app %>/bower_components/material-design-icons/',
-					src: ['navigation/svg/ic_refresh_24px.svg',
-						  'action/svg/ic_search_24px.svg',
-						  'action/svg/ic_help_24px.svg',
-						  'action/svg/ic_schedule_24px.svg',
-						  'action/svg/ic_bug_report_24px.svg',
-						  'content/svg/ic_remove_24px.svg',
-						  'hardware/svg/ic_keyboard_backspace_24px.svg',
+					src: ['navigation/svg/production/ic_refresh_24px.svg',
+						  'action/svg/production/ic_search_24px.svg',
+						  'action/svg/production/ic_help_24px.svg',
+						  'action/svg/production/ic_schedule_24px.svg',
+						  'action/svg/production/ic_bug_report_24px.svg',
 
-						  'action/svg/ic_settings_24px.svg',
-						  'navigation/svg/ic_menu_24px.svg',
-						  'navigation/svg/ic_arrow_back_24px.svg',
-						  'navigation/svg/ic_arrow_forward_24px.svg',
+						  'content/svg/production/ic_remove_24px.svg',
+						  'content/svg/production/ic_remove_circle_24px.svg',
+						  'content/svg/production/ic_add_circle_24px.svg',
 
-						  'navigation/svg/ic_close_18px.svg',
-						  'navigation/svg/ic_close_24px.svg',
-						  'navigation/svg/ic_expand_more_24px.svg',
-						  'navigation/svg/ic_expand_less_24px.svg'
+						  'hardware/svg/production/ic_keyboard_backspace_24px.svg',
+
+						  'action/svg/production/ic_settings_24px.svg',
+						  'navigation/svg/production/ic_menu_24px.svg',
+						  'navigation/svg/production/ic_arrow_back_24px.svg',
+						  'navigation/svg/production/ic_arrow_forward_24px.svg',
+
+						  'navigation/svg/production/ic_close_18px.svg',
+						  'navigation/svg/production/ic_close_24px.svg',
+						  'navigation/svg/production/ic_expand_more_24px.svg',
+						  'navigation/svg/production/ic_expand_less_24px.svg'
 						 ],
 					dest: '<%= config.app %>/images/icons/svg/',
 					flatten: true,
@@ -453,16 +457,19 @@ module.exports = function (grunt) {
 			}
 		},
 
-		svgsprite: {
+		svgstore: {
 			options: {
-				spritedir: ".",
-				sprite: "icons",
-				
+				prefix: 'icon-', // This will prefix each ID
+				svg: { // will add and overide the the default xmlns="http://www.w3.org/2000/svg" attribute to the resulting SVG
+					viewBox: '0 0 24 24',
+					xmlns: 'http://www.w3.org/2000/svg'
+				}
 			},
-			icons: {
-				src      : '<%= config.app %>/images/icons/svg',
-  				dest     : '<%= config.app %>/images/icons'
-			},
+			default: {
+				files: {
+					'<%= config.app %>/images/icons/icons.svg': ['<%= config.app %>/images/icons/svg/*.svg'],
+				}
+			}
 		}
 
 	});
@@ -472,7 +479,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-mocha-cli");
 	grunt.loadNpmTasks('grunt-express-server');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
-	grunt.loadNpmTasks('grunt-svg-sprite');
+	grunt.loadNpmTasks('grunt-svgstore');
+	grunt.loadNpmTasks('grunt-wiredep');
 
 	grunt.registerTask('debug', function (platform) {
 
@@ -495,7 +503,7 @@ module.exports = function (grunt) {
             'mochacli',
             'stylus',
 			'copy:dev',
-			'svgsprite:icons',
+			'svgstore',
             'express:dev',
             'connect:' + platform,
             'watch'
@@ -521,7 +529,7 @@ module.exports = function (grunt) {
         'cssmin',
         'uglify',
 		'copy:dev',
-		'svgsprite:icons',
+		'svgstore',
         'copy',
         'usemin',
         'htmlmin',

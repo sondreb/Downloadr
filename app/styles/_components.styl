@@ -1,10 +1,32 @@
 @import '_settings';
+
+
+
+
+.window-frame
+{
+	-webkit-app-region: drag;
+}
+
+.window-frame a
+{
+	-webkit-app-region: no-drag;
+}
+
+.window-frame button
+{
+	-webkit-app-region: no-drag;
+}
+
  .frame {
 	-webkit-app-region: drag;
 	height: 20px;
 	text-align: right;
 	background-color: $accent-500;
 	color: black;
+	
+	/*padding: 4px 4px 0px 4px;*/
+	
 	/*
 	
 	height: 64px;
@@ -16,33 +38,50 @@
 	cursor: move;
 	border: 1px solid green;*/
 }
+
 .frame a {
+	
+	-webkit-app-region: no-drag;
+	text-decoration: none;
+	display: inline-block;
+	
+	/*
 	color: black;
 	-webkit-app-region: no-drag;
 	text-decoration: none;
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
+	*/
+	/*
 	line-height: 18px;
 	height: 20px;
+	*/
+	/*
 	margin: 0;
 	padding: 0;
-	padding: 0px 5px 0px 5px;
+	padding: 0px 5px 0px 5px;*/
 }
 .frame a:hover {
-	color: black;
-	background-color: $accent-400;
+	/*color: black;*/
+	/*background-color: $accent-400;*/
+	/*background-color: transparent;*/
 }
 .frame a:visited {
-	color: black;
+	/*color: black;*/
 }
+
+/*
 .frame a div {} #window-close {
 	padding: 0px 18px 0px 18px;
 }
+
 #window-close div {
 	height: 18px;
 	width: 18px;
 }
+*/
+
 .padding {
 	padding: 8px;
 }
@@ -54,6 +93,126 @@
 .thin {
 	font-weight: 100;
 }
+
+.icon svg
+{
+	width: 24px;
+	height: 24px;
+}
+
+.icon.window-icon svg
+{
+	width: 16px;
+	height: 16px;
+}
+
+.icon.icon12 svg
+{
+	width: 12px;
+	height: 12px;
+}
+
+.icon.icon14 svg
+{
+	width: 14px;
+	height: 14px;
+}
+
+.icon.icon16 svg
+{
+	width: 16px;
+	height: 16px;
+}
+
+.icon.icon18 svg
+{
+	width: 18px;
+	height: 18px;
+}
+
+.mac.window-icon-container /* This is required to ensure hover off is triggered on the icons. */
+{
+	display: inline-block;
+	-webkit-app-region: no-drag;
+	height: 20px;
+	padding: 3px 10px 1px 3px;
+}
+
+.win.window-icon-container /* This is required to ensure hover off is triggered on the icons. */
+{
+	display: inline-block;
+	-webkit-app-region: no-drag;
+	height: 20px;
+	padding: 1px 1px 1px 10px;
+}
+
+.win.window-icon-container a
+{
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
+.win.window-icon-container a:hover
+{
+	background-color: $accent-600;
+}
+
+.win.window-icon-container a:active
+{
+	background-color: $accent-800;
+}
+
+.linux.window-icon-container /* This is required to ensure hover off is triggered on the icons. */
+{
+	display: inline-block;
+	-webkit-app-region: no-drag;
+	height: 20px;
+	padding: 1px 1px 1px 10px;
+}
+
+.icon .icon-hover,
+.icon .icon-active,
+.icon .icon-nofocus,
+{
+  display: none;
+}
+
+.icon:hover .icon-normal,
+.icon:hover .icon-active,
+.icon:hover .icon-nofocus
+{
+	display: none;
+}
+
+.icon:hover .icon-hover{
+  display: block;
+}
+
+.icon:active .icon-normal,
+.icon:active .icon-hover,
+.icon:active .icon-nofocus,
+{
+  display: none;
+}
+
+.icon:active .icon-active{
+  display: block;
+}
+
+.nofocus .icon-normal,
+.nofocus .icon-active,
+.nofocus .icon-hover,
+{
+	display: none;
+}
+
+.nofocus .icon-nofocus
+{
+	display: block;
+}
+
+
+/*
 .icon {
 	width: 24px;
 	height: 24px;
@@ -64,6 +223,10 @@
 	background-repeat: no-repeat no-repeat;
 	pointer-events: none;
 }
+.icon14px {
+	width: 10px;
+	height: 10px;
+}
 .icon16px {
 	width: 16px;
 	height: 16px;
@@ -72,6 +235,12 @@
 	width: 18px;
 	height: 18px;
 }
+
+.icon.red
+{
+}*/
+
+
 .menu-button {
 	text-align: left !important;
 	padding-left: 32px;
@@ -138,9 +307,11 @@
 	background-size: cover;
 }
 .wallpaper-3 {
+	background-color: white;
+	/*
 	background-image: none;
 	background-color: white;
-	background: linear-gradient(to bottom, rgb(255, 255, 255) 20%, rgb(120, 120, 120) 100%);
+	background: linear-gradient(to bottom, rgb(255, 255, 255) 20%, rgb(120, 120, 120) 100%);*/
 }
 .wallpaper-4 {
 	/*
@@ -148,13 +319,20 @@
   background-color: gray;
   background: linear-gradient(to bottom, rgb(30,30,30) 20%,rgb(100,100,100) 100%);
 */
-	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%);
+	
+	background-color: white;
+	
+	/*background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%);*/
 	/* W3C */
 }
 .wallpaper-gray {
-	background-image: none;
+		
+	
+	background-color: white;
+	
+	/*background-image: none;
 	background-color: gray;
-	background: linear-gradient(to bottom, rgb(60, 60, 60) 0%, rgb(30, 30, 30) 100%);
+	background: linear-gradient(to bottom, rgb(60, 60, 60) 0%, rgb(30, 30, 30) 100%);*/
 }
 .animated-background {
 	background-color: #7db9e8 !important;

@@ -41,6 +41,8 @@
 
 					console.log('Settings loaded: ', values);
 					$scope.apply();
+					
+					$rootScope.$broadcast('Settings:Loaded', values);
 
 				});
 			};
