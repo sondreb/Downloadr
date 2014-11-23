@@ -82,6 +82,13 @@
 }
 */
 
+.frame search,
+.frame input,
+.frame md-input-group
+{
+	-webkit-app-region: no-drag;
+}
+
 .padding {
 	padding: 8px;
 }
@@ -288,16 +295,50 @@ strong.bigger
 	color: white;
 	background-color: rgba(255, 255, 255, 0.2);
 }
+
+.indent
+{
+	margin-left: 20px;
+}
+
+
+.actions ul {
+	float: left !important;
+	display: inline-block !important;
+}
+.actions li {
+	list-style-type: none !important;
+	display: inline !important;
+	float: left !important;
+}
+.actions li > a,
+.actions li > span {
+	width: 120px;
+	height: 50px;
+	color: #9f9f9f;
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	line-height: 50px;
+	transition-duration: 0.3s;
+	transition-property: background-color;
+}
+
+
+
+
 .actions.row {
-	height: 40px;
+	height: 100px;
 	bottom: 18px;
 	line-height: 18px;
 }
+
 .actions {
 	color: white;
-	background-color: #2f2f2f;
+	background-color: $accent-500;
 	padding-left: 4px;
 }
+
 .actions select {
 	margin-top: 6px;
 	margin-right: 8px;
@@ -305,6 +346,73 @@ strong.bigger
 	border: 0;
 	height: 28px !important;
 }
+
+
+/*
+.menu {
+	float: right;
+	display: inline-block;
+}
+
+.menu div
+{
+	height: 30px;
+	display: inline;
+	float: left;
+}
+
+*/
+/*
+.menu li {
+	list-style-type: none;
+	display: inline;
+	float: left;
+}
+.menu li > a,
+.menu li > span {
+	width: 120px;
+	height: 50px;
+	color: #9f9f9f;
+	display: inline-block;
+	text-decoration: none;
+	text-align: center;
+	line-height: 50px;
+	transition-duration: 0.3s;
+	transition-property: background-color;
+}
+.menu.smaller li > a,
+.menu.smaller li > span {
+	height: 40px;
+	line-height: 40px;
+}
+.menu li > a:hover {
+	background-color: gray;
+	color: silver;
+}
+.menu li > a:focus {
+	background-color: gray;
+	color: silver;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
+}
+.menu li > a:active {
+	background: #171717;
+	color: white !important;
+}
+.menu li > a:visited {
+	background: #171717;
+	color: white !important;
+}
+.menu li > a.selected {
+	background: white;
+}
+.menu li > a.active {
+	background: red;
+	color: blue;
+}*/
+
+
+
+
 .wallpaper {
 	background: url(../img/wallpaper-1.jpg) no-repeat center center fixed;
 	-webkit-background-size: cover;
@@ -619,6 +727,7 @@ strong.bigger
 	font-size: 1.2em;
 }
 
+
 .menu {
 	top: 88px; 
 	width: 200px;
@@ -633,4 +742,58 @@ strong.bigger
 
 .menu a:hover {
 	color: black;
+}
+
+
+.search-type {
+
+	background-color: white !important;
+	width: 100px;
+	border-radius: 2px;
+	position: relative;
+	
+}
+
+.search-type a {
+	color: black;
+	text-decoration: none;
+}
+
+.search-type .menu-button
+{
+	display: none;
+	position: static;
+}
+
+/*
+.menu-button:hover
+{
+	display: block;
+	border: 1px solid red;
+	background-color: yellow;
+	padding: 10px;	
+}*/
+
+.search-type:hover .menu-button
+{
+	display: block;
+}
+
+.search-type .selected {
+	display: block;
+}
+
+
+.icon:hover .icon-normal,
+
+.search-control > * {
+	float: left;
+}
+
+
+.footer {
+	font-size: 0.7em;
+	padding-left: 4px;
+	color: white;
+	background-color: $accent-500;
 }

@@ -1120,6 +1120,11 @@
 				$location.path(url);
 			}
 			
+			$scope.showSearchControls = function()
+			{
+				$rootScope.state.showSearchControls = true;
+			}
+			
 			$scope.toggleFullscreen = function() {
 			
 				if (chrome.app.window.current().isFullscreen())

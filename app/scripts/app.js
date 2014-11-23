@@ -25,8 +25,8 @@
 	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
 	//downloadr.value('config_socket_server', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify',
-		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify) {
+	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
+		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
 			console.log('downloadr.run: ', flickr);
 
 			var loadingStatus = { settings: false, runtime: false };
@@ -190,7 +190,9 @@
 				
 				showControlsLeft: true,
 				
-				focused: true
+				focused: true,
+				
+				showSearchControls: false
 
 			};
 			
@@ -216,10 +218,14 @@
 				$rootScope.state.showActions = false;
 
 				if (path === '/' || path === '') {
-					$rootScope.state.isOnStartScreen = true;
+					$rootScope.state.showSearchControls = false;
 				} else {
-					$rootScope.state.isOnStartScreen = false;
+					$rootScope.state.showSearchControls = true;
 				}
+				
+				// Whenever the user navigates somewhere, we'll make sure that the sidemenu
+				// is being closed as a result.
+				$mdSidenav('left').close();
 
 			});
 

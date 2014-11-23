@@ -77,19 +77,18 @@
 
 				<h3>Credits</h3>
 
-				<ul>
+				<ul class="indent">
 					<li ng-repeat="credit in credits">{{credit.type}} by <a href="{{credit.url}}" target="_blank">{{credit.text}}</a>
 					</li>
 
 					<li>
 						Components: <span ng-repeat="library in libraries"><a href="{{library.url}}" target="_blank">{{library.text}}</a>{{$last ? '' : ', '}}</span> and more...
 					</li>
+					<li>
+					Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
+					</li>
 				</ul>
-				<p>
-					<br>Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
-				</p>
-
-
+				
 				<h3>Software License</h3>
 				<p>Copyright (C) 2007-2014 Sondre Bjellås -
 					<a href="http://sondreb.com/" target="_blank">http://sondreb.com/</a>
@@ -108,6 +107,7 @@
 
 			<div class="page" layout="column" layout-fill layout-align="space-around">
 
+				<!--
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0</strong>
@@ -120,16 +120,20 @@
 						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0" target="_blank">https://github.com/sondreb/Downloadr/milestones/3.0.0</a>
 						</li>
 					</ul>
-				</div>
+				</div>-->
 
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0 beta</strong>
-						<br>2014-08-30
+						<br>2014-11-30
 					</div>
 					<ul flex>
+						<li>Added: Changed the visual layout to be based on Material design guidelines.</li>
 						<li>Improved: Better integration of authentication with Flickr.</li>
 						<li>Improved: Made the settings better.</li>
+						<li>Improved: Window frame icons was updated and visual change for Mac users.</li>
+						<li>Improved: Changed the about screen into multiple with a tab control.</li>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0%20beta" target="_blank">https://github.com/sondreb/Downloadr/milestones/3.0.0%20beta</a>
 					</ul>
 				</div>
 

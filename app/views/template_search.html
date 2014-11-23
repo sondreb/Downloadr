@@ -4,12 +4,30 @@
 	-->
 	<md-text-float style="display: inline-block !important;" placehlder="Kittens?..." ng-model="value" ng-model="state.search"></md-text-float>
 	
+	<md-whiteframe class="md-whiteframe-z1 search-type" layout="column" ng-init="selectedType = 'photos'">
+		
+			<md-button class="menu-button search-type-photos" ng-class="{'selected':selectedType === 'photos'}" ng-click="selectedType = 'photos'">
+				<icon icon="ic_settings_24px"></icon>
+				Photos
+			</md-button>
+		
+			<md-button class="menu-button search-type-users" ng-class="{'selected':selectedType === 'users'}" ng-click="selectedType = 'users'">
+				<icon icon="ic_settings_24px"></icon>
+				Users
+			</md-button>
+			
+			<md-button class="menu-button search-type-groups" ng-class="{'selected':selectedType === 'groups'}" ng-click="selectedType = 'groups'">
+				<icon icon="ic_settings_24px"></icon>
+				Groups
+			</md-button>
+	</md-whiteframe>
+	
+	<!--
 	<select>
 		<option value="photos">Photos</option>
-		<!--<option value="videos">Videos</option>-->
 		<option value="user">User</option>
 		<option value="groups">Groups</option>
-	</select>
+	</select>-->
 	
 	<md-button ng-click="clickHandler()" class="md-primary">
 					<icon icon="ic_search_24px" />
