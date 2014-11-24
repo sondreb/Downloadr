@@ -42,9 +42,12 @@ If you want to work with the source code of Flickr Downloadr, make a clone of th
 and then run:
 
 ```sh
-$ npm install --msvs_version=2013
-$ bower install --msvs_version=2013
+$ npm install
+$ bower install
 ```
+
+If there is any modules that require node-gyp and you don't have Visual Studio 2010 redist installed,
+you might need to append the following parameter to npm and bower install commands: --msvs_version=2013
 
 This will download dependencies, such as Grunt, Bower, Mocha, Chai and more.
 

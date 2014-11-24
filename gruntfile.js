@@ -355,7 +355,11 @@ module.exports = function (grunt) {
 						  'hardware/svg/production/ic_keyboard_backspace_24px.svg',
 
 						  'action/svg/production/ic_settings_24px.svg',
+						  
 						  'navigation/svg/production/ic_menu_24px.svg',
+						  'navigation/svg/production/ic_check_24px.svg',
+						  'navigation/svg/production/ic_more_horiz_24px.svg',
+						  'navigation/svg/production/ic_more_vert_24px.svg',
 						  'navigation/svg/production/ic_arrow_back_24px.svg',
 						  'navigation/svg/production/ic_arrow_forward_24px.svg',
 

@@ -1,8 +1,9 @@
-<div class="search-control {{class}}">
+<div layout="row" class="search-control {{class}}">
 	<!--
 	<input type="search" ng-model="value" ng-enter="{{target}}" name="search" placeholder="Kittens?..." />
 	-->
-	<md-text-float style="display: inline-block !important;" placehlder="Kittens?..." ng-model="value" ng-model="state.search"></md-text-float>
+	
+	<md-text-float class="search-input" ng-enter="{{target}}" placehlder="Kittens?..." ng-model="value" ng-model="state.search"></md-text-float>
 	
 	<md-whiteframe class="md-whiteframe-z1 search-type" layout="column" ng-init="selectedType = 'photos'">
 		
@@ -29,9 +30,7 @@
 		<option value="groups">Groups</option>
 	</select>-->
 	
-	<md-button ng-click="clickHandler()" class="md-primary">
-					<icon icon="ic_search_24px" />
-				</md-button>
-	<!--
-	<a href="" data-ng-click="clickHandler()"><span class="fa fa-search"></span></a>-->
+	<md-button class="search-button" ng-click="clickHandler()" class="md-primary">
+		<icon icon="ic_search_24px" />
+	</md-button>
 </div>
