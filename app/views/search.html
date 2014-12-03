@@ -1,6 +1,6 @@
 <div id="gallery" class="thumbs container">
 
-	<a ng-repeat="photo in photos" class="link" ng-class="{selectedThumbnail: photo.selected}" href="" ng-click="selectPhoto(photo)" repeat-done>
+	<a ng-repeat="photo in photos" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)" class="link" ng-class="{selectedThumbnail: photo.selected}" href="" ng-click="selectPhoto(photo)" repeat-done>
 		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
 	</a>
 

@@ -192,7 +192,11 @@
 				
 				focused: true,
 				
-				showSearchControls: false
+				showSearchControls: false,
+				
+				currentPath: '',
+				
+				previouspath: ''
 
 			};
 			
@@ -226,6 +230,9 @@
 				// Whenever the user navigates somewhere, we'll make sure that the sidemenu
 				// is being closed as a result.
 				$mdSidenav('left').close();
+				
+				$rootScope.state.previouspath = $rootScope.state.currentPath;
+				$rootScope.state.currentPath = path;
 
 			});
 

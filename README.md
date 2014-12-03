@@ -46,6 +46,19 @@ $ npm install
 $ bower install
 ```
 
+Then navigate into the "web" folder and run:
+
+```sh
+$ npm install
+```
+
+Navigate back into the root of the repository, then run the following command to open up the web
+server that is required to communicate for OAuth tokens and live-reload:
+
+```sh
+$ grunt debug
+```
+
 If there is any modules that require node-gyp and you don't have Visual Studio 2010 redist installed,
 you might need to append the following parameter to npm and bower install commands: --msvs_version=2013
 

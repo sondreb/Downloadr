@@ -353,6 +353,10 @@ module.exports = function (grunt) {
 						  'content/svg/production/ic_add_circle_24px.svg',
 
 						  'hardware/svg/production/ic_keyboard_backspace_24px.svg',
+						  'file/svg/production/ic_file_download_24px.svg',
+						  'file/svg/production/ic_folder_24px.svg',
+
+						  
 
 						  'action/svg/production/ic_settings_24px.svg',
 						  
@@ -485,6 +489,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-stylus');
 	grunt.loadNpmTasks('grunt-svgstore');
 	grunt.loadNpmTasks('grunt-wiredep');
+	grunt.loadNpmTasks('grunt-angular-architecture-graph');
 
 	grunt.registerTask('debug', function (platform) {
 
@@ -539,7 +544,7 @@ module.exports = function (grunt) {
         'htmlmin',
         'compress'
     ]);
-
+	
 	grunt.registerTask('default', [
         'newer:jshint',
         'test',

@@ -669,8 +669,8 @@
     }]);
 
 
-	controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings',
-		function ($scope, $rootScope, settings) {
+	controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings', '$location',
+		function ($scope, $rootScope, settings, $location) {
 
 			$scope.sorting = {
 				'relevance': 'Relevant',
@@ -712,6 +712,13 @@
 				}
 
 			});
+			
+			$scope.navigateBack = function() {
+			
+				console.log('Navigate back');
+				$location.path($rootScope.state.previouspath);
+				
+			};
 
 			$scope.clearSelection = function () {
 				$rootScope.state.selectedPhotos = [];
