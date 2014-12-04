@@ -12,30 +12,8 @@
 
 	controllers.run(['$log',
 		function ($log) {
-
 			$log.log('downloadr.controllers.run: ');
-
-			/*
-        $rootScope.$on("$routeChangeStart", function(event, next, current) {
-          $rootScope.onLoading();
-        });
-
-        $rootScope.onLoading = function() {
-          $rootScope.$safeApply(function() {
-            $rootScope.loading = true;
-            $rootScope.status = 'loading';
-          },this);
-        };
-
-        $rootScope.onReady = function() {
-          $rootScope.$safeApply(function() {
-            $rootScope.loading = false;
-            $rootScope.status = 'ready';
-          },this);
-        };*/
-
     }]);
-
 
 	controllers.controller('StatusController', ['$scope', '$rootScope', 'socket',
 		function ($scope, $rootScope, socket) {
@@ -580,7 +558,7 @@
 
 					$scope.photos.forEach(function (photo) {
 
-						if (photo.url !== 'img/loading.gif') {
+						if (photo.url !== 'images/loading.gif') {
 							console.log('Disposing: ', photo.url);
 							URL.revokeObjectURL(photo.url);
 						}
@@ -1386,7 +1364,7 @@
 			};
 
 			$scope.isProfileLoading = true;
-			$scope.profileIconUrl = 'img/buddyicon.gif';
+			$scope.profileIconUrl = 'images/buddyicon.gif';
 			$scope.isLoggedIn = false;
 			$scope.previousScreen = null;
 			$scope.selectedScreen = '';

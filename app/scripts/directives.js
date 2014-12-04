@@ -20,7 +20,7 @@
 	/*
   This directive allows us to pass a function in on an enter key to do what we want.
    */
-	directives.directive('ngEnter', function ($rootScope, $location, $timeout) {
+	directives.directive('ngEnter', ['$rootScope', '$location', '$timeout', function ($rootScope, $location, $timeout) {
 		return function (scope, element, attrs) {
 			element.bind('keydown keypress', function (event) {
 				if (event.which === 13) {
@@ -44,11 +44,11 @@
 				}
 			});
 		};
-	});
+	}]);
 
 	// This directive is used to show the search input with options dropdown
 	// and the search icon/button.
-	directives.directive('search', function ($location) {
+	directives.directive('search', ['$location', function ($location) {
 
 		return {
 			restrict: 'E',
@@ -78,7 +78,7 @@
 				};
 			}
 		};
-	});
+	}]);
 
 	directives.directive('justified', ['$timeout',
 		function ($timeout) {
@@ -107,7 +107,7 @@
 			};
     }]);
 
-	directives.directive('navMenu', function ($location) {
+	directives.directive('navMenu', ['$location', function ($location) {
 		return function (scope, element, attrs) {
 			var links = element.find('a'),
 				onClass = attrs.navMenu || 'on',
@@ -154,7 +154,7 @@
 				}
 			});
 		};
-	});
+	}]);
 
 	directives.directive('thumb', function () {
 
@@ -196,7 +196,7 @@
 		};
 	});
 	
-	directives.directive('windowIcon', function ($rootScope) {
+	directives.directive('windowIcon', ['$rootScope', function ($rootScope) {
 
 		return {
 			restrict: 'E',
@@ -207,7 +207,7 @@
 			},
 			templateUrl: 'views/template_window_icon.html'
 		};
-	});
+	}]);
 
 
 })();

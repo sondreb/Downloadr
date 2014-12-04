@@ -99,7 +99,7 @@
 				type: type,
 				title: title,
 				message: body,
-				iconUrl: 'img/icon_128.png',
+				iconUrl: 'images/icon_128.png',
 				progress: progress
 			};
 
@@ -133,7 +133,7 @@
 	});
 
 
-	downloadr.factory('searchProvider', function ($location, $timeout) {
+	downloadr.factory('searchProvider', ['$location', '$timeout', function ($location, $timeout) {
 		var service = {};
 
 		service.performSearch = function () {
@@ -143,8 +143,9 @@
 		service.searchText = 'Hello World';
 
 		return service;
-	});
+	}]);
 
+	
 	downloadr.service('util', function () {
 		this.format = function (text, params) {
 			var str = text.replace(/\{(.*?)\}/g, function (i, match) {
@@ -155,7 +156,8 @@
 		};
 	});
 
-	downloadr.factory('socket', function ($rootScope, config_socket_server) {
+	
+	downloadr.factory('socket', ['$rootScope', 'config_socket_server', function ($rootScope, config_socket_server) {
 
 		console.log('connecting to socket server @ ', config_socket_server);
 		var socket = io.connect(config_socket_server);
@@ -193,9 +195,9 @@
 				})
 			}
 		};
-	});
+	}]);
 
-	downloadr.service('flickr2', function ($rootScope) {
+	downloadr.service('flickr2', ['$rootScope', function ($rootScope) {
 
 		var token = '';
 		var secret = '';
@@ -236,9 +238,9 @@
 			removeToken: removeToken,
 			createMessage: createMessage
 		};
-	});
+	}]);
 
-	downloadr.service('flickr', function ($rootScope) {
+	downloadr.service('flickr', ['$rootScope', function ($rootScope) {
 
 		var token = '';
 		var secret = '';
@@ -282,63 +284,7 @@
 			
 		};
 
-		//$scope.format = function (text, params) {
-		//    var str = text.replace(/\{(.*?)\}/g, function (i, match) {
-		//        return params[match];
-		//    });
-
-		//    return str;
-		//}
-
-		//$scope.deleteToken = function ()
-		//{
-		//    Flickr.DeleteToken();
-		//}
-
-		// Event that is raised when authentication is fully complete and secure oauth calls
-		// can be done against the Flickr API.
-		/*
-        Flickr.OnAuthenticated = function (token) {
-
-            console.log('Flickr:OnAuthenticated');
-            console.log(token);
-
-            var webview = document.querySelector('webview');
-
-            $(webview).hide();
-
-            $rootScope.$broadcast('authenticated', token);
-        };
-
-        // Event that is raised which should load URL to get users permission.
-        Flickr.OnAuthenticating = function (url) {
-            console.log('Flickr:OnAuthenticating: ' + url);
-
-            //$('#loginUrlView').html(url);
-
-            if ($rootScope.state.packaged) {
-
-                //var webview = document.querySelector('webview');
-                var webview = document.getElementById('browserView');
-                webview.src = url;
-                webview.addEventListener('loadstop', function () {
-
-                    console.log('LOADSTOP: ' + webview.src);
-
-                });
-
-                //$('#myModal').modal({ show: true })
-            }
-            else {
-                window.open(url, '_blank');
-            }
-
-            $rootScope.$broadcast('authenticating', url);
-        };
-
-        return Flickr;*/
-
-	});
+	}]);
 })();
 
 

@@ -27,6 +27,7 @@
 	
 	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
+			
 			console.log('downloadr.run: ', flickr);
 
 			var loadingStatus = { settings: false, runtime: false };

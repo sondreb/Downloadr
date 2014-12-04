@@ -3,7 +3,7 @@
     "default_locale": "en",
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
-    "version": "3.0.51",
+    "version": "3.0.59",
     "permissions": [
         {
             "fileSystem": [
@@ -24,7 +24,7 @@
         "<all_urls>"
     ],
     "minimum_chrome_version": "38",
-    "offline_enabled": true,
+    "offline_enabled": false,
     "icons": {
         "16": "images/icon_16.png",
         "48": "images/icon_48.png",
