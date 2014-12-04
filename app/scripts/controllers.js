@@ -228,6 +228,8 @@
 	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'socket',
 		function ($scope, $rootScope, $location, socket) {
 
+			$rootScope.state.background = 'wallpaper-3';
+			
 			$scope.user = {
 				username: '',
 				password: ''
@@ -1148,7 +1150,7 @@
 				'ctrl+t+d': function () {
 					console.log('Open up [T]est & [D]ebug mode for developers.');
 					$rootScope.state.debug = !$rootScope.state.debug;
-					settings.values.debug = true;
+					settings.values.debug = $rootScope.state.debug;
 					settings.save();
 				},
 				'ctrl+s': function () {

@@ -196,7 +196,11 @@
 				
 				currentPath: '',
 				
-				previouspath: ''
+				previouspath: '',
+				
+				userId: '',
+				
+				userName: ''
 
 			};
 			
@@ -269,24 +273,18 @@
 			$rootScope.$on('Event:Logout', function () {
 
 				console.log('Logout Initialized...');
-
+				
 				chrome.storage.sync.set({
 					'token': null
 				}, function () {
 					// Notify that we saved.
-					//message('Settings saved');
-					console.log('Settings saved');
+					console.log('Token removed');
 				});
-
-				flickr.removeToken();
-
-				$rootScope.state.isAnonymous = true;
-				//$rootScope.state.isConnecting = true;
-
+				
+				$rootScope.authenticationState(null);
+				
 				// Make sure we get a new login url.
 				socket.emit('getUrl');
-
-				//$scope.authenticatingEvent(null);
 			});
 
 			// Make sure we listen to whenever the local storage value have changed.
@@ -320,13 +318,9 @@
 					// When no token is found, we'll issue a command to get login url.
 					socket.emit('getUrl');
 				} else {
-					console.log('Found in local storage: ', result.token);
-					flickr.parseToken(result.token);
-					$rootScope.state.isAnonymous = false;
-					$rootScope.state.isConnecting = false;
-					$rootScope.$broadcast('status', {
-						message: 'Authenticated. Hi ' + result.token.userName + '!'
-					});
+					
+					$rootScope.authenticationState(result.token);
+					
 				}
 			});
 
@@ -353,18 +347,37 @@
 					'token': message
 				}, function () {
 					// Notify that we saved.
-					message('Settings saved');
+					message('Token saved');
 				});
 
-				console.log('Received Access Token: ', message);
-				flickr.parseToken(message);
-
-				$rootScope.state.isAnonymous = false;
-				$rootScope.$broadcast('status', {
-					message: 'Authenticated. Hi ' + message.userName + '!'
-				});
+				$rootScope.authenticationState(message);
 
 			});
+			
+			$rootScope.authenticationState = function(token)
+			{
+				if (token === null)
+				{
+					flickr.removeToken();
+					$rootScope.state.isAnonymous = true;
+				}
+				else
+				{
+					flickr.parseToken(token);
+
+					$rootScope.state.userId = flickr.userId;
+					$rootScope.state.userName = flickr.userName;
+
+					console.log('$rootScope.state.userName: ', flickr.userId);
+					
+					$rootScope.state.isAnonymous = false;
+					$rootScope.state.isConnecting = false;
+
+					$rootScope.$broadcast('status', {
+						message: 'Authenticated. Hi ' + flickr.userName + '!'
+					});
+				}
+			};
 
 			// This will read oauth_token from local storage if it exists, if not, it will
 			// connect to the WebSocket service and notify a request for authentication URL.

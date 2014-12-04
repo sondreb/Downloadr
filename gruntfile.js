@@ -345,6 +345,7 @@ module.exports = function (grunt) {
 					src: ['navigation/svg/production/ic_refresh_24px.svg',
 						  'action/svg/production/ic_search_24px.svg',
 						  'action/svg/production/ic_help_24px.svg',
+						  'action/svg/production/ic_home_24px.svg',
 						  'action/svg/production/ic_schedule_24px.svg',
 						  'action/svg/production/ic_bug_report_24px.svg',
 
@@ -355,7 +356,6 @@ module.exports = function (grunt) {
 						  'hardware/svg/production/ic_keyboard_backspace_24px.svg',
 						  'file/svg/production/ic_file_download_24px.svg',
 						  'file/svg/production/ic_folder_24px.svg',
-
 						  
 
 						  'action/svg/production/ic_settings_24px.svg',
@@ -413,6 +413,9 @@ module.exports = function (grunt) {
 		},
 
 		// Run some tasks in parallel to speed up build process
+		
+		// 'svgmin' was removed from 'dist'
+		
 		concurrent: {
 			server: [
                 'copy:styles'
@@ -422,8 +425,7 @@ module.exports = function (grunt) {
             ],
 			dist: [
                 'copy:styles',
-                'imagemin',
-                'svgmin'
+                'imagemin'
             ],
 			test: [
                 'copy:styles'

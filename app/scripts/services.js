@@ -247,19 +247,19 @@
 		var fullName = '';
 
 		var removeToken = function () {
-			token = '';
-			secret = '';
-			userId = '';
-			userName = '';
-			fullName = '';
+			this.token = '';
+			this.secret = '';
+			this.userId = '';
+			this.userName = '';
+			this.fullName = '';
 		}
 
 		var parseToken = function (message) {
-			token = message.oauthToken;
-			secret = message.oauthTokenSecret;
-			userId = message.userNsId;
-			userName = message.userName;
-			fullName = message.fullName;
+			this.token = message.oauthToken;
+			this.secret = message.oauthTokenSecret;
+			this.userId = message.userNsId;
+			this.userName = message.userName;
+			this.fullName = message.fullName;
 		};
 
 		var createMessage = function (method, args) {
@@ -276,7 +276,10 @@
 		return {
 			parseToken: parseToken,
 			removeToken: removeToken,
-			createMessage: createMessage
+			createMessage: createMessage,
+			userId: userId,
+			userName: userName
+			
 		};
 
 		//$scope.format = function (text, params) {

@@ -91,27 +91,44 @@ strong.bigger {
 .thin {
 	font-weight: 100;
 }
-.icon svg {
+
+.fa {
 	width: 24px;
 	height: 24px;
 }
-.icon.window-icon svg {
+
+.icon:hover .icon-normal,
+/*
+.search-control > * {
+	float: left;
+}*/
+
+.icon {
+	width: 24px;
+	height: 24px;
+}
+
+.icon:hover {
+	color: white;
+}
+
+.icon.window-icon {
 	width: 16px;
 	height: 16px;
 }
-.icon.icon12 svg {
+.icon.icon12 {
 	width: 12px;
 	height: 12px;
 }
-.icon.icon14 svg {
+.icon.icon14 {
 	width: 14px;
 	height: 14px;
 }
-.icon.icon16 svg {
+.icon.icon16 {
 	width: 16px;
 	height: 16px;
 }
-.icon.icon18 svg {
+.icon.icon18 {
 	width: 18px;
 	height: 18px;
 }
@@ -673,12 +690,13 @@ strong.bigger {
 	position: static;
 }
 .search-button {
-	margin-left: 106px !important;
+	/*margin-left: 106px !important;*/
 	-webkit-app-region: no-drag;
 }
 .search-input {
 	padding-right: 3px !important;
 	-webkit-app-region: no-drag;
+	
 }
 .search-input input {}
 /*
@@ -696,11 +714,14 @@ strong.bigger {
 .search-type .selected {
 	display: block;
 }
-.icon:hover .icon-normal,
-/*
-.search-control > * {
-	float: left;
-}*/
+
+.search-control {
+
+	/*
+	background-color: rgba(255, 255, 255, 0.2);
+	padding-left: 10px;*/
+
+}
 
 .footer {
 	font-size: 0.7em;

@@ -187,7 +187,7 @@
 
 		return {
 			restrict: 'E',
-			replace: false,
+			replace: true,
 			scope: {
 				icon: '@',
 				size: '@'

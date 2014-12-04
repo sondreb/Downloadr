@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.36)
+Flickr Downloadr 3 (3.0.48)
 ============
 
 http://flickr-downloadr.com/
@@ -7,6 +7,10 @@ http://flickr-downloadr.com/
 
 Elegant and simple app that allows you to search and download
 photos from Flickr.com photo service.
+
+Flickr Downloadr is currently available to official beta testers only:
+
+Install on the Chrome Web Store: https://chrome.google.com/webstore/detail/flickr-downloadr/fpmonoglnknhfnfgeopdjmhpilpejedj
 
 Home Screen:
 
