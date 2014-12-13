@@ -324,48 +324,36 @@
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
+			
+			$rootScope.$on('Event:Paging', function (event) {
 
-			$scope.loadMore = function () {
-				console.log('Load more...');
+				console.log('User changed paging...');
+				$scope.performSearch($rootScope.state.searchText);
 
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-				$scope.photos.push({
-					url: 'content/img.jpg'
-				});
-			};
+			});
 
 			$scope.loadImage = function (item, callback) {
+				
 				var xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
-
+				
 				xhr.onload = function () {
 					callback(window.webkitURL.createObjectURL(xhr.response), item);
 				};
-
+				
 				xhr.open('GET', item.uri, true);
 				xhr.send();
+				
 			};
-
+			
+			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
 			$scope.selectPhoto = function (photo) {
+				
 				if (photo.selected === true) {
 					photo.selected = false;
+					
+					$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, photo);
+					
 				} else {
 					photo.selected = true;
 					$rootScope.state.selectedPhotos.push(photo);
@@ -377,22 +365,42 @@
 
 				console.log('Select photo: ', photo);
 			};
-
-			//$scope.selectedPhotos = [];
-
+			
 			// for each image with no imageUrl, start a new loader
 			$scope.loadImages = function () {
 
 				var photos = $scope.photos;
 
-				//var gallery = $('#gallery');
-
+				console.log('PHOTOS!!!: ', photos);
+				
 				for (var i = 0; i < photos.length; i++) {
 
 					var item = photos[i];
+					
+					// Skip all photos already downloaded.
+					
+					console.log('item.url: ', item.url);
+					
+					if (item.url !== undefined) {
+						continue;
+					}
 
 					item.uri = item.getUrl('m');
 
+					// We are about to download the last photo, we can prepare for next search (scrolling).
+					if (i === (photos.length - 1))
+					{
+						console.log('i == photos.length!');
+						
+						$scope.page = $scope.page + 1;
+						
+						if ($scope.page < 3)
+						{
+							$rootScope.$broadcast('Event:Paging');
+						}
+						
+					}
+					
 					$scope.loadImage(item, function (blob_uri, originalItem) {
 
 						// We really should have a better way of maintaining a list of
@@ -405,46 +413,11 @@
 
 							console.log('BLOB: ', blob_uri);
 							originalItem.url = blob_uri;
-							//gallery.justifiedGallery();
-
+							
 						}, 0);
-
-						/*
-              $scope.$apply(function(scope) {
-
-                  item.url = blob_uri;
-                  console.log('BLOB: ', blob_uri);
-
-
-                for (var k=0; k<scope.todos.length; k++) {
-                  if (scope.todos[k].uri==requested_uri) {
-                    scope.todos[k].imageUrl = blob_uri;
-                  }
-                }
-              });*/
 
 					});
 
-					/*
-            if (photo.imageUrl === PLACEHOLDER_IMAGE) {
-
-              $scope.loadImage(todo.uri, function(blob_uri, requested_uri) {
-
-                $scope.$apply(function(scope) {
-
-                  for (var k=0; k<scope.todos.length; k++) {
-
-                    if (scope.todos[k].uri==requested_uri) {
-
-                      scope.todos[k].imageUrl = blob_uri;
-
-                    }
-                  }
-                });
-
-              });
-            }
-            */
 				}
 			};
 
@@ -453,11 +426,12 @@
 			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
 
 			$scope.total = 0;
+			
+			$scope.page = 1;
 
 			// Register handler for callbacks of signing URLs.
 			socket.on('urlSigned', function (message) {
 
-				console.log('Signed URL callback: ', message);
 				var url = 'https://' + message.hostname + message.path;
 
 				$http.post(url).success(function (data, status, headers, config) {
@@ -468,12 +442,18 @@
 
 					var list = data.photos.photo;
 					$scope.total = data.photos.total;
+					
+					var paging = data.photos.page > 1;
 
-					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-						total: $scope.total,
-						photos: $rootScope.state.selectedPhotos
-					});
-
+					// If we are paging, we should not delete the existing photos.
+					if (!paging)
+					{
+						$rootScope.$broadcast('Event:SelectedPhotosChanged', {
+							total: $scope.total,
+							photos: $rootScope.state.selectedPhotos
+						});
+					}
+					
 					// Could we perhaps use prototype instead of this silly loop?
 					for (var i = 0; i < list.length; i++) {
 						var item = list[i];
@@ -510,34 +490,29 @@
 
 							throw new Error('Unable to find photo URL for the specified size');
 
-							//return 'https://farm' + this.farm + '.staticflickr.com/' + this.server + '/' + this.id + '_' + this.secret + '_' + size + '.jpg';
-
 						};
 
 						item.getFileName = function (photoSize) {
 							var url = this.getUrl(photoSize);
 							var filename = url.replace(/^.*[\\\/]/, '');
 							return filename;
-							/*
-                    if (photoSize == 'o')
-                    {
-                      return this.id + '_' + this.originalsecret + '_' + photoSize + '.jpg';
-                    }
-                    else
-                    {
-                      return this.id + '_' + this.secret + '_' + photoSize + '.jpg';
-                    }*/
 						};
 					}
 
-					// Remove existing downloaded photos to avoid memory leak.
-					$scope.clearObjectURLs();
-
-					// Bind to the UI.
-					$scope.photos = list;
-
-					//$('#gallery').justifiedGallery();
-
+					if (!paging)
+					{
+						// Remove existing downloaded photos to avoid memory leak.
+						$scope.clearObjectURLs();
+						
+						// Bind to the UI.
+						$scope.photos = list;
+					}
+					else
+					{
+						// Append new photos to existing list.
+						$scope.photos = $scope.photos.concat(list);
+					}
+					
 					// Begin download the thumbnails.
 					$scope.loadImages();
 				}).
@@ -553,12 +528,14 @@
 			// Clears up all the blob files that was previously downloaded. For future
 			// informational reference, the blob-links under "Resources" in the Developer Tools
 			// does still list the old blobs, but their binary content is actually deleted.
+			//
+			// TODO: Create a cleanup method on this controller and make sure it's called when needed.
 			$scope.clearObjectURLs = function () {
 				if ($scope.photos) {
 
 					$scope.photos.forEach(function (photo) {
 
-						if (photo.url !== 'images/loading.gif') {
+						if (photo.url !== undefined) {
 							console.log('Disposing: ', photo.url);
 							URL.revokeObjectURL(photo.url);
 						}
@@ -576,13 +553,13 @@
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
 					per_page: '30',
+					page: '' + $scope.page + '',
 					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
 
 				console.log('Sign URL message: ', message);
 				socket.emit('signUrl', message);
 			};
-
 
 			$scope.init = function () {
 
@@ -678,6 +655,10 @@
 				// Make sure we save settings when user changes dropdowns.
 				// We do this, to remember the selections for next search.
 				settings.save();
+				
+				// We should re-run the search with changed settings.
+				$rootScope.$broadcast('Event:Filter');
+
 
 			}, true);
 
@@ -701,6 +682,11 @@
 			};
 
 			$scope.clearSelection = function () {
+				
+				$rootScope.state.selectedPhotos.forEach(function (photo) {
+					photo.selected = false;
+				});
+
 				$rootScope.state.selectedPhotos = [];
 				$rootScope.$broadcast('Event:SelectedPhotosChanged', {
 					photos: $rootScope.state.selectedPhotos
@@ -755,10 +741,10 @@
 						// Reset everything to empty state.
 						$rootScope.state.searchText = '';
 						$rootScope.state.selectedPhotos = [];
-
 						$scope.completed = true;
-
+						
 						if (settings.values.completed) {
+							
 							notify('success', 'basic', 'Download Complete',
 								'All ' + $scope.count + ' photos have been saved successfully.',
 								function (id) {

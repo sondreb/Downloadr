@@ -16,7 +16,8 @@
     "ngInfiniteScroll": "latest",
     "jquery": "latest",
     "material-design-icons": "latest",
-    "angular-material": "master"
+    "angular-material": "master",
+    "underscore": "~1.7.0"
   },
   "devDependencies": {
     "angular-mocks": "latest",

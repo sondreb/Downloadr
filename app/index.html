@@ -97,7 +97,7 @@
 			<!-- Windows -->
 			<span ng-show="state.OS == 'win'" class="win window-icon-container">
 				
-				<icon icon="win-min" size="12" title="Minimize" ng-click="minimize();"></icon><icon icon="win-max" size="12" title="Maximize" ng-click="maximize();" ng-hide="isMaximized"></icon><icon icon="win-restore" size="12" title="Restore Down" ng-click="restore();" ng-show="isMaximized" ng-cloak></icon><icon icon="win-close" size="12" title="Close" ng-click="close();"></icon>
+				<a href=""ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize" ></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a><a href=""  ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a>
 				
 				<!--
 				<a href="" ng-click="minimize();" id="window-minimize" title="Minimize">
@@ -363,6 +363,8 @@
               <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
             </li>-->
 
+			<!--
+			Hidden for first release, planned for 3.0.3
 			<div ng-show="state.actionTarget == 'folder'">
 				<label for="select-list" title="View"><i class="fa fa-list-ul"></i>
 				</label>
@@ -371,7 +373,7 @@
 					<option value="small">Small</option>
 					<option value="list">List</option>
 				</select>
-			</div>
+			</div>-->
 
 			<!-- For user simplicity, we will hide most of the size options. -->
 			<div ng-show="state.actionTarget != 'folder'">
@@ -402,18 +404,43 @@
 			</div>
 
 			<!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
-			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0"><a href="#/folder">NEXT 
+			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0">
+				<md-button aria-label="NEXT" href="#/folder">
+				<md-tooltip>
+					Go to next screen
+				</md-tooltip>
+						NEXT
+					<icon icon="ic_arrow_forward_24px"></icon>
+				</md-button>
+			</div>
+			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0">
+				<md-button aria-label="NEXT" href="#/folder">
+				<md-tooltip>
+					Go to next screen
+				</md-tooltip>
+						NEXT
+					<icon icon="ic_arrow_forward_24px"></icon>
+				</md-button>
+			</div>
+			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''">
 				
-				<icon icon="ic_arrow_forward_24px"></icon>
+								<md-button aria-label="DOWNLOAD" href="#/download">
+				<md-tooltip>
+					Start the download of photos
+				</md-tooltip>
+						DOWNLOAD
+					<icon icon="ic_file_download_24px"></icon>
+				</md-button>
 			</div>
-			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0"><a href="#/folder">NEXT 
+			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''">
 				
-				<icon icon="ic_arrow_forward_24px"></icon>
-			</div>
-			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''"><a href="#/download">DOWNLOAD 
-				<icon icon="ic_file_download_24px"></icon>
-			</div>
-			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''"><a href="">DOWNLOAD <icon icon="ic_file_download_24px"></icon></a>
+					<md-button aria-label="DOWNLOAD" href="">
+				<md-tooltip>
+					Start the download of photos.
+				</md-tooltip>
+						DOWNLOAD
+					<icon icon="ic_file_download_24px"></icon>
+				</md-button>
 			</div>
 
 		</div>
@@ -442,7 +469,8 @@
 	<script src="bower_components/angular-aria/angular-aria.js"></script>
 	<script src="bower_components/hammerjs/hammer.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
-	<script src="bower_components/socket.io-client/socket.io.js"></script>				
+	<script src="bower_components/underscore/underscore.js"></script>
+	<script src="bower_components/socket.io-client/socket.io.js"></script>	
 	<!-- endbower -->
 	<!-- endbuild -->
 

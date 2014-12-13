@@ -29,7 +29,7 @@
     "grunt-newer": "^0.8.0",
     "grunt-svgmin": "^2.0.0",
     "grunt-svgstore": "^0.4.1",
-    "grunt-usemin": "^2.6.2",
+    "grunt-usemin": "^3.0.0",
     "grunt-wiredep": "^2.0.0",
     "jshint-stylish": "^1.0.0",
     "load-grunt-tasks": "^1.0.0",

@@ -103,11 +103,11 @@ strong.bigger {
 	float: left;
 }*/
 
-.icon {
+.icon { /* svg is 24x24 and use is 18x18, so pad the content down a bit. */
 	width: 24px;
 	height: 24px;
+	padding-top: 3px;
 }
-
 .icon:hover {
 	color: white;
 }
@@ -119,18 +119,22 @@ strong.bigger {
 .icon.icon12 {
 	width: 12px;
 	height: 12px;
+	padding-top 1px;
 }
 .icon.icon14 {
 	width: 14px;
 	height: 14px;
+	padding-top 1px;
 }
 .icon.icon16 {
 	width: 16px;
 	height: 16px;
+	padding-top 1px;
 }
 .icon.icon18 {
 	width: 18px;
 	height: 18px;
+	padding-top 3px;
 }
 .mac.window-icon-container
 /* This is required to ensure hover off is triggered on the icons. */
@@ -154,10 +158,11 @@ strong.bigger {
 	padding-left: 6px;
 	padding-right: 6px;
 	height: 22px;
-	padding-top: 3px;
+	padding-top: 2px;
 }
+
 .win.window-icon-container a:hover {
-	background-color: $accent-600;
+	background-color: $accent-700;
 }
 .win.window-icon-container a:active {
 	background-color: $accent-800;
@@ -171,6 +176,7 @@ strong.bigger {
 	height: 24px;
 	padding: 1px 1px 1px 10px;
 }
+
 .icon .icon-hover,
 .icon .icon-active,
 .icon .icon-nofocus,
@@ -284,7 +290,7 @@ strong.bigger {
 	transition-property: background-color;
 }
 .actions.row {
-	height: 48px;
+	height: 36px;
 	bottom: 18px;
 	line-height: 18px;
 }
@@ -300,6 +306,7 @@ strong.bigger {
 	border: 0;
 	height: 28px !important;
 }
+
 /*
 .menu {
 	float: right;
@@ -469,6 +476,10 @@ strong.bigger {
 		background-color: #7db9e8;
 	}
 }
+.container
+{
+	padding: 16px 10px 16px 16px;
+}
 .search-container h1 {
 	font-size: 1.1em;
 	width: 260px;
@@ -478,6 +489,16 @@ strong.bigger {
 	color: white;
 	text-shadow: 2px 2px rgba(0, 0, 0, 0.50);
 	margin: 0 !important;
+}
+.clear {
+	clear: both;
+	width: 100%;
+	text-align: center;
+	float: none;
+}
+.middle
+{
+	text-align: center;
 }
 .center {
 	position: fixed;
@@ -810,8 +831,9 @@ strong.bigger {
 	font-size: 1.3em;
 	margin-left: 20px;
 	margin-right: 10px;
-	min-width: 100px;
+	min-width: 110px;
 	text-align: right;
+	padding-top: 10px;
 }
 .counter-remove {
 	margin-left: 3px;
