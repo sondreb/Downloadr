@@ -296,6 +296,36 @@
 
     }]);
 
+	
+	function isScrolledIntoView(elem) {
+		if ($(elem).length == 0) {
+			return false;
+		}
+		var docViewTop = $(window).scrollTop();
+		var docViewBottom = docViewTop + $(window).height();
+
+		var elemTop = $(elem).offset().top;
+		var elemBottom = elemTop + $(elem).height();
+		//  return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop)); //try it, will only work for text
+		return (docViewBottom >= elemTop && docViewTop <= elemBottom);
+	}
+
+	$('.text').each(function () {
+		console.log(isScrolledIntoView(this), this);
+	});
+	$('.big').each(function () {
+		console.log(isScrolledIntoView(this), this);
+	});
+
+	$(window).on('scroll', function () {
+		$('.text').each(function () {
+			console.log(isScrolledIntoView(this), this);
+		});
+		$('.big').each(function () {
+			console.log(isScrolledIntoView(this), this);
+		});
+	});
+	
 
 	controllers.controller('SearchController', ['$scope', '$rootScope',
     '$location', '$http',
@@ -310,6 +340,23 @@
 			$rootScope.state.showActions = true;
 			$rootScope.state.actionTarget = 'folder';
 
+			// Hook up handler to the scroll event when DOM is ready.
+			angular.element(document).ready(function () {
+				$('#presenter').on('scroll', function() { console.log('scroll event'); });
+			});
+			
+			/*
+			$('#presenter').scroll(function() {
+			   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+				   console.log('BOTTOM!!!');
+			   }
+				
+				console.log('$(window).scrollTop(): ', $(window).scrollTop());
+				console.log('$(window).height(): ', $(window).height());
+				console.log('$(document).height(): ', $(document).height());
+				
+			});*/
+			
 			$rootScope.$on('Event:Search', function (event, data) {
 
 				console.log('User did a new search...');
