@@ -137,17 +137,20 @@ strong.bigger {
 	padding-top 3px;
 }
 .mac.window-icon-container
-/* This is required to ensure hover off is triggered on the icons. */
-
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
 	height: 24px;
 	padding: 3px 10px 5px 3px;
 }
-.win.window-icon-container
-/* This is required to ensure hover off is triggered on the icons. */
+.mac.window-icon-container svg {
+	width: 18px;
+	height: 18px;
+}
 
+
+
+.win.window-icon-container
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
@@ -172,8 +175,6 @@ strong.bigger {
 	background-color: $accent-800;
 }
 .linux.window-icon-container
-/* This is required to ensure hover off is triggered on the icons. */
-
 {
 	display: inline-block;
 	-webkit-app-region: no-drag;
@@ -193,7 +194,7 @@ strong.bigger {
 	display: none;
 }
 .icon:hover .icon-hover {
-	display: block;
+	display: inline-block;
 }
 .icon:active .icon-normal,
 .icon:active .icon-hover,
@@ -202,7 +203,7 @@ strong.bigger {
 	display: none;
 }
 .icon:active .icon-active {
-	display: block;
+	display: inline-block;
 }
 .nofocus .icon-normal,
 .nofocus .icon-active,
@@ -211,7 +212,7 @@ strong.bigger {
 	display: none;
 }
 .nofocus .icon-nofocus {
-	display: block;
+	display: inline-block;
 }
 /*
 .icon {
