@@ -2,12 +2,12 @@
  .window-frame {
 	-webkit-app-region: drag;
 }
-.window-frame a {
+
+ .window-frame * {
 	-webkit-app-region: no-drag;
 }
-.window-frame button {
-	-webkit-app-region: no-drag;
-}
+
+
 .frame {
 	-webkit-app-region: drag;
 	height: 24px;
@@ -92,9 +92,11 @@ strong.bigger {
 	font-weight: 100;
 }
 
+
 .fa {
 	width: 24px;
 	height: 24px;
+	padding-top: 3px;
 }
 
 .icon:hover .icon-normal,
@@ -106,7 +108,6 @@ strong.bigger {
 .icon { /* svg is 24x24 and use is 18x18, so pad the content down a bit. */
 	width: 24px;
 	height: 24px;
-	padding-top: 3px;
 }
 .icon:hover {
 	color: white;
@@ -174,6 +175,10 @@ strong.bigger {
 .win.window-icon-container a:active {
 	background-color: $accent-800;
 }
+.win.window-icon-container svg {
+	margin-top: 2px;
+}
+
 .linux.window-icon-container
 {
 	display: inline-block;
@@ -253,8 +258,12 @@ strong.bigger {
 	margin-top: -60px;
 }
 .menu-button span {
-	margin-top: -30px;
+	/*margin-top: -30px;*/
 }
+/*
+.menu-button svg {
+	margin-top: 10px;
+}*/
 .menu-button:hover {
 	color: $accent-700;
 }

@@ -10,6 +10,7 @@
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+	<link rel="stylesheet" href="bower_components/lumx/dist/css/lumx.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -63,6 +64,7 @@
 		<div class="loader-section section-right"></div>
 	</div>
 	
+	
 	<header class="row header accent-500" ng-controller="ScreenController as screen">
 
 		<div class="frame" mousetrap-keypress="keyboard" ng-class="{left: state.showControlsLeft}">
@@ -115,7 +117,42 @@
 			</span>
 
 		</div>
+		
+		
+    <div class="toolbar bgc-light-blue-500 window-frame">
+        <div class="toolbar__left mr">
+            <button ng-click="expandMenu()" class="btn btn--l btn--black btn--icon" lx-ripple>
+                <i class="mdi mdi--menu"></i>
+            </button>
+        </div>
 
+        <span class="toolbar__label fs-title"><a href="#/" class="logo">
+				<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
+			</a></span>
+
+        <div class="toolbar__right">
+            <lx-dropdown position="right" from-top>
+                <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle>
+                    <i class="mdi mdi--more-vert"></i>
+                </button>
+
+                <lx-dropdown-menu>
+                    <ul>
+                        <li><a class="dropdown-link">Action</a></li>
+                        <li><a class="dropdown-link">Another action</a></li>
+                        <li><a class="dropdown-link">Something else here</a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a class="dropdown-link dropdown-link--is-header">Header</a></li>
+                        <li><a class="dropdown-link">Separated link</a></li>
+                    </ul>
+                </lx-dropdown-menu>
+            </lx-dropdown>
+            
+            <lx-search-filter closed theme="dark" placeholder="Search"></lx-search-filter>
+        </div>
+    </div>
+
+<!--
 		<md-toolbar>
 
 			<div class="md-toolbar-tools window-frame">
@@ -131,7 +168,6 @@
 				<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
 			</a></span>
 
-				<!-- fill up the space between left and right area -->
 				<span class="window-frame" flex></span>
 				
 				<div flex ng-cloak ng-show="state.showSearchControls">
@@ -145,27 +181,11 @@
 					<icon icon="ic_search_24px"></icon>
 				</md-icon>
 			  </md-button>
-				
-	<!--			
-				<md-button href="#/login" aria-label="Sign in" ng-show="!state.isConnecting && state.isAnonymous">
-					<md-tooltip>
-				  Sign in
-				</md-tooltip>
-					<i class="fa fa-sign-in"></i>
-				</md-button>
-
-				<md-button href="#/logout" aria-label="Sign out" ng-show="!state.isConnecting && !state.isAnonymous">
-					<md-tooltip>
-				  Sign out
-				</md-tooltip>
-					<i style="color: black; width: 24px; height: 24px;" class="fa fa-sign-out"></i>
-				</md-button>
--->
-
 
 			</div>
 
 		</md-toolbar>
+-->
 
 
 		<!--
@@ -242,7 +262,7 @@
 
 
 	<div flex layout="row">
-
+		
 		<!--
 		<aside layout="vertical" layout-sm="horizontal" flex-sm="33" flex-md="20">
 			Menu
@@ -264,12 +284,12 @@
 		
 	<md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left menu">
 		
-			<md-toolbar style="min-height: 24px;">
+			<md-toolbar>
 
-				<md-button aria-label="Hide menu" ng-click="closeMenu()" class="md-button-colored">
+				<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button">
 					<md-tooltip>
-				  Hide menu
-				</md-tooltip>
+				  	Hide menu
+					</md-tooltip>
 					<icon icon="ic_keyboard_backspace_24px"></icon>
 				</md-button>
 
@@ -277,7 +297,7 @@
 			<md-tooltip>
 				  Open Flickr Profile
 				</md-tooltip>
-			<img src="images/buddyicon.gif" style="width: 24px; height: 24px;">
+			<img src="images/buddyicon.gif" style="width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
 			{{state.userName}}
 		</md-button>
 				
@@ -302,14 +322,12 @@
 			Settings
 		</md-button>
 		
-		<md-button class="menu-button"  href="#/login" ng-show="!state.isConnecting && state.isAnonymous">
-				
-						<i class="fa fa-sign-in"></i> Sign In
-				
+		<md-button class="menu-button" style="padding-left: 32px;" href="#/login" ng-show="!state.isConnecting && state.isAnonymous">
+					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
 				</md-button>
 
-				<md-button href="#/logout"  class="menu-button"  ng-show="!state.isConnecting && !state.isAnonymous">
-					<i class="fa fa-sign-out"></i> Sign out
+				<md-button href="#/logout" style="padding-left: 32px;" class="menu-button"  ng-show="!state.isConnecting && !state.isAnonymous">
+					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-out"></i> Sign out
 				</md-button>
 		
 		 <span flex></span>
@@ -470,6 +488,9 @@
 	<script src="bower_components/hammerjs/hammer.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
 	<script src="bower_components/underscore/underscore.js"></script>
+	<script src="bower_components/velocity/velocity.js"></script>
+	<script src="bower_components/moment/moment.js"></script>
+	<script src="bower_components/lumx/dist/js/lumx.js"></script>
 	<script src="bower_components/socket.io-client/socket.io.js"></script>	
 	<!-- endbower -->
 	<!-- endbuild -->
