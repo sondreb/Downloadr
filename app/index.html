@@ -355,12 +355,45 @@
 		<div layout="row" layout-align="end" nav-menu="selected">
 		
 			<!--
-			// Implement in v3.0.2
+			// Implement in future release
 			<md-button ng-click="navigateBack()">Back</md-button>
 			-->
 			<div flex></div>
 			
 			<div ng-show="state.actionTarget == 'folder'">
+
+			 <div class="fab">
+					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="License" tooltip-position="left">
+						<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-copyright"></i>
+					</button>
+
+					<div class="fab__actions fab__actions--up">
+						<button ng-if="state.debug" ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
+						--><button ng-if="state.debug" ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
+						--><button ng-class="licenseClass('1,2,3,4,5,6,7,8')" ng-click="selectLicense('1,2,3,4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (All)" tooltip-position="right"><img class="cc-icon" src="images/cc.png"></button><!--
+						--><button ng-class="licenseClass('4,5,6,7,8')" ng-click="selectLicense('4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Commercial Use Allowed" tooltip-position="right"><img class="cc-icon" src="images/by.png"><!--
+						--><button  ng-class="licenseClass('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>
+					</div>
+				</div>
+				
+				<!--
+			<lx-dropdown from-top="false">
+				<button class="btn btn--m btn--black btn--flat" lx-ripple lx-dropdown-toggle>
+					Dropdown toggle
+				</button>
+
+				<lx-dropdown-menu>
+					<ul>
+						<li><a class="dropdown-link" ng-click="dropdownAlert()">Notification</a></li>
+						<li><a class="dropdown-link">Another action</a></li>
+						<li><a class="dropdown-link">Something else here</a></li>
+						<li class="dropdown-divider"></li>
+						<li><span class="dropdown-link dropdown-link--is-header">Header</span></li>
+						<li><a class="dropdown-link">Separated link</a></li>
+					</ul>
+				</lx-dropdown-menu>
+			</lx-dropdown>-->
+				<!--
 				<label for="select-license" title="License"><i class="fa fa-copyright"></i>
 				</label>
 				<select id="select-license" class="select-dark" ng-model="settings.values.license">
@@ -370,12 +403,27 @@
 					<option value="4,5,6,7,8">CC: Commercial Use Allowed</option>
 					<option value="1,2,3">CC: Non Commercial Allowed</option>
 				</select>
+				-->
+				
 			</div>
 
-			<div ng-show="state.actionTarget == 'folder'">
-				<label for="select-sort" title="Sort"><i class="fa fa-arrows-v"></i>
+			<div ng-show="state.actionTarget == 'folder'" style="margin-left: 10px;">
+				
+				<div class="fab">
+					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">
+						<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>
+					</button>
+
+					<div class="fab__actions fab__actions--up">
+						<button ng-class="sortingClass('relevance')" ng-click="selectSort('relevance')" class="btn btn--l btn--raised" lx-ripple>Relevant</button><!--
+--><button ng-class="sortingClass('date-posted-desc')" ng-click="selectSort('date-posted-desc')" class="btn btn--l btn--raised" lx-ripple>Recent</button><!--
+						--><button  ng-class="sortingClass('interestingness-desc')" ng-click="selectSort('interestingness-desc')" class="btn btn--l btn--raised" lx-ripple>Interesting</button>
+					</div>
+				</div>
+				
+				
 				</label>
-				<select id="select-sort" class="select-dark" ng-model="settings.values.sort" ng-options="k as v for (k,v) in sorting"></select>
+				<!--<select id="select-sort" class="select-dark" ng-model="settings.values.sort" ng-options="k as v for (k,v) in sorting"></select>-->
 			</div>
 
 
@@ -397,8 +445,24 @@
 			</div>-->
 
 			<!-- For user simplicity, we will hide most of the size options. -->
-			<div ng-show="state.actionTarget != 'folder'">
+			<div ng-show="state.actionTarget != 'folder'" style="margin-right: 10px;">
+				
+				<div class="fab">
+					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Size" tooltip-position="left">
+						<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>
+					</button>
 
+					<div class="fab__actions fab__actions--up">
+						
+						<button ng-class="sizeClass('o')" ng-click="selectSize('o')" class="btn btn--l btn--raised" lx-ripple>Original</button><!--
+--><button ng-class="sizeClass('b')" ng-click="selectSize('b')" class="btn btn--l btn--raised" lx-ripple>Large</button><!--
+						--><button  ng-class="sizeClass('z')" ng-click="selectSize('z')" class="btn btn--l btn--raised" lx-ripple>Medium</button><!--
+						--><button  ng-class="sizeClass('n')" ng-click="selectSize('n')" class="btn btn--l btn--raised" lx-ripple>Small</button><!--
+						--><button  ng-class="sizeClass('q')" ng-click="selectSize('q')" class="btn btn--l btn--raised" lx-ripple>Square</button>
+					</div>
+				</div>
+				<!--
+				
 				<label for="select-size" title="Size"><i class="fa fa-file-photo-o"></i>
 				</label>
 
@@ -413,55 +477,65 @@
 					<option ng-if="state.debug" value="t">Thumbnail (100)</option>
 					<option value="q">Square (150x150)</option>
 					<option ng-if="state.debug" value="s">Square (75x75)</option>
-				</select>
+				</select>-->
 			</div>
 
-			<div title="Photos selected for download" class="counter" ng-show="state.actionTarget == 'folder' && count">
-				{{count}}<a href="" ng-click="clearSelection()" class="counter-remove" title="Clear photos selection"><i class="fa fa-check"></i></a>
+			<div class="counter" ng-show="state.actionTarget == 'folder' && count">
+				{{count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
 			</div>
 
-			<div title="Photos selected for download" class="counter" ng-hide="count">
-				{{total}}<a href="" class="counter-total" title="Number of search results"><i class="fa fa-check"></i></a>
+			<div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-hide="count">
+				{{total}}<a href="" class="counter-total"><i class="fa fa-check"></i></a>
 			</div>
 
 			<!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
 			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0">
+				
+				<button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
+				<!--
 				<md-button aria-label="NEXT" href="#/folder">
 				<md-tooltip>
 					Go to next screen
 				</md-tooltip>
 						NEXT
 					<icon icon="ic_arrow_forward_24px"></icon>
-				</md-button>
+				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0">
+				
+				<button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
+				<!--
 				<md-button aria-label="NEXT" href="#/folder">
 				<md-tooltip>
 					Go to next screen
 				</md-tooltip>
 						NEXT
 					<icon icon="ic_arrow_forward_24px"></icon>
-				</md-button>
+				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''">
 				
-								<md-button aria-label="DOWNLOAD" href="#/download">
+				<button ng-click="navigate('/download')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
+				<!--
+				<md-button aria-label="DOWNLOAD" href="#/download">
 				<md-tooltip>
 					Start the download of photos
 				</md-tooltip>
 						DOWNLOAD
 					<icon icon="ic_file_download_24px"></icon>
-				</md-button>
+				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''">
 				
+				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
+				<!--
 					<md-button aria-label="DOWNLOAD" href="">
 				<md-tooltip>
 					Start the download of photos.
 				</md-tooltip>
 						DOWNLOAD
 					<icon icon="ic_file_download_24px"></icon>
-				</md-button>
+				</md-button>-->
 			</div>
 
 		</div>
