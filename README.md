@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.49)
+Flickr Downloadr 3 (3.0.70)
 ============
 
 http://flickr-downloadr.com/
@@ -12,13 +12,11 @@ Flickr Downloadr is currently available to official beta testers only:
 
 Install on the Chrome Web Store: https://chrome.google.com/webstore/detail/flickr-downloadr/fpmonoglnknhfnfgeopdjmhpilpejedj
 
-Home Screen:
+Screenshots
 
-![Version 3 Home Screen](/web/public/images/Flickr_3_1.jpg?raw=true "Version 3 Home Screen")
+![Home Screen](/web/public/images/Flickr_Downloadr_02.png?raw=true "Home Screen")
 
-Search Results:
-
-![Version 3 Prototype](/web/public/images/Flickr_3_prototype_1.jpg?raw=true "Version 3 Prototype")
+![Results](/web/public/images/Flickr_Downloadr_06.png?raw=true "Results")
 
 ## Features:
 - Search for photos based upon name, the user account or groups.
