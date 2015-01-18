@@ -10,6 +10,27 @@
 
 	var downloadr = angular.module('downloadr.services', []);
 
+
+	var sidebar = angular.module('Sidebar', []).service('SidebarService', function()
+	{
+		var sidebarIsShown = false;
+
+		function toggleSidebar()
+		{
+			sidebarIsShown = !sidebarIsShown;
+		}
+
+		return {
+			isSidebarShown: function()
+			{
+				return sidebarIsShown;
+			},
+			toggleSidebar: toggleSidebar
+		};
+	});
+
+	
+	
 	downloadr.factory('settings', ['$rootScope', '$timeout',
 		function ($rootScope, $timeout) {
 

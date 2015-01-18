@@ -1,25 +1,22 @@
 <md-content class="content">
 	
-	<md-tabs md-selected="selectedIndex">
-		
-		<md-tab label="Version">
-
-			<div class="page" layout="column" layout-fill layout-align="space-around center">
+	
+    <lx-tabs links-tc="light" links-bgc="light-blue-500" indicator="yellow-500" no-divider="true" z-depth="1">
+        <lx-tab heading="Version">
+            <div class="page" layout="column" layout-fill layout-align="space-around center">
 
 				<div class="app-banner">
 					<img src="/images/icon_96.png" class="app-icon">
 					<h3>Flickr Downloadr</h3>
-					Release v<span app-version></span> (beta)
+					Release v<span app-version></span>
 				</div>
 				<p>
 					Flickr Downloadr is an app that enables you to find and pick photos to download from the Flickr.com service.
 				</p>
 
-				<p>&nbsp;</p>
 				<p>
 					Focus for the app have always been on simplicity and elegance. The main features needed, in the simplest form. The software and service is hosted and provided by <a href="http://brain.no/" target="_blank">brain.no</a>.
 				</p>
-				<p>&nbsp;</p>
 				<md-whiteframe class="md-whiteframe-z2 padding" layout layout-align="center center">
 
 					<p>Support: <a href="mailto:tickets@nobrain.uservoice.com" target="_blank">tickets@nobrain.uservoice.com</a>
@@ -31,11 +28,10 @@
 				<p>This application is a third party application and is not association with Flickr or Yahoo in any way or form.</p>
 
 			</div>
-		</md-tab>
+        </lx-tab>
 
-		<md-tab label="Shortcuts">
-
-			<div class="page" layout="column" layout-fill layout-align="space-around center">
+        <lx-tab heading="Shortcuts">
+            			<div class="page" layout="column" layout-fill layout-align="space-around center">
 				<div>
 					ALT+ENTER: Toggle fullscreen mode.
 					<br>CTRL+S: Perform search
@@ -43,10 +39,9 @@
 
 				</div>
 			</div>
-		</md-tab>
+        </lx-tab>
 
-		<md-tab label="Licenses">
-
+        <lx-tab heading="Licenses">
 			<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<h3>Photo Licenses</h3>
@@ -101,11 +96,10 @@
 				<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
 			</div>
-		</md-tab>
-
-		<md-tab label="Releases">
-
-			<div class="page" layout="column" layout-fill layout-align="space-around">
+        </lx-tab>
+		
+		 <lx-tab heading="Releases">
+       			<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<!--
 				<div layout="row" class="page-row">
@@ -122,6 +116,17 @@
 					</ul>
 				</div>-->
 
+		<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">3.0.0</strong>
+						<br>2015-31-1
+					</div>
+					<ul flex>
+						<li>Changed: Moved from Angular Md for layout to LumX.</li>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0" target="_blank">Release Notes</a>
+					</ul>
+				</div>
+					
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0 beta</strong>
@@ -133,7 +138,7 @@
 						<li>Improved: Made the settings better.</li>
 						<li>Improved: Window frame icons was updated and visual change for Mac users.</li>
 						<li>Improved: Changed the about screen into multiple with a tab control.</li>
-						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0%20beta" target="_blank">https://github.com/sondreb/Downloadr/milestones/3.0.0%20beta</a>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0%20beta" target="_blank">Release Notes</a>
 					</ul>
 				</div>
 
@@ -208,8 +213,32 @@
 				</div>
 
 			</div>
+        </lx-tab>
+    </lx-tabs>
+
+	<!--
+	<md-tabs md-selected="selectedIndex">
+		
+		<md-tab label="Version">
+
+			
+		</md-tab>
+
+		<md-tab label="Shortcuts">
+
+
+		</md-tab>
+
+		<md-tab label="Licenses">
+
+
+		</md-tab>
+
+		<md-tab label="Releases">
+
+
 		</md-tab>
 
 	</md-tabs>
-
+	-->
 </md-content>

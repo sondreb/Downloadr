@@ -233,12 +233,15 @@
 			webview.addEventListener('loadstop', function () {
 
 				if (webview.src.indexOf('oauth_verifier') > -1) {
-
+					
 					console.log('navigating to home!');
 
 					var oauth_token = getParameterByName(webview.src, 'oauth_token');
 					var oauth_verifier = getParameterByName(webview.src, 'oauth_verifier');
 
+					console.log('oauth_token: ', oauth_token);
+					console.log('oauth_verifier: ', oauth_verifier);
+					
 					$scope.$apply(function () {
 
 						// Notify the server so we can transform this token into
@@ -1190,7 +1193,7 @@
 				var farm = data.person.iconfarm;
 				var nsid = data.person.nsid;
 
-				var buddyIconUrl = 'http://farm{icon-farm}.staticflickr.com/{icon-server}/buddyicons/{nsid}.jpg';
+				var buddyIconUrl = 'https://farm{icon-farm}.staticflickr.com/{icon-server}/buddyicons/{nsid}.jpg';
 
 				var url = util.format(buddyIconUrl, {
 					'icon-farm': farm,

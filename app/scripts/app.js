@@ -17,13 +17,14 @@
         'downloadr.filters',
         'downloadr.services',
         'downloadr.directives',
-        'downloadr.controllers'
+        'downloadr.controllers',
+		'lumx'
     ]);
 
 	downloadr.value('version', '3.0.0');
 	downloadr.value('author', 'Sondre Bjellås');
-	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-	//downloadr.value('config_socket_server', 'http://localhost:3000');
+	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
+	downloadr.value('config_socket_server', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
