@@ -1,49 +1,31 @@
+
 <div class="gradient" id="startView">
+	<div class="search-container center" layout="row" flex layout-align="center center">
+	  	
+		<div>
+			<div><h1 class="thin">Hi, what are you looking for?</h1></div><br>
+			<div class="card">
+				<div class="toolbar">
 
-	<div class="search-container search-large center">
-		<h1 class="thin">Hi, what are you looking for?</h1>
-
-		<!--
-		<search class="larger" target="/search" value="state.searchText" ng-search="performSearch()"></search>
--->
-		
-		<div class="grid" style="width: 600px;">
-			
-		<!-- Down direction -->
-    <div class="fab ml">
-        <button class="btn btn--xl btn--black btn--icon" lx-ripple lx-tooltip="Lorem Ipsum" tooltip-position="right">
-            <i class="mdi mdi--apps"></i>
-        </button>
-
-        <div class="fab__actions fab__actions--down">
-            <button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Photos" tooltip-position="right"><i class="mdi mdi--edit"></i></button><!--
-            --><button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Users" tooltip-position="right"><i class="mdi mdi--archive"></i></button><!--
-            --><button class="btn btn--l btn--black btn--fab" lx-ripple lx-tooltip="Groups" tooltip-position="right"><i class="mdi mdi--delete"></i></button>
-        </div>
-    </div>
-			
-			
-			<div class="grid__col6">
-				<div class="card">
-					<div class="toolbar">
+					<!--
+					<div class="toolbar__right">
+						<button class="btn btn--l btn--black btn--icon" lx-ripple>
+							<i class="mdi mdi--apps"></i>
+						</button>
+					</div>-->
 					
-						<div class="toolbar__right">
-							<button class="btn btn--l btn--black btn--icon" lx-ripple>
-								<i class="mdi mdi--apps"></i>
-							</button>
-						</div>
-						
-						<lx-search-filter model="searchFilter.first" filter-width="100%"></lx-search-filter>
-						
-						<!--
-						<div class="toolbar__right">
-								<lx-search-filter model="searchFilter.second" position="right" closed></lx-search-filter>
-						</div>-->
-					</div>
+					<lx-search-filter model="state.searchText" placeholder="Search"></lx-search-filter>
+					
+					<!--
+					<search class="larger" target="/search" value="state.searchText" ng-search="performSearch()"></search>
+					-->
+					
+					<!--
+					<div class="toolbar__right">
+							<lx-search-filter model="searchFilter.second" position="right" closed></lx-search-filter>
+					</div>-->
 				</div>
 			</div>
 		</div>
-		
 	</div>
-
 </div>

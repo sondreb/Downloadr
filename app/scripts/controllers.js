@@ -40,6 +40,11 @@
 	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings',
 		function ($scope, $rootScope, settings) {
 
+			$scope.performSearch = function()
+			{
+				console.log('SEARCH!!!!');
+			}
+			
 			$scope.refreshWallpaper = function () {
 
 				console.log('Refresh Wallpaper');
@@ -197,6 +202,11 @@
 					type: 'Library',
 					text: 'Grunt',
 					url: 'http://gruntjs.com/'
+				},
+				{
+					type: 'Library',
+					text: 'LumX',
+					url: 'http://ui.lumapps.com/'
 				}
 
         ];
@@ -723,6 +733,63 @@
 				}
 
 			});
+			
+			$scope.selectLicense = function(license)
+			{
+				settings.values.license = license;
+			};
+			
+			$scope.licenseClass = function(license)
+			{
+				if (settings.values.license == license)
+				{
+					return 'btn--light-blue';
+				}
+				else
+				{
+					return 'btn--white';
+				}
+			};
+			
+			$scope.sortingClass = function(sort)
+			{
+				if (settings.values.sort == sort)
+				{
+					return 'btn--light-blue';
+				}
+				else
+				{
+					return 'btn--white';
+				}
+			};
+			
+			$scope.selectSort = function(sort)
+			{
+				settings.values.sort = sort;
+			};
+			
+			$scope.sizeClass = function(size)
+			{
+				if (settings.values.size == size)
+				{
+					return 'btn--light-blue';
+				}
+				else
+				{
+					return 'btn--white';
+				}
+			};
+			
+			$scope.selectSize = function(size)
+			{
+				settings.values.size = size;
+			};
+			
+			$scope.navigate = function(url) {
+			
+				$location.path(url);
+				
+			};
 			
 			$scope.navigateBack = function() {
 			

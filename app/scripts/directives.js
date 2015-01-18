@@ -27,17 +27,20 @@
 
 					$timeout(function () {
 
-						if (attrs.ngEnter != null) {
+						//if (attrs.ngEnter != null && $location.path() != attrs.ngEnter) {
 							// First make sure we navigate to the page.
-							$location.path(attrs.ngEnter);
-						}
+						//	$location.path(attrs.ngEnter);
+						//}
 
+						$rootScope.performSearch();
+						
 						// This should check for both undefined and null.
-						if (scope.eventHandler != null) {
+						//if (scope.eventHandler != null) {
 							// If there is any event handler defined on the directive
 							// call the function.
-							scope.eventHandler();
-						}
+						//	scope.eventHandler();
+						//}
+						
 					}, 0);
 
 					event.preventDefault();

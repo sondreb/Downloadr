@@ -31,7 +31,7 @@ chrome.app.runtime.onLaunched.addListener(function () {
 			left: Math.round((screenWidth - width) / 2),
 			top: Math.round((screenHeight - height) / 2),
 			minWidth: 460,
-			minHeight: 340
+			minHeight: 400
 		}
 	});
 
