@@ -40,6 +40,11 @@
 	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings',
 		function ($scope, $rootScope, settings) {
 
+			$scope.performSearch = function()
+			{
+				console.log('SEARCH!!!!');
+			}
+			
 			$scope.refreshWallpaper = function () {
 
 				console.log('Refresh Wallpaper');
@@ -197,6 +202,11 @@
 					type: 'Library',
 					text: 'Grunt',
 					url: 'http://gruntjs.com/'
+				},
+				{
+					type: 'Library',
+					text: 'LumX',
+					url: 'http://ui.lumapps.com/'
 				}
 
         ];

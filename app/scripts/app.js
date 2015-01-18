@@ -8,6 +8,17 @@
 
 (function () {
 
+	// Override the LumX template for lx-search-filter.
+	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter" ng-class="{ \'search-filter--is-focused\': model }">\n' +
+    '    <div class="search-filter__container">\n' +
+    '        <label class="search-filter__label" ng-click="$root.performSearch()" ><i class="mdi mdi--search"></i></label>\n' +
+    '        <input type="text" class="search-filter__input" ng-enter="/search" ng-model="model">\n' +
+    '        <span class="search-filter__cancel" ng-click="clear()"><i class="mdi mdi--cancel"></i></span>\n' +
+    '    </div>\n' +
+    '</div>');
+	 }]);
+	
+	
 	// Create the app module and dependencies.
 	var downloadr = angular.module('downloadr', [
         'ngRoute',
@@ -21,7 +32,7 @@
 		'lumx'
     ]);
 
-	downloadr.value('version', '3.0.0');
+	downloadr.value('version', '3.0.70');
 	downloadr.value('author', 'Sondre Bjellås');
 	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
 	downloadr.value('config_socket_server', 'http://localhost:3000');
@@ -218,6 +229,21 @@
 				// Do we need apply here?
 				$rootScope.$apply();
 			});
+			
+			$rootScope.navigate = function(path)
+			{
+				// This is a major hack to fix the search-filter from LumX and hacking
+				// it so it work properly for this app.
+				var searchElement = $('#top-search').find('.search-filter');
+				
+				console.log('width: ', searchElement.width());
+				
+				// Only navigate if the user have already expanded the search input element.
+				if (searchElement.width() != 40)
+				{
+					$rootScope.performSearch();
+				}
+			};
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
 
@@ -229,6 +255,10 @@
 
 				if (path === '/' || path === '') {
 					$rootScope.state.showSearchControls = false;
+					
+					// If the user navigates back home, we'll clear the existing search value.
+					$rootScope.state.searchText = '';
+					
 				} else {
 					$rootScope.state.showSearchControls = true;
 				}
@@ -243,17 +273,22 @@
 			});
 
 			$rootScope.performSearch = function () {
-
-				if ($rootScope.state.searchText === null || $rootScope.state.searchText === '') {
-					$rootScope.state.searchText = 'Kittens';
+				
+				// If the user have not entered anything, we won't search.
+				if ($rootScope.state.searchText === null || 
+					$rootScope.state.searchText === undefined || 
+					$rootScope.state.searchText === '') {
+					return;
 				}
 
-				console.log('CLICK PERFORM SEARCH: ', $rootScope.state.searchText);
+				console.log('PERFORM SEARCH: ', $rootScope.state.searchText);
 
 				$rootScope.$broadcast('Event:Search', {
 					value: $rootScope.state.searchText
 				});
 
+				$location.path('/search');
+				
 			};
 
 

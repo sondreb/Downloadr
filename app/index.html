@@ -119,7 +119,8 @@
 		</div>
 		
 		
-    <div class="toolbar bgc-light-blue-500 window-frame">
+		<!-- We override the padding here to avoid dynamic resize of the toolbar. -->
+    <div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
         <div class="toolbar__left mr">
             <button ng-click="expandMenu()" class="btn btn--l btn--black btn--icon" lx-ripple>
                 <i class="mdi mdi--menu"></i>
@@ -131,7 +132,9 @@
 			</a></span>
 
         <div class="toolbar__right">
-            <lx-dropdown position="right" from-top>
+            
+			<!--
+			<lx-dropdown position="right" from-top>
                 <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle>
                     <i class="mdi mdi--more-vert"></i>
                 </button>
@@ -147,8 +150,8 @@
                     </ul>
                 </lx-dropdown-menu>
             </lx-dropdown>
-            
-            <lx-search-filter closed theme="dark" placeholder="Search"></lx-search-filter>
+            -->
+            <lx-search-filter model="state.searchText" id="top-search" closed theme="dark" placeholder="Search"></lx-search-filter>
         </div>
     </div>
 
