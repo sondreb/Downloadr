@@ -17,7 +17,7 @@
 	<!-- build:css styles/app.css -->
 	<link rel="stylesheet" href="bower_components/angular/angular-csp.css">
 	<link rel="stylesheet" href="styles/app.css">
-	<link rel="stylesheet" href="bower_components/angular-material/themes/cyan-theme.css" />
+	<link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
 	<!-- endbuild -->
 
 </head>
@@ -122,7 +122,7 @@
 		<!-- We override the padding here to avoid dynamic resize of the toolbar. -->
     <div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
         <div class="toolbar__left mr">
-            <button ng-click="expandMenu()" class="btn btn--l btn--black btn--icon" lx-ripple>
+            <button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
                 <i class="mdi mdi--menu"></i>
             </button>
         </div>
@@ -131,7 +131,7 @@
 				<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
 			</a></span>
 
-        <div class="toolbar__right">
+        <div class="toolbar__right" ng-hide="$location.path() == '/'">
             
 			<!--
 			<lx-dropdown position="right" from-top>
@@ -151,7 +151,9 @@
                 </lx-dropdown-menu>
             </lx-dropdown>
             -->
+			
             <lx-search-filter model="state.searchText" id="top-search" closed theme="dark" placeholder="Search"></lx-search-filter>
+			
         </div>
     </div>
 
@@ -285,23 +287,18 @@
 
 	<span ng-controller="MenuController">
 		
-	<md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left menu">
+	<md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left md-whiteframe-z2 menu">
 		
 			<md-toolbar>
 
-				<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button">
-					<md-tooltip>
-				  	Hide menu
-					</md-tooltip>
+				<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button bgc-light-blue-500">
 					<icon icon="ic_keyboard_backspace_24px"></icon>
 				</md-button>
 
-		<md-button  ng-hide="state.isAnonymous" class="menu-button" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
-			<md-tooltip>
-				  Open Flickr Profile
-				</md-tooltip>
-			<img src="images/buddyicon.gif" style="width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
-			{{state.userName}}
+		<md-button  ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
+			<img src="images/buddyicon.gif" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
+			<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
+			
 		</md-button>
 				
 					
@@ -325,11 +322,11 @@
 			Settings
 		</md-button>
 		
-		<md-button class="menu-button" style="padding-left: 32px;" href="#/login" ng-show="!state.isConnecting && state.isAnonymous">
+		<md-button class="menu-button" href="#/login" ng-show="!state.isConnecting && state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
 				</md-button>
 
-				<md-button href="#/logout" style="padding-left: 32px;" class="menu-button"  ng-show="!state.isConnecting && !state.isAnonymous">
+				<md-button href="#/logout" class="menu-button"  ng-show="!state.isConnecting && !state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-out"></i> Sign out
 				</md-button>
 		
@@ -446,6 +443,18 @@
 
 			<!-- For user simplicity, we will hide most of the size options. -->
 			<div ng-show="state.actionTarget != 'folder'" style="margin-right: 10px;">
+				
+			<!--
+				Icons for future use: md-view-headline, md-view-list, md-view-module
+				md-open-in-browser
+md-clear
+md-sort
+md-file-download
+md-check
+md-close
+
+				-->
+				
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Size" tooltip-position="left">
@@ -568,7 +577,7 @@
 	<script src="bower_components/velocity/velocity.js"></script>
 	<script src="bower_components/moment/moment.js"></script>
 	<script src="bower_components/lumx/dist/js/lumx.js"></script>
-	<script src="bower_components/socket.io-client/socket.io.js"></script>	
+	<script src="bower_components/socket.io-client/socket.io.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->
 

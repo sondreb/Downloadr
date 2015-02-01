@@ -1,6 +1,6 @@
 /*!
  * Flickr Downloadr
- * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
+ * Copyright: 2007-2015 Sondre Bjellås. http://sondreb.com/
  * License: MIT
  */
 
@@ -37,8 +37,8 @@
 
     }]);
 
-	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings',
-		function ($scope, $rootScope, settings) {
+	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings', '$document',
+		function ($scope, $rootScope, settings, $document) {
 
 			$scope.performSearch = function()
 			{

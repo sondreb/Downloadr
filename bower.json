@@ -17,8 +17,8 @@
     "jquery": "latest",
     "material-design-icons": "latest",
     "angular-material": "master",
-    "underscore": "~1.7.0",
-    "lumx": "~0.2.47"
+    "underscore": "latest",
+    "lumx": "latest"
   },
   "devDependencies": {
     "angular-mocks": "latest",

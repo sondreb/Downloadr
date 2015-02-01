@@ -1,6 +1,6 @@
 /*!
  * Flickr Downloadr
- * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
+ * Copyright: 2007-2015 Sondre Bjellås. http://sondreb.com/
  * License: MIT
  */
 
@@ -9,6 +9,7 @@
 (function () {
 
 	// Override the LumX template for lx-search-filter.
+	/*
 	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter" ng-class="{ \'search-filter--is-focused\': model }">\n' +
     '    <div class="search-filter__container">\n' +
     '        <label class="search-filter__label" ng-click="$root.performSearch()" ><i class="mdi mdi--search"></i></label>\n' +
@@ -17,7 +18,7 @@
     '    </div>\n' +
     '</div>');
 	 }]);
-	
+	*/
 	
 	// Create the app module and dependencies.
 	var downloadr = angular.module('downloadr', [
@@ -423,9 +424,11 @@
 			//Flickr.Authenticate();
     }]);
 
-	downloadr.config(['$routeProvider',
-		function ($routeProvider)
+	downloadr.config(['$routeProvider', '$mdThemingProvider',
+		function ($routeProvider, $mdThemingProvider)
 		{
+			 $mdThemingProvider.theme('cyan');
+			
 			$routeProvider.when('/', {
 				templateUrl: '/views/home.html',
 				controller: 'HomeController'

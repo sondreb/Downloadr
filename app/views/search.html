@@ -1,5 +1,25 @@
-<div id="gallery" class="thumbs">
+<div id="gallery" class="thumbs grid">
 
+	
+	
+	<figure ng-repeat="photo in photos" class="effect-winston">
+		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
+		<figcaption>
+			<h2>{{photo.title}}</h2>
+			<p>
+				<a href="#"><i><icon icon="ic_more_horiz_24px"></icon></i>
+
+				</a>
+				<a href="#"><i class="fa fa-fw fa-comments-o"></i></a>
+				<a href="#"><i class="fa fa-fw fa-envelope-o"></i></a>
+			</p>
+		</figcaption>			
+	</figure>
+	
+	
+	
+	
+	
 	<a ng-repeat="photo in photos" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)" class="link" ng-class="{selectedThumbnail: photo.selected}" href="" ng-click="selectPhoto(photo)" repeat-done>
 		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
 	</a>
