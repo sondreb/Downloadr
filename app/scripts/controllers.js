@@ -406,6 +406,13 @@
 				
 			};
 			
+			$scope.showMenu = function(photo)
+			{
+				var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
+				console.log('Open: ', url);
+				window.open(url);
+			};
+			
 			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
 			$scope.selectPhoto = function (photo) {
 				
