@@ -11,14 +11,19 @@
 		</figcaption>			
 	</figure>
 	
+	<div class="clear"></div>
 	
+	<div style="padding: 10px;">
+	<md-button class="menu-button" ng-click="loadMore()">
+			Load more...
+		</md-button>
+	</div>
 	
-	
-	
+	<!--
 	<a ng-repeat="photo in photos" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)" class="link" ng-class="{selectedThumbnail: photo.selected}" href="" ng-click="selectPhoto(photo)" repeat-done>
 		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
 	</a>
-
+-->
 	<!--
   <ul>
     <li ng-repeat="photo in photos"><a href="" ng-click="selectPhoto(photo)"><img ng-src="{{photo.url}}" ng-class="{selectedThumbnail: photo.selected}" title="{{photo.title}}" alt="{{photo.title}}"></a></li>
@@ -32,6 +37,7 @@
 		<img src="/images/loading.gif">
 	</div>-->
 
+	<!--
 	<div class="clear middle"><p>Fetching photos...</p></div>
 	
 	
@@ -47,6 +53,6 @@
 	<div class="text" id="text3">Text 3</div>
 	<div class="big" id="big3">3</div>
 
-	</div>
+	</div>-->
 	
 </div>

@@ -29,13 +29,27 @@
 			</div>
         </lx-tab>
 
-        <lx-tab heading="Shortcuts">
-            			<div class="page" layout="column" layout-fill layout-align="space-around center">
+        <lx-tab heading="Learn">
+            <div class="page" layout="column" layout-fill layout-align="space-around center">
+				
+				<h2>Search and Download</h2>
+				<p>
+				Search, select photos, pick folder, download and wait. You can search multiple times and pick photos from different searches,
+					before you start the download process.
+				</p>
+				
+				<h2>Existing files?</h2>
+				
+				<p>
+					If there is existing files with the same filename, Flickr Downloadr will append a random
+					four character value to the filename. This ensures no interuption during download.
+				</p>
+				
+				<h2>Shortcuts</h2>
 				<div>
 					ALT+ENTER: Toggle fullscreen mode.
 					<br>CTRL+S: Perform search
 					<br>
-
 				</div>
 			</div>
         </lx-tab>
@@ -114,8 +128,20 @@
 						</li>
 					</ul>
 				</div>-->
-
-		<div layout="row" class="page-row">
+				
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger"><span app-version></span></strong>
+						<br>2015-14-1
+					</div>
+					<ul flex>
+						<li>Improved: If photo already exists on disk, saves with an extra 4 random characters.</li>
+						<li>Fixed: Size selection now works as expected.</li>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.80" target="_blank">Release Notes</a>
+					</ul>
+				</div>	
+					
+				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.70</strong>
 						<br>2015-31-1
@@ -123,10 +149,10 @@
 					<ul flex>
 						<li>Changed: Moved from Angular Md for layout to LumX.</li>
 						<li>Improved: Fixed most visual layout issues.</li>
-						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0" target="_blank">Release Notes</a>
+						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.70" target="_blank">Release Notes</a>
 					</ul>
-				</div>
-					
+				</div>			
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0 beta</strong>
@@ -151,7 +177,7 @@
 						<li>Full rewrite of the app, built on HTML5 technologies.</li>
 					</ul>
 				</div>
-
+				
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">2.0.4</strong>

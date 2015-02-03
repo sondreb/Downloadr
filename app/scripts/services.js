@@ -214,6 +214,9 @@
 						}
 					});
 				})
+			},
+			removeAllListeners: function(eventName) {
+				socket.removeAllListeners(eventName);
 			}
 		};
 	}]);

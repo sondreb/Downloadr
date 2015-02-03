@@ -43,11 +43,13 @@
         'downloadr.controllers',
 		'lumx'
     ]);
-
-	downloadr.value('version', '3.0.70');
+	
+	var manifest = chrome.runtime.getManifest();
+	
+	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
-	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-	downloadr.value('config_socket_server', 'http://localhost:3000');
+	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
+	//downloadr.value('config_socket_server', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
@@ -225,7 +227,9 @@
 				
 				userId: '',
 				
-				userName: ''
+				userName: '',
+				
+				firstRun: true
 
 			};
 			
@@ -246,15 +250,15 @@
 			{
 				// This is a major hack to fix the search-filter from LumX and hacking
 				// it so it work properly for this app.
-				var searchElement = $('#top-search').find('.search-filter');
+				//var searchElement = $('#top-search').find('.search-filter');
 				
-				console.log('width: ', searchElement.width());
+				//console.log('width: ', searchElement.width());
 				
 				// Only navigate if the user have already expanded the search input element.
-				if (searchElement.width() != 40)
-				{
-					$rootScope.performSearch();
-				}
+				//if (searchElement.width() != 40)
+				//{
+				//	$rootScope.performSearch();
+				//}
 			};
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -284,6 +288,7 @@
 
 			});
 
+			
 			$rootScope.performSearch = function () {
 				
 				// If the user have not entered anything, we won't search.
@@ -295,12 +300,14 @@
 
 				console.log('PERFORM SEARCH: ', $rootScope.state.searchText);
 
+				// Navigate and load SearchController.
+				$location.path('/search');
+				
+				// Raise the search event which the SearchController listens to.
 				$rootScope.$broadcast('Event:Search', {
 					value: $rootScope.state.searchText
 				});
 
-				$location.path('/search');
-				
 			};
 
 

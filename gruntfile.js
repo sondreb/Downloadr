@@ -400,8 +400,14 @@ module.exports = function (grunt) {
 						cwd: 'app/bower_components/font-awesome/fonts/',
 						src: ['*.*'],
 						dest: '<%= config.dist %>/fonts'
-            }
-
+            		},
+					{
+						expand: true,
+						dot: true,
+						cwd: 'app/bower_components/lumx/dist/fonts/md-icons/',
+						src: ['*.*'],
+						dest: '<%= config.dist %>/fonts/md-icons'
+            		}
                 ]
 			},
 			styles: {
