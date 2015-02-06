@@ -231,19 +231,19 @@ module.exports = function (grunt) {
 
 		wiredep: {
 			task: {
-				// Point to the files that should be updated when
-				// you run `grunt wiredep`
-				src: [
-              '<%= config.app %>/index.html'
-            ],
+					// Point to the files that should be updated when
+					// you run `grunt wiredep`
+					src: [
+				  '<%= config.app %>/index.html'
+				],
 
-				options: {
-					// See wiredep's configuration documentation for the options
-					// you may pass:
+					options: {
+						// See wiredep's configuration documentation for the options
+						// you may pass:
 
-					// https://github.com/taptapship/wiredep#configuration
+						// https://github.com/taptapship/wiredep#configuration
+					}
 				}
-			}
 		},
 
 		// Reads HTML for usemin blocks to enable smart builds that automatically
@@ -341,7 +341,7 @@ module.exports = function (grunt) {
 		copy: {
 			dev: {
 				files: [{
-					cwd: '<%= config.app %>/bower_components/material-design-icons/',
+					cwd: 'bower_components/material-design-icons/',
 					src: ['navigation/svg/production/ic_refresh_24px.svg',
 						  'action/svg/production/ic_search_24px.svg',
 						  'action/svg/production/ic_help_24px.svg',
@@ -377,7 +377,7 @@ module.exports = function (grunt) {
 					expand: true
 				},
 				{
-					cwd: '<%= config.app %>/bower_components/font-awesome/fonts/',
+					cwd: 'bower_components/font-awesome/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.app %>/fonts',
 					expand: true,
@@ -386,7 +386,7 @@ module.exports = function (grunt) {
 				{
 					expand: true,
 					dot: true,
-					cwd: '<%= config.app %>/bower_components/mdi/fonts/',
+					cwd: 'bower_components/mdi/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.app %>/fonts/'
 				}]
@@ -409,14 +409,14 @@ module.exports = function (grunt) {
 				{
 					expand: true,
 					dot: true,
-					cwd: 'app/bower_components/font-awesome/fonts/',
+					cwd: 'bower_components/font-awesome/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.dist %>/fonts'
 				},
 				{
 					expand: true,
 					dot: true,
-					cwd: 'app/bower_components/mdi/fonts/',
+					cwd: 'bower_components/mdi/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.dist %>/fonts/'
 				}

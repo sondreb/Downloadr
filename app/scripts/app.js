@@ -316,7 +316,8 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 				
 				// Raise the search event which the SearchController listens to.
 				$rootScope.$broadcast('Event:Search', {
-					value: $rootScope.state.searchText
+					value: $rootScope.state.searchText,
+					clear: true
 				});
 
 			};
