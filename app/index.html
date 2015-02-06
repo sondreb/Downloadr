@@ -327,9 +327,6 @@
 	</md-sidenav>
 	</span>
 
-	
-	
-	
 	<div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
 		
 		
@@ -491,7 +488,7 @@ md-close
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0">
 				
-				<button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
+				<button ng-click="navigate('/folder')" disabled style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
 				<!--
 				<md-button aria-label="NEXT" href="#/folder">
 				<md-tooltip>
