@@ -15,35 +15,35 @@
 			return (input || []).join(delimiter || ',');
 		};
 	});
-	
-	filters.filter('iconLink', function() {
-        return function(stringValue) {
-            return '#icon-' + stringValue;
-        };
-    });
 
-	filters.filter('iconLinkNormal', function() {
-        return function(stringValue) {
-            return '#icon-' + stringValue + '-normal';
-        };
-    });
-	
-	filters.filter('iconLinkHover', function() {
-        return function(stringValue) {
-            return '#icon-' + stringValue + '-hover';
-        };
-    });
-	
-	filters.filter('iconLinkActive', function() {
-        return function(stringValue) {
-            return '#icon-' + stringValue + '-press';
-        };
-    });
-	
-	filters.filter('iconLinkNoFocus', function() {
-        return function(stringValue) {
-            return '#icon-' + stringValue + '-nofocus';
-        };
-    });
-	
+	filters.filter('iconLink', function () {
+		return function (stringValue) {
+			return '#icon-' + stringValue;
+		};
+	});
+
+	filters.filter('iconLinkNormal', function () {
+		return function (stringValue) {
+			return '#icon-' + stringValue + '-normal';
+		};
+	});
+
+	filters.filter('iconLinkHover', function () {
+		return function (stringValue) {
+			return '#icon-' + stringValue + '-hover';
+		};
+	});
+
+	filters.filter('iconLinkActive', function () {
+		return function (stringValue) {
+			return '#icon-' + stringValue + '-press';
+		};
+	});
+
+	filters.filter('iconLinkNoFocus', function () {
+		return function (stringValue) {
+			return '#icon-' + stringValue + '-nofocus';
+		};
+	});
+
 })();

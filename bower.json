@@ -18,8 +18,7 @@
     "material-design-icons": "latest",
     "angular-material": "master",
     "underscore": "latest",
-    "lumx": "latest",
-    "winjs": "*"
+    "lumx": "latest"
   },
   "devDependencies": {
     "angular-mocks": "latest",

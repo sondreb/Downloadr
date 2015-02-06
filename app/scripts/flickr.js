@@ -37,7 +37,7 @@ var Flickr = (function () {
 	};
 
 	var buildUrl = function (method, query) {
-		var apiKey = '519594a5d8ab2bb0e42d75d54d2bca87';
+		var apiKey = _consumerKey;
 		var apiUrl = 'https://api.flickr.com/services/rest/?method=';
 		query += '&format=json&api_key=' + apiKey;
 

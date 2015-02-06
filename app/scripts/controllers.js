@@ -40,7 +40,7 @@
 	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings', '$document',
 		function ($scope, $rootScope, settings, $document) {
 
-			
+
 			$scope.refreshWallpaper = function () {
 
 				console.log('Refresh Wallpaper');
@@ -85,31 +85,6 @@
 			$rootScope.state.background = 'wallpaper-3';
 
 			$scope.settings = settings.values;
-
-			/*
-        hotkeys.add({
-            combo: 'ctrl+up',
-            description: 'Move selection up',
-            callback: function() {
-                $scope.credits = null;
-            }
-        });
-
-        hotkeys.add({
-            combo: 's',
-            description: 'Move selection up',
-            callback: function() {
-                $scope.credits = null;
-            }
-        });
-
-
-        hotkeys.add({
-            combo: 'ctrl+j',
-            callback: function() {
-                //alert('Easter Egg!');
-            }
-        });*/
 
 			$scope.state = {
 				isLoggedIn: false
@@ -213,7 +188,7 @@
 		function ($scope, $rootScope, $location, socket) {
 
 			$rootScope.state.background = 'wallpaper-3';
-			
+
 			$scope.user = {
 				username: '',
 				password: ''
@@ -239,7 +214,7 @@
 			webview.addEventListener('loadstop', function () {
 
 				if (webview.src.indexOf('oauth_verifier') > -1) {
-					
+
 					console.log('navigating to home!');
 
 					var oauth_token = getParameterByName(webview.src, 'oauth_token');
@@ -247,7 +222,7 @@
 
 					console.log('oauth_token: ', oauth_token);
 					console.log('oauth_verifier: ', oauth_verifier);
-					
+
 					$scope.$apply(function () {
 
 						// Notify the server so we can transform this token into
@@ -287,9 +262,6 @@
 
 				// Navigate to home.
 				$location.path('/#');
-
-				//flickr.DeleteToken();
-				//$scope.authenticatingEvent(null);
 			};
 
 			$scope.back = function () {
@@ -299,17 +271,15 @@
 				$location.path('/#');
 
 			};
-
-			//$rootScope.state.background = 'wallpaper';
-			//$scope.search = { text: '' };
-
     }]);
 
-	
+
 	function isScrolledIntoView(elem) {
+
 		if ($(elem).length == 0) {
 			return false;
 		}
+
 		var docViewTop = $(window).scrollTop();
 		var docViewBottom = docViewTop + $(window).height();
 
@@ -334,7 +304,7 @@
 			console.log(isScrolledIntoView(this), this);
 		});
 	});
-	
+
 
 	controllers.controller('SearchController', ['$scope', '$rootScope',
     '$location', '$http',
@@ -342,36 +312,37 @@
     'flickr', 'settings',
 		function ($scope, $rootScope, $location, $http, $timeout, socket, flickr, settings) {
 
-
-			console.log('CREATING SEARCH CONTROLLER!!!');
-			
-			//$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
-
 			$rootScope.state.background = 'wallpaper-dark';
 			$rootScope.state.showActions = true;
 			$rootScope.state.actionTarget = 'folder';
-			
+
+			$scope.photos = [];
+			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
+			$scope.total = 0;
+			$scope.page = 1;
+
 			$scope.$on('$destroy', function (event) {
-				
+
 				console.log('Destroy: SearchController... Cleaning up Resources...');
-				
+
 				socket.removeAllListeners('urlSigned');
-				
+
 				// Whenever the user navigates away from SearchController, make sure
 				// we cleanup resources in use.
 				$scope.clearPhotos();
-				
+
 				// Remove global event listeners.
 				$scope.onSearchEvent();
 				$scope.onFilterEvent();
 				$scope.onPagingEvent();
 			});
-			
+
 			// Hook up handler to the scroll event when DOM is ready.
+			// This is kept for future feature addition, need to have automatic scrolling and search.
 			//angular.element(document).ready(function () {
 			//	$('#presenter').on('scroll', function() { console.log('scroll event'); });
 			//});
-			
+
 			/*
 			$('#presenter').scroll(function() {
 			   if($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -383,17 +354,16 @@
 				console.log('$(document).height(): ', $(document).height());
 				
 			});*/
-			
+
 			$scope.onSearchEvent = $rootScope.$on('Event:Search', function (event, data) {
 
 				console.log('User did a new search...');
 				$rootScope.state.searchText = data.value;
-				
-				if (data.clear === true)
-				{
+
+				if (data.clear === true) {
 					$scope.clearPhotos();
 				}
-				
+
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
@@ -401,53 +371,51 @@
 			$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
 
 				$scope.clearPhotos();
-				
+
 				console.log('User changed filter...');
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
-			
+
 			$scope.onPagingEvent = $rootScope.$on('Event:Paging', function (event) {
 
 				console.log('User changed paging...');
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
-			
-			$scope.loadMore = function()
-			{
+
+			$scope.loadMore = function () {
 				$rootScope.$broadcast('Event:Paging');
 			}
 
 			$scope.loadImage = function (item, callback) {
-				
+
 				var xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
-				
+
 				xhr.onload = function () {
 					callback(window.webkitURL.createObjectURL(xhr.response), item);
 				};
-				
+
 				xhr.open('GET', item.uri, true);
 				xhr.send();
-				
+
 			};
-			
-			$scope.showMenu = function(photo)
-			{
+
+			$scope.showMenu = function (photo) {
 				var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
 				console.log('Open: ', url);
 				window.open(url);
 			};
-			
+
 			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
 			$scope.selectPhoto = function (photo) {
-				
+
 				if (photo.selected === true) {
 					photo.selected = false;
-					
+
 					$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, photo);
-					
+
 				} else {
 					photo.selected = true;
 					$rootScope.state.selectedPhotos.push(photo);
@@ -459,52 +427,38 @@
 
 				console.log('Select photo: ', photo);
 			};
-			
+
 			// for each image with no imageUrl, start a new loader
 			$scope.loadImages = function () {
 
 				var photos = $scope.photos;
 
 				console.log('PHOTOS!!!: ', photos);
-				
+
 				for (var i = 0; i < photos.length; i++) {
 
 					var item = photos[i];
-					
+
 					// Skip all photos already downloaded.
-					//console.log('item.url: ', item.url);
-					
 					if (item.url !== undefined) {
 						continue;
 					}
-					
+
 					item.uri = item.getUrl('m');
 
 					// We are about to download the last photo, we can prepare for next search (scrolling).
-					if (i === (photos.length - 1))
-					{
+					if (i === (photos.length - 1)) {
 						console.log('i == photos.length!');
 						$scope.page = $scope.page + 1;
-						
-						//if ($scope.page < 3)
-						//{
-							//$rootScope.$broadcast('Event:Paging');
-						//}
 					}
-					
-					$scope.loadImage(item, function (blob_uri, originalItem) {
 
-						// We really should have a better way of maintaining a list of
-						// locally downloaded thumbnails, but this have to do for now to
-						// avoid memory leak.
-						//$rootScope.objectURLs = $rootScope.objectURLs || [];
-						//$rootScope.objectURLs.push(blob_uri);
+					$scope.loadImage(item, function (blob_uri, originalItem) {
 
 						$timeout(function () {
 
 							console.log('BLOB: ', blob_uri);
 							originalItem.url = blob_uri;
-							
+
 						}, 0);
 
 					});
@@ -512,14 +466,6 @@
 				}
 			};
 
-			$scope.photos = [];
-
-			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
-
-			$scope.total = 0;
-			
-			$scope.page = 1;
-			
 			$scope.onUrlSigned = function (message) {
 
 				var url = 'https://' + message.hostname + message.path;
@@ -532,18 +478,17 @@
 
 					var list = data.photos.photo;
 					$scope.total = data.photos.total;
-					
+
 					var paging = data.photos.page > 1;
 
 					// If we are paging, we should not delete the existing photos.
-					if (!paging)
-					{
+					if (!paging) {
 						$rootScope.$broadcast('Event:SelectedPhotosChanged', {
 							total: $scope.total,
 							photos: $rootScope.state.selectedPhotos
 						});
 					}
-					
+
 					// Could we perhaps use prototype instead of this silly loop?
 					for (var i = 0; i < list.length; i++) {
 						var item = list[i];
@@ -554,8 +499,6 @@
 						// size. Depending on the original photo, not all sizes are
 						// available so this function will search for the largest.
 						item.getUrl = function (photoSize) {
-
-							//console.log('WHAT IS SIZE: ', photoSize);
 
 							// If the specified size exists, return that.
 							if (this['url_' + photoSize] !== undefined) {
@@ -589,19 +532,16 @@
 						};
 					}
 
-					if (!paging)
-					{
+					if (!paging) {
 						$scope.clearPhotos();
-						
+
 						// Bind to the UI.
 						$scope.photos = list;
-					}
-					else
-					{
+					} else {
 						// Append new photos to existing list.
 						$scope.photos = $scope.photos.concat(list);
 					}
-					
+
 					// Begin download the thumbnails.
 					$scope.loadImages();
 				}).
@@ -616,9 +556,8 @@
 
 			// Register handler for callbacks of signing URLs.
 			socket.on('urlSigned', $scope.onUrlSigned);
-			
-			$scope.clearPhotos = function()
-			{
+
+			$scope.clearPhotos = function () {
 				// Remove existing downloaded photos to avoid memory leak.
 				$scope.clearObjectURLs();
 
@@ -629,6 +568,8 @@
 			// Clears up all the blob files that was previously downloaded. For future
 			// informational reference, the blob-links under "Resources" in the Developer Tools
 			// does still list the old blobs, but their binary content is actually deleted.
+			//
+			// This task is important to avoid memory leak.
 			//
 			// TODO: Create a cleanup method on this controller and make sure it's called when needed.
 			$scope.clearObjectURLs = function () {
@@ -647,7 +588,7 @@
 			};
 
 			$scope.performSearch = function (searchTerm) {
-				
+
 				// Get a prepared message that includes token.
 				// Until we know exactly what metadata we need, we'll ask for all extras.
 				var message = flickr.createMessage('flickr.photos.search', {
@@ -662,24 +603,16 @@
 				console.log('Sign URL message: ', message);
 				socket.emit('signUrl', message);
 			};
-			
+
 			$scope.init = function () {
 
-				//if ($rootScope.state.firstRun)
-				//{
-					//$rootScope.state.firstRun = false;
-					
-					console.log('SearchController: init.');
-				
-					// This is first run, meaning user have probably performed search from
-					// home view. Read the state and perform search now.
-					$scope.performSearch($rootScope.state.searchText);
-				//}
-				
+				// This is first run, meaning user have probably performed search from
+				// home view. Read the state and perform search now.
+				$scope.performSearch($rootScope.state.searchText);
+
 			};
 
 			$scope.init();
-
     }]);
 
 
@@ -764,7 +697,7 @@
 				// Make sure we save settings when user changes dropdowns.
 				// We do this, to remember the selections for next search.
 				settings.save();
-				
+
 				// We should re-run the search with changed settings.
 				$rootScope.$broadcast('Event:Filter');
 
@@ -782,73 +715,58 @@
 				}
 
 			});
-			
-			$scope.selectLicense = function(license)
-			{
+
+			$scope.selectLicense = function (license) {
 				settings.values.license = license;
 			};
-			
-			$scope.licenseClass = function(license)
-			{
-				if (settings.values.license == license)
-				{
+
+			$scope.licenseClass = function (license) {
+				if (settings.values.license == license) {
 					return 'btn--light-blue';
-				}
-				else
-				{
+				} else {
 					return 'btn--white';
 				}
 			};
-			
-			$scope.sortingClass = function(sort)
-			{
-				if (settings.values.sort == sort)
-				{
+
+			$scope.sortingClass = function (sort) {
+				if (settings.values.sort == sort) {
 					return 'btn--light-blue';
-				}
-				else
-				{
+				} else {
 					return 'btn--white';
 				}
 			};
-			
-			$scope.selectSort = function(sort)
-			{
+
+			$scope.selectSort = function (sort) {
 				settings.values.sort = sort;
 			};
-			
-			$scope.sizeClass = function(size)
-			{
-				if (settings.values.size == size)
-				{
+
+			$scope.sizeClass = function (size) {
+				if (settings.values.size == size) {
 					return 'btn--light-blue';
-				}
-				else
-				{
+				} else {
 					return 'btn--white';
 				}
 			};
-			
-			$scope.selectSize = function(size)
-			{
+
+			$scope.selectSize = function (size) {
 				settings.values.size = size;
 			};
-			
-			$scope.navigate = function(url) {
-			
+
+			$scope.navigate = function (url) {
+
 				$location.path(url);
-				
+
 			};
-			
-			$scope.navigateBack = function() {
-			
+
+			$scope.navigateBack = function () {
+
 				console.log('Navigate back');
 				$location.path($rootScope.state.previouspath);
-				
+
 			};
 
 			$scope.clearSelection = function () {
-				
+
 				$rootScope.state.selectedPhotos.forEach(function (photo) {
 					photo.selected = false;
 				});
@@ -862,15 +780,12 @@
 			$scope.count = 0;
 
     }]);
-	
-	
+
+
 	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog',
 		function ($scope, $rootScope, notify, settings, $mdDialog) {
 
 			$rootScope.state.background = 'wallpaper-light';
-
-			
-	
 
 			function errorHandler(err) {
 				console.log('ERROR!! : ', err);
@@ -891,28 +806,27 @@
 			$scope.count = 0;
 			$scope.photoNumber = 1;
 			$scope.completed = false;
-			
-			 $scope.showConfirm = function(accept, cancel) {
 
-			   var confirm = $mdDialog.confirm()
-				  .title('One more more files already exists!')
-				  .content('Would you like to skip those photos or overwrite existing ones?')
-				  .ariaLabel('Already exists')
-				  .ok('Overwrite existing')
-				  .cancel('Skip existing');
+			$scope.showConfirm = function (accept, cancel) {
 
-				$mdDialog.show(confirm).then(function() {
+				var confirm = $mdDialog.confirm()
+					.title('One more more files already exists!')
+					.content('Would you like to skip those photos or overwrite existing ones?')
+					.ariaLabel('Already exists')
+					.ok('Overwrite existing')
+					.cancel('Skip existing');
+
+				$mdDialog.show(confirm).then(function () {
 					accept();
-				}, function() {
+				}, function () {
 					cancel();
 				});
 
-			  };
-			
-			$scope.writeFile = function(index, fileName, entry, blob_uri, retry)
-			{
+			};
+
+			$scope.writeFile = function (index, fileName, entry, blob_uri, retry) {
 				console.log('Write file: ', fileName);
-				
+
 				// Create the file on disk.
 				entry.getFile(fileName, {
 					create: true,
@@ -935,11 +849,11 @@
 
 							var percentage = $scope.photoNumber * 100 / $scope.count;
 
-								if (settings.values.progress) {
-							// Should we do Pause/Cancel buttons for this notification?
-							notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
-								'You will be notified when download is completed.',
-								function (id) {}, Math.round(percentage));
+							if (settings.values.progress) {
+								// Should we do Pause/Cancel buttons for this notification?
+								notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
+									'You will be notified when download is completed.',
+									function (id) {}, Math.round(percentage));
 
 							}
 
@@ -955,19 +869,16 @@
 				}, function (err) {
 
 					// If the error is caused by file existing, we'll generate random name and retry.
-					if (err.name == 'InvalidModificationError' && !retry)
-					{
+					if (err.name == 'InvalidModificationError' && !retry) {
 						var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
 						var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
 						var newFullName = newFileName + '_' + $scope.uniqueName() + newFileNameExt;
-						
+
 						console.log('Unable to write file to disk... Retry with new filename: ', newFullName);
-						
+
 						// Retry with new filename.
 						$scope.writeFile(index, newFullName, entry, blob_uri, true);
-					}
-					else
-					{
+					} else {
 						console.log(photo);
 
 						//$scope.showConfirm(function() { console.log('accept'); }, function() { console.log('cancel'); });
@@ -975,13 +886,13 @@
 						console.log('Unable to write file to disk...');
 						console.log(err);
 					}
-					
+
 				});
 
 			};
-							  
-			$scope.uniqueName = function() {
-    			return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4);
+
+			$scope.uniqueName = function () {
+				return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 			};
 
 			$scope.processPhoto = function (index) {
@@ -1004,9 +915,9 @@
 						$rootScope.state.searchText = '';
 						$rootScope.state.selectedPhotos = [];
 						$scope.completed = true;
-						
+
 						if (settings.values.completed) {
-							
+
 							notify('success', 'basic', 'Download Complete',
 								'All ' + $scope.count + ' photos have been saved successfully.',
 								function (id) {
@@ -1025,11 +936,11 @@
 				$scope.loadImage(photo, size, function (blob_uri, originalItem) {
 
 					console.log('blob_uri: ', blob_uri);
-					
+
 					var fileName = photo.getFileName(size);
-					
+
 					$scope.writeFile(index, fileName, entry, blob_uri);
-					
+
 
 				});
 			};
@@ -1046,11 +957,6 @@
 
 				$scope.processPhoto(index);
 
-				/*
-          for(var i=0;i<photos.length;i++) {
-
-          };*/
-
 			});
     }]);
 
@@ -1058,9 +964,11 @@
 		function ($scope, $rootScope) {
 
 			$rootScope.state.background = 'wallpaper-light';
-			
 			$rootScope.state.actionTarget = 'download';
 			$rootScope.state.showActions = true;
+
+			$scope.count = 0;
+			$scope.path = '';
 
 			/**
 			 * @param {string} File name.
@@ -1070,20 +978,6 @@
 			$scope.sanitizeFileName = function (fileName) {
 				return fileName.replace(/[^a-z0-9\-]/gi, ' ').substr(0, 50).trim();
 			};
-
-
-			/*
-      var folder = document.getElementById('folderDialog');
-
-      folder.addEventListener("change", function(event) {
-        console.log('ON CHANGED!!!', event);
-      });
-      */
-
-			//$scope.folderDialog = folder;
-			$scope.count = 0;
-			$scope.path = '';
-
 
 			$scope.lastError = function () {
 				console.log(chrome.runtime.lastError);
@@ -1108,7 +1002,6 @@
 				var xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
 				xhr.onload = function () {
-					//callback(window.webkitURL.createObjectURL(xhr.response), item);
 					callback(xhr.response, item);
 				};
 				xhr.open('GET', item.getUrl('b'), true);
@@ -1128,22 +1021,6 @@
 
 					$rootScope.state.targetEntry = entry;
 
-
-
-
-
-					/*
-            chrome.fileSystem.getWritableEntry(entry, function(writableFileEntry) {
-
-
-              console.log('WRITEABLE: ', writableFileEntry);
-
-            });*/
-
-					/*
-            console.log(entry.createReader);
-*/
-
 					chrome.fileSystem.getDisplayPath(entry, function (path) {
 
 
@@ -1153,66 +1030,11 @@
 							$rootScope.state.targetPath = path;
 							$scope.path = path;
 						});
-
-
-						/*
-              var filePath = path + "\\downloadr.jpg";
-
-              console.log("filePath: ", filePath);
-
-              function errorHandler()
-              {
-                console.log('ERROR!!!');
-
-              }
-
-              chrome.fileSystem.getWritableEntry(filePath, function(writableFileEntry) {
-
-              console.log('YES!!!!');
-
-                  writableFileEntry.createWriter(function(writer) {
-                    writer.onerror = errorHandler;
-                    writer.onwriteend = callback;
-
-                  chosenFileEntry.file(function(file) {
-                    writer.write(file);
-                  });
-
-                }, errorHandler);
-              });
-*/
-
-						/*
-              chrome.fileSystem.getWritableEntry(filePath, function(entry) {
-
-                console.log('WRITABLE: ', entry);
-                console.log(chrome.runtime.lastError);
-
-              });*/
-
-
-
 					});
 
 					console.log('DIALOG: ', entry);
-					//console.log(chrome.runtime.lastError);
-
-					/*
-            chrome.fileSystem.getWritableEntry(chosenFileEntry, function(writableFileEntry) {
-                writableFileEntry.createWriter(function(writer) {
-                  writer.onerror = errorHandler;
-                  writer.onwriteend = callback;
-
-                chosenFileEntry.file(function(file) {
-                  writer.write(file);
-                });
-              }, errorHandler);
-            });*/
-
 				});
-
 			};
-
     }]);
 
 
@@ -1249,7 +1071,6 @@
 				});
 
 			});
-
     }]);
 
 
@@ -1260,17 +1081,15 @@
 			$scope.enableAllLicenses = false;
 
     }]);
-			
-			controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
+
+	controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
 		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
-		
-		$scope.closeMenu = function() {
+
+			$scope.closeMenu = function () {
 				console.log('closeMenu');
-				
-			
 				$mdSidenav('left').close();
 			};
-		
+
 		}]);
 
 
@@ -1281,29 +1100,24 @@
 				$scope.goBack();
 			});
 
-			$scope.expandMenu = function()
-			{
+			$scope.expandMenu = function () {
 				$mdSidenav('left').toggle();
 			}
-			
+
 			$scope.tabSelected = function (url) {
 				console.log('tabSELECTED: ', url);
 				$location.path(url);
 			}
-			
-			$scope.showSearchControls = function()
-			{
+
+			$scope.showSearchControls = function () {
 				$rootScope.state.showSearchControls = true;
 			}
-			
-			$scope.toggleFullscreen = function() {
-			
-				if (chrome.app.window.current().isFullscreen())
-				{
+
+			$scope.toggleFullscreen = function () {
+
+				if (chrome.app.window.current().isFullscreen()) {
 					chrome.app.window.current().restore();
-				}
-				else
-				{
+				} else {
 					chrome.app.window.current().fullscreen();
 				}
 			};
@@ -1322,11 +1136,7 @@
 					$scope.toggleFullscreen();
 				}
 			};
-			/*
-        $scope.keyboard = {
-          't': function('T was pressed, enable debug mode');
-        };
-*/
+
 			$scope.parseProfile = function (data) {
 
 				// Validate successfull results.
@@ -1378,119 +1188,11 @@
 
 						console.log('ONLINE: ' + navigator.onLine);
 
-						/*
-                    var cs = new Chromestore([{ path: 'thumbs/users' },{ path: 'audio/wav', callback: function () { console.log('finished creating audio/wav folder tree') } }]);
-
-                    cs.usedAndRemaining(function (used, remaining) {
-                        console.log('Used bytes: ' + used);
-                        console.log('Remaining bytes: ' + remaining);
-                    });
-
-                    cs.getFile('fileCreate.txt', { create: true, exclusive: true }, function (fileEntry) {
-                        console.log('File created');
-                    });*/
-
-						//Create Directory
-						/*cs.getDir('genres/action', { create: true }, function () {*/
-						//Create and write to file
-						/*cs.write('genres/action/media.mp4', 'video/mp4', 'aaa', { create: true });
-                    });*/
-
-						//var url = 'https://s3.amazonaws.com/lr-chaos/videos/encoded_files/000/000/548/original/Hands-Elegant-Road-04-22-13.mp4';
-						//var url = 'https://s3.amazonaws.com/lr-chaos/videos/encoded_files/000/000/548/original/Hands-Elegant-Road-04-22-13.mp4';
-						/*
-                    console.log('Retrieving data from ' + url);
-                    cs.getAndWrite(url, 'user.jpg', 'image/jpeg', { create: true }, function () {
-                        console.log('Write user thumb complete');
-                    });*/
-
-						//webkitStorageInfo.requestQuota(
-						//  webkitStorageInfo.PERSISTENT,
-
-						//  1000, // amount of bytes you need
-
-						//  function (availableBytes) {
-						//      alert("Quota is available. Quota size: " + availableBytes);
-						//      // you can use the filesystem now
-						//  }
-						//);
-
 					});
 
 
 				} else {
-					//var xhr = new XMLHttpRequest();
-					//xhr.open('GET', url, true);
-					//xhr.responseType = 'blob';
 
-					//xhr.onload = function (e) {
-
-					//    var img = document.getElementById('buddyIconImg');
-					//    img.src = window.URL.createObjectURL(this.response);
-
-					//};
-
-					//xhr.send();
-
-
-					//$http.get(url, { responseType: 'blob' }).success(function (blob) {
-
-					//    console.log("WHAT?!?!?!");
-
-					//    // Write the blob to disk.
-					//    navigator.webkitPersistentStorage.requestQuota(
-					//      2048, //bytes of storage requested
-					//      function (availableBytes) {
-					//          console.log(availableBytes);
-					//      }
-					//    );
-
-					//    console.log("ONLINE: " + navigator.onLine);
-
-					//    var cs = new Chromestore([{ path: 'thumbs/users' }, { path: 'audio/wav', callback: function () { console.log('finished creating audio/wav folder tree') } }]);
-
-					//    cs.usedAndRemaining(function (used, remaining) {
-					//        console.log("Used bytes: " + used);
-					//        console.log("Remaining bytes: " + remaining);
-					//    });
-
-					//    cs.getFile('fileCreate.txt', { create: true, exclusive: true }, function (fileEntry) {
-					//        console.log('File created');
-					//    });
-
-					//    //Create Directory
-					//    cs.getDir('genres/action', { create: true }, function () {
-					//        //Create and write to file
-					//        cs.write('genres/action/media.mp4', 'video/mp4', 'aaa', { create: true });
-					//    });
-
-					//    //var url = 'https://s3.amazonaws.com/lr-chaos/videos/encoded_files/000/000/548/original/Hands-Elegant-Road-04-22-13.mp4';
-					//    //var url = 'https://s3.amazonaws.com/lr-chaos/videos/encoded_files/000/000/548/original/Hands-Elegant-Road-04-22-13.mp4';
-					//    console.log('Retrieving data from ' + url);
-					//    cs.getAndWrite(url, 'user.jpg', 'image/jpeg', { create: true }, function () {
-					//        console.log('Write user thumb complete');
-					//    });
-
-					//    //webkitStorageInfo.requestQuota(
-					//    //  webkitStorageInfo.PERSISTENT,
-
-					//    //  1000, // amount of bytes you need
-
-					//    //  function (availableBytes) {
-					//    //      alert("Quota is available. Quota size: " + availableBytes);
-					//    //      // you can use the filesystem now
-					//    //  }
-					//    //);
-
-
-					//    var img = document.getElementById('buddyIconImg');
-					//    img.src = window.URL.createObjectURL(blob);
-
-					//});
-
-
-
-					//$('#buddyIconImg').attr('src', url);
 				}
 			};
 
@@ -1510,7 +1212,6 @@
 				var url = chrome.extension.getURL('test.html');
 				var webview = document.getElementById('debugView');
 				webview.src = url;
-				//webview.src = "./test.html";
 			};
 
 			$scope.debugView = function () {
@@ -1574,7 +1275,5 @@
 				}
 
 			}, 0);
-
-
     }]);
 })();

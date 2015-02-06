@@ -341,7 +341,7 @@ module.exports = function (grunt) {
 		copy: {
 			dev: {
 				files: [{
-					cwd: 'bower_components/material-design-icons/',
+					cwd: '<%= config.app %>/bower_components/material-design-icons/',
 					src: ['navigation/svg/production/ic_refresh_24px.svg',
 						  'action/svg/production/ic_search_24px.svg',
 						  'action/svg/production/ic_help_24px.svg',
@@ -377,7 +377,7 @@ module.exports = function (grunt) {
 					expand: true
 				},
 				{
-					cwd: 'bower_components/font-awesome/fonts/',
+					cwd: '<%= config.app %>/bower_components/font-awesome/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.app %>/fonts',
 					expand: true,
@@ -386,9 +386,9 @@ module.exports = function (grunt) {
 				{
 					expand: true,
 					dot: true,
-					cwd: 'bower_components/mdi/fonts/',
+					cwd: '<%= config.app %>/bower_components/mdi/fonts/',
 					src: ['*.*'],
-					dest: '<%= config.app %>/fonts/'
+					dest: '<%= config.app %>/styles/fonts'
 				}]
 			},
 			dist: {
@@ -403,22 +403,23 @@ module.exports = function (grunt) {
 						'images/check.svg',
                         '{,*/}*.html',
                         'fonts/{,*/}*.*',
+						'styles/fonts/{,*/}*.*',
                         '_locales/{,*/}*.json',
                     ]
                 },
 				{
 					expand: true,
 					dot: true,
-					cwd: 'bower_components/font-awesome/fonts/',
+					cwd: '<%= config.app %>/bower_components/font-awesome/fonts/',
 					src: ['*.*'],
 					dest: '<%= config.dist %>/fonts'
 				},
 				{
 					expand: true,
 					dot: true,
-					cwd: 'bower_components/mdi/fonts/',
+					cwd: '<%= config.app %>/bower_components/mdi/fonts/',
 					src: ['*.*'],
-					dest: '<%= config.dist %>/fonts/'
+					dest: '<%= config.dist %>/styles/fonts'
 				}
                 ]
 			},

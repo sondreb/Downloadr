@@ -13,6 +13,7 @@ package
 components
 app/components
 test/components
+app/fonts/FontAwesome*
 app/fonts/fontawesome*
 app/fonts/material*
 node_modules

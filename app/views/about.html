@@ -1,13 +1,12 @@
 <md-content class="content">
-	
-    <lx-tabs links-tc="light" links-bgc="light-blue-500" indicator="yellow-500" no-divider="true" z-depth="1">
-        <lx-tab heading="Version">
-            <div class="page" layout="column" layout-fill layout-align="space-around center">
+
+	<lx-tabs links-tc="light" links-bgc="light-blue-500" indicator="yellow-500" no-divider="true" z-depth="1">
+		<lx-tab heading="Version">
+			<div class="page" layout="column" layout-fill layout-align="space-around center">
 
 				<div class="app-banner">
 					<img src="/images/icon_96.png" class="app-icon">
-					<h3>Flickr Downloadr</h3>
-					Release v<span app-version></span>
+					<h3>Flickr Downloadr</h3> Release v<span app-version></span>
 				</div>
 				<p>
 					Flickr Downloadr is an app that enables you to find and pick photos to download from the Flickr.com service.
@@ -27,24 +26,22 @@
 				<p>This application is a third party application and is not association with Flickr or Yahoo in any way or form.</p>
 
 			</div>
-        </lx-tab>
+		</lx-tab>
 
-        <lx-tab heading="Learn">
-            <div class="page" layout="column" layout-fill layout-align="space-around">
-				
+		<lx-tab heading="Learn">
+			<div class="page" layout="column" layout-fill layout-align="space-around">
+
 				<h3>Search and Download</h3>
 				<p>
-				Search, select photos, pick folder, download and wait. You can search multiple times and pick photos from different searches,
-					before you start the download process.
+					Search, select photos, pick folder, download and wait. You can search multiple times and pick photos from different searches, before you start the download process.
 				</p>
-				
+
 				<h3>Existing files?</h3>
-				
+
 				<p>
-					If there is existing files with the same filename, Flickr Downloadr will append a random
-					four character value to the filename. This ensures no interuption during download.
+					If there is existing files with the same filename, Flickr Downloadr will append a random four character value to the filename. This ensures no interuption during download.
 				</p>
-				
+
 				<h3>Shortcuts</h3>
 				<div>
 					ALT+ENTER: Toggle fullscreen mode.
@@ -52,9 +49,9 @@
 					<br>
 				</div>
 			</div>
-        </lx-tab>
+		</lx-tab>
 
-        <lx-tab heading="Licenses">
+		<lx-tab heading="Licenses">
 			<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<h3>Photo Licenses</h3>
@@ -93,10 +90,10 @@
 						Components: <span ng-repeat="library in libraries"><a href="{{library.url}}" target="_blank">{{library.text}}</a>{{$last ? '' : ', '}}</span> and more...
 					</li>
 					<li>
-					Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
+						Source: <a href="https://github.com/sondreb/Downloadr" target="_blank">https://github.com/sondreb/Downloadr</a>
 					</li>
 				</ul>
-				
+
 				<h3>Software License</h3>
 				<p>Copyright (C) 2007-2015 Sondre Bjellås -
 					<a href="http://sondreb.com/" target="_blank">http://sondreb.com/</a>
@@ -109,26 +106,11 @@
 				<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
 			</div>
-        </lx-tab>
-		
-		 <lx-tab heading="Releases">
-       			<div class="page" layout="column" layout-fill layout-align="space-around">
+		</lx-tab>
 
-				<!--
-				<div layout="row" class="page-row">
-					<div class="release-number">
-						<strong class="bigger">3.0</strong>
-						<br>2014-12-31
-					</div>
-					<ul flex>
-						<li>Added: Changed the visual layout to be based on Material design guidelines.</li>
-						<li>Improved: Window frame icons was updated and visual change for Mac users.</li>
-						<li>Improved: Changed the about screen into multiple with a tab control.</li>
-						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.0" target="_blank">https://github.com/sondreb/Downloadr/milestones/3.0.0</a>
-						</li>
-					</ul>
-				</div>-->
-				
+		<lx-tab heading="Releases">
+			<div class="page" layout="column" layout-fill layout-align="space-around">
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger"><span app-version></span></strong>
@@ -142,7 +124,7 @@
 						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.80" target="_blank">Release Notes</a>
 					</ul>
 				</div>
-					
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.70</strong>
@@ -153,7 +135,7 @@
 						<li>Changed: Moved from Angular Md for layout to LumX.</li>
 						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.70" target="_blank">Release Notes</a>
 					</ul>
-				</div>			
+				</div>
 
 				<div layout="row" class="page-row">
 					<div class="release-number">
@@ -179,7 +161,7 @@
 						<li>Full rewrite of the app, built on HTML5 technologies.</li>
 					</ul>
 				</div>
-				
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">2.0.4</strong>
@@ -241,32 +223,7 @@
 				</div>
 
 			</div>
-        </lx-tab>
-    </lx-tabs>
+		</lx-tab>
+	</lx-tabs>
 
-	<!--
-	<md-tabs md-selected="selectedIndex">
-		
-		<md-tab label="Version">
-
-			
-		</md-tab>
-
-		<md-tab label="Shortcuts">
-
-
-		</md-tab>
-
-		<md-tab label="Licenses">
-
-
-		</md-tab>
-
-		<md-tab label="Releases">
-
-
-		</md-tab>
-
-	</md-tabs>
-	-->
 </md-content>

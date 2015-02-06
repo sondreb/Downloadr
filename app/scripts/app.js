@@ -8,19 +8,7 @@
 
 (function () {
 
-	// Override the LumX template for lx-search-filter.
-	/*angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
-    '     ng-class="{ \'search-filter--is-focused\': model,\n' +
-    '                 \'search-filter--is-closed\': closed }">\n' +
-    '    <div class="search-filter__container">\n' +
-    '        <label class="search-filter__label" ng-click="$root.performSearch()"><i class="mdi mdi--search"></i></label>\n' +
-    '        <input type="text" class="search-filter__input" placeholder="{{ placeholder }}" ng-enter="/search" ng-model="model">\n' +
-    '        <span class="search-filter__cancel" ng-click="clear()"><i class="mdi mdi--cancel"></i></span>\n' +
-    '    </div>\n' +
-    '</div>');
-	 }]);*/
-	
-angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
+	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
     '     ng-class="{ \'search-filter--is-focused\': model,\n' +
     '                 \'search-filter--is-closed\': closed }">\n' +
     '    <div class="search-filter__container">\n' +
@@ -30,18 +18,7 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
     '    </div>\n' +
     '</div>');
 	 }]);
-	
-	/*
-	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter" ng-class="{ \'search-filter--is-focused\': model }">\n' +
-    '    <div class="search-filter__container">\n' +
-    '        <label class="search-filter__label" ng-click="$root.performSearch()" ><i class="mdi mdi--search"></i></label>\n' +
-    '        <input type="text" class="search-filter__input" ng-enter="/search" ng-model="model">\n' +
-    '        <span class="search-filter__cancel" ng-click="clear()"><i class="mdi mdi--cancel"></i></span>\n' +
-    '    </div>\n' +
-    '</div>');
-	 }]);
-	*/
-	
+
 	// Create the app module and dependencies.
 	var downloadr = angular.module('downloadr', [
         'ngRoute',
@@ -78,12 +55,6 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 				// This ensures any data loaded in the async loading handlers is
 				// updated in the UI.
 				$rootScope.$apply();
-				
-				/*
-				if (loadingStatus.settings === true && loadingStatus.runtime === true)
-				{
-					$('body').addClass('loaded');
-				}*/
 				
 				if (loadingStatus.runtime === true)
 				{
@@ -259,17 +230,7 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 			
 			$rootScope.navigate = function(path)
 			{
-				// This is a major hack to fix the search-filter from LumX and hacking
-				// it so it work properly for this app.
-				//var searchElement = $('#top-search').find('.search-filter');
-				
-				//console.log('width: ', searchElement.width());
-				
-				// Only navigate if the user have already expanded the search input element.
-				//if (searchElement.width() != 40)
-				//{
-				//	$rootScope.performSearch();
-				//}
+
 			};
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -308,6 +269,21 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 					$rootScope.state.searchText === '') {
 					return;
 				}
+				
+				
+				// This is a major hack to fix the search-filter from LumX and hacking
+				// it so it work properly for this app. The buggy behavior happens if the
+				// user have already searched, then clicks the top search icon to prepare
+				// for entering another new search, at that time, search is ran, while it
+				// should not. Code kepts here for later bugfix.
+				
+				//var searchElement = $('#top-search').find('.search-filter');
+				//console.log('width: ', searchElement.width());
+				// Only navigate if the user have already expanded the search input element.
+				//if (searchElement.width() != 40)
+				//{
+				//	$rootScope.performSearch();
+				//}
 
 				console.log('PERFORM SEARCH: ', $rootScope.state.searchText);
 
@@ -322,21 +298,9 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 
 			};
 
-
 			$rootScope.$broadcast('status', {
 				message: 'Starting...'
 			});
-
-			// Whenever the search directive raises the search event,
-			// we'll update the rootScope.state.
-			/*$rootScope.$on('Event:Search', function (event, data) {
-
-          $rootScope.state.searchText = data.value;
-
-        });*/
-
-
-			//$rootScope.$broadcast('Event:Search', { value: 'Sweeet' });
 
 			$rootScope.$on('Event:Logout', function () {
 
@@ -446,12 +410,6 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
 					});
 				}
 			};
-
-			// This will read oauth_token from local storage if it exists, if not, it will
-			// connect to the WebSocket service and notify a request for authentication URL.
-			// After the URL is generated, we'll show it to the user. When returned, it will
-			// return to the WebSocket service, which in return will return the answers.
-			//Flickr.Authenticate();
     }]);
 
 	downloadr.config(['$routeProvider', '$mdThemingProvider',
@@ -523,17 +481,3 @@ angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put(
     }]);
 
 })();
-
-
-
-// Check whether new version is installed
-/* Keeping for future use.
-chrome.runtime.onInstalled.addListener(function(details){
-    if(details.reason == "install"){
-        console.log("This is a first install!");
-    }else if(details.reason == "update"){
-        var thisVersion = chrome.runtime.getManifest().version;
-        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
-    }
-});
-*/
