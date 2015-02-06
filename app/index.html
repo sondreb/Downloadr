@@ -84,184 +84,38 @@
 			
 			<!-- Mac -->
 			<span ng-show="state.OS == 'mac'" class="mac window-icon-container">
-				
 				<window-icon icon="mac-close" title="Close" ng-click="close();"></window-icon><window-icon icon="mac-min" title="Minimize" ng-click="minimize();"></window-icon><window-icon icon="mac-max" title="Maximize" ng-click="maximize();" ng-hide="isMaximized"></window-icon><window-icon icon="mac-max" title="Restore Down" ng-click="restore();" ng-show="isMaximized" ng-cloak></window-icon>
-				
 			</span>
 			
 			<!-- Linux -->
 			<span ng-show="state.OS == 'linux'" class="linux window-icon-container">
-				<a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak title="Restore Down" id="window-restore">
-					<icon icon="maximize_restore_gray_18px" size="18px" />
-				</a>
+				<a href=""ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize" ></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a><a href=""  ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a>
 			</span>
 			
 			<!-- Windows -->
 			<span ng-show="state.OS == 'win'" class="win window-icon-container">
-				
 				<a href=""ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize" ></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a><a href=""  ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a>
-				
-				<!--
-				<a href="" ng-click="minimize();" id="window-minimize" title="Minimize">
-					<icon icon="minimize_gray_18px" size="18px" />
-				</a>
-				<a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak title="Restore Down" id="window-restore">
-					<icon icon="maximize_restore_gray_18px" size="18px" />
-				</a>
-				<a hreF="" ng-click="maximize();" ng-hide="isMaximized" title="Maximize" id="window-maximize">
-					<icon icon="maximize_restore_gray_18px" size="18px" />
-				</a>
-				<a href="" ng-click="close();" id="window-close" title="Close">
-						<icon icon="close_gray_18px" size="18px" />
-				</a>-->
 			</span>
 
 		</div>
 		
 		
 		<!-- We override the padding here to avoid dynamic resize of the toolbar. -->
-    <div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
-        <div class="toolbar__left mr">
-            <button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
-                <i class="mdi mdi-menu"></i>
-            </button>
-        </div>
-
-        <span class="toolbar__label fs-title"><a href="#/" class="logo">
-				<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
-			</a></span>
-
-        <div class="toolbar__right" ng-hide="$location.path() == '/'">
-            
-			<!--
-			<lx-dropdown position="right" from-top>
-                <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle>
-                    <i class="mdi mdi--more-vert"></i>
-                </button>
-
-                <lx-dropdown-menu>
-                    <ul>
-                        <li><a class="dropdown-link">Action</a></li>
-                        <li><a class="dropdown-link">Another action</a></li>
-                        <li><a class="dropdown-link">Something else here</a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-link dropdown-link--is-header">Header</a></li>
-                        <li><a class="dropdown-link">Separated link</a></li>
-                    </ul>
-                </lx-dropdown-menu>
-            </lx-dropdown>
-            -->
-			
-            <lx-search-filter model="state.searchText" id="top-search" closed theme="dark" placeholder="Search"></lx-search-filter>
-			
-        </div>
-    </div>
-
-<!--
-		<md-toolbar>
-
-			<div class="md-toolbar-tools window-frame">
-
-				<md-button ng-click="expandMenu()" aria-label="Show menu">
-					<md-tooltip>
-				  Show menu
-				</md-tooltip>
-					<icon icon="ic_menu_24px"></icon>
-				</md-button>
-
-				<span flex="33"><a href="#/" class="logo">
-				<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
-			</a></span>
-
-				<span class="window-frame" flex></span>
-				
-				<div flex ng-cloak ng-show="state.showSearchControls">
-				<search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()"></search>
-				</div>
-				
-				<md-button ng-hide="state.showSearchControls" aria-label="Search" ng-click="showSearchControls();">
-				<md-tooltip>
-				  Search
-				</md-tooltip>
-					<icon icon="ic_search_24px"></icon>
-				</md-icon>
-			  </md-button>
-
+		<div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
+			<div class="toolbar__left mr">
+				<button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
+					<i class="mdi mdi-menu"></i>
+				</button>
 			</div>
 
-		</md-toolbar>
--->
+			<span class="toolbar__label fs-title"><a href="#/" class="logo">
+					<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
+				</a></span>
 
-
-		<!--
-		<md-toolbar md-theme="green">
-			  <a href="#/" class="logo">
-	<img src="img/downloadr.png">
-</a>
-
-			<span flex></span>
-			<md-button class="md-fab md-primary">
-				<md-tooltip>
-					Search
-				</md-tooltip>
-				<md-icon icon="/img/icons/ic_search_24px.svg">
-				</md-icon>
-			</md-button>
-
-		</md-toolbar>-->
-		<!--
-
-
-		<div class="toolbar" layout="horizontal">
-
-			<md-icon icon="/img/icons/ic_search_24px.svg">
-				<md-tooltip>
-					Play Music
-				</md-tooltip>
-			</md-icon>
--->
-		<!--<div ng-include="'views/view-thumbnail.html'"></div>-->
-		<!--<view-thumbnail>
-                </view-thumbnail>-->
-		<!--<div>
-				<a href="#/" class="logo">
-					<img src="img/downloadr.png">
-				</a>
-			</div>-->
-
-
-
-		<!--
-			<div flex ng-hide="state.isOnStartScreen">
-				<search class="search-control-smaller right" target="/search" value="state.searchText" ng-search="performSearch()"></search>
+			<div class="toolbar__right" ng-hide="$location.path() == '/'">
+				<lx-search-filter model="state.searchText" id="top-search" closed theme="dark" placeholder="Search"></lx-search-filter>
 			</div>
-
--->
-
-
-
-		<!--
-			<md-tabs selected="data.selectedIndex" center style="max-width: 400px;">
-				<md-tab id="tab1" on-select="tabSelected('#/settings')" aria-controls="tab1-content">
-
-					SETTINGS
-
-				</md-tab>
-				<md-tab id="tab2" on-select="tabSelected('#/about')">
-					ABOUT
-				</md-tab>
-				<md-tab id="tab3" aria-controls="tab3-content">
-					<a href="#/logout" style="width: 40px;" title="Sign out">
-						<i class="fa fa-sign-out"></i>
-					</a>
-				</md-tab>
-			</md-tabs>
--->
-		<!--
 		</div>
-
--->
-
 
 	</header>
 
@@ -475,56 +329,16 @@ md-close
 
 			<!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
 			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0">
-				
 				<button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
-				<!--
-				<md-button aria-label="NEXT" href="#/folder">
-				<md-tooltip>
-					Go to next screen
-				</md-tooltip>
-						NEXT
-					<icon icon="ic_arrow_forward_24px"></icon>
-				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0">
-				
 				<button ng-click="navigate('/folder')" disabled style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
-				<!--
-				<md-button aria-label="NEXT" href="#/folder">
-				<md-tooltip>
-					Go to next screen
-				</md-tooltip>
-						NEXT
-					<icon icon="ic_arrow_forward_24px"></icon>
-				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''">
-				
 				<button ng-click="navigate('/download')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
-				<!--
-				<md-button aria-label="DOWNLOAD" href="#/download">
-				<md-tooltip>
-					Start the download of photos
-				</md-tooltip>
-						DOWNLOAD
-					<icon icon="ic_file_download_24px"></icon>
-				</md-button>-->
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''">
-				
-				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD 
-					<!--<icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon>-->
-				<icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon>
-				
-				</button>
-				<!--
-					<md-button aria-label="DOWNLOAD" href="">
-				<md-tooltip>
-					Start the download of photos.
-				</md-tooltip>
-						DOWNLOAD
-					<icon icon="ic_file_download_24px"></icon>
-				</md-button>-->
+				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
 			</div>
 
 		</div>

@@ -3,7 +3,7 @@
     "default_locale": "en",
     "name": "__MSG_appName__",
     "description": "__MSG_appDesc__",
-    "version": "3.0.69",
+    "version": "3.0.76",
     "permissions": [
         {
             "fileSystem": [
@@ -21,6 +21,8 @@
         "https://api.flickr.com/*",
         "https://*.staticflickr.com/*",
         "http://brain.no/*",
+        "http://flickr-downloadr/*",
+        "https://flickr-downloadr/*",
         "<all_urls>"
     ],
     "minimum_chrome_version": "38",

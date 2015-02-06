@@ -28,19 +28,19 @@
 					$timeout(function () {
 
 						//if (attrs.ngEnter != null && $location.path() != attrs.ngEnter) {
-							// First make sure we navigate to the page.
+						// First make sure we navigate to the page.
 						//	$location.path(attrs.ngEnter);
 						//}
 
 						$rootScope.performSearch();
-						
+
 						// This should check for both undefined and null.
 						//if (scope.eventHandler != null) {
-							// If there is any event handler defined on the directive
-							// call the function.
+						// If there is any event handler defined on the directive
+						// call the function.
 						//	scope.eventHandler();
 						//}
-						
+
 					}, 0);
 
 					event.preventDefault();
@@ -184,8 +184,8 @@
 		};
 
 	});
-	
-	
+
+
 	directives.directive('icon', function () {
 
 		return {
@@ -198,7 +198,7 @@
 			templateUrl: 'views/template_icon.html'
 		};
 	});
-	
+
 	directives.directive('windowIcon', ['$rootScope', function ($rootScope) {
 
 		return {
@@ -211,6 +211,5 @@
 			templateUrl: 'views/template_window_icon.html'
 		};
 	}]);
-
 
 })();

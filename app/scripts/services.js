@@ -11,26 +11,22 @@
 	var downloadr = angular.module('downloadr.services', []);
 
 
-	var sidebar = angular.module('Sidebar', []).service('SidebarService', function()
-	{
+	var sidebar = angular.module('Sidebar', []).service('SidebarService', function () {
 		var sidebarIsShown = false;
 
-		function toggleSidebar()
-		{
+		function toggleSidebar() {
 			sidebarIsShown = !sidebarIsShown;
 		}
 
 		return {
-			isSidebarShown: function()
-			{
+			isSidebarShown: function () {
 				return sidebarIsShown;
 			},
 			toggleSidebar: toggleSidebar
 		};
 	});
 
-	
-	
+
 	downloadr.factory('settings', ['$rootScope', '$timeout',
 		function ($rootScope, $timeout) {
 
@@ -62,7 +58,7 @@
 
 					console.log('Settings loaded: ', values);
 					$scope.apply();
-					
+
 					$rootScope.$broadcast('Settings:Loaded', values);
 
 				});
@@ -102,13 +98,8 @@
 
     }]);
 
-	downloadr.factory('notify', function () {
 
-		/*
-      var onNotifyShow = function() {
-          console.log('notification was shown!');
-      }
-*/
+	downloadr.factory('notify', function () {
 		return function (id, type, title, body, callback, progress) {
 
 			chrome.notifications.onClicked.addListener(function (id) {
@@ -126,31 +117,7 @@
 
 			chrome.notifications.create(id, options, function (notificationId) {});
 
-			/*
-        var opt = {
-          type: "progress",
-          title: "Primary Title",
-          message: "Primary message to display",
-          progress: 42
-        }
-
-        chrome.notifications.create('status', opt, function(notificationId) {
-
-          console.log('notification was shown!');
-
-        });*/
-
-
-			/*
-        var notification = new Notification(title, {
-          body: body,
-          notifyShow: onNotifyShow
-        });
-*/
-			//notification.show();
-
 		};
-
 	});
 
 
@@ -166,7 +133,7 @@
 		return service;
 	}]);
 
-	
+
 	downloadr.service('util', function () {
 		this.format = function (text, params) {
 			var str = text.replace(/\{(.*?)\}/g, function (i, match) {
@@ -177,7 +144,7 @@
 		};
 	});
 
-	
+
 	downloadr.factory('socket', ['$rootScope', 'config_socket_server', function ($rootScope, config_socket_server) {
 
 		console.log('connecting to socket server @ ', config_socket_server);
@@ -215,54 +182,12 @@
 					});
 				})
 			},
-			removeAllListeners: function(eventName) {
+			removeAllListeners: function (eventName) {
 				socket.removeAllListeners(eventName);
 			}
 		};
 	}]);
 
-	downloadr.service('flickr2', ['$rootScope', function ($rootScope) {
-
-		var token = '';
-		var secret = '';
-		var userId = '';
-		var userName = '';
-		var fullName = '';
-
-		var removeToken = function () {
-			token = '';
-			secret = '';
-			userId = '';
-			userName = '';
-			fullName = '';
-		}
-
-		var parseToken = function (message) {
-			token = message.oauthToken;
-			secret = message.oauthTokenSecret;
-			userId = message.userNsId;
-			userName = message.userName;
-			fullName = message.fullName;
-		};
-
-		var createMessage = function (method, args) {
-			var message = {
-				method: method,
-				args: args,
-				token: flickr.token,
-				secret: flickr.secret
-			};
-
-			return message;
-		};
-
-
-		return {
-			parseToken: parseToken,
-			removeToken: removeToken,
-			createMessage: createMessage
-		};
-	}]);
 
 	downloadr.service('flickr', ['$rootScope', function ($rootScope) {
 
@@ -305,22 +230,8 @@
 			createMessage: createMessage,
 			userId: userId,
 			userName: userName
-			
+
 		};
 
 	}]);
 })();
-
-
-
-// Register the utility service.
-//angular.module('downloadr').service('utility', function ($scope) {
-
-//    $scope.format = function (text, params) {
-//        var str = text.replace(/\{(.*?)\}/g, function (i, match) {
-//            return params[match];
-//        });
-
-//        return str;
-//    }
-//});

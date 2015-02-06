@@ -3,54 +3,29 @@
 
 		<h3>Safe Search</h3>
 		<p>
-			<!--
-			<md-radio-group ng-model="settings.values.safe">
 
-				<md-radio-button ng-disabled="state.isAnonymous" value="1">SafeSearch on</md-radio-button>
-				<md-radio-button ng-disabled="state.isAnonymous" value="2" noink>SafeSearch moderate</md-radio-button>
-				<md-radio-button ng-disabled="state.isAnonymous" value="3">SafeSearch off</md-radio-button>
+			<div class="radio-group mt">
+				<div class="radio-button">
+					<input type="radio" id="radio4" ng-model="settings.values.safe" name="radio2" value="1" class="radio-button__input">
+					<label for="radio4" class="radio-button__label">SafeSearch on</label>
+				</div>
 
-			</md-radio-group>
-			-->
-			
-<div class="radio-group mt">
-    <div class="radio-button">
-        <input type="radio" id="radio4" ng-model="settings.values.safe" name="radio2" value="1" class="radio-button__input">
-        <label for="radio4" class="radio-button__label">SafeSearch on</label>
-    </div>
+				<div class="radio-button">
+					<input type="radio" id="radio5" ng-model="settings.values.safe" name="radio2" value="2" class="radio-button__input">
+					<label for="radio5" class="radio-button__label">SafeSearch moderate</label>
+				</div>
 
-    <div class="radio-button">
-        <input type="radio" id="radio5" ng-model="settings.values.safe" name="radio2" value="2" class="radio-button__input">
-        <label for="radio5" class="radio-button__label">SafeSearch moderate</label>
-    </div>
+				<div class="radio-button">
+					<input type="radio" id="radio6" ng-model="settings.values.safe" name="radio2" value="3" class="radio-button__input" checked>
+					<label for="radio6" class="radio-button__label">SafeSearch off</label>
+				</div>
+			</div>
 
-    <div class="radio-button">
-        <input type="radio" id="radio6" ng-model="settings.values.safe" name="radio2" value="3" class="radio-button__input" checked>
-        <label for="radio6" class="radio-button__label">SafeSearch off</label>
-    </div>
-</div>
-			
-			
-			
 		</p>
 		<p ng-show="state.isAnonymous">
 			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service</em>
 		</p>
 
-		<!--
-      <p>
-      <input type=checkbox id="ccsearch" name="cc_search" onchange="F.search.updateCCBoxes();">
-			<label for="ccsearch">Only search within <strong>Creative Commons</strong>-licensed content</label>
-			<br />
-			<br />
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type=checkbox id="cccommercial" name="cc_commercial" disabled />
-			<label for="cccommercial">Find content to use commercially</label> <br />
-			&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type=checkbox id="ccderivs" name="cc_derivs" disabled />
-			<label for="ccderivs"> Find content to modify, adapt, or build upon</label>
-      </p>
--->
 		<!--<br>
 		<h3>Layout</h3>
 		<p>
@@ -65,19 +40,15 @@
 			<div class="checkbox mt">
 				<input type="checkbox" ng-model="settings.values.progress" id="checkbox2" class="checkbox__input">
 				<label for="checkbox2" class="checkbox__label">Progress Notification</label>
-				<!--<span class="checkbox__help">If checked will show desktop notification of download progress.</span>-->
 			</div>
-			
-			<!--<md-checkbox ng-model="settings.values.progress">Progress Notification</md-checkbox>-->
+
 		</p>
 		<p>
 			<div class="checkbox mt">
 				<input type="checkbox" ng-model="settings.values.completed" id="checkbox3" class="checkbox__input">
 				<label for="checkbox3" class="checkbox__label">Completed Notification</label>
-				<!--<span class="checkbox__help">If checked will show desktop notification of when downloading have completed.</span>-->
 			</div>
-			
-			<!--<md-checkbox ng-model="settings.values.completed">Completed Notification</md-checkbox>-->
+
 		</p>
 
 	</div>
