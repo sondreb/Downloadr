@@ -10,7 +10,6 @@
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-	<link rel="stylesheet" href="bower_components/lumx/dist/css/lumx.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -18,6 +17,8 @@
 	<link rel="stylesheet" href="bower_components/angular/angular-csp.css">
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
+	<link rel="stylesheet" href="/bower_components/lumx/dist/lumx.css">
+	<link rel="stylesheet" href="bower_components/mdi/materialdesignicons.css">
 	<!-- endbuild -->
 
 </head>
@@ -123,7 +124,7 @@
     <div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
         <div class="toolbar__left mr">
             <button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
-                <i class="mdi mdi--menu"></i>
+                <i class="mdi mdi-menu"></i>
             </button>
         </div>
 
@@ -408,7 +409,9 @@
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">
-						<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>
+						<!--<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>-->
+						<i class="mdi mdi-sort"></i>
+						<i class="mdi mdi-sort"></i>
 					</button>
 
 					<div class="fab__actions fab__actions--up">
@@ -535,7 +538,11 @@ md-close
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''">
 				
-				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
+				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD 
+					<!--<icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon>-->
+				<i class="mdi mdi-download"></i>
+				
+				</button>
 				<!--
 					<md-button aria-label="DOWNLOAD" href="">
 				<md-tooltip>
@@ -570,12 +577,9 @@ md-close
 	<script src="bower_components/angular-mousetrap/src/keypress.js"></script>
 	<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
 	<script src="bower_components/angular-aria/angular-aria.js"></script>
-	<script src="bower_components/hammerjs/hammer.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
 	<script src="bower_components/underscore/underscore.js"></script>
-	<script src="bower_components/velocity/velocity.js"></script>
-	<script src="bower_components/moment/moment.js"></script>
-	<script src="bower_components/lumx/dist/js/lumx.js"></script>
+	<script src="bower_components/lumx/dist/lumx.js"></script>
 	<script src="bower_components/socket.io-client/socket.io.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->
