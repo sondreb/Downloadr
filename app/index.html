@@ -9,15 +9,14 @@
 	<!-- build:css styles/libraries.css -->
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
 	<!-- build:css styles/app.css -->
 	<link rel="stylesheet" href="bower_components/angular/angular-csp.css">
 	<link rel="stylesheet" href="styles/app.css">
-	<link rel="stylesheet" href="/bower_components/angular-material/angular-material.css">
-	<link rel="stylesheet" href="/bower_components/lumx/dist/lumx.css">
+	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+	<link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
 	<link rel="stylesheet" href="bower_components/mdi/materialdesignicons.css">
 	<!-- endbuild -->
 
@@ -266,42 +265,26 @@
 
 	</header>
 
-
-	<div flex layout="row">
-		
-		<!--
-		<aside layout="vertical" layout-sm="horizontal" flex-sm="33" flex-md="20">
-			Menu
-			<br>[flex-sm="33"][flex-md="20"]
-		</aside>
--->
-		<md-content class="{{state.background}}" ng-view flex id="presenter"></md-content>
-
-		<!--
-		<main ng-view flex class="container row scroll-y" ng-class="{extended: state.showActions}">
-
-		</main>-->
-
-	</div>
 	
+	<div flex layout="row">
+		<md-content class="{{state.background}}" ng-view flex id="presenter"></md-content>
+	</div>
 	
 
 	<span ng-controller="MenuController">
 		
 	<md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left md-whiteframe-z2 menu">
 		
-			<md-toolbar>
+			<md-toolbar class="bgc-light-blue-500">
 
-				<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button bgc-light-blue-500">
-					<icon icon="ic_keyboard_backspace_24px"></icon>
-				</md-button>
+			<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button bgc-light-blue-500">
+				<icon icon="ic_keyboard_backspace_24px"></icon>
+			</md-button>
 
-		<md-button  ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
-			<img src="images/buddyicon.gif" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
-			<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
-			
-		</md-button>
-				
+			<md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
+				<img src="images/buddyicon.gif" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
+				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
+			</md-button>
 					
 			</md-toolbar>
 
@@ -426,12 +409,6 @@
 				<!--<select id="select-sort" class="select-dark" ng-model="settings.values.sort" ng-options="k as v for (k,v) in sorting"></select>-->
 			</div>
 
-
-			<!--
-            <li>
-              <search class="search-control-smaller right" value="state.searchText" ng-search="performSearch()"></search>
-            </li>-->
-
 			<!--
 			Hidden for first release, planned for 3.0.3
 			<div ng-show="state.actionTarget == 'folder'">
@@ -540,7 +517,7 @@ md-close
 				
 				<button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD 
 					<!--<icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon>-->
-				<i class="mdi mdi-download"></i>
+				<icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon>
 				
 				</button>
 				<!--
@@ -579,6 +556,9 @@ md-close
 	<script src="bower_components/angular-aria/angular-aria.js"></script>
 	<script src="bower_components/angular-material/angular-material.js"></script>
 	<script src="bower_components/underscore/underscore.js"></script>
+	<script src="bower_components/velocity/velocity.js"></script>
+	<script src="bower_components/velocity/velocity.ui.js"></script>
+	<script src="bower_components/moment/moment.js"></script>
 	<script src="bower_components/lumx/dist/lumx.js"></script>
 	<script src="bower_components/socket.io-client/socket.io.js"></script>
 	<!-- endbower -->
