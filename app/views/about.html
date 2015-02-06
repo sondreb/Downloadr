@@ -30,22 +30,22 @@
         </lx-tab>
 
         <lx-tab heading="Learn">
-            <div class="page" layout="column" layout-fill layout-align="space-around center">
+            <div class="page" layout="column" layout-fill layout-align="space-around">
 				
-				<h2>Search and Download</h2>
+				<h3>Search and Download</h3>
 				<p>
 				Search, select photos, pick folder, download and wait. You can search multiple times and pick photos from different searches,
 					before you start the download process.
 				</p>
 				
-				<h2>Existing files?</h2>
+				<h3>Existing files?</h3>
 				
 				<p>
 					If there is existing files with the same filename, Flickr Downloadr will append a random
 					four character value to the filename. This ensures no interuption during download.
 				</p>
 				
-				<h2>Shortcuts</h2>
+				<h3>Shortcuts</h3>
 				<div>
 					ALT+ENTER: Toggle fullscreen mode.
 					<br>CTRL+S: Perform search
@@ -132,14 +132,16 @@
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger"><span app-version></span></strong>
-						<br>2015-14-1
+						<br>2015-8-2
 					</div>
 					<ul flex>
+						<li>Improved: Overall improvements of quality and fixes for UI glitches.</li>
 						<li>Improved: If photo already exists on disk, saves with an extra 4 random characters.</li>
 						<li>Fixed: Size selection now works as expected.</li>
+						<li>Changed: Web Socket connection is only used for OAuth verification and not for searches.</li>
 						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.80" target="_blank">Release Notes</a>
 					</ul>
-				</div>	
+				</div>
 					
 				<div layout="row" class="page-row">
 					<div class="release-number">
@@ -147,8 +149,8 @@
 						<br>2015-31-1
 					</div>
 					<ul flex>
-						<li>Changed: Moved from Angular Md for layout to LumX.</li>
 						<li>Improved: Fixed most visual layout issues.</li>
+						<li>Changed: Moved from Angular Md for layout to LumX.</li>
 						<li><a href="https://github.com/sondreb/Downloadr/milestones/3.0.70" target="_blank">Release Notes</a>
 					</ul>
 				</div>			

@@ -4,11 +4,11 @@
 	<figure ng-repeat="photo in photos" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectPhoto(photo)" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)">
 		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
 		<figcaption>
-			<h2>{{photo.title}}</h2>
+			<h2>{{ photo.title | limitTo: 50 }}{{photo.title.length > 50 ? '...' : ''}}</h2>
 			<p>
-				<a ng-click="showMenu(photo)"><i ng-click="showMenu(photo)"><icon icon="ic_more_horiz_24px"></icon></i></a>
+				<a ng-click="showMenu(photo)"><i class="mdi mdi-dots-horizontal"></i></a>
 			</p>
-		</figcaption>			
+		</figcaption>
 	</figure>
 	
 	<div class="clear"></div>
