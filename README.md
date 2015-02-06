@@ -95,12 +95,12 @@ http://flickrdownloadr.codeplex.com/SourceControl/latest
 - Components: https://angularjs.org/, https://jquery.org/, http://nodejs.org/,
 http://socket.io/, http://expressjs.com/, https://github.com/Azure/azure-documentdb-node,
 https://github.com/mattiaserlo/flickr-oauth-and-upload, https://github.com/flatiron/nconf,
-https://github.com/HubSpot/pace,  https://github.com/khasinski/angular-mousetrap,
-http://gruntjs.com/
+https://github.com/HubSpot/pace, https://github.com/khasinski/angular-mousetrap,
+http://gruntjs.com/, http://ui.lumapps.com/
 
 ## License (MIT):
 
-Copyright (C) 2007-2014 Sondre Bjellås - http://sondreb.com/
+Copyright (C) 2007-2015 Sondre Bjellås - http://sondreb.com/
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

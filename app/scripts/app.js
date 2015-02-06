@@ -1,6 +1,6 @@
 /*!
  * Flickr Downloadr
- * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
+ * Copyright: 2007-2015 Sondre Bjellås. http://sondreb.com/
  * License: MIT
  */
 
@@ -9,6 +9,29 @@
 (function () {
 
 	// Override the LumX template for lx-search-filter.
+	/*angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
+    '     ng-class="{ \'search-filter--is-focused\': model,\n' +
+    '                 \'search-filter--is-closed\': closed }">\n' +
+    '    <div class="search-filter__container">\n' +
+    '        <label class="search-filter__label" ng-click="$root.performSearch()"><i class="mdi mdi--search"></i></label>\n' +
+    '        <input type="text" class="search-filter__input" placeholder="{{ placeholder }}" ng-enter="/search" ng-model="model">\n' +
+    '        <span class="search-filter__cancel" ng-click="clear()"><i class="mdi mdi--cancel"></i></span>\n' +
+    '    </div>\n' +
+    '</div>');
+	 }]);*/
+	
+angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
+    '     ng-class="{ \'search-filter--is-focused\': model,\n' +
+    '                 \'search-filter--is-closed\': closed }">\n' +
+    '    <div class="search-filter__container">\n' +
+    '        <label class="search-filter__label" ng-click="$root.performSearch()"><i class="mdi mdi-magnify"></i></label>\n' +
+    '        <input type="text" class="search-filter__input" placeholder="{{ placeholder }}" ng-enter="/search" ng-model="model">\n' +
+    '        <span class="search-filter__cancel" ng-click="clear()"><i class="mdi mdi-close-circle"></i></span>\n' +
+    '    </div>\n' +
+    '</div>');
+	 }]);
+	
+	/*
 	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('lumx.search_filter.html', '<div class="search-filter" ng-class="{ \'search-filter--is-focused\': model }">\n' +
     '    <div class="search-filter__container">\n' +
     '        <label class="search-filter__label" ng-click="$root.performSearch()" ><i class="mdi mdi--search"></i></label>\n' +
@@ -17,7 +40,7 @@
     '    </div>\n' +
     '</div>');
 	 }]);
-	
+	*/
 	
 	// Create the app module and dependencies.
 	var downloadr = angular.module('downloadr', [
@@ -31,11 +54,13 @@
         'downloadr.controllers',
 		'lumx'
     ]);
-
-	downloadr.value('version', '3.0.70');
+	
+	var manifest = chrome.runtime.getManifest();
+	
+	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
-	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-	downloadr.value('config_socket_server', 'http://localhost:3000');
+	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
+	//downloadr.value('config_socket_server', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
 		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
@@ -213,7 +238,9 @@
 				
 				userId: '',
 				
-				userName: ''
+				userName: '',
+				
+				firstRun: true
 
 			};
 			
@@ -234,15 +261,15 @@
 			{
 				// This is a major hack to fix the search-filter from LumX and hacking
 				// it so it work properly for this app.
-				var searchElement = $('#top-search').find('.search-filter');
+				//var searchElement = $('#top-search').find('.search-filter');
 				
-				console.log('width: ', searchElement.width());
+				//console.log('width: ', searchElement.width());
 				
 				// Only navigate if the user have already expanded the search input element.
-				if (searchElement.width() != 40)
-				{
-					$rootScope.performSearch();
-				}
+				//if (searchElement.width() != 40)
+				//{
+				//	$rootScope.performSearch();
+				//}
 			};
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -272,6 +299,7 @@
 
 			});
 
+			
 			$rootScope.performSearch = function () {
 				
 				// If the user have not entered anything, we won't search.
@@ -283,12 +311,14 @@
 
 				console.log('PERFORM SEARCH: ', $rootScope.state.searchText);
 
+				// Navigate and load SearchController.
+				$location.path('/search');
+				
+				// Raise the search event which the SearchController listens to.
 				$rootScope.$broadcast('Event:Search', {
 					value: $rootScope.state.searchText
 				});
 
-				$location.path('/search');
-				
 			};
 
 
@@ -423,9 +453,11 @@
 			//Flickr.Authenticate();
     }]);
 
-	downloadr.config(['$routeProvider',
-		function ($routeProvider)
+	downloadr.config(['$routeProvider', '$mdThemingProvider',
+		function ($routeProvider, $mdThemingProvider)
 		{
+			 $mdThemingProvider.theme('cyan');
+			
 			$routeProvider.when('/', {
 				templateUrl: '/views/home.html',
 				controller: 'HomeController'

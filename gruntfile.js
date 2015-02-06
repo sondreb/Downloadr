@@ -375,6 +375,20 @@ module.exports = function (grunt) {
 					dest: '<%= config.app %>/images/icons/svg/',
 					flatten: true,
 					expand: true
+				},
+				{
+					cwd: '<%= config.app %>/bower_components/font-awesome/fonts/',
+					src: ['*.*'],
+					dest: '<%= config.app %>/fonts',
+					expand: true,
+					dot: true
+				},
+				{
+					expand: true,
+					dot: true,
+					cwd: '<%= config.app %>/bower_components/mdi/fonts/',
+					src: ['*.*'],
+					dest: '<%= config.app %>/fonts/'
 				}]
 			},
 			dist: {
@@ -392,16 +406,20 @@ module.exports = function (grunt) {
                         '_locales/{,*/}*.json',
                     ]
                 },
-
-
-					{
-						expand: true,
-						dot: true,
-						cwd: 'app/bower_components/font-awesome/fonts/',
-						src: ['*.*'],
-						dest: '<%= config.dist %>/fonts'
-            }
-
+				{
+					expand: true,
+					dot: true,
+					cwd: 'app/bower_components/font-awesome/fonts/',
+					src: ['*.*'],
+					dest: '<%= config.dist %>/fonts'
+				},
+				{
+					expand: true,
+					dot: true,
+					cwd: 'app/bower_components/mdi/fonts/',
+					src: ['*.*'],
+					dest: '<%= config.dist %>/fonts/'
+				}
                 ]
 			},
 			styles: {

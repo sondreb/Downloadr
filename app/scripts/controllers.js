@@ -1,6 +1,6 @@
 /*!
  * Flickr Downloadr
- * Copyright: 2007-2014 Sondre Bjellås. http://sondreb.com/
+ * Copyright: 2007-2015 Sondre Bjellås. http://sondreb.com/
  * License: MIT
  */
 
@@ -37,13 +37,9 @@
 
     }]);
 
-	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings',
-		function ($scope, $rootScope, settings) {
+	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings', '$document',
+		function ($scope, $rootScope, settings, $document) {
 
-			$scope.performSearch = function()
-			{
-				console.log('SEARCH!!!!');
-			}
 			
 			$scope.refreshWallpaper = function () {
 
@@ -347,16 +343,34 @@
 		function ($scope, $rootScope, $location, $http, $timeout, socket, flickr, settings) {
 
 
+			console.log('CREATING SEARCH CONTROLLER!!!');
+			
 			//$scope.PLACEHOLDER_IMAGE = '/img/loading.gif';
 
-			$rootScope.state.background = 'wallpaper-gray';
+			$rootScope.state.background = 'wallpaper-dark';
 			$rootScope.state.showActions = true;
 			$rootScope.state.actionTarget = 'folder';
-
-			// Hook up handler to the scroll event when DOM is ready.
-			angular.element(document).ready(function () {
-				$('#presenter').on('scroll', function() { console.log('scroll event'); });
+			
+			$scope.$on('$destroy', function (event) {
+				
+				console.log('Destroy: SearchController... Cleaning up Resources...');
+				
+				socket.removeAllListeners('urlSigned');
+				
+				// Whenever the user navigates away from SearchController, make sure
+				// we cleanup resources in use.
+				$scope.clearPhotos();
+				
+				// Remove global event listeners.
+				$scope.onSearchEvent();
+				$scope.onFilterEvent();
+				$scope.onPagingEvent();
 			});
+			
+			// Hook up handler to the scroll event when DOM is ready.
+			//angular.element(document).ready(function () {
+			//	$('#presenter').on('scroll', function() { console.log('scroll event'); });
+			//});
 			
 			/*
 			$('#presenter').scroll(function() {
@@ -370,7 +384,7 @@
 				
 			});*/
 			
-			$rootScope.$on('Event:Search', function (event, data) {
+			$scope.onSearchEvent = $rootScope.$on('Event:Search', function (event, data) {
 
 				console.log('User did a new search...');
 				$rootScope.state.searchText = data.value;
@@ -378,19 +392,26 @@
 
 			});
 
-			$rootScope.$on('Event:Filter', function (event) {
+			$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
 
+				$scope.clearPhotos();
+				
 				console.log('User changed filter...');
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
 			
-			$rootScope.$on('Event:Paging', function (event) {
+			$scope.onPagingEvent = $rootScope.$on('Event:Paging', function (event) {
 
 				console.log('User changed paging...');
 				$scope.performSearch($rootScope.state.searchText);
 
 			});
+			
+			$scope.loadMore = function()
+			{
+				$rootScope.$broadcast('Event:Paging');
+			}
 
 			$scope.loadImage = function (item, callback) {
 				
@@ -404,6 +425,13 @@
 				xhr.open('GET', item.uri, true);
 				xhr.send();
 				
+			};
+			
+			$scope.showMenu = function(photo)
+			{
+				var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
+				console.log('Open: ', url);
+				window.open(url);
 			};
 			
 			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
@@ -438,27 +466,24 @@
 					var item = photos[i];
 					
 					// Skip all photos already downloaded.
-					
-					console.log('item.url: ', item.url);
+					//console.log('item.url: ', item.url);
 					
 					if (item.url !== undefined) {
 						continue;
 					}
-
+					
 					item.uri = item.getUrl('m');
 
 					// We are about to download the last photo, we can prepare for next search (scrolling).
 					if (i === (photos.length - 1))
 					{
 						console.log('i == photos.length!');
-						
 						$scope.page = $scope.page + 1;
 						
-						if ($scope.page < 3)
-						{
-							$rootScope.$broadcast('Event:Paging');
-						}
-						
+						//if ($scope.page < 3)
+						//{
+							//$rootScope.$broadcast('Event:Paging');
+						//}
 					}
 					
 					$scope.loadImage(item, function (blob_uri, originalItem) {
@@ -488,9 +513,8 @@
 			$scope.total = 0;
 			
 			$scope.page = 1;
-
-			// Register handler for callbacks of signing URLs.
-			socket.on('urlSigned', function (message) {
+			
+			$scope.onUrlSigned = function (message) {
 
 				var url = 'https://' + message.hostname + message.path;
 
@@ -525,7 +549,7 @@
 						// available so this function will search for the largest.
 						item.getUrl = function (photoSize) {
 
-							console.log('WHAT IS SIZE: ', photoSize);
+							//console.log('WHAT IS SIZE: ', photoSize);
 
 							// If the specified size exists, return that.
 							if (this['url_' + photoSize] !== undefined) {
@@ -561,8 +585,7 @@
 
 					if (!paging)
 					{
-						// Remove existing downloaded photos to avoid memory leak.
-						$scope.clearObjectURLs();
+						$scope.clearPhotos();
 						
 						// Bind to the UI.
 						$scope.photos = list;
@@ -583,7 +606,19 @@
 					console.log('HTTP Status: ', status);
 				});
 
-			});
+			};
+
+			// Register handler for callbacks of signing URLs.
+			socket.on('urlSigned', $scope.onUrlSigned);
+			
+			$scope.clearPhotos = function()
+			{
+				// Remove existing downloaded photos to avoid memory leak.
+				$scope.clearObjectURLs();
+
+				// Bind to the UI.
+				$scope.photos = [];
+			}
 
 			// Clears up all the blob files that was previously downloaded. For future
 			// informational reference, the blob-links under "Resources" in the Developer Tools
@@ -606,13 +641,14 @@
 			};
 
 			$scope.performSearch = function (searchTerm) {
+				
 				// Get a prepared message that includes token.
 				// Until we know exactly what metadata we need, we'll ask for all extras.
 				var message = flickr.createMessage('flickr.photos.search', {
 					text: searchTerm,
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
-					per_page: '30',
+					per_page: '10',
 					page: '' + $scope.page + '',
 					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
@@ -620,13 +656,20 @@
 				console.log('Sign URL message: ', message);
 				socket.emit('signUrl', message);
 			};
-
+			
 			$scope.init = function () {
 
-				// This is first run, meaning user have probably performed search from
-				// home view. Read the state and perform search now.
-				$scope.performSearch($rootScope.state.searchText);
-
+				//if ($rootScope.state.firstRun)
+				//{
+					//$rootScope.state.firstRun = false;
+					
+					console.log('SearchController: init.');
+				
+					// This is first run, meaning user have probably performed search from
+					// home view. Read the state and perform search now.
+					$scope.performSearch($rootScope.state.searchText);
+				//}
+				
 			};
 
 			$scope.init();
@@ -813,11 +856,15 @@
 			$scope.count = 0;
 
     }]);
+	
+	
+	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog',
+		function ($scope, $rootScope, notify, settings, $mdDialog) {
 
-	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings',
-		function ($scope, $rootScope, notify, settings) {
+			$rootScope.state.background = 'wallpaper-light';
 
-
+			
+	
 
 			function errorHandler(err) {
 				console.log('ERROR!! : ', err);
@@ -838,6 +885,98 @@
 			$scope.count = 0;
 			$scope.photoNumber = 1;
 			$scope.completed = false;
+			
+			 $scope.showConfirm = function(accept, cancel) {
+
+			   var confirm = $mdDialog.confirm()
+				  .title('One more more files already exists!')
+				  .content('Would you like to skip those photos or overwrite existing ones?')
+				  .ariaLabel('Already exists')
+				  .ok('Overwrite existing')
+				  .cancel('Skip existing');
+
+				$mdDialog.show(confirm).then(function() {
+					accept();
+				}, function() {
+					cancel();
+				});
+
+			  };
+			
+			$scope.writeFile = function(index, fileName, entry, blob_uri, retry)
+			{
+				console.log('Write file: ', fileName);
+				
+				// Create the file on disk.
+				entry.getFile(fileName, {
+					create: true,
+					exclusive: true
+				}, function (writableFileEntry) {
+
+					console.log('FILE: ', writableFileEntry);
+
+					writableFileEntry.createWriter(function (writer) {
+						writer.onerror = errorHandler;
+						writer.onwriteend = function (e) {
+
+							console.log('write complete');
+
+							// We need to run apply here, cause in the loop it's called
+							// from outside the angular scope.
+							$scope.$apply(function () {
+								$scope.photoNumber = (index + 1);
+							});
+
+							var percentage = $scope.photoNumber * 100 / $scope.count;
+
+								if (settings.values.progress) {
+							// Should we do Pause/Cancel buttons for this notification?
+							notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
+								'You will be notified when download is completed.',
+								function (id) {}, Math.round(percentage));
+
+							}
+
+							// Process the next photo
+							$scope.processPhoto(index + 1);
+						};
+
+						writer.write(new Blob([blob_uri], {
+							type: 'image/jpeg'
+						}));
+
+					}, errorHandler);
+				}, function (err) {
+
+					// If the error is caused by file existing, we'll generate random name and retry.
+					if (err.name == 'InvalidModificationError' && !retry)
+					{
+						var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+						var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
+						var newFullName = newFileName + '_' + $scope.uniqueName() + newFileNameExt;
+						
+						console.log('Unable to write file to disk... Retry with new filename: ', newFullName);
+						
+						// Retry with new filename.
+						$scope.writeFile(index, newFullName, entry, blob_uri, true);
+					}
+					else
+					{
+						console.log(photo);
+
+						//$scope.showConfirm(function() { console.log('accept'); }, function() { console.log('cancel'); });
+
+						console.log('Unable to write file to disk...');
+						console.log(err);
+					}
+					
+				});
+
+			};
+							  
+			$scope.uniqueName = function() {
+    			return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4);
+			};
 
 			$scope.processPhoto = function (index) {
 				// Get a reference to the photo object.
@@ -847,7 +986,7 @@
 				var entry = $rootScope.state.targetEntry;
 
 				// Get a reference to the user selected photo size.
-				var size = $rootScope.state.photoSize;
+				var size = settings.values.size;
 
 				console.log('PHOTO SIZE: ', size);
 
@@ -880,77 +1019,11 @@
 				$scope.loadImage(photo, size, function (blob_uri, originalItem) {
 
 					console.log('blob_uri: ', blob_uri);
-
-					// Create the file on disk.
-					entry.getFile(photo.getFileName(size), {
-						create: true,
-						exclusive: true
-					}, function (writableFileEntry) {
-
-						console.log('FILE: ', writableFileEntry);
-
-						writableFileEntry.createWriter(function (writer) {
-							writer.onerror = errorHandler;
-							writer.onwriteend = function (e) {
-
-								console.log('write complete');
-
-								// We need to run apply here, cause in the loop it's called
-								// from outsiden the angular scope.
-								$scope.$apply(function () {
-									$scope.photoNumber = (index + 1);
-								});
-
-								var percentage = $scope.photoNumber * 100 / $scope.count;
-
-
-								if (settings.values.progress) {
-									// Should we do Pause/Cancel buttons for this notification?
-									notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
-										'You will be notified when download is completed.',
-										function (id) {}, Math.round(percentage));
-
-								}
-								/*
-              var options = {
-                type: "progress",
-                title: "Downloaded " + $scope.photoNumber + " of " + $scope.count,
-                message: "",
-                //message: "Used time 3:33 estimated 5:30 left",
-                iconUrl: 'img/icon_128.png',
-                buttons: [{
-                    title: "Pause",
-                    iconUrl: "img/icon_64.png"
-                }, {
-                    title: "Cancel",
-                    iconUrl: "img/icon_64.png"
-                }],
-                progress: Math.round(percentage)
-              };
-
-              chrome.notifications.create('progress', options, function(notificationId) {
-
-                console.log('Clicked: ', notificationId);
-
-              });*/
-
-
-								// Process the next photo
-								$scope.processPhoto(index + 1);
-
-							};
-
-							writer.write(new Blob([blob_uri], {
-								type: 'image/jpeg'
-							}));
-							//writer.write(new Blob(['1234567890'], {type: 'text/plain'}));
-
-						}, errorHandler);
-
-
-					}, function (err) {
-						console.log(err);
-					});
+					
+					var fileName = photo.getFileName(size);
+					
+					$scope.writeFile(index, fileName, entry, blob_uri);
+					
 
 				});
 			};
@@ -978,6 +1051,8 @@
 	controllers.controller('FolderController', ['$scope', '$rootScope',
 		function ($scope, $rootScope) {
 
+			$rootScope.state.background = 'wallpaper-light';
+			
 			$rootScope.state.actionTarget = 'download';
 			$rootScope.state.showActions = true;
 
