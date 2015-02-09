@@ -36,11 +36,11 @@
 	
 	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
-	downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-	//downloadr.value('config_socket_server', 'http://localhost:3000');
+	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
+	downloadr.value('config_socket_server', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav',
-		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav) {
+	downloadr.run(['$rootScope', '$location', 'searchProvider', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'config_socket_server',
+		function ($rootScope, $location, searchProvider, flickr, settings, notify, $mdSidenav, $http, config_socket_server) {
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -172,8 +172,6 @@
 
 				isAnonymous: true,
 
-				isConnecting: true,
-
 				// Used to see if we're running inside Chrome Packaged App.
 				packaged: chrome.runtime !== undefined,
 
@@ -301,6 +299,70 @@
 			$rootScope.$broadcast('status', {
 				message: 'Starting...'
 			});
+			
+			
+			$rootScope.authenticated = function(oauth_token, oauth_verifier)
+			{
+				var url = config_socket_server + '/login/exchange';
+				
+				$http.post(url, {oauth_token: oauth_token, oauth_verifier: oauth_verifier}).success($rootScope.onAuthenticated).error($rootScope.onAuthenticatedError);
+			};
+			
+			$rootScope.onAuthenticated = function(data, status, headers, config)
+			{
+				var message = data;
+				
+				// Save it using the Chrome extension storage API.
+				// This will ensure the token is synced across devices.
+				chrome.storage.sync.set({
+					'token': message
+				}, function () {
+					// Notify that we saved.
+					message('Token saved');
+				});
+
+				$rootScope.authenticationState(message);
+				
+				console.log('YES!! ', message);
+				
+			};
+			
+			$rootScope.onAuthenticatedError = function(data, status, headers, config)
+			{
+				console.log('Unable to connect with server: ', status);
+				
+				$rootScope.$broadcast('status', {
+					message: 'Error: ' + status
+				});
+			};
+			
+			$rootScope.getLoginUrl = function(ok, fail) {
+				
+				var url = config_socket_server + '/login/url';
+				console.log('Calling HTTP Server... ', url);
+
+				// When no token is found, we'll issue a command to get login url.
+				$http.get(url).success(ok).error(fail);
+				
+			};
+			
+			$rootScope.onLoginUrl = function(data, status, headers, config)
+			{
+				console.log('Flickr auth URL: ', data.url);
+
+				$rootScope.state.loginUrl = data.url;
+				$rootScope.$broadcast('status', {
+					message: 'Ready.'
+				});
+			};
+			
+			$rootScope.onLoginUrlError = function(data, status, headers, config) {
+				console.log('Unable to connect with server: ', status);
+				
+				$rootScope.$broadcast('status', {
+					message: 'Error: ' + status
+				});
+			};
 
 			$rootScope.$on('Event:Logout', function () {
 
@@ -316,7 +378,7 @@
 				$rootScope.authenticationState(null);
 				
 				// Make sure we get a new login url.
-				socket.emit('getUrl');
+				//socket.emit('getUrl');
 			});
 
 			// Make sure we listen to whenever the local storage value have changed.
@@ -339,16 +401,15 @@
 			// Try to find existing token.
 			chrome.storage.sync.get('token', function (result) {
 
-				if (result === undefined || result === null) {
+				if (result === undefined || result === null || result.token === undefined || result.token === null) {
+					
 					console.log('No existing token found.');
-
-					// When no token is found, we'll issue a command to get login url.
-					socket.emit('getUrl');
-				} else if (result.token === undefined || result.token === null) {
-					console.log('No existing token found.');
-
-					// When no token is found, we'll issue a command to get login url.
-					socket.emit('getUrl');
+					
+					// Retreive the login URL.
+					//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
+					
+					//socket.emit('getUrl');
+					
 				} else {
 					
 					$rootScope.authenticationState(result.token);
@@ -358,7 +419,7 @@
 
 			// Whenever login URL is received, we will update the UI and enable
 			// the login button.
-			socket.on('url', function (message) {
+			/*socket.on('url', function (message) {
 
 				console.log('Flickr auth URL: ', message.url);
 
@@ -368,9 +429,10 @@
 					message: 'Connected.'
 				});
 
-			});
+			});*/
 
 			// When we receive access token, make sure we store it permanently.
+			/*
 			socket.on('token', function (message) {
 
 				// Save it using the Chrome extension storage API.
@@ -384,7 +446,7 @@
 
 				$rootScope.authenticationState(message);
 
-			});
+			});*/
 			
 			$rootScope.authenticationState = function(token)
 			{
@@ -403,10 +465,9 @@
 					console.log('$rootScope.state.userName: ', flickr.userId);
 					
 					$rootScope.state.isAnonymous = false;
-					$rootScope.state.isConnecting = false;
 
 					$rootScope.$broadcast('status', {
-						message: 'Authenticated. Hi ' + flickr.userName + '!'
+						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});
 				}
 			};

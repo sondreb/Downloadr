@@ -15,8 +15,8 @@
 			$log.log('downloadr.controllers.run: ');
     }]);
 
-	controllers.controller('StatusController', ['$scope', '$rootScope', 'socket',
-		function ($scope, $rootScope, socket) {
+	controllers.controller('StatusController', ['$scope', '$rootScope', 
+		function ($scope, $rootScope) {
 
 			console.log('STATUS CONTROLLER!');
 
@@ -29,11 +29,12 @@
 
 			});
 
+			/*
 			socket.on('status', function (message) {
 				console.log('Status: ', message);
 				$scope.message = message.text;
 
-			});
+			});*/
 
     }]);
 
@@ -136,11 +137,6 @@
 				},
 				{
 					type: 'Library',
-					text: 'socket.io',
-					url: 'http://socket.io/'
-				},
-				{
-					type: 'Library',
 					text: 'express',
 					url: 'http://expressjs.com/'
 				},
@@ -184,24 +180,50 @@
 
     }]);
 
-	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'socket',
-		function ($scope, $rootScope, $location, socket) {
-
-			$rootScope.state.background = 'wallpaper-3';
-
-			$scope.user = {
-				username: '',
-				password: ''
-			};
-
-			console.log('Login URL', $rootScope.state.loginUrl);
+	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'config_socket_server', '$http',
+		function ($scope, $rootScope, $location, config_socket_server, $http) {
 
 			// Was unable to bind to the src attribute, so have to use DOM.
 			var webview = document.querySelector('webview');
+			
+			$rootScope.state.background = 'wallpaper-3';
+			
+			$scope.loginUrl = '';
 
-			// Set the source to be login URL.
-			webview.src = $rootScope.state.loginUrl;
+			$scope.getLoginUrl = function(ok, fail) {
+				
+				var url = config_socket_server + '/login/url';
+				console.log('Calling HTTP Server... ', url);
 
+				// When no token is found, we'll issue a command to get login url.
+				$http.get(url).success(ok).error(fail);
+				
+			};
+			
+			$scope.onLoginUrl = function(data, status, headers, config)
+			{
+				console.log('Flickr auth URL: ', data.url);
+				$scope.loginUrl = data.url;
+				
+				// Set the source to be login URL.
+				webview.src = $scope.loginUrl;
+				
+				$rootScope.$broadcast('status', {
+					message: 'Loading Flickr.com for authorization...'
+				});
+			};
+			
+			$scope.onLoginUrlError = function(data, status, headers, config) {
+				console.log('Unable to connect with server: ', status);
+				
+				$rootScope.$broadcast('status', {
+					message: 'Error: ' + status
+				});
+			};
+			
+			// Call the login URL on root.
+			$scope.getLoginUrl($scope.onLoginUrl, $scope.onLoginUrlError);
+			
 			var getParameterByName = function (url, name) {
 				name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
 				var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
@@ -225,13 +247,15 @@
 
 					$scope.$apply(function () {
 
+						$rootScope.authenticated(oauth_token, oauth_verifier);
+						
 						// Notify the server so we can transform this token into
 						// a proper access token the user can store permanently.
-						socket.emit('accessGranted', {
-							oauth_token: oauth_token,
-							oauth_verifier: oauth_verifier
-						})
-
+						//socket.emit('accessGranted', {
+						//	oauth_token: oauth_token,
+						//	oauth_verifier: oauth_verifier
+						//})
+						
 						$rootScope.state.isAnonymous = false;
 
 						$rootScope.$broadcast('status', {
@@ -245,6 +269,10 @@
 				}
 
 				console.log('webview loaded: ' + webview.src);
+				
+				$rootScope.$broadcast('status', {
+					message: 'Login to complete the authorization.'
+				});
 
 			});
 
@@ -308,9 +336,9 @@
 
 	controllers.controller('SearchController', ['$scope', '$rootScope',
     '$location', '$http',
-    '$timeout', 'socket',
-    'flickr', 'settings',
-		function ($scope, $rootScope, $location, $http, $timeout, socket, flickr, settings) {
+    '$timeout', 
+    'flickr', 'settings', 'config_socket_server',
+		function ($scope, $rootScope, $location, $http, $timeout, flickr, settings, config_socket_server) {
 
 			$rootScope.state.background = 'wallpaper-dark';
 			$rootScope.state.showActions = true;
@@ -324,8 +352,6 @@
 			$scope.$on('$destroy', function (event) {
 
 				console.log('Destroy: SearchController... Cleaning up Resources...');
-
-				socket.removeAllListeners('urlSigned');
 
 				// Whenever the user navigates away from SearchController, make sure
 				// we cleanup resources in use.
@@ -555,7 +581,7 @@
 			};
 
 			// Register handler for callbacks of signing URLs.
-			socket.on('urlSigned', $scope.onUrlSigned);
+			//socket.on('urlSigned', $scope.onUrlSigned);
 
 			$scope.clearPhotos = function () {
 				// Remove existing downloaded photos to avoid memory leak.
@@ -587,8 +613,10 @@
 				}
 			};
 
+			
+			
 			$scope.performSearch = function (searchTerm) {
-
+				
 				// Get a prepared message that includes token.
 				// Until we know exactly what metadata we need, we'll ask for all extras.
 				var message = flickr.createMessage('flickr.photos.search', {
@@ -599,11 +627,24 @@
 					page: '' + $scope.page + '',
 					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
-
+				
 				console.log('Sign URL message: ', message);
-				socket.emit('signUrl', message);
+				
+				var url = config_socket_server + '/search';
+				$http.post(url, message).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+				
 			};
-
+			
+			$scope.onUrlSignedError = function(data, status, headers, config)
+			{
+				console.log('Unable to sign search request: ', status);
+				
+				$rootScope.$broadcast('status', {
+					message: 'Error: ' + status
+				});
+			};
+			
+			
 			$scope.init = function () {
 
 				// This is first run, meaning user have probably performed search from
@@ -611,7 +652,7 @@
 				$scope.performSearch($rootScope.state.searchText);
 
 			};
-
+			
 			$scope.init();
     }]);
 
@@ -1082,8 +1123,8 @@
 
     }]);
 
-	controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
-		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
+	controllers.controller('MenuController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav',
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav) {
 
 			$scope.closeMenu = function () {
 				console.log('closeMenu');
@@ -1093,8 +1134,8 @@
 		}]);
 
 
-	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'socket', 'settings', '$mdSidenav',
-		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, socket, settings, $mdSidenav) {
+	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav',
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav) {
 
 			$scope.$on('Event:NavigateBack', function () {
 				$scope.goBack();

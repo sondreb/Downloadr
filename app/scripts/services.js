@@ -145,50 +145,6 @@
 	});
 
 
-	downloadr.factory('socket', ['$rootScope', 'config_socket_server', function ($rootScope, config_socket_server) {
-
-		console.log('connecting to socket server @ ', config_socket_server);
-		var socket = io.connect(config_socket_server);
-
-		socket.on('connect', function () {
-
-			console.log('socket.io connected to service.');
-			$rootScope.$broadcast('status', {
-				message: 'Connected to service.'
-			});
-			socket.emit('message', {
-				text: 'hello world from app!!!'
-			});
-
-
-		});
-
-		return {
-			on: function (eventName, callback) {
-				socket.on(eventName, function () {
-					var args = arguments;
-					$rootScope.$apply(function () {
-						callback.apply(socket, args);
-					});
-				});
-			},
-			emit: function (eventName, data, callback) {
-				socket.emit(eventName, data, function () {
-					var args = arguments;
-					$rootScope.$apply(function () {
-						if (callback) {
-							callback.apply(socket, args);
-						}
-					});
-				})
-			},
-			removeAllListeners: function (eventName) {
-				socket.removeAllListeners(eventName);
-			}
-		};
-	}]);
-
-
 	downloadr.service('flickr', ['$rootScope', function ($rootScope) {
 
 		var token = '';

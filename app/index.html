@@ -160,11 +160,11 @@
 			Settings
 		</md-button>
 		
-		<md-button class="menu-button" href="#/login" ng-show="!state.isConnecting && state.isAnonymous">
+		<md-button class="menu-button" href="#/login" ng-show="state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
 				</md-button>
 
-				<md-button href="#/logout" class="menu-button"  ng-show="!state.isConnecting && !state.isAnonymous">
+				<md-button href="#/logout" class="menu-button"  ng-show="!state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-out"></i> Sign out
 				</md-button>
 		

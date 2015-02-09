@@ -13,91 +13,13 @@
   and don't do any abstractions of it's methods.
 */
 
-
-function createSocket(app, settings) {
-	// Expose the on handler directly from the socket.io instance.
-	//exports.on = io.on;
-
-	io.on('connection', function (socket) {
-
-		//exports.socket = socket;
-
-		console.log('a user connected, session id: ', socket.id);
-
-		socket.on('disconnect', function () {
-			console.log('user disconnected: ', socket.id);
-		});
-
-		//socket.on('message', function () { return "Hello World!"; });
-
-		//io.emit('status', { text: 'Connected.' });
-		//io.emit('url', { url: 'http://www.flickr.com/services/oauth/request_token' });
-		//io.emit('this', { will: 'aawwwesome!!' });
-		/*
-    var flickrApi = require('flickr-oauth-and-upload');
-
-    var myCallback = function (err, data) {
-      if (!err) {
-        console.log('Remember the credentials:');
-        console.log('oauthToken: ' + data.oauthToken);
-        console.log('oauthTokenSecret: ' + data.oauthTokenSecret);
-        console.log('Ask user to go here for authorization: ' + data.url);
-
-        storage.openCollection('tokens').then(function(collection) {
-
-          // Create a new session.
-          var session = { connectionId: socket.id, token: data.oauthToken, tokenSecret: data.oauthTokenSecret, tokenVerifier: '', isAccessToken: false };
-
-          storage.insert(session, collection).then(function(document)
-          {
-            console.log('Document Created: ', document);
-            //return storage.delete(document);
-          })
-          .fail(function(error){
-            console.log(error);
-          });
-
-        });
-
-        io.emit('url', {url: data.url});
-
-      } else {
-        console.log('Error: ' + err);
-      }
-    };*/
-
-		/*
-    var args = {
-      flickrConsumerKey: configuration.get('FLICKR_KEY'),
-      flickrConsumerKeySecret: configuration.get('FLICKR_SECRET'),
-      permissions: 'read',
-      redirectUrl: 'http://localhost:3000/auth/',
-      callback: myCallback
-    };
-
-    flickrApi.getRequestToken(args);
-*/
-
-		//socket.broadcast.emit('user connected');
-		//socket.broadcast.emit('this', { will: 'asdfasdfasdfadfs!!' });
-
-		//socket.on('private message', function(from, msg){
-		//  console.log('I received a private message by ', from, ' saying ', msg)
-		//});
-
-
-
-	});
-
-	return this;
-
-}
-
 module.exports = function (socket, storage, flickr) {
 
 	// Bind the socket events with the Flickr API and storage API.
 	socket.on('connection', function (client) {
 
+		return;
+		
 		client.on('message', function (msg) {
 			console.log('socket.io:message: ', msg);
 		});
@@ -140,8 +62,7 @@ module.exports = function (socket, storage, flickr) {
 							// Now we should delete the session token from storage.
 							// Perhaps we should have some sort of timeout, if there
 							// is a connection issue with the WebSocket?
-
-							storage.delete(doc);
+							//storage.delete(doc);
 
 						});
 
@@ -158,6 +79,8 @@ module.exports = function (socket, storage, flickr) {
 
 
 		client.on('signUrl', function (msg) {
+			
+			return;
 
 			console.log('Sign this method: ', msg);
 
@@ -173,6 +96,8 @@ module.exports = function (socket, storage, flickr) {
 
 		// When user requests auth URL, generate using the Flickr service.
 		client.on('getUrl', function () {
+			
+			return;
 
 			console.log('io: User requests login url.');
 
@@ -210,10 +135,9 @@ module.exports = function (socket, storage, flickr) {
 								tokenSecret: oauthTokenSecret,
 								tokenVerifier: ''
 							};
-
+							
 							storage.insert(doc, collection).then(function (document) {
 								console.log('Saved document: ' + document);
-
 							});
 						} else {
 							console.log('Found document: ' + document);
@@ -232,28 +156,4 @@ module.exports = function (socket, storage, flickr) {
 			});
 		});
 	});
-
-
-
-
-	//var port = settings.port || 5000;
-	//console.log('socket.io hosted on port: ', port);
-
-	// Create the socket.io server which runs on specified port.
-	//var server = require('http').Server(app);
-	//var io = require('socket.io').listen(server);
-	//server.listen(port);
-
-	/*
-  io.on('connection', function(client) {
-
-    console.log('a user connected, session id: ', client.id);
-
-    client.on('disconnect', function() {
-      console.log('user disconnected: ', client.id);
-    });
-
-  });*/
-
-	//return io;
 };
