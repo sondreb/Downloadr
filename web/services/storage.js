@@ -137,7 +137,31 @@ var readDocumentByToken = function (token, collection) {
 
 	return deferred.promise;
 
+};
+
+
+var readDocumentByRequestToken = function (token, collection) {
+
+	var deferred = Q.defer();
+
+	console.log('Searching for document with request token = ', token);
+
+	_client.queryDocuments(collection._self, 'SELECT * FROM tokens t WHERE t.requestToken="' + token + '"').toArray(function (err, results) {
+		if (err) {
+			console.log('Error: ', err);
+			deferred.reject(err);
+			return;
+		}
+
+		//console.log('Results: ', results);
+
+		deferred.resolve(results[0]);
+	});
+
+	return deferred.promise;
+
 }
+
 
 var readDocumentBySessionId = function (id, collection) {
 	var deferred = Q.defer();
@@ -270,6 +294,7 @@ module.exports = function (host, key, databaseId) {
 		list: readDocuments,
 		read: readDocument,
 		readByToken: readDocumentByToken,
+		readByRequestToken: readDocumentByRequestToken,
 		readBySessionId: readDocumentBySessionId,
 		insert: insertDocument,
 		update: updateDocument,

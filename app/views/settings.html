@@ -10,12 +10,22 @@
 					<label for="radio4" class="radio-button__label">SafeSearch on</label>
 				</div>
 
-				<div class="radio-button">
+				<div class="radio-button" ng-show="{{state.isAnonymous}}">
+					<input type="radio" id="radio5" disabled ng-model="settings.values.safe" name="radio2" value="2" class="radio-button__input">
+					<label for="radio5" class="radio-button__label">SafeSearch moderate</label>
+				</div>
+
+				<div class="radio-button" ng-show="{{state.isAnonymous}}">
+					<input type="radio" id="radio6" disabled ng-model="settings.values.safe" name="radio2" value="3" class="radio-button__input" checked>
+					<label for="radio6" class="radio-button__label">SafeSearch off</label>
+				</div>
+				
+				<div class="radio-button" ng-hide="{{state.isAnonymous}}">
 					<input type="radio" id="radio5" ng-model="settings.values.safe" name="radio2" value="2" class="radio-button__input">
 					<label for="radio5" class="radio-button__label">SafeSearch moderate</label>
 				</div>
 
-				<div class="radio-button">
+				<div class="radio-button" ng-hide="{{state.isAnonymous}}">
 					<input type="radio" id="radio6" ng-model="settings.values.safe" name="radio2" value="3" class="radio-button__input" checked>
 					<label for="radio6" class="radio-button__label">SafeSearch off</label>
 				</div>
@@ -23,7 +33,7 @@
 
 		</p>
 		<p ng-show="state.isAnonymous">
-			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service</em>
+			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service and not the app.</em>
 		</p>
 
 		<!--<br>

@@ -225,13 +225,15 @@
 
 					$scope.$apply(function () {
 
+						$rootScope.authenticated(oauth_token, oauth_verifier);
+						
 						// Notify the server so we can transform this token into
 						// a proper access token the user can store permanently.
-						socket.emit('accessGranted', {
-							oauth_token: oauth_token,
-							oauth_verifier: oauth_verifier
-						})
-
+						//socket.emit('accessGranted', {
+						//	oauth_token: oauth_token,
+						//	oauth_verifier: oauth_verifier
+						//})
+						
 						$rootScope.state.isAnonymous = false;
 
 						$rootScope.$broadcast('status', {

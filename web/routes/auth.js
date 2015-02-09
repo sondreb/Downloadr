@@ -12,7 +12,7 @@ exports.index = function (req, res) {
 
 	console.log('Token :', token);
 	console.log('Verifier: ', verifier);
-
+	
 	// We could show error messages to users at this
 	// time if the auth did not succeed?
 
