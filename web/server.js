@@ -22,6 +22,7 @@ var express = require('express'),
 	user = require('./routes/user'),
 	auth = require('./routes/auth'),
 	login = require('./routes/login'),
+	search = require('./routes/search'),
 	logger = require('morgan'),
 	multer = require('multer'),
 	methodOverride = require('method-override'),
@@ -72,6 +73,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/auth', auth.index);
 app.get('/login/url', login.url);
 app.post('/login/exchange', login.exchange);
+app.post('/search', search.index);
 
 // error handling middleware should be loaded after the loading the routes
 if ('development' == app.get('env')) {
@@ -82,6 +84,5 @@ var server = app.listen(app.get('port'), function () {
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
-var io = require('socket.io').listen(server);
-
-var socket = require('./services/socket.js')(io, storage, flickr);
+//var io = require('socket.io').listen(server);
+//var socket = require('./services/socket.js')(io, storage, flickr);

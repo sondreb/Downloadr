@@ -39,8 +39,8 @@
 	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
 	downloadr.value('config_socket_server', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'searchProvider', 'socket', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'config_socket_server',
-		function ($rootScope, $location, searchProvider, socket, flickr, settings, notify, $mdSidenav, $http, config_socket_server) {
+	downloadr.run(['$rootScope', '$location', 'searchProvider', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'config_socket_server',
+		function ($rootScope, $location, searchProvider, flickr, settings, notify, $mdSidenav, $http, config_socket_server) {
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -171,8 +171,6 @@
 			$rootScope.state = {
 
 				isAnonymous: true,
-
-				isConnecting: true,
 
 				// Used to see if we're running inside Chrome Packaged App.
 				packaged: chrome.runtime !== undefined,
@@ -353,7 +351,6 @@
 				console.log('Flickr auth URL: ', data.url);
 
 				$rootScope.state.loginUrl = data.url;
-				$rootScope.state.isConnecting = false;
 				$rootScope.$broadcast('status', {
 					message: 'Ready.'
 				});
@@ -381,7 +378,7 @@
 				$rootScope.authenticationState(null);
 				
 				// Make sure we get a new login url.
-				socket.emit('getUrl');
+				//socket.emit('getUrl');
 			});
 
 			// Make sure we listen to whenever the local storage value have changed.
@@ -409,7 +406,7 @@
 					console.log('No existing token found.');
 					
 					// Retreive the login URL.
-					$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
+					//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
 					
 					//socket.emit('getUrl');
 					
@@ -435,6 +432,7 @@
 			});*/
 
 			// When we receive access token, make sure we store it permanently.
+			/*
 			socket.on('token', function (message) {
 
 				// Save it using the Chrome extension storage API.
@@ -448,7 +446,7 @@
 
 				$rootScope.authenticationState(message);
 
-			});
+			});*/
 			
 			$rootScope.authenticationState = function(token)
 			{
@@ -467,10 +465,9 @@
 					console.log('$rootScope.state.userName: ', flickr.userId);
 					
 					$rootScope.state.isAnonymous = false;
-					$rootScope.state.isConnecting = false;
 
 					$rootScope.$broadcast('status', {
-						message: 'Authenticated. Hi ' + flickr.userName + '!'
+						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});
 				}
 			};
