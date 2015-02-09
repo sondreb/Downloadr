@@ -23,6 +23,7 @@ var express = require('express'),
 	auth = require('./routes/auth'),
 	login = require('./routes/login'),
 	search = require('./routes/search'),
+	version = require('./routes/version'),
 	logger = require('morgan'),
 	multer = require('multer'),
 	methodOverride = require('method-override'),
@@ -74,6 +75,7 @@ app.get('/auth', auth.index);
 app.get('/login/url', login.url);
 app.post('/login/exchange', login.exchange);
 app.post('/search', search.index);
+app.get('/version', version.index);
 
 // error handling middleware should be loaded after the loading the routes
 if ('development' == app.get('env')) {
