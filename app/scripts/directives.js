@@ -69,11 +69,11 @@
 				$scope.clickHandler = function () {
 					console.log('CLICK HANDLER FOR DIRECTIVE!!');
 
-					if ($scope.target != null) {
+					if ($scope.target !== null) {
 						$location.path($scope.target);
 					}
 
-					if ($scope.eventHandler != null) {
+					if ($scope.eventHandler !== null) {
 						// If there is any event handler defined on the directive
 						// call the function.
 						$scope.eventHandler();

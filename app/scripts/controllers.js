@@ -20,28 +20,36 @@
 
 			console.log('STATUS CONTROLLER!');
 
-			$scope.message = 'Loading...';
+			$rootScope.state.statusMessage = 'Welcome! Login to enable additional features.';
+			
+			$scope.message = $rootScope.state.statusMessage;
 
 			$scope.$on('status', function (event, args) {
 
 				console.log('Status: ', args.message);
-				$scope.message = args.message;
+				
+				if (args.message === null || args.message === '')
+				{
+					// Setting status to empty string or nothing, will make the UI fail.
+					$scope.message = $rootScope.state.statusMessage;
+				}
+				else
+				{
+					$scope.message = args.message;
+				}
 
 			});
-
-			/*
-			socket.on('status', function (message) {
-				console.log('Status: ', message);
-				$scope.message = message.text;
-
-			});*/
 
     }]);
 
 	controllers.controller('HomeController', ['$scope', '$rootScope', 'settings', '$document',
 		function ($scope, $rootScope, settings, $document) {
 
-
+			
+			$rootScope.$broadcast('status', {
+				message: ''
+			});
+			
 			$scope.refreshWallpaper = function () {
 
 				console.log('Refresh Wallpaper');
@@ -180,8 +188,8 @@
 
     }]);
 
-	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'config_socket_server', '$http',
-		function ($scope, $rootScope, $location, config_socket_server, $http) {
+	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'HOST', '$http',
+		function ($scope, $rootScope, $location, HOST, $http) {
 
 			// Was unable to bind to the src attribute, so have to use DOM.
 			var webview = document.querySelector('webview');
@@ -192,7 +200,7 @@
 
 			$scope.getLoginUrl = function(ok, fail) {
 				
-				var url = config_socket_server + '/login/url';
+				var url = HOST + '/login/url';
 				console.log('Calling HTTP Server... ', url);
 
 				// When no token is found, we'll issue a command to get login url.
@@ -257,10 +265,6 @@
 						//})
 						
 						$rootScope.state.isAnonymous = false;
-
-						$rootScope.$broadcast('status', {
-							message: 'Authenticated.'
-						});
 
 						// Navigate to home.
 						$location.path('/#');
@@ -337,8 +341,8 @@
 	controllers.controller('SearchController', ['$scope', '$rootScope',
     '$location', '$http',
     '$timeout', 
-    'flickr', 'settings', 'config_socket_server',
-		function ($scope, $rootScope, $location, $http, $timeout, flickr, settings, config_socket_server) {
+    'flickr', 'settings', 'HOST',
+		function ($scope, $rootScope, $location, $http, $timeout, flickr, settings, HOST) {
 
 			$rootScope.state.background = 'wallpaper-dark';
 			$rootScope.state.showActions = true;
@@ -361,6 +365,7 @@
 				$scope.onSearchEvent();
 				$scope.onFilterEvent();
 				$scope.onPagingEvent();
+
 			});
 
 			// Hook up handler to the scroll event when DOM is ready.
@@ -505,6 +510,11 @@
 					var list = data.photos.photo;
 					$scope.total = data.photos.total;
 
+					
+					$rootScope.$broadcast('status', {
+						message: 'Found ' + $scope.total + ' photos.'
+					});
+					
 					var paging = data.photos.page > 1;
 
 					// If we are paging, we should not delete the existing photos.
@@ -630,7 +640,7 @@
 				
 				console.log('Sign URL message: ', message);
 				
-				var url = config_socket_server + '/search';
+				var url = HOST + '/search';
 				$http.post(url, message).success($scope.onUrlSigned).error($scope.onUrlSignedError);
 				
 			};
@@ -704,6 +714,11 @@
 				console.log('Saving settings from settings...');
 
 				settings.save();
+				
+				$rootScope.$broadcast('status', {
+					message: 'Settings saved.'
+				});
+				
 			}, true);
 
     }]);
@@ -828,6 +843,10 @@
 
 			$rootScope.state.background = 'wallpaper-light';
 
+			$rootScope.$broadcast('status', {
+					message: 'Downloading...'
+			});
+			
 			function errorHandler(err) {
 				console.log('ERROR!! : ', err);
 				console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
@@ -956,6 +975,10 @@
 						$rootScope.state.searchText = '';
 						$rootScope.state.selectedPhotos = [];
 						$scope.completed = true;
+						
+						$rootScope.$broadcast('status', {
+							message: 'Downloading completed.'
+						});
 
 						if (settings.values.completed) {
 
@@ -1011,6 +1034,12 @@
 			$scope.count = 0;
 			$scope.path = '';
 
+			
+			$rootScope.$broadcast('status', {
+					message: 'Choose folder to save ' + $rootScope.state.selectedPhotos.length + ' photos.'
+			});
+			
+			
 			/**
 			 * @param {string} File name.
 			 * @return {string} Sanitized File name.
@@ -1143,16 +1172,16 @@
 
 			$scope.expandMenu = function () {
 				$mdSidenav('left').toggle();
-			}
+			};
 
 			$scope.tabSelected = function (url) {
 				console.log('tabSELECTED: ', url);
 				$location.path(url);
-			}
+			};
 
 			$scope.showSearchControls = function () {
 				$rootScope.state.showSearchControls = true;
-			}
+			};
 
 			$scope.toggleFullscreen = function () {
 

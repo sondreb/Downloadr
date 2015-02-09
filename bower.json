@@ -1,6 +1,6 @@
 {
   "name": "downloadr",
-  "version": "0.3.0",
+  "version": "3.0.0",
   "dependencies": {
     "json3": "latest",
     "es5-shim": "latest",
@@ -11,12 +11,11 @@
     "angular-touch": "latest",
     "angular-route": "latest",
     "font-awesome": "latest",
-    "socket.io-client": "latest",
     "angular-mousetrap": "latest",
     "ngInfiniteScroll": "latest",
     "jquery": "latest",
-    "material-design-icons": "latest",
     "angular-material": "master",
+    "material-design-icons": "latest",
     "underscore": "latest",
     "lumx": "latest"
   },

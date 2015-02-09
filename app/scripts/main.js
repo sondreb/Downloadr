@@ -13,12 +13,7 @@
 
 'use strict';
 
-var DownloadrGlobal = { OS: '' };
-
 chrome.app.runtime.onLaunched.addListener(function () {
-	// Center window on screen.
-	var screenWidth = screen.availWidth;
-	var screenHeight = screen.availHeight;
 	var width = 900;
 	var height = 600;
 	
@@ -28,8 +23,8 @@ chrome.app.runtime.onLaunched.addListener(function () {
 		outerBounds: {
 			width: width,
 			height: height,
-			left: Math.round((screenWidth - width) / 2),
-			top: Math.round((screenHeight - height) / 2),
+			left: Math.round((screen.availWidth - width) / 2),
+      		top: Math.round((screen.availHeight - height)/2),
 			minWidth: 460,
 			minHeight: 400
 		}
