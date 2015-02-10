@@ -7,9 +7,11 @@
 'use strict';
 
 // Remove logging for production use.
+/*
 var console = {};
 console.log = function(){};
 window.console = console;
+*/
 
 (function () {
 
@@ -41,8 +43,8 @@ window.console = console;
 	
 	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
-	downloadr.value('HOST', 'http://flickr-downloadr.com');
-	//downloadr.value('HOST', 'http://localhost:3000');
+	//downloadr.value('HOST', 'http://flickr-downloadr.com');
+	downloadr.value('HOST', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST',
 		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST) {
