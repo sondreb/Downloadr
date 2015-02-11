@@ -44,6 +44,17 @@ var express = require('express'),
 		})
 
 
+Date.prototype.addSeconds = function(seconds) {
+            this.setSeconds(this.getSeconds() + seconds);
+            return this;
+};
+
+Date.prototype.addMinutes = function(minutes) {
+            this.setMinutes(this.getMinutes() + minutes);
+            return this;
+};
+
+
 // Make our objects accessible to our routers
 app.use(function (req, res, next) {
 	req.storage = storage;

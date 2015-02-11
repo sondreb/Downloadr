@@ -10,30 +10,14 @@
 
 	var downloadr = angular.module('downloadr.services', []);
 
-
-	var sidebar = angular.module('Sidebar', []).service('SidebarService', function () {
-		var sidebarIsShown = false;
-
-		function toggleSidebar() {
-			sidebarIsShown = !sidebarIsShown;
-		}
-
-		return {
-			isSidebarShown: function () {
-				return sidebarIsShown;
-			},
-			toggleSidebar: toggleSidebar
-		};
-	});
-
-
+	
 	downloadr.factory('settings', ['$rootScope', '$timeout',
 		function ($rootScope, $timeout) {
 
 			var load = function () {
 				chrome.storage.sync.get('settings', function (result) {
 
-					if (result.settings == null || Object.keys(result.settings).length === 0) // Checks null and undefined
+					if (result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
 					{
 						return;
 					}
@@ -121,19 +105,6 @@
 	});
 
 
-	downloadr.factory('searchProvider', ['$location', '$timeout', function ($location, $timeout) {
-		var service = {};
-
-		service.performSearch = function () {
-			console.log("PERFORM SEARCH!!!");
-		}
-
-		service.searchText = 'Hello World';
-
-		return service;
-	}]);
-
-
 	downloadr.service('util', function () {
 		this.format = function (text, params) {
 			var str = text.replace(/\{(.*?)\}/g, function (i, match) {
@@ -145,7 +116,7 @@
 	});
 
 
-	downloadr.service('flickr', ['$rootScope', function ($rootScope) {
+	downloadr.service('flickr', [function () {
 
 		var token = '';
 		var secret = '';
@@ -159,7 +130,7 @@
 			this.userId = '';
 			this.userName = '';
 			this.fullName = '';
-		}
+		};
 
 		var parseToken = function (message) {
 			this.token = message.oauthToken;

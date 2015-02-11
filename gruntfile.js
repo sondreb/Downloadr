@@ -215,10 +215,10 @@ module.exports = function (grunt) {
 
 		mochacli: {
 			options: {
-				reporter: "spec",
-				ui: "tdd"
+				reporter: 'spec',
+				ui: 'tdd'
 			},
-			all: ["<%= config.service %>/test/*.js"]
+			all: ['<%= config.service %>/test/*.js']
 		},
 
 		// Automatically inject Bower components into the HTML file
@@ -293,6 +293,7 @@ module.exports = function (grunt) {
 		htmlmin: {
 			dist: {
 				options: {
+					customAttrAssign: [/\?=/],
 					collapseBooleanAttributes: true,
 					collapseWhitespace: true,
 					removeAttributeQuotes: true,
@@ -543,7 +544,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('server', [
         'express:dev',
-        'watch'])
+        'watch']);
 
 	grunt.registerTask('test', [
         'connect:test',
@@ -569,7 +570,6 @@ module.exports = function (grunt) {
 	
 	grunt.registerTask('default', [
         'newer:jshint',
-        'test',
-        'build'
+        'test'
     ]);
 };

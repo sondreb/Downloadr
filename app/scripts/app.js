@@ -6,9 +6,15 @@
 
 'use strict';
 
+// Remove logging for production use.
+var console = {};
+console.log = function(){};
+window.console = console;
+
+
 (function () {
 
-	angular.module("lumx.search-filter").run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
+	angular.module('lumx.search-filter').run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
     '     ng-class="{ \'search-filter--is-focused\': model,\n' +
     '                 \'search-filter--is-closed\': closed }">\n' +
     '    <div class="search-filter__container">\n' +
@@ -36,11 +42,11 @@
 	
 	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
-	//downloadr.value('config_socket_server', 'http://flickr-downloadr.com');
-	downloadr.value('config_socket_server', 'http://localhost:3000');
+	downloadr.value('HOST', 'http://flickr-downloadr.com');
+	//downloadr.value('HOST', 'http://localhost:3001');
 	
-	downloadr.run(['$rootScope', '$location', 'searchProvider', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'config_socket_server',
-		function ($rootScope, $location, searchProvider, flickr, settings, notify, $mdSidenav, $http, config_socket_server) {
+	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST',
+		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST) {
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -209,7 +215,9 @@
 				
 				userName: '',
 				
-				firstRun: true
+				firstRun: true,
+				
+				statusMessage: ''
 
 			};
 			
@@ -303,7 +311,7 @@
 			
 			$rootScope.authenticated = function(oauth_token, oauth_verifier)
 			{
-				var url = config_socket_server + '/login/exchange';
+				var url = HOST + '/login/exchange';
 				
 				$http.post(url, {oauth_token: oauth_token, oauth_verifier: oauth_verifier}).success($rootScope.onAuthenticated).error($rootScope.onAuthenticatedError);
 			};
@@ -338,7 +346,7 @@
 			
 			$rootScope.getLoginUrl = function(ok, fail) {
 				
-				var url = config_socket_server + '/login/url';
+				var url = HOST + '/login/url';
 				console.log('Calling HTTP Server... ', url);
 
 				// When no token is found, we'll issue a command to get login url.
@@ -376,6 +384,10 @@
 				});
 				
 				$rootScope.authenticationState(null);
+				
+				$rootScope.$broadcast('status', {
+					message: ''
+				});
 				
 				// Make sure we get a new login url.
 				//socket.emit('getUrl');
@@ -466,6 +478,8 @@
 					
 					$rootScope.state.isAnonymous = false;
 
+					$rootScope.state.statusMessage = 'Authorized. Hi ' + flickr.userName + '!';
+					
 					$rootScope.$broadcast('status', {
 						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});

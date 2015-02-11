@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.77)
+Flickr Downloadr 3 (3.0.100)
 ============
 
 http://flickr-downloadr.com/
@@ -92,8 +92,8 @@ http://flickrdownloadr.codeplex.com/SourceControl/latest
 - Mac Icons by synetcon: http://synetcon.deviantart.com/art/OSX-Yosemite-window-buttons-459868391
 - Symbols by Font Awesome: http://fontawesome.io/
 - Image by Ossi Petruska: http://www.flickr.com/photos/10134557@N08/2527630813
-- Components: https://angularjs.org/, https://jquery.org/, http://nodejs.org/,
-http://socket.io/, http://expressjs.com/, https://github.com/Azure/azure-documentdb-node,
+- Components: https://angularjs.org/, https://jquery.org/, http://nodejs.org/, http://expressjs.com/, 
+https://github.com/Azure/azure-documentdb-node,
 https://github.com/mattiaserlo/flickr-oauth-and-upload, https://github.com/flatiron/nconf,
 https://github.com/HubSpot/pace, https://github.com/khasinski/angular-mousetrap,
 http://gruntjs.com/, http://ui.lumapps.com/

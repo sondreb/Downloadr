@@ -131,7 +131,7 @@
 		
 			<md-toolbar class="bgc-light-blue-500">
 
-			<md-button aria-label="Hide menu" style="margin: 0; padding-top: 4px; padding-bottom: 0px;" ng-click="closeMenu()" class="md-button bgc-light-blue-500">
+			<md-button aria-label="Hide menu" class="close-button" ng-click="closeMenu()" class="md-button">
 				<icon icon="ic_keyboard_backspace_24px"></icon>
 			</md-button>
 
@@ -344,8 +344,6 @@ md-close
 		</div>
 	</div>
 	
-	
-	
 	<footer class="footer" ng-controller="StatusController">
 		{{message}}
 	</footer>
@@ -371,7 +369,6 @@ md-close
 	<script src="bower_components/velocity/velocity.ui.js"></script>
 	<script src="bower_components/moment/moment.js"></script>
 	<script src="bower_components/lumx/dist/lumx.js"></script>
-	<script src="bower_components/socket.io-client/socket.io.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->
 

@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
     "default_locale": "en",
-    "name": "__MSG_appName__",
+    "name": "Flickr Downloadr",
     "description": "__MSG_appDesc__",
-    "version": "3.0.78",
+    "version": "3.0.100",
     "permissions": [
         {
             "fileSystem": [
