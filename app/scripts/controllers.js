@@ -225,7 +225,7 @@
 				console.log('Unable to connect with server: ', status);
 				
 				$rootScope.$broadcast('status', {
-					message: 'Error: ' + status
+					message: 'Service is unavailable. Please try again later. Code: ' + status
 				});
 			};
 			
@@ -648,9 +648,11 @@
 			$scope.onUrlSignedError = function(data, status, headers, config)
 			{
 				console.log('Unable to sign search request: ', status);
-				
+				console.log('Error Data: ', data);
+				console.log('Error Data: ', headers);
+
 				$rootScope.$broadcast('status', {
-					message: 'Error: ' + status
+					message: 'Service is unavailable. Please try again later. Code: ' + status
 				});
 			};
 			
