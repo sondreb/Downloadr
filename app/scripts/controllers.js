@@ -866,8 +866,38 @@
 			};
 
 			$scope.count = 0;
+			$scope.photoIndex = 0;
 			$scope.photoNumber = 1;
 			$scope.completed = false;
+			$scope.paused = false;
+			$scope.pauseResumeText = 'Pause';
+			
+			$scope.pause = function() {
+			
+				$scope.paused = !$scope.paused;
+				
+				if ($scope.paused)
+				{
+					$scope.pauseResumeText = 'Resume';
+				}
+				else
+				{
+					$scope.pauseResumeText = 'Pause';
+					
+					// Continue processing.
+					$scope.photoIndex = $scope.photoIndex + 1;
+					$scope.processPhoto();
+				}
+			};
+			
+			$scope.cancel = function() {
+				$scope.paused = true;
+				
+				// Set the count, so we'll only display the number that was downloaded before canceling.
+				$scope.count = ($scope.photoIndex + 1);
+				
+				$scope.downloadCompleted('Download canceled.');
+			}
 
 			$scope.showConfirm = function (accept, cancel) {
 
@@ -920,7 +950,12 @@
 							}
 
 							// Process the next photo
-							$scope.processPhoto(index + 1);
+							if (!$scope.paused)
+							{
+								$scope.photoIndex = $scope.photoIndex + 1;
+								$scope.processPhoto();
+							}
+							
 						};
 
 						writer.write(new Blob([blob_uri], {
@@ -956,10 +991,32 @@
 			$scope.uniqueName = function () {
 				return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 			};
+			
+			$scope.downloadCompleted = function(message) {
 
-			$scope.processPhoto = function (index) {
+				// Reset everything to empty state.
+				$rootScope.state.searchText = '';
+				$rootScope.state.selectedPhotos = [];
+				$scope.completed = true;
+
+				$rootScope.$broadcast('status', {
+					message: message
+				});
+
+				if (settings.values.completed) {
+
+					notify('success', 'basic', message,
+						'All ' + $scope.count + ' photos have been saved successfully.',
+						function (id) {
+							// Launch the local file browser at the target destination.
+						});
+				}
+			
+			};
+
+			$scope.processPhoto = function () {
 				// Get a reference to the photo object.
-				var photo = $rootScope.state.selectedPhotos[index];
+				var photo = $rootScope.state.selectedPhotos[$scope.photoIndex];
 
 				// Get a reference to the folder object.
 				var entry = $rootScope.state.targetEntry;
@@ -973,29 +1030,14 @@
 				{
 					$scope.$apply(function () {
 
-						// Reset everything to empty state.
-						$rootScope.state.searchText = '';
-						$rootScope.state.selectedPhotos = [];
-						$scope.completed = true;
+						$scope.downloadCompleted('Downloading completed.');
 						
-						$rootScope.$broadcast('status', {
-							message: 'Downloading completed.'
-						});
-
-						if (settings.values.completed) {
-
-							notify('success', 'basic', 'Download Complete',
-								'All ' + $scope.count + ' photos have been saved successfully.',
-								function (id) {
-									// Launch the local file browser at the target destination.
-								});
-						}
 					});
 
 					return;
 				}
 
-				console.log('INDEX: ', index);
+				console.log('INDEX: ', $scope.photoIndex);
 				console.log('Process Photo: ', photo);
 
 				// Download the photo
@@ -1005,8 +1047,7 @@
 
 					var fileName = photo.getFileName(size);
 
-					$scope.writeFile(index, fileName, entry, blob_uri);
-
+					$scope.writeFile($scope.photoIndex, fileName, entry, blob_uri);
 
 				});
 			};
@@ -1019,9 +1060,9 @@
 				// Set the image count.
 				$scope.count = photos.length;
 
-				var index = 0;
+				$scope.photoIndex = 0;
 
-				$scope.processPhoto(index);
+				$scope.processPhoto();
 
 			});
     }]);

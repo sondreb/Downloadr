@@ -4,8 +4,6 @@ exports.index = function (req, res) {
 	var storage = req.storage;
 	
 	var msg = req.body;
-	
-	console.log('Sign this method: ', msg);
 
 	flickr.signUrl(msg.token, msg.secret, msg.method, msg.args, function (err, data) {
 
