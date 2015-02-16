@@ -50,6 +50,19 @@
 				message: ''
 			});
 			
+			$scope.searchType = function(type){
+				// Check for undefined, to support older app versions.
+				if (settings.values.type === undefined || settings.values.type === type) {
+					return 'btn--light-blue';
+				} else {
+					return 'btn--white';
+				}
+			};
+			
+			$scope.selectType = function(type){
+				settings.values.type = type;
+			};
+			
 			$scope.refreshWallpaper = function () {
 
 				console.log('Refresh Wallpaper');
@@ -352,11 +365,16 @@
 			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
 			$scope.total = 0;
 			$scope.page = 1;
+			$scope.showLoadMore = true;
+			$scope.searchStatus = '';
 
 			$scope.$on('$destroy', function (event) {
 
 				console.log('Destroy: SearchController... Cleaning up Resources...');
 
+				$scope.showLoadMore = true;
+				$scope.searchStatus = '';
+				
 				// Whenever the user navigates away from SearchController, make sure
 				// we cleanup resources in use.
 				$scope.clearPhotos();
@@ -496,9 +514,77 @@
 
 				}
 			};
+			
+			$scope.performSearchByUserId = function()
+			{
+				// Get a prepared message that includes token.
+				// Until we know exactly what metadata we need, we'll ask for all extras.
+				var query = flickr.createMessage('flickr.people.getPhotos', {
+					user_id: $scope.currentUserId,
+					safe_search: settings.values.safe,
+					sort: settings.values.sort,
+					per_page: '15',
+					page: '' + $scope.page + '',
+					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				});
 
+				console.log('Sign URL message: ', query);
+				var url = HOST + '/search';
+				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+			}
+			
+			$scope.currentUserId = '';
+			
+			$scope.onUserSearch = function(message)
+			{
+				console.log('Message Received: ', message);
+				var url = 'https://' + message.hostname + message.path;
+				
+				$http.post(url).success(function (data, status, headers, config) {
+					// this callback will be called asynchronously
+					// when the response is available
+					console.log('Service results: ', data);
+					console.log('Service HTTP status: ', status);
+
+					if (data.stat === 'ok')
+					{
+						$rootScope.$broadcast('status', {
+							message: 'Found user ' + data.user.username._content + ', listing photos...'
+						});
+						
+						$scope.showLoadMore = true;
+						$scope.searchStatus = '';
+
+						$scope.currentUserId = data.user.nsid;
+						$scope.performSearchByUserId();
+						
+					}
+					else
+					{
+						$rootScope.$broadcast('status', {
+							message: 'User not found.'
+						});
+						
+						$scope.showLoadMore = false;
+						$scope.searchStatus = data.message + '.';
+					}
+				}).
+				error(function (data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+					console.log(data);
+					console.log('HTTP Status: ', status);
+				});
+				
+			}
+			
 			$scope.onUrlSigned = function (message) {
 
+				console.log('Message Received: ', message);
+				
+				$scope.showLoadMore = true;
+				$scope.searchStatus = '';
+				
 				var url = 'https://' + message.hostname + message.path;
 
 				$http.post(url).success(function (data, status, headers, config) {
@@ -510,6 +596,11 @@
 					var list = data.photos.photo;
 					$scope.total = data.photos.total;
 
+					if ($scope.total === '0')
+					{
+						$scope.showLoadMore = false;
+						$scope.searchStatus = 'Found 0 photos.';
+					}
 					
 					$rootScope.$broadcast('status', {
 						message: 'Found ' + $scope.total + ' photos.'
@@ -627,22 +718,52 @@
 			
 			$scope.performSearch = function (searchTerm) {
 				
-				// Get a prepared message that includes token.
-				// Until we know exactly what metadata we need, we'll ask for all extras.
-				var message = flickr.createMessage('flickr.photos.search', {
-					text: searchTerm,
-					safe_search: settings.values.safe,
-					sort: settings.values.sort,
-					per_page: '15',
-					page: '' + $scope.page + '',
-					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-				});
+				var message;
 				
-				console.log('Sign URL message: ', message);
-				
-				var url = HOST + '/search';
-				$http.post(url, message).success($scope.onUrlSigned).error($scope.onUrlSignedError);
-				
+				if (settings.values.type === 'user')
+				{
+					// If the user is asking for more, we already know the user's name and we'll perform another search with same userID.
+					if ($scope.page > 1)
+					{
+						$scope.performSearchByUserId();
+					}
+					else
+					{
+						if (searchTerm.indexOf('@') > -1)
+						{
+							message = flickr.createMessage('flickr.people.findByEmail', {
+								find_email: searchTerm
+							});
+						}
+						else
+						{
+							message = flickr.createMessage('flickr.people.findByUsername', {
+								username: searchTerm
+							});
+						}
+
+						console.log('Sign URL message: ', message);
+						var url = HOST + '/search';
+						$http.post(url, message).success($scope.onUserSearch).error($scope.onUrlSignedError);
+					}
+				}
+				else
+				{
+					// Get a prepared message that includes token.
+					// Until we know exactly what metadata we need, we'll ask for all extras.
+					message = flickr.createMessage('flickr.photos.search', {
+						text: searchTerm,
+						safe_search: settings.values.safe,
+						sort: settings.values.sort,
+						per_page: '15',
+						page: '' + $scope.page + '',
+						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+					});
+					
+					console.log('Sign URL message: ', message);
+					var url = HOST + '/search';
+					$http.post(url, message).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+				}
 			};
 			
 			$scope.onUrlSignedError = function(data, status, headers, config)
@@ -814,6 +935,20 @@
 
 				$location.path(url);
 
+			};
+			
+			$scope.showSorting = function() {
+			
+				console.log('showSorting...', settings.values.type);
+				
+				if (settings.values.type === 'user')
+				{
+					return false;
+				}
+				else
+				{
+					return $scope.state.actionTarget == 'folder';
+				}
 			};
 
 			$scope.navigateBack = function () {
@@ -1216,7 +1351,20 @@
 			$scope.expandMenu = function () {
 				$mdSidenav('left').toggle();
 			};
-
+			
+			$scope.searchType = function(type){
+				// Check for undefined, to support older app versions.
+				if (settings.values.type === undefined || settings.values.type === type) {
+					return 'btn--light-blue';
+				} else {
+					return 'btn--white';
+				}
+			};
+			
+			$scope.selectType = function(type){
+				settings.values.type = type;
+			};
+			
 			$scope.tabSelected = function (url) {
 				console.log('tabSELECTED: ', url);
 				$location.path(url);
