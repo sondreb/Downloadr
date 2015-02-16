@@ -12,10 +12,14 @@
 
 	<div class="clear"></div>
 
-	<div style="padding: 10px;">
+	<div style="padding: 10px;" ng-show="showLoadMore">
 		<md-button class="menu-button" ng-click="loadMore()">
 			Load more...
 		</md-button>
+	</div>
+	
+	<div style="padding: 10px; color: white;" ng-show="searchStatus !== ''">
+		{{searchStatus}}
 	</div>
 
 </div>

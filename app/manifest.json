@@ -3,7 +3,7 @@
     "default_locale": "en",
     "name": "Flickr Downloadr",
     "description": "__MSG_appDesc__",
-    "version": "3.0.100",
+    "version": "3.0.102",
     "permissions": [
         {
             "fileSystem": [
