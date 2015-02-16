@@ -114,6 +114,22 @@
 
 			<div class="toolbar__right" ng-hide="$location.path() == '/'">
 				<lx-search-filter model="state.searchText" id="top-search" closed theme="dark" placeholder="Search"></lx-search-filter>
+				
+				<lx-dropdown position="right" from-top>
+					<button class="btn btn--l btn--icon" lx-ripple lx-dropdown-toggle>
+						<i class="mdi mdi-dots-vertical"></i>
+					</button>
+
+					<lx-dropdown-menu>
+						<ul>
+							<!--<li><a class="dropdown-link" ng-class="searchType('photos')" ng-click="selectType('photos')" >Photos</a></li>
+							<li><a style="background-color: blue;" class="dropdown-link" ng-class="searchType('user')" ng-click="selectType('user')" >User</a></li>-->
+							<li><button style="width: 100%;" ng-class="searchType('photos')" ng-click="selectType('photos')" class="btn btn--l btn--raised" lx-ripple>Photos</button></li>
+							<li><button style="width: 100%;" ng-class="searchType('user')" ng-click="selectType('user')" class="btn btn--l btn--raised" lx-ripple>User</button></li>
+						</ul>
+					</lx-dropdown-menu>
+            	</lx-dropdown>
+				
 			</div>
 		</div>
 
@@ -192,7 +208,7 @@
 			-->
 			<div flex></div>
 			
-			<div ng-show="state.actionTarget == 'folder'">
+			<div ng-show="showSorting()">
 
 			 <div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="License" tooltip-position="left">
@@ -239,7 +255,7 @@
 				
 			</div>
 
-			<div ng-show="state.actionTarget == 'folder'" style="margin-left: 10px;">
+			<div ng-show="showSorting()" style="margin-left: 10px;">
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">

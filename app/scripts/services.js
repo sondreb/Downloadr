@@ -35,6 +35,7 @@
 					values.debug = settings.debug;
 					values.progress = settings.progress;
 					values.completed = settings.completed;
+					values.type = settings.type;
 
 					if (values.debug === true) {
 						$rootScope.state.debug = true;
@@ -68,7 +69,8 @@
 				background: true,
 				debug: false,
 				progress: true,
-				completed: true
+				completed: true,
+				type: 'photos'
 			};
 
 			// Before we return the service, we'll load the settings if they exists.
