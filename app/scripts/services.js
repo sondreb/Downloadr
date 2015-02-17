@@ -13,48 +13,60 @@
 	
 	downloadr.factory('settings', ['$rootScope', '$timeout',
 		function ($rootScope, $timeout) {
+			
+			
+			var runtime = (typeof(chrome) !== 'undefined') ? 'chrome' : 'firefox';
 
 			var load = function () {
-				chrome.storage.sync.get('settings', function (result) {
+				
+				
+				if (runtime === 'chrome')
+				{
+					chrome.storage.sync.get('settings', function (result) {
 
-					if (result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
-					{
-						return;
-					}
+						if (result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
+						{
+							return;
+						}
 
-					var settings = result.settings;
+						var settings = result.settings;
 
-					// When we load, we can't replace the whole "values" object, as that
-					// will remove link between controllers and this service.
-					values.safe = settings.safe;
-					values.size = settings.size;
-					values.sort = settings.sort;
-					values.license = settings.license;
-					values.view = settings.view;
-					values.background = settings.background;
-					values.debug = settings.debug;
-					values.progress = settings.progress;
-					values.completed = settings.completed;
-					values.type = settings.type;
+						// When we load, we can't replace the whole "values" object, as that
+						// will remove link between controllers and this service.
+						values.safe = settings.safe;
+						values.size = settings.size;
+						values.sort = settings.sort;
+						values.license = settings.license;
+						values.view = settings.view;
+						values.background = settings.background;
+						values.debug = settings.debug;
+						values.progress = settings.progress;
+						values.completed = settings.completed;
+						values.type = settings.type;
 
-					if (values.debug === true) {
-						$rootScope.state.debug = true;
-					}
+						if (values.debug === true) {
+							$rootScope.state.debug = true;
+						}
 
-					console.log('Settings loaded: ', values);
-					$scope.apply();
+						console.log('Settings loaded: ', values);
+						$scope.apply();
 
-					$rootScope.$broadcast('Settings:Loaded', values);
+						$rootScope.$broadcast('Settings:Loaded', values);
 
-				});
+					});
+				}
 			};
 
 			var save = function () {
-				chrome.storage.sync.set({
-					'settings': values
-				}, function () {
-					console.log('Settings saved: ', values);
-				});
+				
+				if (runtime === 'chrome') {
+				
+					chrome.storage.sync.set({
+						'settings': values
+					}, function () {
+						console.log('Settings saved: ', values);
+					});
+				}
 			};
 
 			// Setting keys have been chosen to be small and simple for

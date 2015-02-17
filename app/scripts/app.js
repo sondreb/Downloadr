@@ -7,9 +7,9 @@
 'use strict';
 
 // Remove logging for production use.
-var console = {};
-console.log = function(){};
-window.console = console;
+//var console = {};
+//console.log = function(){};
+//window.console = console;
 
 
 (function () {
@@ -38,15 +38,72 @@ window.console = console;
 		'lumx'
     ]);
 	
-	var manifest = chrome.runtime.getManifest();
+	if (typeof(chrome) !== 'undefined' && chrome.runtime !== undefined)
+	{
+		var manifest = chrome.runtime.getManifest();
+		downloadr.value('version', manifest.version);
+		downloadr.value('runtime', 'chrome');
+	}
+	else
+	{
+		downloadr.value('version', '3.0.103');
+		downloadr.value('runtime', 'firefox');
+	}
 	
-	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
 	downloadr.value('HOST', 'http://flickr-downloadr.com');
 	//downloadr.value('HOST', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST',
-		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST) {
+	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 
+		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime) {
+			
+			$rootScope.state = {
+
+				isAnonymous: true,
+
+				runtime: runtime,
+
+				background: 'wallpaper',
+
+				showActions: false,
+
+				actionTarget: 'folder',
+
+				targetPath: '',
+
+				targetEntry: null,
+
+				searchText: '',
+
+				loginUrl: '',
+
+				selectedPhotos: [],
+				
+				OS: '',
+				
+				debug: false,
+				
+				showControlsLeft: true,
+				
+				focused: true,
+				
+				showSearchControls: false,
+				
+				currentPath: '',
+				
+				previouspath: '',
+				
+				userId: '',
+				
+				userName: '',
+				
+				firstRun: true,
+				
+				statusMessage: ''
+
+			};
+			
+			
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -76,32 +133,42 @@ window.console = console;
 				updateLoadingStatus();
 			});
 			
-			// First we need to get some platform info that we will use to
-			// render different window icons.
-			chrome.runtime.getPlatformInfo(function(platform) {
-				
-				switch(platform.os)
-				{
-						case 'mac':
-							$rootScope.state.OS = 'mac';
-						break;
-						case 'win':
-						case 'cros':
-							$rootScope.state.OS = 'win';
-							
-							// Only for Windows/Chrome OS will we show minimize/maximize/close on the right
-							// Default in latest Ubuntu is on the left, same applies for OS X.
-							$rootScope.state.showControlsLeft = false;
-						break;
-						default: // 'linux', 'android', 'openbsd'
-							$rootScope.state.OS = 'linux';
-						break;
-				}
-				
+			if (runtime === 'chrome')
+			{
+				// First we need to get some platform info that we will use to
+				// render different window icons.
+				chrome.runtime.getPlatformInfo(function(platform) {
+
+					switch(platform.os)
+					{
+							case 'mac':
+								$rootScope.state.OS = 'mac';
+							break;
+							case 'win':
+							case 'cros':
+								$rootScope.state.OS = 'win';
+
+								// Only for Windows/Chrome OS will we show minimize/maximize/close on the right
+								// Default in latest Ubuntu is on the left, same applies for OS X.
+								$rootScope.state.showControlsLeft = false;
+							break;
+							default: // 'linux', 'android', 'openbsd'
+								$rootScope.state.OS = 'linux';
+							break;
+					}
+
+					loadingStatus.runtime = true;
+
+					updateLoadingStatus();
+				});
+			}
+			else
+			{
+				//$rootScope.state.OS = 'win';
+				//$rootScope.state.showControlsLeft = false;
 				loadingStatus.runtime = true;
-				
 				updateLoadingStatus();
-			});
+			}
 			
 			// Used to override the async preloading tasks, if one of them fails,
 			// we'll still show the UI after the specified seconds.
@@ -167,57 +234,13 @@ window.console = console;
 				}
         ];
 
-			// i18n example:
-			var resourceText = chrome.i18n.getMessage('settings_title');
 
-			console.log('Resource Text: ', resourceText);
-
-			$rootScope.state = {
-
-				isAnonymous: true,
-
-				// Used to see if we're running inside Chrome Packaged App.
-				packaged: chrome.runtime !== undefined,
-
-				background: 'wallpaper',
-
-				showActions: false,
-
-				actionTarget: 'folder',
-
-				targetPath: '',
-
-				targetEntry: null,
-
-				searchText: '',
-
-				loginUrl: '',
-
-				selectedPhotos: [],
-				
-				OS: '',
-				
-				debug: false,
-				
-				showControlsLeft: true,
-				
-				focused: true,
-				
-				showSearchControls: false,
-				
-				currentPath: '',
-				
-				previouspath: '',
-				
-				userId: '',
-				
-				userName: '',
-				
-				firstRun: true,
-				
-				statusMessage: ''
-
-			};
+			if (runtime === 'chrome')
+				{
+				// i18n example:
+				var resourceText = chrome.i18n.getMessage('settings_title');
+				console.log('Resource Text: ', resourceText);
+			}
 			
 			$(window).focus(function() {
 				$rootScope.state.focused = true;
