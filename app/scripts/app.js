@@ -86,19 +86,17 @@ window.console = console;
 							$rootScope.state.OS = 'mac';
 						break;
 						case 'win':
+						case 'cros':
 							$rootScope.state.OS = 'win';
-						
-							// Only for Windows will we show minimize/maximize/close on the right
+							
+							// Only for Windows/Chrome OS will we show minimize/maximize/close on the right
 							// Default in latest Ubuntu is on the left, same applies for OS X.
 							$rootScope.state.showControlsLeft = false;
 						break;
-						default: // 'linux', 'android', 'cros', 'openbsd'
+						default: // 'linux', 'android', 'openbsd'
 							$rootScope.state.OS = 'linux';
 						break;
 				}
-				
-				//$rootScope.state.OS = 'mac'
-				//$rootScope.state.showControlsLeft = true;
 				
 				loadingStatus.runtime = true;
 				
