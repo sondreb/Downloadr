@@ -414,41 +414,45 @@
 				//socket.emit('getUrl');
 			});
 
-			// Make sure we listen to whenever the local storage value have changed.
-			chrome.storage.onChanged.addListener(function (changes, namespace) {
-				for (var key in changes) {
-					var storageChange = changes[key];
-					console.log('Storage key "%s" in namespace "%s" changed. ' +
-						'Old value was "%s", new value is "%s".',
-						key,
-						namespace,
-						storageChange.oldValue,
-						storageChange.newValue);
+			
+			if (runtime === 'chrome')
+			{
+				// Make sure we listen to whenever the local storage value have changed.
+				chrome.storage.onChanged.addListener(function (changes, namespace) {
+					for (var key in changes) {
+						var storageChange = changes[key];
+						console.log('Storage key "%s" in namespace "%s" changed. ' +
+							'Old value was "%s", new value is "%s".',
+							key,
+							namespace,
+							storageChange.oldValue,
+							storageChange.newValue);
 
-					if (key === 'token') {
-						//flickr.parseToken(storageChange.newValue);
+						if (key === 'token') {
+							//flickr.parseToken(storageChange.newValue);
+						}
 					}
-				}
-			});
+				});
 
-			// Try to find existing token.
-			chrome.storage.sync.get('token', function (result) {
+				// Try to find existing token.
+				chrome.storage.sync.get('token', function (result) {
 
-				if (result === undefined || result === null || result.token === undefined || result.token === null) {
-					
-					console.log('No existing token found.');
-					
-					// Retreive the login URL.
-					//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
-					
-					//socket.emit('getUrl');
-					
-				} else {
-					
-					$rootScope.authenticationState(result.token);
-					
-				}
-			});
+					if (result === undefined || result === null || result.token === undefined || result.token === null) {
+
+						console.log('No existing token found.');
+
+						// Retreive the login URL.
+						//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
+
+						//socket.emit('getUrl');
+
+					} else {
+
+						$rootScope.authenticationState(result.token);
+
+					}
+				});
+			}
 
 			// Whenever login URL is received, we will update the UI and enable
 			// the login button.

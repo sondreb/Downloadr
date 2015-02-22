@@ -199,7 +199,8 @@
 		};
 	});
 
-	directives.directive('windowIcon', ['$rootScope', function ($rootScope) {
+	
+	directives.directive('windowIcon', function () {
 
 		return {
 			restrict: 'E',
@@ -210,6 +211,6 @@
 			},
 			templateUrl: 'views/template_window_icon.html'
 		};
-	}]);
+	});
 
 })();
