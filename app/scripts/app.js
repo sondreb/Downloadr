@@ -11,7 +11,6 @@ var console = {};
 console.log = function(){};
 window.console = console;
 
-
 (function () {
 
 	angular.module('lumx.search-filter').run(['$templateCache', function(a) { a.put('search-filter.html', '<div class="search-filter search-filter--{{ theme }}-theme"\n' +
@@ -38,15 +37,85 @@ window.console = console;
 		'lumx'
     ]);
 	
-	var manifest = chrome.runtime.getManifest();
+	if (typeof(chrome) !== 'undefined' && chrome.runtime !== undefined)
+	{
+		var manifest = chrome.runtime.getManifest();
+		downloadr.value('version', manifest.version);
+		downloadr.value('runtime', 'chrome');
+	}
+	else
+	{
+		downloadr.value('version', '3.0.103');
+		downloadr.value('runtime', 'firefox');
+	}
 	
-	downloadr.value('version', manifest.version);
 	downloadr.value('author', 'Sondre Bjellås');
 	downloadr.value('HOST', 'http://flickr-downloadr.com');
 	//downloadr.value('HOST', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST',
-		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST) {
+	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage',
+		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime, fileManager, storage) {
+			
+			$rootScope.state = {
+
+				isAnonymous: true,
+
+				runtime: runtime,
+
+				background: 'wallpaper',
+
+				showActions: false,
+
+				actionTarget: 'folder',
+
+				targetPath: '',
+
+				targetEntry: null,
+
+				searchText: '',
+
+				loginUrl: '',
+
+				selectedPhotos: [],
+				
+				OS: '',
+				
+				debug: false,
+				
+				showControlsLeft: true,
+				
+				focused: true,
+				
+				showSearchControls: false,
+				
+				currentPath: '',
+				
+				previouspath: '',
+				
+				userId: '',
+				
+				userName: '',
+				
+				firstRun: true,
+				
+				statusMessage: '',
+				
+				buddyIcon: 'images/buddyicon.gif'
+
+			};
+			
+			// datepart: 'y', 'm', 'w', 'd', 'h', 'n', 's'
+			Date.dateDiff = function(datepart, fromdate, todate) {	
+			  datepart = datepart.toLowerCase();	
+			  var diff = todate - fromdate;	
+			  var divideBy = { w:604800000, 
+							   d:86400000, 
+							   h:3600000, 
+							   n:60000, 
+							   s:1000 };	
+
+			  return Math.floor( diff/divideBy[datepart]);
+			}
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -76,34 +145,42 @@ window.console = console;
 				updateLoadingStatus();
 			});
 			
-			// First we need to get some platform info that we will use to
-			// render different window icons.
-			chrome.runtime.getPlatformInfo(function(platform) {
-				
-				switch(platform.os)
-				{
-						case 'mac':
-							$rootScope.state.OS = 'mac';
-						break;
-						case 'win':
-							$rootScope.state.OS = 'win';
-						
-							// Only for Windows will we show minimize/maximize/close on the right
-							// Default in latest Ubuntu is on the left, same applies for OS X.
-							$rootScope.state.showControlsLeft = false;
-						break;
-						default: // 'linux', 'android', 'cros', 'openbsd'
-							$rootScope.state.OS = 'linux';
-						break;
-				}
-				
-				//$rootScope.state.OS = 'mac'
-				//$rootScope.state.showControlsLeft = true;
-				
+			if (runtime === 'chrome')
+			{
+				// First we need to get some platform info that we will use to
+				// render different window icons.
+				chrome.runtime.getPlatformInfo(function(platform) {
+
+					switch(platform.os)
+					{
+							case 'mac':
+								$rootScope.state.OS = 'mac';
+							break;
+							case 'win':
+							case 'cros':
+								$rootScope.state.OS = 'win';
+
+								// Only for Windows/Chrome OS will we show minimize/maximize/close on the right
+								// Default in latest Ubuntu is on the left, same applies for OS X.
+								$rootScope.state.showControlsLeft = false;
+							break;
+							default: // 'linux', 'android', 'openbsd'
+								$rootScope.state.OS = 'linux';
+							break;
+					}
+
+					loadingStatus.runtime = true;
+
+					updateLoadingStatus();
+				});
+			}
+			else
+			{
+				//$rootScope.state.OS = 'win';
+				//$rootScope.state.showControlsLeft = false;
 				loadingStatus.runtime = true;
-				
 				updateLoadingStatus();
-			});
+			}
 			
 			// Used to override the async preloading tasks, if one of them fails,
 			// we'll still show the UI after the specified seconds.
@@ -169,57 +246,13 @@ window.console = console;
 				}
         ];
 
-			// i18n example:
-			var resourceText = chrome.i18n.getMessage('settings_title');
 
-			console.log('Resource Text: ', resourceText);
-
-			$rootScope.state = {
-
-				isAnonymous: true,
-
-				// Used to see if we're running inside Chrome Packaged App.
-				packaged: chrome.runtime !== undefined,
-
-				background: 'wallpaper',
-
-				showActions: false,
-
-				actionTarget: 'folder',
-
-				targetPath: '',
-
-				targetEntry: null,
-
-				searchText: '',
-
-				loginUrl: '',
-
-				selectedPhotos: [],
-				
-				OS: '',
-				
-				debug: false,
-				
-				showControlsLeft: true,
-				
-				focused: true,
-				
-				showSearchControls: false,
-				
-				currentPath: '',
-				
-				previouspath: '',
-				
-				userId: '',
-				
-				userName: '',
-				
-				firstRun: true,
-				
-				statusMessage: ''
-
-			};
+			if (runtime === 'chrome')
+				{
+				// i18n example:
+				var resourceText = chrome.i18n.getMessage('settings_title');
+				console.log('Resource Text: ', resourceText);
+			}
 			
 			$(window).focus(function() {
 				$rootScope.state.focused = true;
@@ -322,17 +355,13 @@ window.console = console;
 				
 				// Save it using the Chrome extension storage API.
 				// This will ensure the token is synced across devices.
-				chrome.storage.sync.set({
-					'token': message
-				}, function () {
+				storage.set('token', message, function () {
 					// Notify that we saved.
-					message('Token saved');
+					//message('Token saved');
+					console.log('Token saved: ', message);
 				});
-
+				
 				$rootScope.authenticationState(message);
-				
-				console.log('YES!! ', message);
-				
 			};
 			
 			$rootScope.onAuthenticatedError = function(data, status, headers, config)
@@ -376,9 +405,7 @@ window.console = console;
 
 				console.log('Logout Initialized...');
 				
-				chrome.storage.sync.set({
-					'token': null
-				}, function () {
+				storage.set('token', null, function () {
 					// Notify that we saved.
 					console.log('Token removed');
 				});
@@ -393,41 +420,47 @@ window.console = console;
 				//socket.emit('getUrl');
 			});
 
-			// Make sure we listen to whenever the local storage value have changed.
-			chrome.storage.onChanged.addListener(function (changes, namespace) {
-				for (var key in changes) {
-					var storageChange = changes[key];
-					console.log('Storage key "%s" in namespace "%s" changed. ' +
-						'Old value was "%s", new value is "%s".',
-						key,
-						namespace,
-						storageChange.oldValue,
-						storageChange.newValue);
+			
+			if (runtime === 'chrome')
+			{
+				// Make sure we listen to whenever the local storage value have changed.
+				/*
+				chrome.storage.onChanged.addListener(function (changes, namespace) {
+					for (var key in changes) {
+						var storageChange = changes[key];
+						console.log('Storage key "%s" in namespace "%s" changed. ' +
+							'Old value was "%s", new value is "%s".',
+							key,
+							namespace,
+							storageChange.oldValue,
+							storageChange.newValue);
 
-					if (key === 'token') {
-						//flickr.parseToken(storageChange.newValue);
+						if (key === 'token') {
+							//flickr.parseToken(storageChange.newValue);
+						}
 					}
-				}
-			});
+				});
+				*/
 
-			// Try to find existing token.
-			chrome.storage.sync.get('token', function (result) {
+				// Try to find existing token.
+				storage.get('token', function (result) {
 
-				if (result === undefined || result === null || result.token === undefined || result.token === null) {
-					
-					console.log('No existing token found.');
-					
-					// Retreive the login URL.
-					//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
-					
-					//socket.emit('getUrl');
-					
-				} else {
-					
-					$rootScope.authenticationState(result.token);
-					
-				}
-			});
+					if (result === undefined || result === null || result.token === undefined || result.token === null) {
+
+						console.log('No existing token found.');
+
+						// Retreive the login URL.
+						//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
+
+						//socket.emit('getUrl');
+
+					} else {
+
+						$rootScope.authenticationState(result.token);
+
+					}
+				});
+			}
 
 			// Whenever login URL is received, we will update the UI and enable
 			// the login button.
@@ -460,21 +493,119 @@ window.console = console;
 
 			});*/
 			
+			$rootScope.getDaysBetweenDates = function(d0, d1) {
+				var msPerDay = 8.64e7;
+
+				// Copy dates so don't mess them up
+				var x0 = new Date(d0);
+				var x1 = new Date(d1);
+
+				// Set to noon - avoid DST errors
+				x0.setHours(12,0,0);
+				x1.setHours(12,0,0);
+
+				// Round to remove daylight saving errors
+				return Math.round( (x1 - x0) / msPerDay );
+			};
+			
+			
+			$rootScope.loadBuddyIcon = function() {
+			
+				storage.getLocal('buddyicon', function(data) {  
+
+					if (data.buddyicon !== undefined && data.buddyicon !== null && Object.keys(data.buddyicon).length !== 0) {
+
+						console.log('getLocal: buddyicon received');
+
+						var savedDate = new Date(data.buddyicon.date);
+						var numberOfDaysSinceDownloaded = $rootScope.getDaysBetweenDates(savedDate, new Date());
+
+						// Set the buddy icon.
+						$rootScope.state.buddyIcon = 'data:image/png;base64,' + data.buddyicon.base64;
+						
+						// Download the buddy icon if older than 14 days.
+						if (numberOfDaysSinceDownloaded > 14)
+						{
+							console.log('Download new buddyicon!');
+							$rootScope.downloadBuddyIcon();
+						}
+
+					}
+					else
+					{
+						$rootScope.downloadBuddyIcon();
+					}
+				});
+				
+			};
+			
+			
+			$rootScope.downloadBuddyIcon = function()
+			{
+				// The username returned from service is url encoded, so we'll need to convert.
+				var query = flickr.createMessage('flickr.people.getInfo', {
+					user_id: flickr.userId.replace('%40', '@')
+				});
+				
+				flickr.signUrl('/sign/url', query, function(message) { 
+
+					flickr.query(message, function(data) {
+
+						console.log(data);
+
+						if (data.stat === 'ok')
+						{
+							var buddyUrl = 'http://farm' + data.person.iconfarm + '.staticflickr.com/' + data.person.iconserver + '/buddyicons/' + data.person.nsid + '.jpg'
+							fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
+						}
+						else
+						{
+							console.log('Failed: ', data.message);
+						}
+
+					}, function() { console.log('Failed to query userInfo.') });
+
+				});
+			};
+			
+			
+			$rootScope.downloadedBuddyIcon = function(base64, url)
+			{
+				// Set the buddy icon to be displayed.
+				$rootScope.state.buddyIcon = 'data:image/png;base64,' + base64;
+				
+				// Save the buddy icon for later use.
+				storage.setLocal({ buddyicon: { base64: base64, date: new Date().toISOString() } }, function() {
+					console.log('Buddy icon saved successfully.');
+				});
+			};
+			
+			
 			$rootScope.authenticationState = function(token)
 			{
 				if (token === null)
 				{
 					flickr.removeToken();
 					$rootScope.state.isAnonymous = true;
+
+					// Ensure we delete the buddy icon.
+					storage.removeLocal('buddyicon', function() { console.log('Buddy icon removed'); });
+					$rootScope.state.buddyIcon = 'images/buddyicon.gif';			
+					
 				}
 				else
 				{
+					console.log('Token: ', token);
+					
 					flickr.parseToken(token);
 
 					$rootScope.state.userId = flickr.userId;
 					$rootScope.state.userName = flickr.userName;
 
 					console.log('$rootScope.state.userName: ', flickr.userId);
+					
+					// Load or download the users buddy icon.
+					$rootScope.loadBuddyIcon();
 					
 					$rootScope.state.isAnonymous = false;
 
@@ -483,6 +614,8 @@ window.console = console;
 					$rootScope.$broadcast('status', {
 						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});
+					
+					
 				}
 			};
     }]);

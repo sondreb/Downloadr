@@ -88,8 +88,7 @@
 			</span>
 			
 			<!-- Linux -->
-			<span ng-show="state.OS == 'linux'" class="linux window-icon-container">
-				<a href=""ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize" ></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a><a href=""  ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a>
+			<span ng-show="state.OS == 'linux'" class="linux window-icon-container"><a href=""  ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a><a href=""ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize" ></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a>
 			</span>
 			
 			<!-- Windows -->
@@ -152,7 +151,7 @@
 			</md-button>
 
 			<md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
-				<img src="images/buddyicon.gif" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
+				<img ng-src="{{state.buddyIcon}}" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
 				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
 			</md-button>
 					
@@ -389,7 +388,6 @@ md-close
 	<!-- endbuild -->
 
 	<!-- build:js scripts/app.js -->
-	<script src="scripts/flickr.js"></script>
 	<script src="scripts/directives.js"></script>
 	<script src="scripts/filters.js"></script>
 	<script src="scripts/services.js"></script>

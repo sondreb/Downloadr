@@ -2,8 +2,8 @@
     "manifest_version": 2,
     "default_locale": "en",
     "name": "Flickr Downloadr",
-    "description": "__MSG_appDesc__",
-    "version": "3.0.102",
+    "description": "Simple and elegant photo downloading tool.",
+    "version": "3.0.103",
     "permissions": [
         {
             "fileSystem": [

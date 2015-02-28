@@ -939,7 +939,7 @@
 			
 			$scope.showSorting = function() {
 			
-				console.log('showSorting...', settings.values.type);
+				//console.log('showSorting...', settings.values.type);
 				
 				if (settings.values.type === 'user')
 				{
