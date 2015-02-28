@@ -19,9 +19,9 @@ var http_port = process.env.PORT || 3000;
 var express = require('express'),
 	app = express(),
 	routes = require('./routes'),
-	user = require('./routes/user'),
 	auth = require('./routes/auth'),
 	login = require('./routes/login'),
+	sign = require('./routes/sign'),
 	search = require('./routes/search'),
 	version = require('./routes/version'),
 	logger = require('morgan'),
@@ -85,6 +85,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/auth', auth.index);
 app.get('/login/url', login.url);
 app.post('/login/exchange', login.exchange);
+app.post('/sign/url', sign.url);
 app.post('/search', search.index);
 app.get('/version', version.index);
 

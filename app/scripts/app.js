@@ -7,10 +7,9 @@
 'use strict';
 
 // Remove logging for production use.
-//var console = {};
-//console.log = function(){};
-//window.console = console;
-
+var console = {};
+console.log = function(){};
+window.console = console;
 
 (function () {
 
@@ -54,8 +53,8 @@
 	downloadr.value('HOST', 'http://flickr-downloadr.com');
 	//downloadr.value('HOST', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 
-		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime) {
+	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage',
+		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime, fileManager, storage) {
 			
 			$rootScope.state = {
 
@@ -99,11 +98,24 @@
 				
 				firstRun: true,
 				
-				statusMessage: ''
+				statusMessage: '',
+				
+				buddyIcon: 'images/buddyicon.gif'
 
 			};
 			
-			
+			// datepart: 'y', 'm', 'w', 'd', 'h', 'n', 's'
+			Date.dateDiff = function(datepart, fromdate, todate) {	
+			  datepart = datepart.toLowerCase();	
+			  var diff = todate - fromdate;	
+			  var divideBy = { w:604800000, 
+							   d:86400000, 
+							   h:3600000, 
+							   n:60000, 
+							   s:1000 };	
+
+			  return Math.floor( diff/divideBy[datepart]);
+			}
 			
 			console.log('downloadr.run: ', flickr);
 
@@ -343,17 +355,13 @@
 				
 				// Save it using the Chrome extension storage API.
 				// This will ensure the token is synced across devices.
-				chrome.storage.sync.set({
-					'token': message
-				}, function () {
+				storage.set('token', message, function () {
 					// Notify that we saved.
-					message('Token saved');
+					//message('Token saved');
+					console.log('Token saved: ', message);
 				});
-
+				
 				$rootScope.authenticationState(message);
-				
-				console.log('YES!! ', message);
-				
 			};
 			
 			$rootScope.onAuthenticatedError = function(data, status, headers, config)
@@ -397,9 +405,7 @@
 
 				console.log('Logout Initialized...');
 				
-				chrome.storage.sync.set({
-					'token': null
-				}, function () {
+				storage.set('token', null, function () {
 					// Notify that we saved.
 					console.log('Token removed');
 				});
@@ -418,6 +424,7 @@
 			if (runtime === 'chrome')
 			{
 				// Make sure we listen to whenever the local storage value have changed.
+				/*
 				chrome.storage.onChanged.addListener(function (changes, namespace) {
 					for (var key in changes) {
 						var storageChange = changes[key];
@@ -433,9 +440,10 @@
 						}
 					}
 				});
+				*/
 
 				// Try to find existing token.
-				chrome.storage.sync.get('token', function (result) {
+				storage.get('token', function (result) {
 
 					if (result === undefined || result === null || result.token === undefined || result.token === null) {
 
@@ -485,21 +493,119 @@
 
 			});*/
 			
+			$rootScope.getDaysBetweenDates = function(d0, d1) {
+				var msPerDay = 8.64e7;
+
+				// Copy dates so don't mess them up
+				var x0 = new Date(d0);
+				var x1 = new Date(d1);
+
+				// Set to noon - avoid DST errors
+				x0.setHours(12,0,0);
+				x1.setHours(12,0,0);
+
+				// Round to remove daylight saving errors
+				return Math.round( (x1 - x0) / msPerDay );
+			};
+			
+			
+			$rootScope.loadBuddyIcon = function() {
+			
+				storage.getLocal('buddyicon', function(data) {  
+
+					if (data.buddyicon !== undefined && data.buddyicon !== null && Object.keys(data.buddyicon).length !== 0) {
+
+						console.log('getLocal: buddyicon received');
+
+						var savedDate = new Date(data.buddyicon.date);
+						var numberOfDaysSinceDownloaded = $rootScope.getDaysBetweenDates(savedDate, new Date());
+
+						// Set the buddy icon.
+						$rootScope.state.buddyIcon = 'data:image/png;base64,' + data.buddyicon.base64;
+						
+						// Download the buddy icon if older than 14 days.
+						if (numberOfDaysSinceDownloaded > 14)
+						{
+							console.log('Download new buddyicon!');
+							$rootScope.downloadBuddyIcon();
+						}
+
+					}
+					else
+					{
+						$rootScope.downloadBuddyIcon();
+					}
+				});
+				
+			};
+			
+			
+			$rootScope.downloadBuddyIcon = function()
+			{
+				// The username returned from service is url encoded, so we'll need to convert.
+				var query = flickr.createMessage('flickr.people.getInfo', {
+					user_id: flickr.userId.replace('%40', '@')
+				});
+				
+				flickr.signUrl('/sign/url', query, function(message) { 
+
+					flickr.query(message, function(data) {
+
+						console.log(data);
+
+						if (data.stat === 'ok')
+						{
+							var buddyUrl = 'http://farm' + data.person.iconfarm + '.staticflickr.com/' + data.person.iconserver + '/buddyicons/' + data.person.nsid + '.jpg'
+							fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
+						}
+						else
+						{
+							console.log('Failed: ', data.message);
+						}
+
+					}, function() { console.log('Failed to query userInfo.') });
+
+				});
+			};
+			
+			
+			$rootScope.downloadedBuddyIcon = function(base64, url)
+			{
+				// Set the buddy icon to be displayed.
+				$rootScope.state.buddyIcon = 'data:image/png;base64,' + base64;
+				
+				// Save the buddy icon for later use.
+				storage.setLocal({ buddyicon: { base64: base64, date: new Date().toISOString() } }, function() {
+					console.log('Buddy icon saved successfully.');
+				});
+			};
+			
+			
 			$rootScope.authenticationState = function(token)
 			{
 				if (token === null)
 				{
 					flickr.removeToken();
 					$rootScope.state.isAnonymous = true;
+
+					// Ensure we delete the buddy icon.
+					storage.removeLocal('buddyicon', function() { console.log('Buddy icon removed'); });
+					$rootScope.state.buddyIcon = 'images/buddyicon.gif';			
+					
 				}
 				else
 				{
+					console.log('Token: ', token);
+					
 					flickr.parseToken(token);
 
 					$rootScope.state.userId = flickr.userId;
 					$rootScope.state.userName = flickr.userName;
 
 					console.log('$rootScope.state.userName: ', flickr.userId);
+					
+					// Load or download the users buddy icon.
+					$rootScope.loadBuddyIcon();
 					
 					$rootScope.state.isAnonymous = false;
 
@@ -508,6 +614,8 @@
 					$rootScope.$broadcast('status', {
 						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});
+					
+					
 				}
 			};
     }]);
