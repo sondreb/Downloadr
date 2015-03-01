@@ -1341,8 +1341,8 @@
 		}]);
 
 
-	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav',
-		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav) {
+	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav', 'runtime', 
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav, runtime) {
 
 			$scope.$on('Event:NavigateBack', function () {
 				$scope.goBack();
@@ -1398,68 +1398,11 @@
 				}
 			};
 
-			$scope.parseProfile = function (data) {
-
-				// Validate successfull results.
-				if (data.stat !== 'ok') {
-					console.log('Results not OK. Aborting parsing.');
-					return;
-				}
-
-				console.log('Parsing...');
-
-				var server = data.person.iconserver;
-				var farm = data.person.iconfarm;
-				var nsid = data.person.nsid;
-
-				var buddyIconUrl = 'https://farm{icon-farm}.staticflickr.com/{icon-server}/buddyicons/{nsid}.jpg';
-
-				var url = util.format(buddyIconUrl, {
-					'icon-farm': farm,
-					'icon-server': server,
-					nsid: nsid
-				});
-				console.log(url);
-
-				$scope.profileIconUrl = url;
-
-				// Show the home screen when authentcation completed.
-				$scope.goHome();
-
-				if ($rootScope.state.packaged) {
-					// This is done to support both FireFox and Chrome.
-					//window.URL = window.URL || window.webkitURL;
-
-					$http.get(url, {
-						responseType: 'blob'
-					}).success(function (blob) {
-
-						console.log('WHAT?!?!?!');
-
-						var img = document.getElementById('buddyIconImg');
-						img.src = window.URL.createObjectURL(blob);
-
-						// Write the blob to disk.
-						navigator.webkitPersistentStorage.requestQuota(
-							2048, //bytes of storage requested
-							function (availableBytes) {
-								console.log(availableBytes);
-							}
-						);
-
-						console.log('ONLINE: ' + navigator.onLine);
-
-					});
-
-
-				} else {
-
-				}
-			};
-
 			$scope.handleWindowEvents = function () {
 
-				if ($rootScope.state.packaged) {
+				console.log('Packaged: ', runtime);
+				
+				if (runtime === 'chrome') {
 					// Happens when user uses the window bar or shortcuts to maximize.
 					$scope.isMaximized = chrome.app.window.current().isMaximized();
 
@@ -1485,6 +1428,7 @@
 			};
 
 			$scope.maximize = function () {
+				console.log('maximize.....');
 				chrome.app.window.current().maximize();
 			};
 
@@ -1520,10 +1464,12 @@
 			// is available fully.
 			$timeout(function () {
 
-				console.log('VIEW CONTENT LOADED!!');
-
-				if ($rootScope.state.packaged) {
+				console.log('VIEW CONTENT LOADED!!', runtime);
+				
+				if (runtime === 'chrome') {
 					var current = chrome.app.window.current();
+					
+					console.log('CURRENT: ', current);
 
 					// Make sure we read the initial state as well, since the app might startup as maximized.
 					$scope.isMaximized = current.isMaximized();

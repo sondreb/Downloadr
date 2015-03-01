@@ -385,11 +385,11 @@ var Base64 = {
  
 }
 		
-		var set = function (key, data, callback) {
+		var set = function (data, callback) {
 
 			if (runtime === 'chrome')
 			{
-				chrome.storage.sync.set({key: data}, callback);
+				chrome.storage.sync.set(data, callback);
 			}
 			else
 			{
@@ -402,8 +402,16 @@ var Base64 = {
 		{
 			if (runtime === 'chrome')
 			{
-			// Try to find existing token.
-				chrome.storage.sync.get(key, callback);
+				chrome.storage.sync.get(key, function(data) {
+				
+						if (Object.keys(data).length === 0)
+						{
+							data = null;
+						}
+
+						callback(data);
+					}
+				);
 			}
 			else
 			{
@@ -455,8 +463,16 @@ var Base64 = {
 		{
 			if (runtime === 'chrome')
 			{
-			// Try to find existing token.
-				chrome.storage.local.get(key, callback);
+				chrome.storage.local.get(key, function(data) {
+				
+						if (Object.keys(data).length === 0)
+						{
+							data = null;
+						}
+
+						callback(data);
+					}
+				);
 			}
 			else
 			{

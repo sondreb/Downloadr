@@ -267,10 +267,6 @@ window.console = console;
 				$rootScope.$apply();
 			});
 			
-			$rootScope.navigate = function(path)
-			{
-
-			};
 
 			$rootScope.$on('$routeChangeStart', function (event, next, current) {
 
@@ -308,7 +304,6 @@ window.console = console;
 					$rootScope.state.searchText === '') {
 					return;
 				}
-				
 				
 				// This is a major hack to fix the search-filter from LumX and hacking
 				// it so it work properly for this app. The buggy behavior happens if the
@@ -349,13 +344,16 @@ window.console = console;
 				$http.post(url, {oauth_token: oauth_token, oauth_verifier: oauth_verifier}).success($rootScope.onAuthenticated).error($rootScope.onAuthenticatedError);
 			};
 			
+			
 			$rootScope.onAuthenticated = function(data, status, headers, config)
 			{
-				var message = data;
+				var message = { token: data };
+				
+				console.log('$rootScope.onAuthenticated: saving the token now...');
 				
 				// Save it using the Chrome extension storage API.
 				// This will ensure the token is synced across devices.
-				storage.set('token', message, function () {
+				storage.set(message, function () {
 					// Notify that we saved.
 					//message('Token saved');
 					console.log('Token saved: ', message);
@@ -363,6 +361,7 @@ window.console = console;
 				
 				$rootScope.authenticationState(message);
 			};
+			
 			
 			$rootScope.onAuthenticatedError = function(data, status, headers, config)
 			{
@@ -383,6 +382,7 @@ window.console = console;
 				
 			};
 			
+			
 			$rootScope.onLoginUrl = function(data, status, headers, config)
 			{
 				console.log('Flickr auth URL: ', data.url);
@@ -393,6 +393,7 @@ window.console = console;
 				});
 			};
 			
+			
 			$rootScope.onLoginUrlError = function(data, status, headers, config) {
 				console.log('Unable to connect with server: ', status);
 				
@@ -400,12 +401,13 @@ window.console = console;
 					message: 'Error: ' + status
 				});
 			};
+			
 
 			$rootScope.$on('Event:Logout', function () {
 
 				console.log('Logout Initialized...');
 				
-				storage.set('token', null, function () {
+				storage.remove('token', function () {
 					// Notify that we saved.
 					console.log('Token removed');
 				});
@@ -416,82 +418,26 @@ window.console = console;
 					message: ''
 				});
 				
-				// Make sure we get a new login url.
-				//socket.emit('getUrl');
 			});
 
 			
 			if (runtime === 'chrome')
 			{
-				// Make sure we listen to whenever the local storage value have changed.
-				/*
-				chrome.storage.onChanged.addListener(function (changes, namespace) {
-					for (var key in changes) {
-						var storageChange = changes[key];
-						console.log('Storage key "%s" in namespace "%s" changed. ' +
-							'Old value was "%s", new value is "%s".',
-							key,
-							namespace,
-							storageChange.oldValue,
-							storageChange.newValue);
-
-						if (key === 'token') {
-							//flickr.parseToken(storageChange.newValue);
-						}
-					}
-				});
-				*/
-
 				// Try to find existing token.
 				storage.get('token', function (result) {
 
-					if (result === undefined || result === null || result.token === undefined || result.token === null) {
+					if (result === null) {
 
 						console.log('No existing token found.');
 
-						// Retreive the login URL.
-						//$rootScope.getLoginUrl($rootScope.onLoginUrl, $rootScope.onLoginUrlError);
-
-						//socket.emit('getUrl');
-
 					} else {
 
-						$rootScope.authenticationState(result.token);
+						$rootScope.authenticationState(result);
 
 					}
 				});
 			}
 
-			// Whenever login URL is received, we will update the UI and enable
-			// the login button.
-			/*socket.on('url', function (message) {
-
-				console.log('Flickr auth URL: ', message.url);
-
-				$rootScope.state.loginUrl = message.url;
-				$rootScope.state.isConnecting = false;
-				$rootScope.$broadcast('status', {
-					message: 'Connected.'
-				});
-
-			});*/
-
-			// When we receive access token, make sure we store it permanently.
-			/*
-			socket.on('token', function (message) {
-
-				// Save it using the Chrome extension storage API.
-				// This will ensure the token is synced across devices.
-				chrome.storage.sync.set({
-					'token': message
-				}, function () {
-					// Notify that we saved.
-					message('Token saved');
-				});
-
-				$rootScope.authenticationState(message);
-
-			});*/
 			
 			$rootScope.getDaysBetweenDates = function(d0, d1) {
 				var msPerDay = 8.64e7;
@@ -510,10 +456,12 @@ window.console = console;
 			
 			
 			$rootScope.loadBuddyIcon = function() {
+				
+				console.log('loadBuddyIcon.......');
 			
 				storage.getLocal('buddyicon', function(data) {  
 
-					if (data.buddyicon !== undefined && data.buddyicon !== null && Object.keys(data.buddyicon).length !== 0) {
+					if (data !== null) {
 
 						console.log('getLocal: buddyicon received');
 
@@ -597,7 +545,7 @@ window.console = console;
 				{
 					console.log('Token: ', token);
 					
-					flickr.parseToken(token);
+					flickr.parseToken(token.token);
 
 					$rootScope.state.userId = flickr.userId;
 					$rootScope.state.userName = flickr.userName;
@@ -614,8 +562,6 @@ window.console = console;
 					$rootScope.$broadcast('status', {
 						message: 'Authorized. Hi ' + flickr.userName + '!'
 					});
-					
-					
 				}
 			};
     }]);
