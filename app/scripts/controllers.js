@@ -92,15 +92,185 @@
 
     }]);
 
-	controllers.controller('ProfileController', ['$scope', '$rootScope',
-		function ($scope, $rootScope) {
-
-			$scope.user = {
-				displayName: 'Sondre'
+	
+	controllers.controller('ProfileController', ['$scope', '$rootScope', 'settings', 'flickr', 'HOST', '$http', 'fileManager', 
+		function ($scope, $rootScope, settings, flickr, HOST, $http, fileManager) {
+		
+			$rootScope.state.background = 'wallpaper-3';
+			
+			$rootScope.$broadcast('status', {
+					message: 'These are all your photos.'
+				});
+		
+			$scope.albums = [];
+			
+			$scope.page = 1;
+			
+			$scope.findAlbums = function() {
+			
+				// Get a prepared message that includes token.
+				// Until we know exactly what metadata we need, we'll ask for all extras.
+				var query = flickr.createMessage('flickr.photosets.getList', {
+					user_id: flickr.userId.replace('%40', '@'),
+					safe_search: settings.values.safe,
+					sort: settings.values.sort,
+					per_page: '15',
+					page: '' + $scope.page + '',
+					primary_photo_extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+				});
+				
+				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				
+				console.log('Sign URL message: ', query);
+				var url = HOST + '/search';
+				$http.post(url, query).success($scope.findAlbumsSigned).error($scope.findAlbumsError);
+				
 			};
+			
+			$scope.downloadAlbumArt = function()
+			{
+				var currentAlbum = $scope.albums[$scope.albumDownloadIndex];
 
-    }]);
+				fileManager.download(currentAlbum.url, function(uri, url, response) {
 
+					currentAlbum.uri = uri;
+
+					$scope.albumDownloadIndex = $scope.albumDownloadIndex + 1;
+
+					if ($scope.albumDownloadIndex < $scope.albums.length)
+					{
+						$scope.downloadAlbumArt();
+					}
+					
+				});
+			};
+			
+			$scope.showAlbumMenu = function (album) {
+				//var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
+				var url = album.link;
+				console.log('Open: ', url);
+				window.open(url);
+			};
+			
+			$scope.albumDownloadIndex = 0;
+			
+			$scope.findAlbumsSigned = function(message) {
+			
+				console.log('Message Received: ', message);
+				
+				$scope.showLoadMore = true;
+				$scope.searchStatus = '';
+				
+				var url = 'https://' + message.hostname + message.path;
+
+				$http.post(url).success(function (data, status, headers, config) {
+					// this callback will be called asynchronously
+					// when the response is available
+					console.log('Service results: ', data);
+					console.log('Service HTTP status: ', status);
+					
+					if (data.stat === 'ok')
+					{
+						var photosets = data.photosets.photoset;
+						
+						$scope.albums = [photosets.length];
+						
+						for (var i = 0; i < photosets.length; i++) {
+						
+							var photoset = photosets[i];
+							
+							console.log(photoset);
+							
+							var albumArtUrl = photoset.primary_photo_extras.url_m; // consider using _s for smaller size.
+							var title = photoset.title._content;
+							var link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + photoset.id;
+							
+							$scope.albums[i] = { uri: '', url: albumArtUrl, title: title, link: link };
+						
+						}
+	
+						if ($scope.albums.length > 0)
+						{
+							$scope.downloadAlbumArt();
+						}
+						
+						/*
+						var photos = $scope.photos;
+
+						console.log('PHOTOS!!!: ', photos);
+
+						for (var i = 0; i < photos.length; i++) {
+
+							var item = photos[i];
+
+							// Skip all photos already downloaded.
+							if (item.url !== undefined) {
+								continue;
+							}
+
+							item.uri = item.getUrl('m');
+
+							// We are about to download the last photo, we can prepare for next search (scrolling).
+							if (i === (photos.length - 1)) {
+								console.log('i == photos.length!');
+								$scope.page = $scope.page + 1;
+							}
+
+							$scope.loadImage(item, function (blob_uri, originalItem) {
+
+								$timeout(function () {
+
+									console.log('BLOB: ', blob_uri);
+									originalItem.url = blob_uri;
+
+								}, 0);
+
+							});
+
+						}*/
+						
+					}
+				}).
+				error(function (data, status, headers, config) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+					console.log(data);
+					console.log('HTTP Status: ', status);
+				});
+			
+			
+			};
+			
+			$scope.findAlbumsError = function() {
+			
+				console.log('Find Albums Error!');
+			
+			};
+			
+			$scope.albumsTab = function() {
+			
+				console.log('albums TAB!');
+			
+			};
+			
+			$scope.onTabSelected = function(index){
+			
+				if (index === 0)
+				{
+					$scope.findAlbums();
+				}
+				
+				console.log('onTabSelected: ', index);
+			};
+			
+			$scope.announceDeselected = function(index){
+			
+				console.log('announceDeselected: ', index);
+			};
+			
+	}]);
+	
+	
 	controllers.controller('AboutController', ['$scope', '$rootScope', 'settings',
 		function ($scope, $rootScope, settings) {
 

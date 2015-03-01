@@ -7,9 +7,9 @@
 'use strict';
 
 // Remove logging for production use.
-var console = {};
-console.log = function(){};
-window.console = console;
+//var console = {};
+//console.log = function(){};
+//window.console = console;
 
 (function () {
 
@@ -50,8 +50,8 @@ window.console = console;
 	}
 	
 	downloadr.value('author', 'Sondre Bjellås');
-	downloadr.value('HOST', 'http://flickr-downloadr.com');
-	//downloadr.value('HOST', 'http://localhost:3000');
+	//downloadr.value('HOST', 'http://flickr-downloadr.com');
+	downloadr.value('HOST', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage',
 		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime, fileManager, storage) {
@@ -623,7 +623,7 @@ window.console = console;
 	downloadr.config(['$routeProvider', '$mdThemingProvider',
 		function ($routeProvider, $mdThemingProvider)
 		{
-			 $mdThemingProvider.theme('cyan');
+			 $mdThemingProvider.theme('cyan').primaryPalette('cyan');
 			
 			$routeProvider.when('/', {
 				templateUrl: '/views/home.html',
@@ -640,6 +640,10 @@ window.console = console;
 			$routeProvider.when('/logout', {
 				templateUrl: '/views/logout.html',
 				controller: 'LogoutController'
+			});
+			$routeProvider.when('/profile', {
+				templateUrl: '/views/profile.html',
+				controller: 'ProfileController'
 			});
 			$routeProvider.when('/search', {
 				templateUrl: '/views/search.html',

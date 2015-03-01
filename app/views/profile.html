@@ -1,9 +1,79 @@
-<div class="content padding">
-	<h2>Profile</h2>
+<md-content md-theme="cyan" class="content">
+	
+	<md-tabs md-selected="selectedIndex" flex md-stretch-tabs="always">
+		<md-tab md-on-select="onTabSelected(0)" md-on-deselect="announceDeselected(0)">
+			<md-tab-label>Photostream</md-tab-label>
+			
+				<!--
+				<div id="gallery" class="thumbs grid">
 
-	<p>
-		...
+					<figure ng-repeat="photo in photos" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectPhoto(photo)" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)">
+						<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
+						<figcaption>
+							<h2>{{ photo.title | limitTo: 50 }}{{photo.title.length > 50 ? '...' : ''}}</h2>
+							<p>
+								<a ng-click="showMenu(photo)"><i class="mdi mdi-dots-horizontal"></i></a>
+							</p>
+						</figcaption>
+					</figure>
 
-	</p>
+					<div class="clear"></div>
 
-</div>
+					<div style="padding: 10px;" ng-show="showLoadMore">
+						<md-button class="menu-button" ng-click="loadMore()">
+							Load more...
+						</md-button>
+					</div>
+
+					<div style="padding: 10px; color: white;" ng-show="searchStatus !== ''">
+						{{searchStatus}}
+					</div>
+
+				</div>-->
+			
+		</md-tab>
+		<md-tab md-on-select="onTabSelected(1)" md-on-deselect="announceDeselected(1)">
+			<md-tab-label>Albums</md-tab-label>
+			
+				<div id="gallery" class="thumbs grid">
+
+					<figure ng-repeat="album in albums" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectAlbum(album)" md-swipe-left="selectAlbum(album)" md-swipe-right="selectAlbum(album)">
+						<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">
+						<figcaption>
+							<h2>{{ album.title | limitTo: 50 }}{{album.title.length > 50 ? '...' : ''}}</h2>
+							<p>
+								<a ng-click="showAlbumMenu(album)"><i class="mdi mdi-dots-horizontal"></i></a>
+							</p>
+						</figcaption>
+					</figure>
+
+					<div class="clear"></div>
+
+					<div style="padding: 10px;" ng-show="showLoadMore">
+						<md-button class="menu-button" ng-click="loadMore()">
+							Load more...
+						</md-button>
+					</div>
+
+					<div style="padding: 10px; color: white;" ng-show="searchStatus !== ''">
+						{{searchStatus}}
+					</div>
+
+				</div>
+			
+		</md-tab>
+		<md-tab md-on-select="onTabSelected(2)" md-on-deselect="announceDeselected(2)">
+			<md-tab-label>Favorites</md-tab-label>
+			Content :D
+		</md-tab>
+		<md-tab md-on-select="onTabSelected(3)" md-on-deselect="announceDeselected(3)">
+			<md-tab-label>Galleries</md-tab-label>
+			Content :D
+		</md-tab>
+		<md-tab md-on-select="onTabSelected(4)" md-on-deselect="announceDeselected(4)">
+			<md-tab-label>Profile</md-tab-label>
+			The users profile...
+		</md-tab>
+	</md-tabs>
+	
+</md-content>
