@@ -50,6 +50,8 @@
 				message: ''
 			});
 			
+			$scope.buddyIcon = 'https://farm3.staticflickr.com/2881/buddyicons/32954227@N00.jpg?1369136221#32954227@N00';
+			
 			$scope.searchType = function(type){
 				// Check for undefined, to support older app versions.
 				if (settings.values.type === undefined || settings.values.type === type) {
@@ -253,12 +255,95 @@
 			
 			};
 			
+			$scope.findProfile = function() {
+			
+				// Receives 401 error from this call, look into later: https://www.flickr.com/services/api/flickr.stats.getTotalViews.html	
+				//var query = flickr.createMessage('flickr.stats.getTotalViews', {});
+				//console.log('Sign URL message: ', query);
+				//flickr.query(query, $scope.findProfileSuccess, $scope.requestError);
+				
+				// The username returned from service is url encoded, so we'll need to convert.
+				var query = flickr.createMessage('flickr.people.getInfo', {
+					user_id: flickr.userId.replace('%40', '@')
+				});
+				
+				flickr.query(query, $scope.findUserInfoSuccess, $scope.requestError);
+				
+				
+				
+			};
+			
+			$scope.profile = [];
+			
+			$scope.name = '';
+			
+			$scope.buddyIcon = null;
+			
+			//$scope.buddyIcon = 'https://farm3.staticflickr.com/2881/buddyicons/32954227@N00.jpg?1369136221#32954227@N00';
+			
+			$scope.findUserInfoSuccess = function(data) {
+				
+				console.log('findUserInfoSuccess: ', data);
+				
+				// Reset the list.
+				$scope.profile = [];
+				
+				var list = $scope.profile;
+				var person = data.person;
+				
+				$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '_r.jpg'
+				
+				$scope.name = (person.realname._content !== '') ? person.realname._content : person.username._content;
+				
+				//list.push({ key: 'Name', value: person.realname._content });
+				list.push({ key: 'Username', value: person.username._content });
+				//list.push({ key: 'User Id', value: person.nsid });
+				list.push({ key: 'Location', value: person.location._content });
+				list.push({ key: 'Description', value: person.description._content });
+				list.push({ key: 'Photos', value: person.photos.count._content });
+				list.push({ key: 'Views', value: person.photos.views._content });
+				
+				var joinedDate = new Date(person.photos.firstdate._content*1000).toDateString();
+				
+				list.push({ key: 'Joined', value: joinedDate });
+				list.push({ key: 'Oldest Photo', value: person.photos.firstdatetaken._content });
+				
+				
+				list.push({ key: 'Profile', value: person.profileurl._content, isLink: true });
+				list.push({ key: 'Photos', value: person.photosurl._content, isLink: true });
+			
+				var proAccount = (person.ispro === 1) ? 'true' : 'false';
+				list.push({ key: 'Pro Account', value: proAccount });
+				
+				list.push({ key: 'Timezone', value: person.timezone.label });
+				
+			};
+			
+			$scope.findProfileSuccess = function(data) {
+				
+				console.log('findProfileSuccess: ', data);
+				
+			};
+			
+			$scope.requestError = function() {
+			
+				console.log('Failed to perform signing request.');
+				
+			};
+			
 			$scope.onTabSelected = function(index){
 			
-				if (index === 0)
+				switch(index)
 				{
-					$scope.findAlbums();
+					case 0:
+						$scope.findAlbums();
+						break;
+					case 4:
+						$scope.findProfile();
+						break;
+				
 				}
+				
 				
 				console.log('onTabSelected: ', index);
 			};

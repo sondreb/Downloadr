@@ -566,6 +566,8 @@
 					}, function() { console.log('Failed to query userInfo.') });
 
 				});
+				
+				
 			};
 			
 			
@@ -652,10 +654,6 @@
 			$routeProvider.when('/settings', {
 				templateUrl: '/views/settings.html',
 				controller: 'SettingsController'
-			});
-			$routeProvider.when('/profile', {
-				templateUrl: '/views/profile.html',
-				controller: 'ProfileController'
 			});
 			$routeProvider.when('/folder', {
 				templateUrl: '/views/folder.html',

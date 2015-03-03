@@ -86,6 +86,7 @@ app.get('/auth', auth.index);
 app.get('/login/url', login.url);
 app.post('/login/exchange', login.exchange);
 app.post('/sign/url', sign.url);
+app.post('/sign', sign.index);
 app.post('/search', search.index);
 app.get('/version', version.index);
 

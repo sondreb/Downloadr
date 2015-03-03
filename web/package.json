@@ -1,6 +1,6 @@
 {
   "name": "FlickrDownloadrService",
-  "version": "3.0.103",
+  "version": "3.0.104",
   "author": "Sondre Bjellås",
   "description": "Service for WebSocket, Token Exchange and more",
   "scripts": {

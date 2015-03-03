@@ -3,7 +3,7 @@
     "default_locale": "en",
     "name": "Flickr Downloadr",
     "description": "Simple and elegant photo downloading tool.",
-    "version": "3.0.103",
+    "version": "3.0.104",
     "permissions": [
         {
             "fileSystem": [

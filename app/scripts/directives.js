@@ -185,6 +185,36 @@
 
 	});
 
+	
+	directives.directive('image', ['fileManager', function (fileManager) {
+		
+		var failure = function() {
+			console.error('Failed to download image!');
+		};
+		
+		return {
+			restrict: 'A',
+			link: function($scope, $element, attr) {
+
+				attr.$observe('image', function(value){
+					
+					if (value === '' || value === null)
+					{
+						return;
+					}
+					
+					fileManager.downloadAsText(value, function(base64) {
+
+						// Set the src to locally cached base64 encoded image.
+						var base64Url = 'data:image/png;base64,' + base64;
+						$element.attr('src', base64Url);
+
+					}, failure);
+            	});
+			}
+		};
+	}]);
+	
 
 	directives.directive('icon', function () {
 

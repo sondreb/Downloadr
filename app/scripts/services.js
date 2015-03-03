@@ -181,8 +181,7 @@
 						
 						console.log(xhr.response);
 						
-						
-						var uInt8Array = new Uint8Array(this.response);
+						var uInt8Array = new Uint8Array(xhr.response);
 						var i = uInt8Array.length;
 						var biStr = new Array(i);
 						while (i--)
@@ -193,12 +192,11 @@
 						
 						success(base64, url);
 						
-						//window.console.log("response: "+xhr.response);
-						//callback(JSON.parse(xhr.response));
-						//success(window.webkitURL.createObjectURL(xhr.response), url, xhr.response);
 					} else {
-						error(xhr.statusText);
+						
 						console.error(xhr.statusText);
+						error(xhr.statusText);
+						
 					}
 				}
 				
@@ -492,6 +490,8 @@ var Base64 = {
 
 	downloadr.service('flickr', ['$rootScope', '$http', 'HOST', function ($rootScope, $http, HOST) {
 
+		var that = this;
+		
 		var token = '';
 		var secret = '';
 		var userId = '';
@@ -518,8 +518,8 @@ var Base64 = {
 			var message = {
 				method: method,
 				args: args,
-				token: token,
-				secret: secret
+				token: this.token,
+				secret: this.secret
 			};
 
 			return message;
@@ -555,7 +555,7 @@ var Base64 = {
 			});
 		};
 		
-		var query = function(message, ok, fail)
+		var queryService = function(message, ok, fail)
 		{
 			var url = 'https://' + message.hostname + message.path;
 			
@@ -563,6 +563,32 @@ var Base64 = {
 			console.log('Query Data: ', message);
 			
 			$http.post(url).success(ok).error(fail);
+		}
+		
+		var sondre = 1;
+		
+		var signAndQuery = function(query, ok, fail)
+		{
+			// Construct the URL to sign queries.
+			var url = HOST + '/sign';
+			
+			// Sign the query then call Flickr.
+			$http.post(url, query).success(function(data,status,headers,config) {
+			
+				console.log('Received Message in Call method: ', data);
+				
+				queryService(data, function(result) {
+				
+					console.log('Received Data in Call method: ', result);
+					ok(result);
+				
+				}, function(data, status, headers, config) {
+					
+					console.log('Status: ', status);
+					
+					fail(); });
+			
+			}).error(fail);
 		}
 
 		return {
@@ -572,7 +598,7 @@ var Base64 = {
 			userId: userId,
 			userName: userName,
 			signUrl: signUrl,
-			query: query
+			query: signAndQuery
 		};
 
 	}]);
