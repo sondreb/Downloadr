@@ -35,10 +35,13 @@
 		<md-tab md-on-select="onTabSelected(1)" md-on-deselect="announceDeselected(1)">
 			<md-tab-label>Albums</md-tab-label>
 			
+				<gallery load-more="loadMoreAlbums()" status="Hello World!" items="albums"></gallery>
+			
 				<div id="gallery" class="thumbs grid">
 
 					<figure ng-repeat="album in albums" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectAlbum(album)" md-swipe-left="selectAlbum(album)" md-swipe-right="selectAlbum(album)">
-						<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">
+						<!--<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">-->
+						<img image="{{album.url}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">
 						<figcaption>
 							<h2>{{ album.title | limitTo: 50 }}{{album.title.length > 50 ? '...' : ''}}</h2>
 							<p>
@@ -64,11 +67,63 @@
 		</md-tab>
 		<md-tab md-on-select="onTabSelected(2)" md-on-deselect="announceDeselected(2)">
 			<md-tab-label>Favorites</md-tab-label>
-			Content :D
+				<div id="gallery" class="thumbs grid">
+
+					<figure ng-repeat="favorite in favorites" class="effect-winston" ng-class="{selectedFavorite: photo.selected}" ng-click="selectFavorite(favorite)" md-swipe-left="selectFavorite(gallery)" md-swipe-right="selectFavorite(gallery)">
+						<img ng-src="{{favorite.uri}}" class="thumb" title="{{favorite.title}}" alt="{{favorite.title}}">
+						<figcaption>
+							<h2>{{ favorite.title | limitTo: 50 }}{{favorite.title.length > 50 ? '...' : ''}}</h2>
+							<p>
+								<a ng-click="showFavoriteMenu(favorite)"><i class="mdi mdi-dots-horizontal"></i></a>
+							</p>
+						</figcaption>
+					</figure>
+
+					<div class="clear"></div>
+
+					<div style="padding: 10px;" ng-show="showLoadMore">
+						<md-button class="menu-button" ng-click="loadMore()">
+							Load more...
+						</md-button>
+					</div>
+
+					<div style="padding: 10px; color: white;" ng-show="favoritesStatus !== ''">
+						{{favoritesStatus}}
+					</div>
+
+				</div>
 		</md-tab>
 		<md-tab md-on-select="onTabSelected(3)" md-on-deselect="announceDeselected(3)">
 			<md-tab-label>Galleries</md-tab-label>
-			Content :D
+			
+			
+				<div id="gallery" class="thumbs grid">
+
+					<figure ng-repeat="gallery in galleries" class="effect-winston" ng-class="{selectedGallery: photo.selected}" ng-click="selectGallery(gallery)" md-swipe-left="selectGallery(gallery)" md-swipe-right="selectGallery(gallery)">
+						<img ng-src="{{gallery.uri}}" class="thumb" title="{{gallery.title}}" alt="{{gallery.title}}">
+						<figcaption>
+							<h2>{{ album.title | limitTo: 50 }}{{album.title.length > 50 ? '...' : ''}}</h2>
+							<p>
+								<a ng-click="showAlbumMenu(gallery)"><i class="mdi mdi-dots-horizontal"></i></a>
+							</p>
+						</figcaption>
+					</figure>
+
+					<div class="clear"></div>
+
+					<div style="padding: 10px;" ng-show="showLoadMore">
+						<md-button class="menu-button" ng-click="loadMore()">
+							Load more...
+						</md-button>
+					</div>
+
+					<div style="padding: 10px; color: white;" ng-show="galleryStatus !== ''">
+						{{galleryStatus}}
+					</div>
+
+				</div>
+			
+			
 		</md-tab>
 		<md-tab md-on-select="onTabSelected(4)" md-on-deselect="announceDeselected(4)">
 			<md-tab-label>Profile</md-tab-label>
@@ -91,7 +146,6 @@
 					</div>
 				
 				</div>
-				
 		
 			</div>
 				

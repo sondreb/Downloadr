@@ -105,13 +105,63 @@
 				});
 		
 			$scope.albums = [];
-			
 			$scope.page = 1;
+			$scope.favoritesStatus = '';
+			
+
+			
+			$scope.onTabSelected = function(index){
+			
+				switch(index)
+				{
+					case 0:
+						$scope.findAlbums();
+						break;
+					case 2:
+						$scope.findFavorites();
+						break;
+					case 3:
+						$scope.findGalleries();
+						break;
+					case 4:
+						$scope.findProfile();
+						break;
+				
+				}
+				
+				
+				console.log('onTabSelected: ', index);
+			};
+			
+			$scope.findFavorites = function() {
+			
+				var query = flickr.createMessage('flickr.favorites.getList', {
+					user_id: flickr.userId.replace('%40', '@'),
+					per_page: '50',
+					page: '' + $scope.page + '',
+					primary_photo_extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				});
+				
+				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				
+				flickr.query(query, $scope.listFavorites, $scope.error);
+			
+			};
+			
+			$scope.listFavorites = function(data) {
+			
+				$scope.favoritesStatus = '';
+				
+				if (data.favorites.total === "0")
+				{
+					$scope.favoritesStatus = 'User haven\'t favorited any photos yet.';
+				}
+				
+				console.log(data);
+			};
 			
 			$scope.findAlbums = function() {
 			
-				// Get a prepared message that includes token.
-				// Until we know exactly what metadata we need, we'll ask for all extras.
 				var query = flickr.createMessage('flickr.photosets.getList', {
 					user_id: flickr.userId.replace('%40', '@'),
 					safe_search: settings.values.safe,
@@ -125,8 +175,43 @@
 				
 				console.log('Sign URL message: ', query);
 				var url = HOST + '/search';
-				$http.post(url, query).success($scope.findAlbumsSigned).error($scope.findAlbumsError);
+				$http.post(url, query).success($scope.listAlbums).error($scope.error);
 				
+			};
+			
+			$scope.loadMoreAlbums = function() {
+			
+				console.log('Load more albums!!');
+			
+			};
+			
+			$scope.findGalleries = function() {
+			
+				var query = flickr.createMessage('flickr.galleries.getList', {
+					user_id: flickr.userId.replace('%40', '@'),
+					per_page: '50',
+					page: '' + $scope.page + '',
+					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+				});
+				
+				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				
+				flickr.query(query, $scope.listGalleries, $scope.error);
+				
+			};
+			
+			$scope.galleryStatus = '';
+			
+			$scope.listGalleries = function(data) {
+			
+				$scope.galleryStatus = '';
+				
+				if (data.galleries.total === "0")
+				{
+					$scope.galleryStatus = 'User haven\'t created any galleries yet.';
+				}
+				
+				console.log(data);
 			};
 			
 			$scope.downloadAlbumArt = function()
@@ -156,7 +241,7 @@
 			
 			$scope.albumDownloadIndex = 0;
 			
-			$scope.findAlbumsSigned = function(message) {
+			$scope.listAlbums = function(message) {
 			
 				console.log('Message Received: ', message);
 				
@@ -191,10 +276,10 @@
 						
 						}
 	
-						if ($scope.albums.length > 0)
-						{
-							$scope.downloadAlbumArt();
-						}
+						//if ($scope.albums.length > 0)
+						//{
+						//	$scope.downloadAlbumArt();
+						//}
 						
 						/*
 						var photos = $scope.photos;
@@ -243,7 +328,7 @@
 			
 			};
 			
-			$scope.findAlbumsError = function() {
+			$scope.findError = function() {
 			
 				console.log('Find Albums Error!');
 			
@@ -267,7 +352,7 @@
 					user_id: flickr.userId.replace('%40', '@')
 				});
 				
-				flickr.query(query, $scope.findUserInfoSuccess, $scope.requestError);
+				flickr.query(query, $scope.findUserInfoSuccess, $scope.error);
 				
 				
 				
@@ -325,28 +410,13 @@
 				
 			};
 			
-			$scope.requestError = function() {
+			$scope.error = function() {
 			
 				console.log('Failed to perform signing request.');
 				
 			};
 			
-			$scope.onTabSelected = function(index){
-			
-				switch(index)
-				{
-					case 0:
-						$scope.findAlbums();
-						break;
-					case 4:
-						$scope.findProfile();
-						break;
-				
-				}
-				
-				
-				console.log('onTabSelected: ', index);
-			};
+
 			
 			$scope.announceDeselected = function(index){
 			

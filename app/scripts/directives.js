@@ -203,14 +203,77 @@
 						return;
 					}
 					
+					fileManager.download(value, function(uri) {
+
+						$element.attr('src', uri);
+						
+							//URL.revokeObjectURL(uri);
+
+					}, failure);
+					
+					/*
 					fileManager.downloadAsText(value, function(base64) {
 
 						// Set the src to locally cached base64 encoded image.
 						var base64Url = 'data:image/png;base64,' + base64;
 						$element.attr('src', base64Url);
 
-					}, failure);
+					}, failure);*/
             	});
+			}
+		};
+	}]);
+	
+	directives.directive('gallery', ['$location', function ($location) {
+
+		return {
+			restrict: 'E',
+			scope: {
+				items: '=',
+				class: '@',
+				value: '=',
+				target: '@',
+				eventHandler: '&ngSearch',
+				loadMore: '&',
+				status: '@'
+			},
+			controller: function($scope) {
+			
+				$scope.showStatus = false;
+				$scope.status = '';
+				
+				$scope.setStatus = function(text) {
+					
+					$scope.status = text;
+					
+					if ($scope.status !== null && $scope.status !== '')
+					{
+						$scope.showStatus = true;
+					}
+				
+				};
+				
+				console.log($scope);
+			
+			},
+			templateUrl: 'views/template_gallery.html',
+			link: function ($scope, element, attrs) {
+
+				// Click Handler handles when user clicks the
+				// search button, then we will navigate and perform search.
+				$scope.clickHandler = function () {
+					console.log('CLICK HANDLER FOR DIRECTIVE!!');
+
+					if ($scope.target !== null) {
+						$location.path($scope.target);
+					}
+
+					if ($scope.eventHandler !== null) {
+						// If there is any event handler defined on the directive
+						// call the function.
+						$scope.eventHandler();
+					}
+				};
 			}
 		};
 	}]);

@@ -1,0 +1,25 @@
+<div id="gallery" class="thumbs grid">
+	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectAlbum(album)" md-swipe-left="selectAlbum(album)" md-swipe-right="selectAlbum(album)">
+		<!--<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">-->
+		<img image="{{album.url}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">
+		<figcaption>
+			<h2>{{ album.title | limitTo: 50 }}{{album.title.length > 50 ? '...' : ''}}</h2>
+			<p>
+				<a ng-click="showAlbumMenu(album)"><i class="mdi mdi-dots-horizontal"></i></a>
+			</p>
+		</figcaption>
+	</figure>
+
+	<div class="clear"></div>
+
+	<div style="padding: 10px;" ng-show="showLoadMore">
+		<md-button class="menu-button" ng-click="loadMore()">
+			Load more...
+		</md-button>
+	</div>
+
+	<div style="padding: 10px; color: white;" ng-show="showStatus">
+		{{status}}
+	</div>
+
+</div>
