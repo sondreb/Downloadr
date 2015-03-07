@@ -31,6 +31,12 @@ module.exports = function (grunt) {
 
 		// Project settings
 		config: config,
+		
+		ts: {
+		  default : {
+			src: ["**/*.ts", "!node_modules/**/*.ts", "!bower_components/**/*.ts"]
+		  }
+		},
 
 		// Watches files for changes and runs tasks based on the changed files
 		watch: {
@@ -63,6 +69,13 @@ module.exports = function (grunt) {
 			js: {
 				files: ['<%= config.app %>/scripts/{,*/}*.js'],
 				tasks: ['jshint'],
+				options: {
+					livereload: true
+				}
+			},
+			ts: {
+				files: ['<%= config.app %>/scripts/{,*/}*.ts'],
+				tasks: ['ts'],
 				options: {
 					livereload: true
 				}
@@ -513,6 +526,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-svgstore');
 	grunt.loadNpmTasks('grunt-wiredep');
 	grunt.loadNpmTasks('grunt-angular-architecture-graph');
+	grunt.loadNpmTasks("grunt-ts");
 
 	grunt.registerTask('debug', function (platform) {
 
@@ -533,6 +547,7 @@ module.exports = function (grunt) {
             'clean:' + platform,
             'concurrent:' + platform,
             'mochacli',
+			'ts',
             'stylus',
 			'copy:dev',
 			'svgstore',
@@ -554,6 +569,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
         'clean:dist',
         'chromeManifest:dist',
+		'ts',
         'useminPrepare',
         'concurrent:dist',
         'stylus',
