@@ -208,7 +208,7 @@
 			-->
 			<div flex></div>
 			
-			<div ng-show="showSorting()">
+			<div ng-show="state.showLicenses">
 
 			 <div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="License" tooltip-position="left">
@@ -216,8 +216,8 @@
 					</button>
 
 					<div class="fab__actions fab__actions--up">
-						<button ng-if="state.debug" ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
-						--><button ng-if="state.debug" ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
+						<button ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button><!--
+						--><!--<button ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button>--><!--
 						--><button ng-class="licenseClass('1,2,3,4,5,6,7,8')" ng-click="selectLicense('1,2,3,4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (All)" tooltip-position="right"><img class="cc-icon" src="images/cc.png"></button><!--
 						--><button ng-class="licenseClass('4,5,6,7,8')" ng-click="selectLicense('4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Commercial Use Allowed" tooltip-position="right"><img class="cc-icon" src="images/by.png"><!--
 						--><button  ng-class="licenseClass('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>
@@ -255,7 +255,7 @@
 				
 			</div>
 
-			<div ng-show="showSorting()" style="margin-left: 10px;">
+			<div ng-show="state.showSorting" style="margin-left: 10px;">
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">

@@ -185,32 +185,31 @@
 
 	});
 
-	
+
 	directives.directive('image', ['fileManager', function (fileManager) {
-		
-		var failure = function() {
+
+		var failure = function () {
 			console.error('Failed to download image!');
 		};
-		
+
 		return {
 			restrict: 'A',
-			link: function($scope, $element, attr) {
+			link: function ($scope, $element, attr) {
 
-				attr.$observe('image', function(value){
-					
-					if (value === '' || value === null)
-					{
+				attr.$observe('image', function (value) {
+
+					if (value === '' || value === null) {
 						return;
 					}
-					
-					fileManager.download(value, function(uri) {
+
+					fileManager.download(value, function (uri) {
 
 						$element.attr('src', uri);
-						
-							//URL.revokeObjectURL(uri);
+
+						//URL.revokeObjectURL(uri);
 
 					}, failure);
-					
+
 					/*
 					fileManager.downloadAsText(value, function(base64) {
 
@@ -219,11 +218,11 @@
 						$element.attr('src', base64Url);
 
 					}, failure);*/
-            	});
+				});
 			}
 		};
 	}]);
-	
+
 	directives.directive('gallery', ['$location', function ($location) {
 
 		return {
@@ -237,28 +236,75 @@
 				loadMore: '&',
 				status: '@'
 			},
-			controller: function($scope) {
-			
-				$scope.showStatus = false;
-				$scope.status = '';
+			controller: function ($scope, $rootScope) {
+
+				console.log($scope);
 				
-				$scope.setStatus = function(text) {
-					
+				$scope.showStatus = false;
+
+				$scope.setStatus = function (text) {
+
 					$scope.status = text;
-					
-					if ($scope.status !== null && $scope.status !== '')
-					{
+
+					if ($scope.status !== null && $scope.status !== '') {
 						$scope.showStatus = true;
 					}
-				
+
+				};
+
+				$scope.menu = function (item) {
+					var url = item.link;
+					window.open(url);
 				};
 				
-				console.log($scope);
-			
+				$scope.loadMore = function () {
+
+					console.log('loadMore');
+					
+				};
+
+				// Event handler when user selects a photo. Same event for click on existing selected or new photo.
+				$scope.select = function (item) {
+					
+					if (item.license === "0") {
+						return;
+					}
+
+					if (item.selected === true) {
+						item.selected = false;
+
+						$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
+
+					} else {
+						item.selected = true;
+						$rootScope.state.selectedPhotos.push(item);
+					}
+
+					
+					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
+						photos: $rootScope.state.selectedPhotos
+					});
+
+					console.log('Select item: ', item);
+				};
+
 			},
 			templateUrl: 'views/template_gallery.html',
 			link: function ($scope, element, attrs) {
 
+				console.log($scope);
+				
+				attrs.$observe('status', function (value) {
+
+					if (value === '' || value === null) {
+						$scope.showStatus = false;
+					}
+					else
+					{
+						$scope.showStatus = true;
+					}
+				});
+				
 				// Click Handler handles when user clicks the
 				// search button, then we will navigate and perform search.
 				$scope.clickHandler = function () {
@@ -277,7 +323,7 @@
 			}
 		};
 	}]);
-	
+
 
 	directives.directive('icon', function () {
 
@@ -292,7 +338,7 @@
 		};
 	});
 
-	
+
 	directives.directive('windowIcon', function () {
 
 		return {

@@ -1,11 +1,15 @@
 <div id="gallery" class="thumbs grid">
-	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectAlbum(album)" md-swipe-left="selectAlbum(album)" md-swipe-right="selectAlbum(album)">
+	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: item.selected}" ng-click="select(item)" md-swipe-left="select(item)" md-swipe-right="select(item)">
 		<!--<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">-->
-		<img image="{{album.url}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">
+		<img image="{{item.url}}" class="thumb" title="{{item.name}}" alt="{{item.name}}">
 		<figcaption>
-			<h2>{{ album.title | limitTo: 50 }}{{album.title.length > 50 ? '...' : ''}}</h2>
+			
+			<i ng-show="item.license === '0'" class="mdi mdi-close-circle" style="color: white; margin-left: 6px; margin-top: 6px; position: absolute;" title="Not available for download"></i>
+			
+			<h2>{{ item.name | limitTo: 50 }}{{item.name.length > 50 ? '...' : ''}}</h2>
 			<p>
-				<a ng-click="showAlbumMenu(album)"><i class="mdi mdi-dots-horizontal"></i></a>
+				<i ng-show="item.count !== undefined" class="mdi mdi-folder-image">{{item.count}}</i>
+				<a ng-click="menu(item)"><i class="mdi mdi-dots-horizontal"></i></a>
 			</p>
 		</figcaption>
 	</figure>
@@ -18,7 +22,7 @@
 		</md-button>
 	</div>
 
-	<div style="padding: 10px; color: white;" ng-show="showStatus">
+	<div style="padding: 10px; color: white; background-color: black;" ng-show="showStatus">
 		{{status}}
 	</div>
 

@@ -99,29 +99,53 @@
 		function ($scope, $rootScope, settings, flickr, HOST, $http, fileManager) {
 		
 			$rootScope.state.background = 'wallpaper-3';
+			$rootScope.state.showActions = true;
+			$rootScope.state.showLicenses = true;
+			$rootScope.state.showSorting = true;
+			
+			$scope.status = {
+				photos: '',
+				albums: '',
+				favorites: '',
+				galleries: ''
+			};
+			
+			$scope.helloWorld = 'Oh no!';
 			
 			$rootScope.$broadcast('status', {
 					message: 'These are all your photos.'
 				});
 		
 			$scope.albums = [];
+			$scope.photos = [];
+			$scope.favorites = [];
+			$scope.galleries = [];
+			
 			$scope.page = 1;
 			$scope.favoritesStatus = '';
-			
-
 			
 			$scope.onTabSelected = function(index){
 			
 				switch(index)
 				{
 					case 0:
-						$scope.findAlbums();
+						$rootScope.state.showLicenses = true;
+						$rootScope.state.showSorting = true;
 						break;
+					case 1:
+						$scope.findAlbums();
+						$rootScope.state.showLicenses = false;
+						$rootScope.state.showSorting = false;
+						break
 					case 2:
 						$scope.findFavorites();
+						$rootScope.state.showLicenses = false;
+						$rootScope.state.showSorting = false;
 						break;
 					case 3:
 						$scope.findGalleries();
+						$rootScope.state.showLicenses = false;
+						$rootScope.state.showSorting = false;
 						break;
 					case 4:
 						$scope.findProfile();
@@ -139,7 +163,7 @@
 					user_id: flickr.userId.replace('%40', '@'),
 					per_page: '50',
 					page: '' + $scope.page + '',
-					primary_photo_extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+					extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
 				
 				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
@@ -150,14 +174,32 @@
 			
 			$scope.listFavorites = function(data) {
 			
+				console.log(data);
+				
 				$scope.favoritesStatus = '';
 				
-				if (data.favorites.total === "0")
+				if (data.stat !== 'ok')
+				{
+					$scope.albumStatus = 'Failed to retreive favorites.';
+					return;
+				}
+				else if (data.photos.total === "0")
 				{
 					$scope.favoritesStatus = 'User haven\'t favorited any photos yet.';
+					return;
 				}
 				
-				console.log(data);
+				data.photos.photo.forEach(function (item) {
+					
+					item.name = item.title;
+					item.url = item.url_m; // consider using _s for smaller size.
+					item.link = 'https://www.flickr.com/photos/' + item.owner + '/' + item.id;
+					item.type = 'photo';
+					
+					$scope.favorites.push(item);
+				});
+				
+				
 			};
 			
 			$scope.findAlbums = function() {
@@ -173,10 +215,7 @@
 				
 				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				
-				console.log('Sign URL message: ', query);
-				var url = HOST + '/search';
-				$http.post(url, query).success($scope.listAlbums).error($scope.error);
-				
+				flickr.query(query, $scope.listAlbums, $scope.error);
 			};
 			
 			$scope.loadMoreAlbums = function() {
@@ -197,18 +236,17 @@
 				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				
 				flickr.query(query, $scope.listGalleries, $scope.error);
-				
 			};
 			
 			$scope.galleryStatus = '';
 			
 			$scope.listGalleries = function(data) {
 			
-				$scope.galleryStatus = '';
+				$scope.status.galleries = '';
 				
 				if (data.galleries.total === "0")
 				{
-					$scope.galleryStatus = 'User haven\'t created any galleries yet.';
+					$scope.status.galleries = 'User haven\'t created any galleries yet.';
 				}
 				
 				console.log(data);
@@ -241,8 +279,62 @@
 			
 			$scope.albumDownloadIndex = 0;
 			
-			$scope.listAlbums = function(message) {
+			$scope.convertList = function(data) {
 			
+				
+				
+				
+			};
+			
+			$scope.listAlbums = function(data) {
+			
+				console.log(data);
+				
+				$scope.albumStatus = '';
+				
+				if (data.stat !== 'ok')
+				{
+					$scope.albumStatus = 'Failed to retreive albums.';
+					return;
+				}
+				else if (data.photosets.total === "0")
+				{
+					$scope.albumStatus = 'User haven\'t created any albums yet.';
+					return;
+				}
+				
+				data.photosets.photoset.forEach(function (album) {
+					
+					album.name = album.title._content;
+					album.url = album.primary_photo_extras.url_m; // consider using _s for smaller size.
+					album.link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + album.id;
+					album.count = parseInt(album.photos);
+					album.type = 'photoset';
+					
+					$scope.albums.push(album);
+				});
+				
+				/*
+				var albums = data.photosets.photoset;
+				
+				for (var i = 0; i < albums.length; i++) {
+
+					var album = albums[i];
+					console.log(album);
+					
+					// Extend with generic properties used in the directive.
+					album.name = album.title._content;
+					album.url = album.primary_photo_extras.url_m; // consider using _s for smaller size.
+					album.link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + album.id;
+					album.count = parseInt(album.photos);
+					album.type = 'photoset';
+					
+					$scope.albums.push(album);
+				}*/
+				
+				return;
+				
+				
 				console.log('Message Received: ', message);
 				
 				$scope.showLoadMore = true;
@@ -946,6 +1038,8 @@
 						var item = list[i];
 						//item.url = 'img/loading.gif';
 						item.selected = false;
+						
+						item.type = 'photo';
 
 						// Returns the highest available image URL for the selected
 						// size. Depending on the original photo, not all sizes are
@@ -1181,6 +1275,9 @@
 				'interestingness-desc': 'Interesting'
 			};
 
+			$scope.count = 0;
+			$scope.total = 0;
+			
 			$scope.settings = settings;
 
 			$scope.$watch(function () {
@@ -1211,8 +1308,27 @@
 			console.log($scope.settings);
 
 			$scope.$on('Event:SelectedPhotosChanged', function (event, data) {
+				
 				console.log('Event:SelectedPhotosChanged: ', data);
-				$scope.count = data.photos.length;
+				
+				var selectedCount = 0;
+				
+				data.photos.forEach(function (item) {
+					
+					if (item.count !== undefined)
+					{
+						selectedCount += item.count;
+					}
+					else
+					{
+						selectedCount += 1;
+					}
+					
+					console.log(item);
+				});
+				
+				// The count should be of both albums and individual selected photos.
+				$scope.count = selectedCount;
 
 				if (data.total) {
 					$scope.total = data.total;
@@ -1262,6 +1378,7 @@
 
 			};
 			
+			/*
 			$scope.showSorting = function() {
 			
 				//console.log('showSorting...', settings.values.type);
@@ -1274,7 +1391,7 @@
 				{
 					return $scope.state.actionTarget == 'folder';
 				}
-			};
+			};*/
 
 			$scope.navigateBack = function () {
 
@@ -1295,7 +1412,7 @@
 				});
 			};
 
-			$scope.count = 0;
+			
 
     }]);
 

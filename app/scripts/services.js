@@ -525,7 +525,7 @@ var Base64 = {
 			return message;
 		};
 		
-		var signUrl = function(path, query, callback)
+		var signUrl = function(path, query, ok, fail)
 		{
 			var url = HOST + path;
 			
@@ -535,9 +535,17 @@ var Base64 = {
 				callback = onUrlSigned
 			}
 			
-			$http.post(url, query).success(callback).error(onUrlSignedError);
+			var request = {
+				method: 'POST',
+				url: url,
+				data: query,
+				cache: true
+			};
+			
+			$http(request).success(ok).error(fail);
 		}
 		
+		/*
 		var onUrlSignedError = function(data, status, headers, config)
 		{
 			console.log('Unable to sign search request: ', status);
@@ -547,13 +555,14 @@ var Base64 = {
 			$rootScope.$broadcast('status', {
 				message: 'Service is unavailable. Please try again later. Code: ' + status
 			});
-		};
+		};*/
 		
+		/*
 		var onUrlSigned = function (message) {
 			$rootScope.$broadcast('flickr:urlsigned', {
 				message: message
 			});
-		};
+		};*/
 		
 		var queryService = function(message, ok, fail)
 		{
@@ -565,15 +574,19 @@ var Base64 = {
 			$http.post(url).success(ok).error(fail);
 		}
 		
-		var sondre = 1;
-		
 		var signAndQuery = function(query, ok, fail)
 		{
 			// Construct the URL to sign queries.
 			var url = HOST + '/sign';
 			
-			// Sign the query then call Flickr.
-			$http.post(url, query).success(function(data,status,headers,config) {
+			var request = {
+				method: 'POST',
+				url: url,
+				data: query,
+				cache: true
+			};
+			
+			$http(request).success(function(data,status,headers,config) {
 			
 				console.log('Received Message in Call method: ', data);
 				

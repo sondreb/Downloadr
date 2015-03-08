@@ -65,6 +65,10 @@
 				background: 'wallpaper',
 
 				showActions: false,
+				
+				showLicenses: true,
+				
+				showSorting: true,
 
 				actionTarget: 'folder',
 
