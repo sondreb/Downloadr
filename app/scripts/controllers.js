@@ -1070,11 +1070,33 @@
 							throw new Error('Unable to find photo URL for the specified size');
 
 						};
-
+						
+						item.getLicenseName = function(license) {
+						
+							for(var i = 0; i < $rootScope.licenses.length; i++)
+							{
+							  if($rootScope.licenses[i].id == license)
+							  {
+								return $rootScope.licenses[i].extension;
+							  }
+							}
+							
+							return '';
+						};
+						
 						item.getFileName = function (photoSize) {
+							
 							var url = this.getUrl(photoSize);
-							var filename = url.replace(/^.*[\\\/]/, '');
-							return filename;
+							var fileName = url.replace(/^.*[\\\/]/, '');
+							
+							var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+							var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
+							var newFullName = newFileName + '_' + item.getLicenseName(item.license).toLowerCase() + newFileNameExt;
+							
+							console.log(this);
+							console.log(item);
+							
+							return newFullName;
 						};
 					}
 
@@ -1174,6 +1196,7 @@
 						text: searchTerm,
 						safe_search: settings.values.safe,
 						sort: settings.values.sort,
+						license: settings.values.license,
 						per_page: '15',
 						page: '' + $scope.page + '',
 						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'

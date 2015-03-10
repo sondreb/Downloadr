@@ -203,43 +203,43 @@
 				{
 					id: '1',
 					title: 'Attribution-NonCommercial-ShareAlike License',
-					extension: 'CC-BY-NC',
+					extension: 'BY-NC',
 					font: 'c b n'
 				},
 				{
 					id: '2',
 					title: 'Attribution-NonCommercial License',
-					extension: 'CC-BY-NC-SA',
+					extension: 'BY-NC-SA',
 					font: 'c b n a'
 				},
 				{
 					id: '3',
 					title: 'Attribution-NonCommercial-NoDerivs License',
-					extension: 'CC-BY-NC-ND',
+					extension: 'BY-NC-ND',
 					font: 'c b n d'
 				},
 				{
 					id: '4',
 					title: 'Attribution License',
-					extension: 'CC-BY',
+					extension: 'BY',
 					font: 'c b'
 				},
 				{
 					id: '5',
 					title: 'Attribution-ShareAlike License',
-					extension: 'CC-BY-SA',
+					extension: 'BY-SA',
 					font: 'c b a'
 				},
 				{
 					id: '6',
 					title: 'Attribution-NoDerivs License',
-					extension: 'CC-BY-ND',
+					extension: 'BY-ND',
 					font: 'c b d'
 				},
 				{
 					id: '7',
 					title: 'No known copyright restrictions',
-					extension: '',
+					extension: 'NONE',
 					font: ''
 				},
 				{
