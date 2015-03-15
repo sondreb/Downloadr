@@ -262,29 +262,54 @@
 					console.log('loadMore');
 					
 				};
+				
+				/*
+				$scope.canDownload = function(item) {
+				
+					console.log('Can Download?: ', item);
+					
+					// License is only available for photos, not albums, galleries, etc.
+					if (item.type !== 'photo')
+					{
+						return true;
+					}
+					
+					if (item.can_download === 1)
+					{
+						return true;
+					}
+					
+					if (item.license !== '0')
+					{
+						return true;
+					}
+					
+					return false;
+					
+				};*/
 
 				// Event handler when user selects a photo. Same event for click on existing selected or new photo.
 				$scope.select = function (item) {
 					
-					if (item.license === "0") {
+					if (item.can_download !== 1)
+					{
 						return;
 					}
-
+					
 					if (item.selected === true) {
 						item.selected = false;
-
+						
 						$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
 
 					} else {
 						item.selected = true;
 						$rootScope.state.selectedPhotos.push(item);
 					}
-
 					
 					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
 						photos: $rootScope.state.selectedPhotos
 					});
-
+					
 					console.log('Select item: ', item);
 				};
 

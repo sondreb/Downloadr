@@ -4,7 +4,7 @@
 		<img image="{{item.url}}" class="thumb" title="{{item.name}}" alt="{{item.name}}">
 		<figcaption>
 			
-			<i ng-show="item.license === '0'" class="mdi mdi-close-circle" style="color: white; margin-left: 6px; margin-top: 6px; position: absolute;" title="Not available for download"></i>
+			<i ng-show="item.can_download !== 1" class="mdi mdi-close-circle" style="color: white; margin-left: 6px; margin-top: 6px; position: absolute;" title="Not available for download"></i>
 			
 			<h2>{{ item.name | limitTo: 50 }}{{item.name.length > 50 ? '...' : ''}}</h2>
 			<p>
@@ -22,7 +22,7 @@
 		</md-button>
 	</div>
 
-	<div style="padding: 10px; color: white; background-color: black;" ng-show="showStatus">
+	<div style="padding: 10px;" ng-show="showStatus">
 		{{status}}
 	</div>
 

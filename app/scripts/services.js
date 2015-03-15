@@ -49,7 +49,8 @@
 						}
 
 						console.log('Settings loaded: ', values);
-						$scope.apply();
+						
+						$rootScope.$apply();
 
 						$rootScope.$broadcast('Settings:Loaded', values);
 
@@ -133,7 +134,7 @@
 						console.log(xhr.response);
 						//window.console.log("response: "+xhr.response);
 						//callback(JSON.parse(xhr.response));
-						success(window.webkitURL.createObjectURL(xhr.response), url, xhr.response);
+						success(window.URL.createObjectURL(xhr.response), url, xhr.response);
 					} else {
 						error(xhr.statusText);
 						console.error(xhr.statusText);
@@ -525,8 +526,7 @@ var Base64 = {
 			return message;
 		};
 		
-		var signUrl = function(path, query, ok, fail)
-		{
+		var signUrl = function(path, query, ok, fail) {
 			var url = HOST + path;
 			
 			// We'll support a specified callback or broadcast.
@@ -543,7 +543,7 @@ var Base64 = {
 			};
 			
 			$http(request).success(ok).error(fail);
-		}
+		};
 		
 		/*
 		var onUrlSignedError = function(data, status, headers, config)
@@ -564,18 +564,19 @@ var Base64 = {
 			});
 		};*/
 		
-		var queryService = function(message, ok, fail)
-		{
+		var queryService = function(message, ok, fail) {
 			var url = 'https://' + message.hostname + message.path;
 			
 			console.log('Query URL: ', url);
 			console.log('Query Data: ', message);
 			
 			$http.post(url).success(ok).error(fail);
-		}
+		};
 		
-		var signAndQuery = function(query, ok, fail)
-		{
+		// If the search contains user id in query, we'll store it in this property for links generation and more.
+		var queryUserId = null;
+		
+		var signAndQuery = function(query, ok, fail) {
 			// Construct the URL to sign queries.
 			var url = HOST + '/sign';
 			
@@ -586,14 +587,100 @@ var Base64 = {
 				cache: true
 			};
 			
+			// Remember the user ID, if specified in the query.
+			queryUserId = (request.data.user_id !== undefined) ? request.data.user_id : null;
+			
 			$http(request).success(function(data,status,headers,config) {
 			
-				console.log('Received Message in Call method: ', data);
+				console.log('signAndQuery: ', data);
 				
 				queryService(data, function(result) {
-				
-					console.log('Received Data in Call method: ', result);
-					ok(result);
+									
+					console.log('queryService: ', result);
+					
+					// This method processes the results to make them unified for binding and other operations.
+					var items = [];
+					var container = null;
+					var itemType = '';
+					
+					if (result.photos !== undefined)
+					{
+						container = result.photos;
+						items = result.photos.photo;
+						itemType = 'photo';
+					}
+					else if(result.photosets !== undefined)
+					{
+						container = result.photosets;
+						items = result.photosets.photoset;
+						itemType = 'photoset';
+					}
+					else if(result.galleries !== undefined)
+					{
+						container = result.galleries;
+						items = result.galleries.gallery;
+						itemType = 'galleries';
+					}
+					else if (result.person !== undefined)
+					{
+						container = result.person;
+						items = result.person;
+						itemType = 'person';
+					}
+					else
+					{
+						throw new Exception('Unable to parse results.');
+					}
+					
+					if (itemType !== 'person')
+					{
+						items.forEach(function (item) {
+
+							item.name = (item.title._content !== undefined) ? item.title._content : item.title;
+
+							if (itemType === 'photoset')
+							{
+								item.link = getUrl(itemType, item.primary_photo_extras.pathalias, item.id);
+								item.count = parseInt(item.photos);
+								item.url = item.primary_photo_extras.url_m;
+								item.can_download = 1;
+							}
+							else if (queryUserId !== null)
+							{
+								item.link = getUrl(itemType, queryUserId, item.id);
+								item.url = item.url_m;
+							}
+							else
+							{
+								item.link = getUrl(itemType, item.owner, item.id);
+								item.url = item.url_m;
+
+								// Favorites does not have can_download like photostream, so check license.
+								if (item.can_download === undefined)
+								{
+									item.can_download = item.license == '0' ? 0 : 1;
+								}
+							}
+
+							item.type = itemType;
+
+						});
+					}
+					
+					var queryResult = {
+					
+						ok: (result.stat === "ok"),
+						type: itemType,
+						page: parseInt(container.page),
+						pages: parseInt(container.pages),
+						perpage: (container.per_page !== undefined) ? parseInt(container.per_page) : parseInt(container.perpage), /* perpage for photos, per_page for galleries */
+						total: parseInt(container.total),
+						user_id: container.user_id,
+						items: items
+						
+					};
+					
+					ok(queryResult);
 				
 				}, function(data, status, headers, config) {
 					
@@ -602,7 +689,40 @@ var Base64 = {
 					fail(); });
 			
 			}).error(fail);
-		}
+		};
+		
+		var getUrl = function(type, userId, id) {
+			switch(type)
+			{
+				case 'photostream':
+					return 'https://www.flickr.com/photos/' + userId + '/';
+				case 'profile':
+					return 'https://www.flickr.com/people/' + userId + '/';
+				case 'photo':
+					return 'https://www.flickr.com/photos/' + userId + '/' + id + '';
+				case 'photosets':
+					return 'https://www.flickr.com/photos/' + userId + '/sets/';
+				case 'photoset':
+					return 'https://www.flickr.com/photos/' + userId + '/sets/' + id + '';
+			}
+		};
+		
+		// Generates URL for different photo sizes.
+		// Size: [mstzbo]
+		var getPhotoUrl = function(size, photo) {
+			if (size === null)
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+			}
+			else if (size === 'o')
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.originalsecret + '_o.' + photo.originalformat + '';
+			}
+			else
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_' + size + '.jpg';
+			}
+		};
 
 		return {
 			parseToken: parseToken,
@@ -611,6 +731,8 @@ var Base64 = {
 			userId: userId,
 			userName: userName,
 			signUrl: signUrl,
+			getUrl: getUrl,
+			getPhotoUrl: getPhotoUrl,
 			query: signAndQuery
 		};
 

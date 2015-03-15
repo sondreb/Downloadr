@@ -647,7 +647,7 @@
 				templateUrl: '/views/logout.html',
 				controller: 'LogoutController'
 			});
-			$routeProvider.when('/profile', {
+			$routeProvider.when('/profile/:userId?', {
 				templateUrl: '/views/profile.html',
 				controller: 'ProfileController'
 			});

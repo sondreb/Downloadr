@@ -95,9 +95,11 @@
     }]);
 
 	
-	controllers.controller('ProfileController', ['$scope', '$rootScope', 'settings', 'flickr', 'HOST', '$http', 'fileManager', 
-		function ($scope, $rootScope, settings, flickr, HOST, $http, fileManager) {
+	controllers.controller('ProfileController', ['$scope', '$rootScope', 'settings', 'flickr', 'HOST', '$http', 'fileManager', '$routeParams', 
+		function ($scope, $rootScope, settings, flickr, HOST, $http, fileManager, $routeParams) {
 		
+			console.log('$routeParams: ', $routeParams.userId);
+			
 			$rootScope.state.background = 'wallpaper-3';
 			$rootScope.state.showActions = true;
 			$rootScope.state.showLicenses = true;
@@ -115,7 +117,7 @@
 			$rootScope.$broadcast('status', {
 					message: 'These are all your photos.'
 				});
-		
+			
 			$scope.albums = [];
 			$scope.photos = [];
 			$scope.favorites = [];
@@ -124,11 +126,16 @@
 			$scope.page = 1;
 			$scope.favoritesStatus = '';
 			
+			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.userId.replace('%40', '@');
+			
+			$scope.searchTerm = '';
+			
 			$scope.onTabSelected = function(index){
 			
 				switch(index)
 				{
 					case 0:
+						$scope.findPhotos();
 						$rootScope.state.showLicenses = true;
 						$rootScope.state.showSorting = true;
 						break;
@@ -150,9 +157,7 @@
 					case 4:
 						$scope.findProfile();
 						break;
-				
 				}
-				
 				
 				console.log('onTabSelected: ', index);
 			};
@@ -160,13 +165,13 @@
 			$scope.findFavorites = function() {
 			
 				var query = flickr.createMessage('flickr.favorites.getList', {
-					user_id: flickr.userId.replace('%40', '@'),
+					user_id: $scope.userId,
 					per_page: '50',
 					page: '' + $scope.page + '',
 					extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
 				
-				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				//'usage, 
 				
 				flickr.query(query, $scope.listFavorites, $scope.error);
 			
@@ -174,38 +179,34 @@
 			
 			$scope.listFavorites = function(data) {
 			
-				console.log(data);
-				
 				$scope.favoritesStatus = '';
 				
-				if (data.stat !== 'ok')
+				if (!data.ok)
 				{
 					$scope.albumStatus = 'Failed to retreive favorites.';
 					return;
 				}
-				else if (data.photos.total === "0")
+				else if (data.total === 0)
 				{
 					$scope.favoritesStatus = 'User haven\'t favorited any photos yet.';
 					return;
 				}
 				
-				data.photos.photo.forEach(function (item) {
+				data.items.forEach(function (item) {
 					
-					item.name = item.title;
-					item.url = item.url_m; // consider using _s for smaller size.
-					item.link = 'https://www.flickr.com/photos/' + item.owner + '/' + item.id;
-					item.type = 'photo';
+					//item.name = item.title;
+					//item.url = item.url_m; // consider using _s for smaller size.
+					//item.link = 'https://www.flickr.com/photos/' + item.owner + '/' + item.id;
+					//item.type = 'photo';
 					
 					$scope.favorites.push(item);
 				});
-				
-				
 			};
 			
 			$scope.findAlbums = function() {
 			
 				var query = flickr.createMessage('flickr.photosets.getList', {
-					user_id: flickr.userId.replace('%40', '@'),
+					user_id: $scope.userId,
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
 					per_page: '15',
@@ -217,6 +218,64 @@
 				
 				flickr.query(query, $scope.listAlbums, $scope.error);
 			};
+			
+			$scope.listAlbums = function(data) {
+			
+				$scope.albumStatus = '';
+				
+				if (!data.ok)
+				{
+					$scope.albumStatus = 'Failed to retreive albums.';
+					return;
+				}
+				else if (data.total === 0)
+				{
+					$scope.albumStatus = 'User haven\'t created any albums yet.';
+					return;
+				}
+				
+				data.items.forEach(function (item) {
+					$scope.albums.push(item);
+				});
+			};
+			
+			$scope.findPhotos = function() {
+				
+				var query = flickr.createMessage('flickr.photos.search', {
+						user_id: $scope.userId,
+						safe_search: settings.values.safe,
+						sort: settings.values.sort,
+						license: settings.values.license,
+						per_page: '15',
+						page: '' + $scope.page + '',
+						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+					});
+				
+				console.log(query);
+				
+				flickr.query(query, $scope.listPhotos, $scope.error);
+			};
+			
+			$scope.listPhotos = function(data) {
+			
+				$scope.status.photos = '';
+				
+				if (!data.ok)
+				{
+					$scope.status.photos = 'Failed to retreive photostreams.';
+					return;
+				}
+				else if (data.total === 0)
+				{
+					$scope.status.photos = 'User haven\'t uploaded any photos yet.';
+					return;
+				}
+				
+				data.items.forEach(function (item) {
+					$scope.photos.push(item);
+				});
+			}
+			
 			
 			$scope.loadMoreAlbums = function() {
 			
@@ -244,7 +303,7 @@
 			
 				$scope.status.galleries = '';
 				
-				if (data.galleries.total === "0")
+				if (data.total === 0)
 				{
 					$scope.status.galleries = 'User haven\'t created any galleries yet.';
 				}
@@ -280,156 +339,17 @@
 			$scope.albumDownloadIndex = 0;
 			
 			$scope.convertList = function(data) {
-			
 				
-				
-				
-			};
-			
-			$scope.listAlbums = function(data) {
-			
-				console.log(data);
-				
-				$scope.albumStatus = '';
-				
-				if (data.stat !== 'ok')
-				{
-					$scope.albumStatus = 'Failed to retreive albums.';
-					return;
-				}
-				else if (data.photosets.total === "0")
-				{
-					$scope.albumStatus = 'User haven\'t created any albums yet.';
-					return;
-				}
-				
-				data.photosets.photoset.forEach(function (album) {
-					
-					album.name = album.title._content;
-					album.url = album.primary_photo_extras.url_m; // consider using _s for smaller size.
-					album.link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + album.id;
-					album.count = parseInt(album.photos);
-					album.type = 'photoset';
-					
-					$scope.albums.push(album);
-				});
-				
-				/*
-				var albums = data.photosets.photoset;
-				
-				for (var i = 0; i < albums.length; i++) {
-
-					var album = albums[i];
-					console.log(album);
-					
-					// Extend with generic properties used in the directive.
-					album.name = album.title._content;
-					album.url = album.primary_photo_extras.url_m; // consider using _s for smaller size.
-					album.link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + album.id;
-					album.count = parseInt(album.photos);
-					album.type = 'photoset';
-					
-					$scope.albums.push(album);
-				}*/
-				
-				return;
-				
-				
-				console.log('Message Received: ', message);
-				
-				$scope.showLoadMore = true;
-				$scope.searchStatus = '';
-				
-				var url = 'https://' + message.hostname + message.path;
-
-				$http.post(url).success(function (data, status, headers, config) {
-					// this callback will be called asynchronously
-					// when the response is available
-					console.log('Service results: ', data);
-					console.log('Service HTTP status: ', status);
-					
-					if (data.stat === 'ok')
-					{
-						var photosets = data.photosets.photoset;
-						
-						$scope.albums = [photosets.length];
-						
-						for (var i = 0; i < photosets.length; i++) {
-						
-							var photoset = photosets[i];
-							
-							console.log(photoset);
-							
-							var albumArtUrl = photoset.primary_photo_extras.url_m; // consider using _s for smaller size.
-							var title = photoset.title._content;
-							var link = 'https://www.flickr.com/photos/' + flickr.userId + '/sets/' + photoset.id;
-							
-							$scope.albums[i] = { uri: '', url: albumArtUrl, title: title, link: link };
-						
-						}
-	
-						//if ($scope.albums.length > 0)
-						//{
-						//	$scope.downloadAlbumArt();
-						//}
-						
-						/*
-						var photos = $scope.photos;
-
-						console.log('PHOTOS!!!: ', photos);
-
-						for (var i = 0; i < photos.length; i++) {
-
-							var item = photos[i];
-
-							// Skip all photos already downloaded.
-							if (item.url !== undefined) {
-								continue;
-							}
-
-							item.uri = item.getUrl('m');
-
-							// We are about to download the last photo, we can prepare for next search (scrolling).
-							if (i === (photos.length - 1)) {
-								console.log('i == photos.length!');
-								$scope.page = $scope.page + 1;
-							}
-
-							$scope.loadImage(item, function (blob_uri, originalItem) {
-
-								$timeout(function () {
-
-									console.log('BLOB: ', blob_uri);
-									originalItem.url = blob_uri;
-
-								}, 0);
-
-							});
-
-						}*/
-						
-					}
-				}).
-				error(function (data, status, headers, config) {
-					// called asynchronously if an error occurs
-					// or server returns response with an error status.
-					console.log(data);
-					console.log('HTTP Status: ', status);
-				});
-			
-			
 			};
 			
 			$scope.findError = function() {
 			
 				console.log('Find Albums Error!');
-			
 			};
 			
 			$scope.albumsTab = function() {
 			
 				console.log('albums TAB!');
-			
 			};
 			
 			$scope.findProfile = function() {
@@ -441,12 +361,10 @@
 				
 				// The username returned from service is url encoded, so we'll need to convert.
 				var query = flickr.createMessage('flickr.people.getInfo', {
-					user_id: flickr.userId.replace('%40', '@')
+					user_id: $scope.userId
 				});
 				
 				flickr.query(query, $scope.findUserInfoSuccess, $scope.error);
-				
-				
 				
 			};
 			
@@ -460,39 +378,54 @@
 			
 			$scope.findUserInfoSuccess = function(data) {
 				
-				console.log('findUserInfoSuccess: ', data);
+				if (data.ok)
+				{
+					console.log('findUserInfoSuccess: ', data);
 				
-				// Reset the list.
-				$scope.profile = [];
-				
-				var list = $scope.profile;
-				var person = data.person;
-				
-				$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '_r.jpg'
-				
-				$scope.name = (person.realname._content !== '') ? person.realname._content : person.username._content;
-				
-				//list.push({ key: 'Name', value: person.realname._content });
-				list.push({ key: 'Username', value: person.username._content });
-				//list.push({ key: 'User Id', value: person.nsid });
-				list.push({ key: 'Location', value: person.location._content });
-				list.push({ key: 'Description', value: person.description._content });
-				list.push({ key: 'Photos', value: person.photos.count._content });
-				list.push({ key: 'Views', value: person.photos.views._content });
-				
-				var joinedDate = new Date(person.photos.firstdate._content*1000).toDateString();
-				
-				list.push({ key: 'Joined', value: joinedDate });
-				list.push({ key: 'Oldest Photo', value: person.photos.firstdatetaken._content });
-				
-				
-				list.push({ key: 'Profile', value: person.profileurl._content, isLink: true });
-				list.push({ key: 'Photos', value: person.photosurl._content, isLink: true });
-			
-				var proAccount = (person.ispro === 1) ? 'true' : 'false';
-				list.push({ key: 'Pro Account', value: proAccount });
-				
-				list.push({ key: 'Timezone', value: person.timezone.label });
+					// Reset the list.
+					$scope.profile = [];
+
+					var list = $scope.profile;
+
+					// When person, the items is not a list but singular.
+					var person = data.items;
+
+					console.log(person);
+					
+					$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '_r.jpg'
+
+					$scope.name = (person.realname._content !== '') ? person.realname._content : person.username._content;
+
+					//list.push({ key: 'Name', value: person.realname._content });
+					list.push({ key: 'Username', value: person.username._content });
+					//list.push({ key: 'User Id', value: person.nsid });
+					list.push({ key: 'Location', value: person.location._content });
+					list.push({ key: 'Photos', value: person.photos.count._content });
+					
+					if (person.photos.views !== undefined)
+					{
+						list.push({ key: 'Views', value: person.photos.views._content });
+					}
+					
+					var joinedDate = new Date(person.photos.firstdate._content*1000).toDateString();
+
+					list.push({ key: 'Joined', value: joinedDate });
+					list.push({ key: 'Oldest Photo', value: person.photos.firstdatetaken._content });
+
+
+					list.push({ key: 'Profile', value: person.profileurl._content, isLink: true });
+					list.push({ key: 'Photos', value: person.photosurl._content, isLink: true });
+
+					var proAccount = (person.ispro === 1) ? 'true' : 'false';
+					list.push({ key: 'Pro Account', value: proAccount });
+
+					list.push({ key: 'Timezone', value: person.timezone.label });
+					list.push({ key: 'Description', value: person.description._content });
+				}
+				else
+				{
+					// Something bad happened, inform user.
+				}
 				
 			};
 			
@@ -860,7 +793,7 @@
 				xhr.responseType = 'blob';
 
 				xhr.onload = function () {
-					callback(window.webkitURL.createObjectURL(xhr.response), item);
+					callback(window.URL.createObjectURL(xhr.response), item);
 				};
 
 				xhr.open('GET', item.uri, true);
@@ -934,8 +867,18 @@
 			
 			$scope.performSearchByUserId = function()
 			{
+				console.log('performSearchByUserId!!!!!!!!!!!');
+				
+				//$location.path('/Profile/' + $scope.currentUserId);
+				//$location.path('');
+				
+				var url = '/profile/' + $scope.currentUserId;
+				console.log('URL: ', url);
+				$location.path(url);
+				
 				// Get a prepared message that includes token.
 				// Until we know exactly what metadata we need, we'll ask for all extras.
+				/*
 				var query = flickr.createMessage('flickr.people.getPhotos', {
 					user_id: $scope.currentUserId,
 					safe_search: settings.values.safe,
@@ -944,10 +887,10 @@
 					page: '' + $scope.page + '',
 					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
-
+				
 				console.log('Sign URL message: ', query);
 				var url = HOST + '/search';
-				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);*/
 			}
 			
 			$scope.currentUserId = '';
