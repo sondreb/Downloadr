@@ -303,12 +303,22 @@
 			
 				$scope.status.galleries = '';
 				
-				if (data.total === 0)
+				if (!data.ok)
+				{
+					$scope.status.photos = 'Failed to retreive photostreams.';
+					return;
+				}
+				else if (data.total === 0)
 				{
 					$scope.status.galleries = 'User haven\'t created any galleries yet.';
 				}
 				
-				console.log(data);
+				console.log('ListGalleries: ', data);
+				
+				data.items.forEach(function (item) {
+					$scope.galleries.push(item);
+				});
+				
 			};
 			
 			$scope.downloadAlbumArt = function()

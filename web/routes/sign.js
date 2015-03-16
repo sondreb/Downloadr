@@ -21,6 +21,8 @@ exports.url = function (req, res) {
 	var storage = req.storage;
 	
 	var msg = req.body;
+	
+	console.log(msg);
 
 	flickr.signUrl(msg.token, msg.secret, msg.method, msg.args, function (err, data) {
 

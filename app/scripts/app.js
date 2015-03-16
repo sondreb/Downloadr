@@ -551,26 +551,20 @@
 					user_id: flickr.userId.replace('%40', '@')
 				});
 				
-				flickr.signUrl('/sign/url', query, function(message) { 
-
-					flickr.query(message, function(data) {
-
-						console.log(data);
-
-						if (data.stat === 'ok')
-						{
-							var buddyUrl = 'http://farm' + data.person.iconfarm + '.staticflickr.com/' + data.person.iconserver + '/buddyicons/' + data.person.nsid + '.jpg'
-							fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
-						}
-						else
-						{
-							console.log('Failed: ', data.message);
-						}
-
-					}, function() { console.log('Failed to query userInfo.') });
-
-				});
-				
+				flickr.query(query, function(data) {
+					
+					if (data.ok)
+					{
+						var person = data.items;
+						var buddyUrl = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '.jpg'
+						fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
+					}
+					else
+					{
+						console.log('Failed: ', data.message);
+					}
+					
+				}, function() { console.log('Failed to query userInfo.') });
 				
 			};
 			

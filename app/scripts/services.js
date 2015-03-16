@@ -530,9 +530,9 @@ var Base64 = {
 			var url = HOST + path;
 			
 			// We'll support a specified callback or broadcast.
-			if (callback === undefined || callback === null)
+			if (ok === undefined || ok === null)
 			{
-				callback = onUrlSigned
+				ok = onUrlSigned
 			}
 			
 			var request = {
@@ -591,8 +591,6 @@ var Base64 = {
 			queryUserId = (request.data.user_id !== undefined) ? request.data.user_id : null;
 			
 			$http(request).success(function(data,status,headers,config) {
-			
-				console.log('signAndQuery: ', data);
 				
 				queryService(data, function(result) {
 									
@@ -619,7 +617,7 @@ var Base64 = {
 					{
 						container = result.galleries;
 						items = result.galleries.gallery;
-						itemType = 'galleries';
+						itemType = 'gallery';
 					}
 					else if (result.person !== undefined)
 					{
@@ -642,6 +640,14 @@ var Base64 = {
 							{
 								item.link = getUrl(itemType, item.primary_photo_extras.pathalias, item.id);
 								item.count = parseInt(item.photos);
+								item.url = item.primary_photo_extras.url_m;
+								item.can_download = 1;
+							}
+							else if (itemType === 'gallery')
+							{
+								var id = item.id.split('-')[1]; // For galleries, the format is "1484401-72157649041530344". We need last part for URL.
+								item.link = getUrl(itemType, item.owner, id);
+								item.count = parseInt(item.count_photos) + parseInt(item.count_videos);
 								item.url = item.primary_photo_extras.url_m;
 								item.can_download = 1;
 							}
@@ -704,6 +710,8 @@ var Base64 = {
 					return 'https://www.flickr.com/photos/' + userId + '/sets/';
 				case 'photoset':
 					return 'https://www.flickr.com/photos/' + userId + '/sets/' + id + '';
+				case 'gallery':
+					return 'https://www.flickr.com/photos/' + userId + '/galleries/' + id + '/';
 			}
 		};
 		
