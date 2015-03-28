@@ -100,6 +100,15 @@
 		
 			console.log('$routeParams: ', $routeParams.userId);
 			
+			// Cleanup of resources is now handled by the image directive itself.
+			$scope.$on('$destroy', function() {
+				console.log("ProfileController: destroy");
+				//console.log($scope.uri);
+				//URL.revokeObjectURL($scope.uri);
+			});	
+			
+			$scope.imageUrl = 'http://sondreb.com/img/Sondre_Bjellas.jpg';
+			
 			$rootScope.state.background = 'wallpaper-3';
 			$rootScope.state.showActions = true;
 			$rootScope.state.showLicenses = true;
@@ -720,7 +729,9 @@
 			$rootScope.state.background = 'wallpaper-dark';
 			$rootScope.state.showActions = true;
 			$rootScope.state.actionTarget = 'folder';
-
+			$rootScope.state.showLicenses = true;
+			$rootScope.state.showSorting = true;
+			
 			$scope.photos = [];
 			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
 			$scope.total = 0;
@@ -737,7 +748,7 @@
 				
 				// Whenever the user navigates away from SearchController, make sure
 				// we cleanup resources in use.
-				$scope.clearPhotos();
+				//$scope.clearPhotos();
 
 				// Remove global event listeners.
 				$scope.onSearchEvent();
@@ -1083,7 +1094,9 @@
 				$scope.clearObjectURLs();
 
 				// Bind to the UI.
-				$scope.photos = [];
+				//$scope.photos = [];
+				
+				$scope.page = 1;
 			}
 
 			// Clears up all the blob files that was previously downloaded. For future
@@ -1100,7 +1113,7 @@
 
 						if (photo.url !== undefined) {
 							console.log('Disposing: ', photo.url);
-							URL.revokeObjectURL(photo.url);
+							//URL.revokeObjectURL(photo.url);
 						}
 					});
 
@@ -1150,7 +1163,7 @@
 						safe_search: settings.values.safe,
 						sort: settings.values.sort,
 						license: settings.values.license,
-						per_page: '15',
+						per_page: '25',
 						page: '' + $scope.page + '',
 						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 					});

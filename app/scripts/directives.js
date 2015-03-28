@@ -196,6 +196,13 @@
 			restrict: 'A',
 			link: function ($scope, $element, attr) {
 
+				// Cleanup of resources is now handled by the image directive itself.
+				$scope.$on('$destroy', function() {
+					console.log("image: destroy");
+					console.log($scope.uri);
+					URL.revokeObjectURL($scope.uri);
+				});	
+				
 				attr.$observe('image', function (value) {
 
 					if (value === '' || value === null) {
@@ -205,8 +212,7 @@
 					fileManager.download(value, function (uri) {
 
 						$element.attr('src', uri);
-
-						//URL.revokeObjectURL(uri);
+						$scope.uri = uri;
 
 					}, failure);
 
@@ -238,8 +244,6 @@
 			},
 			controller: function ($scope, $rootScope) {
 
-				console.log($scope);
-				
 				$scope.showStatus = false;
 
 				$scope.setStatus = function (text) {
@@ -259,35 +263,10 @@
 				
 				$scope.loadMore = function () {
 
-					console.log('loadMore');
+					//console.log('loadMore');
 					
 				};
 				
-				/*
-				$scope.canDownload = function(item) {
-				
-					console.log('Can Download?: ', item);
-					
-					// License is only available for photos, not albums, galleries, etc.
-					if (item.type !== 'photo')
-					{
-						return true;
-					}
-					
-					if (item.can_download === 1)
-					{
-						return true;
-					}
-					
-					if (item.license !== '0')
-					{
-						return true;
-					}
-					
-					return false;
-					
-				};*/
-
 				// Event handler when user selects a photo. Same event for click on existing selected or new photo.
 				$scope.select = function (item) {
 					
@@ -310,14 +289,19 @@
 						photos: $rootScope.state.selectedPhotos
 					});
 					
-					console.log('Select item: ', item);
+					//console.log('Select item: ', item);
 				};
 
 			},
 			templateUrl: 'views/template_gallery.html',
 			link: function ($scope, element, attrs) {
 
-				console.log($scope);
+				// Cleanup of resources is now handled by the image directive itself.
+				$scope.$on('$destroy', function() {
+					console.log("gallery-link: destroy");
+					//console.log($scope.uri);
+					//URL.revokeObjectURL($scope.uri);
+				});	
 				
 				attrs.$observe('status', function (value) {
 
@@ -333,7 +317,7 @@
 				// Click Handler handles when user clicks the
 				// search button, then we will navigate and perform search.
 				$scope.clickHandler = function () {
-					console.log('CLICK HANDLER FOR DIRECTIVE!!');
+					//console.log('CLICK HANDLER FOR DIRECTIVE!!');
 
 					if ($scope.target !== null) {
 						$location.path($scope.target);
@@ -349,6 +333,112 @@
 		};
 	}]);
 
+	
+	directives.directive('gallery2', ['$location', function ($location) {
+
+		return {
+			restrict: 'E',
+			scope: {
+				items: '=',
+				class: '@',
+				value: '=',
+				target: '@',
+				eventHandler: '&ngSearch',
+				loadMore: '&',
+				status: '@'
+			},
+			controller: function ($scope, $rootScope) {
+
+				$scope.showStatus = false;
+
+				$scope.setStatus = function (text) {
+
+					$scope.status = text;
+
+					if ($scope.status !== null && $scope.status !== '') {
+						$scope.showStatus = true;
+					}
+
+				};
+
+				$scope.menu = function (item) {
+					var url = item.link;
+					window.open(url);
+				};
+				
+				$scope.loadMore = function () {
+
+					//console.log('loadMore');
+					
+				};
+				
+				// Event handler when user selects a photo. Same event for click on existing selected or new photo.
+				$scope.select = function (item) {
+					
+					if (item.can_download !== 1)
+					{
+						return;
+					}
+					
+					if (item.selected === true) {
+						item.selected = false;
+						
+						$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
+
+					} else {
+						item.selected = true;
+						$rootScope.state.selectedPhotos.push(item);
+					}
+					
+					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
+						photos: $rootScope.state.selectedPhotos
+					});
+					
+					//console.log('Select item: ', item);
+				};
+
+			},
+			templateUrl: 'views/template_gallery.html',
+			link: function ($scope, element, attrs) {
+
+				// Cleanup of resources is now handled by the image directive itself.
+				$scope.$on('$destroy', function() {
+					console.log("gallery-link: destroy");
+					//console.log($scope.uri);
+					//URL.revokeObjectURL($scope.uri);
+				});	
+				
+				attrs.$observe('status', function (value) {
+
+					if (value === '' || value === null) {
+						$scope.showStatus = false;
+					}
+					else
+					{
+						$scope.showStatus = true;
+					}
+				});
+				
+				// Click Handler handles when user clicks the
+				// search button, then we will navigate and perform search.
+				$scope.clickHandler = function () {
+					//console.log('CLICK HANDLER FOR DIRECTIVE!!');
+
+					if ($scope.target !== null) {
+						$location.path($scope.target);
+					}
+
+					if ($scope.eventHandler !== null) {
+						// If there is any event handler defined on the directive
+						// call the function.
+						$scope.eventHandler();
+					}
+				};
+			}
+		};
+	}]);
+
+	
 
 	directives.directive('icon', function () {
 
