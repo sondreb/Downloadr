@@ -139,11 +139,26 @@
 			
 			$scope.searchTerm = '';
 			
-			$scope.onTabSelected = function(index){
+			/*
+			$scope.selectedindex = 0;
+			
+			$scope.$watch('selectedIndex', function(current, old){
+				$scope.selectTab(current);
+			});*/
+			
+			$scope.activeTab = 0;
+			
+			$scope.$watch('activeTab', function(current, old){
+				console.log("ACTIVE TAB!!!!", $scope.activeTab);
+				$scope.selectTab($scope.activeTab);
+			});
+			
+			$scope.selectTab = function(index){
 			
 				switch(index)
 				{
 					case 0:
+						$scope.findProfile();
 						$scope.findPhotos();
 						$rootScope.state.showLicenses = true;
 						$rootScope.state.showSorting = true;
@@ -164,7 +179,7 @@
 						$rootScope.state.showSorting = false;
 						break;
 					case 4:
-						$scope.findProfile();
+						//$scope.findProfile();
 						break;
 				}
 				
@@ -390,6 +405,7 @@
 			$scope.profile = [];
 			
 			$scope.name = '';
+			$scope.username = '';
 			
 			$scope.buddyIcon = null;
 			
@@ -411,10 +427,11 @@
 
 					console.log(person);
 					
-					$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '_r.jpg'
+					$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '.jpg'
 
 					$scope.name = (person.realname._content !== '') ? person.realname._content : person.username._content;
-
+					$scope.username = person.username._content;
+					
 					//list.push({ key: 'Name', value: person.realname._content });
 					list.push({ key: 'Username', value: person.username._content });
 					//list.push({ key: 'User Id', value: person.nsid });
