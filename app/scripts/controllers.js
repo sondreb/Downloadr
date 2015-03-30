@@ -105,9 +105,11 @@
 				console.log("ProfileController: destroy");
 				//console.log($scope.uri);
 				//URL.revokeObjectURL($scope.uri);
+				
+				// Remove the $on handler.
+				$scope.onFilterEvent();
+				
 			});	
-			
-			$scope.imageUrl = 'http://sondreb.com/img/Sondre_Bjellas.jpg';
 			
 			$rootScope.state.background = 'wallpaper-3';
 			$rootScope.state.showActions = true;
@@ -158,25 +160,49 @@
 				switch(index)
 				{
 					case 0:
-						$scope.findProfile();
-						$scope.findPhotos();
+						
+						if ($scope.photos.length === 0)
+						{
+							$scope.findProfile();
+							$scope.findPhotos();
+						}
+						
 						$rootScope.state.showLicenses = true;
 						$rootScope.state.showSorting = true;
+						
 						break;
 					case 1:
-						$scope.findAlbums();
+						
+						if ($scope.albums.length === 0)
+						{
+							$scope.findAlbums();
+						}
+						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
+						
 						break
 					case 2:
-						$scope.findFavorites();
+					
+						if ($scope.favorites.length === 0)
+						{
+							$scope.findFavorites();
+						}
+						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
+						
 						break;
 					case 3:
-						$scope.findGalleries();
+						
+						if ($scope.galleries.length === 0)
+						{
+							$scope.findGalleries();
+						}
+						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
+						
 						break;
 					case 4:
 						//$scope.findProfile();
@@ -190,8 +216,8 @@
 			
 				var query = flickr.createMessage('flickr.favorites.getList', {
 					user_id: $scope.userId,
-					per_page: '50',
-					page: '' + $scope.page + '',
+					per_page: '20',
+					page: '' + $scope.favoritesPage + '',
 					extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
 				
@@ -225,6 +251,15 @@
 					
 					$scope.favorites.push(item);
 				});
+				
+				if (data.page === data.pages || data.total === 0)
+				{
+					$scope.showLoadMoreFavorites = false;
+				}
+				else
+				{
+					$scope.showLoadMoreFavorites = true;
+				}
 			};
 			
 			$scope.findAlbums = function() {
@@ -233,8 +268,8 @@
 					user_id: $scope.userId,
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
-					per_page: '15',
-					page: '' + $scope.page + '',
+					per_page: '20',
+					page: '' + $scope.albumsPage + '',
 					primary_photo_extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
 				});
 				
@@ -245,6 +280,8 @@
 			
 			$scope.listAlbums = function(data) {
 			
+				console.log(data);
+				
 				$scope.albumStatus = '';
 				
 				if (!data.ok)
@@ -252,36 +289,121 @@
 					$scope.albumStatus = 'Failed to retreive albums.';
 					return;
 				}
-				else if (data.total === 0)
-				{
-					$scope.albumStatus = 'User haven\'t created any albums yet.';
-					return;
-				}
+				
+				//else if (data.total === 0)
+				//{
+				//	$scope.albumStatus = 'User haven\'t created any albums yet.';
+				//	return;
+				//}
 				
 				data.items.forEach(function (item) {
 					$scope.albums.push(item);
 				});
+				
+				if (data.page === data.pages || data.total === 0)
+				{
+					$scope.showLoadMoreAlbums = false;
+				}
+				else
+				{
+					$scope.showLoadMoreAlbums = true;
+				}
 			};
+			
+			$scope.showLoadMorePhotos = true;
+			$scope.photosPage = 1;
+			
+			$scope.showLoadMoreAlbums = true;
+			$scope.albumsPage = 1;
+			
+			$scope.showLoadMoreFavorites = true;
+			$scope.favoritesPage = 1;
+			
+			$scope.showLoadMoreGalleries = true;
+			$scope.galleriesPage = 1;
+			
+			$scope.loadMorePhotos = function() {
+			
+				$scope.photosPage++;
+				$scope.findPhotos();
+				
+			};
+			
+			$scope.loadMoreAlbums = function() {
+			
+				$scope.albumsPage++;
+				$scope.findAlbums();
+				
+			};
+			
+			$scope.loadMoreFavorites = function() {
+			
+				$scope.favoritesPage++;
+				$scope.findFavorites();
+				
+			};
+			
+			$scope.loadMoreGalleries = function() {
+			
+				$scope.galleriesPage++;
+				$scope.findGalleries();
+				
+			};
+			
+			$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
+
+				//$scope.clearPhotos();
+
+				console.log('User changed filter...');
+				
+				//console.log($scope.photos);
+				//$scope.clearObjectURLs($scope.photos);
+				
+				$scope.photos = [];
+				
+				$scope.findPhotos();
+				
+				//$scope.performSearch($rootScope.state.searchText);
+
+			});
+			
+			/*
+			$scope.clearObjectURLs = function (photos) {
+				
+				photos.forEach(function (photo) {
+					
+					console.log(photo);
+
+						if (photo.url !== undefined) {
+							console.log('Disposing: ', photo.url);
+							URL.revokeObjectURL(photo.url);
+						}
+				});
+				
+				$scope.photos = [];
+				
+			};*/
 			
 			$scope.findPhotos = function() {
 				
 				var query = flickr.createMessage('flickr.photos.search', {
+						text: '',
 						user_id: $scope.userId,
 						safe_search: settings.values.safe,
 						sort: settings.values.sort,
 						license: settings.values.license,
-						per_page: '15',
-						page: '' + $scope.page + '',
+						per_page: '20',
+						page: '' + $scope.photosPage + '',
 						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 					});
-				
-				console.log(query);
 				
 				flickr.query(query, $scope.listPhotos, $scope.error);
 			};
 			
 			$scope.listPhotos = function(data) {
 			
+				console.log(data);
+				
 				$scope.status.photos = '';
 				
 				if (!data.ok)
@@ -289,30 +411,33 @@
 					$scope.status.photos = 'Failed to retreive photostreams.';
 					return;
 				}
-				else if (data.total === 0)
-				{
-					$scope.status.photos = 'User haven\'t uploaded any photos yet.';
-					return;
-				}
+				
+				//else if (data.total === 0)
+				//{
+				//	$scope.status.photos = ''; //'User haven\'t uploaded any photos yet.';
+				//	return;
+				//}
 				
 				data.items.forEach(function (item) {
 					$scope.photos.push(item);
 				});
+				
+				if (data.page === data.pages || data.total === 0)
+				{
+					$scope.showLoadMorePhotos = false;
+				}
+				else
+				{
+					$scope.showLoadMorePhotos = true;
+				}
 			}
-			
-			
-			$scope.loadMoreAlbums = function() {
-			
-				console.log('Load more albums!!');
-			
-			};
 			
 			$scope.findGalleries = function() {
 			
 				var query = flickr.createMessage('flickr.galleries.getList', {
-					user_id: flickr.userId.replace('%40', '@'),
-					per_page: '50',
-					page: '' + $scope.page + '',
+					user_id: $scope.userId,
+					per_page: '20',
+					page: '' + $scope.galleriesPage + '',
 					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
 				});
 				
@@ -332,16 +457,26 @@
 					$scope.status.photos = 'Failed to retreive photostreams.';
 					return;
 				}
-				else if (data.total === 0)
-				{
-					$scope.status.galleries = 'User haven\'t created any galleries yet.';
-				}
+				
+				//else if (data.total === 0)
+				//{
+				//	$scope.status.galleries = 'User haven\'t created any galleries yet.';
+				//}
 				
 				console.log('ListGalleries: ', data);
 				
 				data.items.forEach(function (item) {
 					$scope.galleries.push(item);
 				});
+				
+				if (data.page === data.pages || data.total === 0)
+				{
+					$scope.showLoadMoreGalleries = false;
+				}
+				else
+				{
+					$scope.showLoadMoreGalleries = true;
+				}
 				
 			};
 			
@@ -408,6 +543,7 @@
 			$scope.username = '';
 			
 			$scope.buddyIcon = null;
+			$scope.buddyIconLarge = null;
 			
 			//$scope.buddyIcon = 'https://farm3.staticflickr.com/2881/buddyicons/32954227@N00.jpg?1369136221#32954227@N00';
 			
@@ -427,7 +563,8 @@
 
 					console.log(person);
 					
-					$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '.jpg'
+					$scope.buddyIcon = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '.jpg';
+					$scope.buddyIconLarge = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '_r.jpg'
 
 					$scope.name = (person.realname._content !== '') ? person.realname._content : person.username._content;
 					$scope.username = person.username._content;
@@ -475,13 +612,6 @@
 			
 				console.log('Failed to perform signing request.');
 				
-			};
-			
-
-			
-			$scope.announceDeselected = function(index){
-			
-				console.log('announceDeselected: ', index);
 			};
 			
 	}]);
@@ -1137,8 +1267,6 @@
 					$scope.photos = [];
 				}
 			};
-
-			
 			
 			$scope.performSearch = function (searchTerm) {
 				

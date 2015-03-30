@@ -131,7 +131,7 @@
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						
-						console.log(xhr.response);
+						//console.log(xhr.response);
 						//window.console.log("response: "+xhr.response);
 						//callback(JSON.parse(xhr.response));
 						success(window.URL.createObjectURL(xhr.response), url, xhr.response);
