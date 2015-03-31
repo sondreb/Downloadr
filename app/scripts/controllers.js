@@ -123,35 +123,17 @@
 				galleries: ''
 			};
 			
-			$scope.helloWorld = 'Oh no!';
-			
-			$rootScope.$broadcast('status', {
-					message: 'These are all your photos.'
-				});
-			
-			$scope.albums = [];
-			$scope.photos = [];
-			$scope.favorites = [];
-			$scope.galleries = [];
-			
-			$scope.page = 1;
-			$scope.favoritesStatus = '';
-			
 			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.userId.replace('%40', '@');
 			
-			$scope.searchTerm = '';
+			$rootScope.$broadcast('status', {
+					message: 'Showing profile for ' + $scope.userId + '.'
+			});
 			
-			/*
-			$scope.selectedindex = 0;
-			
-			$scope.$watch('selectedIndex', function(current, old){
-				$scope.selectTab(current);
-			});*/
+			//$scope.searchTerm = '';
 			
 			$scope.activeTab = 0;
 			
 			$scope.$watch('activeTab', function(current, old){
-				console.log("ACTIVE TAB!!!!", $scope.activeTab);
 				$scope.selectTab($scope.activeTab);
 			});
 			
@@ -161,11 +143,11 @@
 				{
 					case 0:
 						
-						if ($scope.photos.length === 0)
-						{
-							$scope.findProfile();
+						//if ($scope.photos.length === 0)
+						//{
+							
 							//$scope.findPhotos();
-						}
+						//}
 						
 						$rootScope.state.showLicenses = true;
 						$rootScope.state.showSorting = true;
@@ -173,43 +155,25 @@
 						break;
 					case 1:
 						
-						if ($scope.albums.length === 0)
-						{
-							//$scope.findAlbums();
-						}
-						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
 						
 						break
 					case 2:
 					
-						if ($scope.favorites.length === 0)
-						{
-							//$scope.findFavorites();
-						}
-						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
 						
 						break;
 					case 3:
 						
-						if ($scope.galleries.length === 0)
-						{
-							//$scope.findGalleries();
-						}
-						
 						$rootScope.state.showLicenses = false;
 						$rootScope.state.showSorting = false;
 						
 						break;
 					case 4:
-						//$scope.findProfile();
 						break;
 				}
-				
-				console.log('onTabSelected: ', index);
 			};
 			
 			$scope.queryPhotos = {
@@ -273,22 +237,6 @@
 			});
 			
 			/*
-			$scope.clearObjectURLs = function (photos) {
-				
-				photos.forEach(function (photo) {
-					
-					console.log(photo);
-
-						if (photo.url !== undefined) {
-							console.log('Disposing: ', photo.url);
-							URL.revokeObjectURL(photo.url);
-						}
-				});
-				
-				$scope.photos = [];
-				
-			};*/
-			
 			$scope.downloadAlbumArt = function()
 			{
 				var currentAlbum = $scope.albums[$scope.albumDownloadIndex];
@@ -305,20 +253,17 @@
 					}
 					
 				});
-			};
+			};*/
 			
+			/*
 			$scope.showAlbumMenu = function (album) {
 				//var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
 				var url = album.link;
 				console.log('Open: ', url);
 				window.open(url);
-			};
+			};*/
 			
-			$scope.albumDownloadIndex = 0;
-			
-			$scope.convertList = function(data) {
-				
-			};
+			//$scope.albumDownloadIndex = 0;
 			
 			$scope.findError = function() {
 			
@@ -417,6 +362,9 @@
 				console.log('Failed to perform signing request.');
 				
 			};
+			
+			// Upon loading, we'll make sure we load the user profile.
+			$scope.findProfile();
 			
 	}]);
 	
@@ -759,6 +707,7 @@
 				$rootScope.$broadcast('Event:Paging');
 			}
 
+			/*
 			$scope.loadImage = function (item, callback) {
 
 				var xhr = new XMLHttpRequest();
@@ -771,7 +720,7 @@
 				xhr.open('GET', item.uri, true);
 				xhr.send();
 
-			};
+			};*/
 
 			$scope.showMenu = function (photo) {
 				var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
@@ -1213,11 +1162,13 @@
 				'interestingness-desc': 'Interesting'
 			};
 
-			$scope.count = 0;
+			//$scope.count = 0;
 			$scope.total = 0;
 			
 			$scope.settings = settings;
-
+			$scope.managerState = downloadManager.state;
+			//$scope.count = downloadManager.state.count;
+			
 			$scope.$watch(function () {
 				return settings.values;
 			}, function (newVal, oldVal) {
@@ -1361,11 +1312,13 @@
 	// This controller supports proper paging and downloads are processed one page at a time, to support downloading
 	// of unlimted number of photos without any memory issues.
 	
-	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog', 'flickr',
-		function ($scope, $rootScope, notify, settings, $mdDialog, flickr) {
+	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog', 'flickr', 'downloadManager', 'fileManager',
+		function ($scope, $rootScope, notify, settings, $mdDialog, flickr, downloadManager, fileManager) {
 			
 			// This is the continue method that is executed whenever a page is completely downloaded.
 			$scope.continue = null;
+			$scope.queue = [];
+			$scope.items = downloadManager.items;
 			
 			$rootScope.state.background = 'wallpaper-light';
 
@@ -1377,7 +1330,62 @@
 				console.log('ERROR!! : ', err);
 				console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
 			}
+			
+			// Returns the highest available image URL for the selected
+			// size. Depending on the original photo, not all sizes are
+			// available so this function will search for the largest.
+			$scope.getUrl = function (photo, photoSize) {
+				// If the specified size exists, return that.
+				if (photo['url_' + photoSize] !== undefined) {
+					return photo['url_' + photoSize];
+				}
 
+				console.log('Find index of ' + photoSize + ' in sizes: ', $scope.sizes);
+
+				var startIndex = $scope.sizes.indexOf(photoSize);
+
+				console.log('Start Index: ', startIndex);
+
+				// Search for the nearest correct size.
+				for (var i = (startIndex + 1); i < $scope.sizes.length; i++) {
+
+					console.log('SEARCHING SIZE: ', $scope.sizes[i]);
+
+					if (photo['url_' + $scope.sizes[i]] !== undefined) {
+						return photo['url_' + $scope.sizes[i]];
+					}
+				}
+
+				throw new Error('Unable to find photo URL for the specified size');
+
+			};
+			
+			$scope.getFileName = function (photo, photoSize) {
+							
+				var url = $scope.getUrl(photo, photoSize);
+				var fileName = url.replace(/^.*[\\\/]/, '');
+
+				var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+				var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
+				var newFullName = newFileName + '_' + $scope.getLicenseName(photo.license).toLowerCase() + newFileNameExt;
+				
+				return newFullName;
+			};
+			
+			$scope.getLicenseName = function(license) {
+						
+				for(var i = 0; i < $rootScope.licenses.length; i++)
+				{
+				  if($rootScope.licenses[i].id == license)
+				  {
+					return $rootScope.licenses[i].extension;
+				  }
+				}
+
+				return '';
+			};
+
+			/*
 			$scope.loadImage = function (item, size, callback) {
 				var xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
@@ -1385,9 +1393,9 @@
 					//callback(window.webkitURL.createObjectURL(xhr.response), item);
 					callback(xhr.response, item);
 				};
-				xhr.open('GET', item.getUrl(size), true);
+				xhr.open('GET', $scope.getUrl(item, size), true);
 				xhr.send();
-			};
+			};*/
 			
 			$scope.count = 0;
 			$scope.photoIndex = 0;
@@ -1395,6 +1403,8 @@
 			$scope.completed = false;
 			$scope.paused = false;
 			$scope.pauseResumeText = 'Pause';
+			$scope.photosetPage = 1;
+			$scope.photosetId = null;
 			
 			$scope.pause = function() {
 			
@@ -1440,7 +1450,7 @@
 
 			};
 
-			$scope.writeFile = function (index, fileName, entry, blob_uri, retry) {
+			$scope.writeFile = function (fileName, entry, blob_uri, retry) {
 				console.log('Write file: ', fileName);
 
 				// Create the file on disk.
@@ -1476,6 +1486,10 @@
 							// Process the next photo
 							if (!$scope.paused)
 							{
+								// Send message to process queue, which will call processItems if empty.
+								$scope.processQueue();
+								
+								
 								$scope.photoIndex = $scope.photoIndex + 1;
 								$scope.processPhoto();
 							}
@@ -1544,51 +1558,57 @@
 			// Get a reference to the folder object.
 			$scope.entry = $rootScope.state.targetEntry;
 
-			$scope.processPhoto = function () {
+			$scope.processPhoto = function (photo) {
 				
 				// Get a reference to the photo object.
-				var photo = $rootScope.state.selectedPhotos[$scope.photoIndex];
+				//var photo = $rootScope.state.selectedPhotos[$scope.photoIndex];
+				//var photo = downloadManager.items[$scope.photoIndex];
 				
 				console.log('PHOTO SIZE: ', $scope.photoSize);
+				console.log('Process Photo: ', photo);
 				//console.log('Photo for downloading: ', photo);
 				
 				if (photo === null || photo === undefined) // checks null or undefined
 				{
 					$scope.$apply(function () {
-
 						$scope.downloadCompleted('Downloading completed.');
-						
 					});
 
 					return;
 				}
 				
-				console.log('INDEX: ', $scope.photoIndex);
-				console.log('Process Photo: ', photo);
+				//console.log('INDEX: ', $scope.photoIndex);
 				
-				if (photo.type === 'photo')
-				{
-					// Download the photo
-					$scope.loadImage(photo, $scope.photoSize, function (blob_uri, originalItem) {
-
-						console.log('blob_uri: ', blob_uri);
-
-						var fileName = photo.getFileName($scope.photoSize);
-
-						$scope.writeFile($scope.photoIndex, fileName, $scope.entry, blob_uri);
-
-					});
-				}
-				else if (photo.type === 'photoset')
-				{
-					$scope.photosetId = photo.id;
-					$scope.queryPhotoset();
-				}
-				else
-				{
-					console.log('Unhandled file type to download...', photo);
-				}
+				var url = $scope.getUrl(photo, $scope.photoSize);
 				
+				console.log('Downloading this URL: ', url);
+				
+				// Download the photo
+				fileManager.download(url, $scope.downloaded, $scope.error, photo);
+				
+				/*
+				$scope.loadImage(photo, $scope.photoSize, function (blob_uri, originalItem) {
+
+					console.log('blob_uri: ', blob_uri);
+
+					var fileName = photo.getFileName($scope.photoSize);
+
+					$scope.writeFile($scope.photoIndex, fileName, $scope.entry, blob_uri);
+
+				});*/
+				
+			};
+			
+			$scope.downloaded = function(uri, url, response, photo) {
+				
+				console.log('blob_uri: ', uri);
+				
+				var fileName = $scope.getFileName(photo, $scope.photoSize);
+				
+				console.log('FileName: ', fileName);
+				
+				$scope.writeFile(fileName, $scope.entry, uri);
+			
 			};
 			
 			$scope.queryPhotoset = function() {
@@ -1608,37 +1628,94 @@
 
 			};
 			
-			$scope.photosetPage = 1;
-			$scope.photosetId = null;
 			
-			$scope.listPhotoset = function(data) {
+			$scope.queueIndex = 0;
 			
-				console.log(data);
+			$scope.processQueue = function() {
+			
+				// Pop an item.
+				var photo = $scope.queue.pop();
 				
-				data.items.forEach(function (item) {
-					
-					// Download the photo
-					$scope.loadImage(item, $scope.photoSize, function (blob_uri, originalItem) {
-
-						console.log('blob_uri: ', blob_uri);
-						var fileName = photo.getFileName($scope.photoSize);
-						$scope.writeFile($scope.photoIndex, fileName, entry, blob_uri);
-
-					});
-					
-				});
-				
-			
-				if (data.page === data.pages)
+				if (photo === undefined)
 				{
-					// This means there is no more paging to be done.
+					if ($scope.continue != null)
+					{
+						// We are all done, call the continue handler.
+						$scope.continue();
+					}
+					else
+					{
+						// Process the next item when we are done with the current one.
+						$scope.processItems();
+					}
 				}
 				else
 				{
-					$scope.photosetPage++;
-					$scope.queryPhotoset();
+					// Process this photo.
+					$scope.processPhoto(photo);
+				}
+			};
+			
+			$scope.processItems = function() {
+			
+				var item = $scope.items.pop();
+				
+				if (item === undefined)
+				{
+					// We are all done, notify about success!
 				}
 				
+				$scope.processItem(item);
+				
+			};
+			
+			$scope.processItem = function(item) {
+			
+				if (item.type === 'photo')
+				{
+					// Process this photo right away, don't bother adding to batch queue.
+					$scope.processPhoto(item);
+				}
+				else if (item.type === 'photoset')
+				{
+					$scope.photosetId = item.id;
+					$scope.queryPhotoset();
+				}
+				else
+				{
+					console.log('Unhandled file type to download...', photo);
+				}
+			
+			};
+			
+			$scope.listPhotoset = function(data) {
+				
+				console.log(data);
+				
+				data.items.forEach(function (item) {
+					// Populate the queue with a batch of photos to process.
+					$scope.queue.push(item);
+				});
+				
+				if (data.page === data.pages)
+				{
+					// Process the next item in the full list in DownloadManager.
+					$scope.continue = null;
+					
+					// Process the queue to complete this album/gallery.
+					$scope.processQueue();
+				}
+				else
+				{
+					// Register the callback for continue operation when queue is processed.
+					$scope.continue = function(){
+						$scope.photosetPage++;
+						$scope.queryPhotoset();
+					};
+					
+					// Process the queue of all the photos we just added.
+					$scope.processQueue();
+				}
 			};
 			
 			$scope.error = function(err) {
@@ -1651,31 +1728,35 @@
 			$scope.$on('$viewContentLoaded', function () {
 				
 				// This can be photo, albums and galleries.
-				var photos = $rootScope.state.selectedPhotos;
+				//var photos = $rootScope.state.selectedPhotos;
 				
 				// Set the image count.
-				$scope.count = photos.length;
+				//$scope.count = photos.length;
 				
-				$scope.photoIndex = 0;
-
-				$scope.processPhoto();
+				// Set the total count generated by the download manager.
+				$scope.count = downloadManager.state.count;
+				
+				// Start processing of items.
+				$scope.processItems();
+				
+				//$scope.photoIndex = 0;
+				//$scope.processPhoto();
 
 			});
     }]);
 
-	controllers.controller('FolderController', ['$scope', '$rootScope',
-		function ($scope, $rootScope) {
+	controllers.controller('FolderController', ['$scope', '$rootScope', 'downloadManager',
+		function ($scope, $rootScope, downloadManager) {
 
 			$rootScope.state.background = 'wallpaper-light';
 			$rootScope.state.actionTarget = 'download';
 			$rootScope.state.showActions = true;
 
-			$scope.count = 0;
+			$scope.count = downloadManager.state.count;
 			$scope.path = '';
-
 			
 			$rootScope.$broadcast('status', {
-					message: 'Choose folder to save ' + $rootScope.state.selectedPhotos.length + ' photos.'
+					message: 'Choose folder to save ' + $scope.count + ' photos.'
 			});
 			
 			
@@ -1707,6 +1788,7 @@
 				console.log('chrome.runtime.lastError: ', chrome.runtime.lastError);
 			}
 
+			/*
 			$scope.loadImage = function (item, callback) {
 				var xhr = new XMLHttpRequest();
 				xhr.responseType = 'blob';
@@ -1715,7 +1797,7 @@
 				};
 				xhr.open('GET', item.getUrl('b'), true);
 				xhr.send();
-			};
+			};*/
 
 			$scope.chooseFolder = function () {
 				chrome.fileSystem.chooseEntry({

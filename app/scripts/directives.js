@@ -229,6 +229,10 @@
 		};
 	}]);
 
+	
+	// NOTE: Currently the LumX tabs control does not raise $destroy event on the tab control, but it
+	// re-created the directive within the tab page on each navigation. Look into this in the future
+	// as this is a memory leak right now.
 	directives.directive('gallery', ['$location','flickr', function ($location, flickr) {
 
 		return {
@@ -244,6 +248,8 @@
 			},
 			controller: function ($scope, $rootScope) {
 
+				console.log('CONTROLLER on GALLERY WAS CALLED!');
+				
 				// Do we need to initialize items here?
 				$scope.items = [];
 				$scope.page = 1;
@@ -363,6 +369,10 @@
 			templateUrl: 'views/template_gallery.html',
 			link: function ($scope, element, attrs) {
 
+				
+				console.log('LINK ON GALLERY WAS CALLED!!!');
+				console.log(element);
+				
 				// Cleanup of resources is now handled by the image directive itself.
 				$scope.$on('$destroy', function() {
 					console.log("gallery-link: destroy");
@@ -400,112 +410,6 @@
 			}
 		};
 	}]);
-
-	
-	directives.directive('gallery2', ['$location', function ($location) {
-
-		return {
-			restrict: 'E',
-			scope: {
-				items: '=',
-				class: '@',
-				value: '=',
-				target: '@',
-				eventHandler: '&ngSearch',
-				loadMore: '&',
-				status: '@'
-			},
-			controller: function ($scope, $rootScope) {
-
-				$scope.showStatus = false;
-
-				$scope.setStatus = function (text) {
-
-					$scope.status = text;
-
-					if ($scope.status !== null && $scope.status !== '') {
-						$scope.showStatus = true;
-					}
-
-				};
-
-				$scope.menu = function (item) {
-					var url = item.link;
-					window.open(url);
-				};
-				
-				$scope.loadMore = function () {
-
-					//console.log('loadMore');
-					
-				};
-				
-				// Event handler when user selects a photo. Same event for click on existing selected or new photo.
-				$scope.select = function (item) {
-					
-					if (item.can_download !== 1)
-					{
-						return;
-					}
-					
-					if (item.selected === true) {
-						item.selected = false;
-						
-						$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
-
-					} else {
-						item.selected = true;
-						$rootScope.state.selectedPhotos.push(item);
-					}
-					
-					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-						photos: $rootScope.state.selectedPhotos
-					});
-					
-					//console.log('Select item: ', item);
-				};
-
-			},
-			templateUrl: 'views/template_gallery.html',
-			link: function ($scope, element, attrs) {
-
-				// Cleanup of resources is now handled by the image directive itself.
-				$scope.$on('$destroy', function() {
-					console.log("gallery-link: destroy");
-					//console.log($scope.uri);
-					//URL.revokeObjectURL($scope.uri);
-				});	
-				
-				attrs.$observe('status', function (value) {
-
-					if (value === '' || value === null) {
-						$scope.showStatus = false;
-					}
-					else
-					{
-						$scope.showStatus = true;
-					}
-				});
-				
-				// Click Handler handles when user clicks the
-				// search button, then we will navigate and perform search.
-				$scope.clickHandler = function () {
-					//console.log('CLICK HANDLER FOR DIRECTIVE!!');
-
-					if ($scope.target !== null) {
-						$location.path($scope.target);
-					}
-
-					if ($scope.eventHandler !== null) {
-						// If there is any event handler defined on the directive
-						// call the function.
-						$scope.eventHandler();
-					}
-				};
-			}
-		};
-	}]);
-
 	
 
 	directives.directive('icon', function () {
