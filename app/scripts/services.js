@@ -115,6 +115,72 @@
 
 		};
 	});
+	
+	
+	downloadr.factory('downloadManager', ['$rootScope', 'settings', function ($rootScope, settings) {
+		
+		// This is the complete collection of items to be downloaded, including photos, albums and galleries.
+		var items = [];
+		
+		var count = 0;
+					  
+		var license = settings.values.license;
+		
+		var size = settings.values.size;
+		
+		var remove = function(item) {
+			
+			items = _.without(items, item);
+			
+		};
+		
+		var add = function(item) {
+			
+			items.push(item);
+			
+		};
+		
+		var clear = function() {
+			
+			// First make sure we remove selection to update the UI.
+			items.forEach(function (item) {
+				item.selected = false;
+			});
+			
+			// Remove all items by clearing the array.
+			items = [];
+			
+			// Update the count to zero.
+			count = 0;
+		
+		};
+		
+		// The manager will listen to the selection changed event and update accordingly.
+		$rootScope.$on('Event:SelectedItemChanged', function (event, data) {
+		
+			console.log('$on:Event:SelectedItemChanged', data);
+			
+			if (data.selected)
+			{
+				add(data.item);
+			}
+			else
+			{
+				remove(data.item);
+			}
+		});
+		
+		return {
+			items : items,
+			count: count,
+			add : add,
+			remove: remove,
+			clear: clear,
+			license: license,
+			size: size
+		};
+		
+	}]);
 
 	
 	downloadr.factory('fileManager', function () {
@@ -577,6 +643,10 @@ var Base64 = {
 		var queryUserId = null;
 		
 		var signAndQuery = function(query, ok, fail) {
+			
+			
+			console.log('flickr: signAndQuery');
+			
 			// Construct the URL to sign queries.
 			var url = HOST + '/sign';
 			
@@ -605,6 +675,12 @@ var Base64 = {
 					{
 						container = result.photos;
 						items = result.photos.photo;
+						itemType = 'photo';
+					}
+					else if(result.photoset !== undefined) // When user have selected album for downloading, the query will return a single photoset.
+					{
+						container = result.photoset;
+						items = result.photoset.photo;
 						itemType = 'photo';
 					}
 					else if(result.photosets !== undefined)

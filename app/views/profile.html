@@ -1,28 +1,4 @@
 <md-content md-theme="cyan" class="content">
-	<!--
-	 <md-tabs  class="md-accent" md-selected="selectedIndex">
-      <md-tab id="tab1">
-        <md-tab-label>Photostream</md-tab-label>
-        <md-tab-template>
-			Gallery:
-          <gallery load-more="loadMorePhotos()" items="photos" status="{{status.photos}}"></gallery>
-        </md-tab-template>
-      </md-tab>
-      <md-tab id="tab2">
-        <md-tab-label>Albums</md-tab-label>
-        <md-tab-template>
-          <gallery load-more="loadMoreAlbums()" status="{{status.albums}}" items="albums"></gallery>
-        </md-tab-template>
-      </md-tab>
-      <md-tab id="tab3">
-        <md-tab-label>Favorites</md-tab-label>
-        <md-tab-template>
-          <gallery load-more="loadMoreFavorites()" status="{{status.favorites}}" items="favorites"></gallery>
-        </md-tab-template>
-      </md-tab>
-    </md-tabs>
--->
-	
 
   <div  flex class="accent-500 bgc-light-blue-500" flex layout="row">
   	  <img style="height: 64px; width: 64px;" image="{{buddyIcon}}">
@@ -35,115 +11,31 @@
   </div>
 
   <lx-tabs links-tc="light" active-tab="activeTab" links-bgc="light-blue-500" indicator="white" no-divider="true" z-depth="1">
-	<lx-tab heading="Photostream">
-		<gallery load-more="loadMorePhotos()" items="photos" status="{{status.photos}}"></gallery>
-		<div style="padding: 10px; text-align: center;" ng-show="showLoadMorePhotos">
-			<md-button class="menu-button" ng-click="loadMorePhotos()">
-				Load more...
-			</md-button>
-		</div>
-	</lx-tab>
+		<lx-tab heading="Photostream">
+			<gallery query="{{queryPhotos}}"></gallery>
+		</lx-tab>
 
-	<lx-tab heading="Albums">
-		<gallery load-more="loadMoreAlbums()" status="{{status.albums}}" items="albums"></gallery>
-		<div style="padding: 10px; text-align: center;" ng-show="showLoadMoreAlbums">
-			<md-button class="menu-button" ng-click="loadMoreAlbums()">
-				Load more...
-			</md-button>
-		</div>
-	</lx-tab>
+		<lx-tab heading="Albums">
+			<gallery query="{{queryAlbums}}"></gallery>
+		</lx-tab>
 
-	<lx-tab heading="Favorites">
-		<gallery load-more="loadMoreFavorites()" status="{{status.favorites}}" items="favorites"></gallery>
-		<div style="padding: 10px; text-align: center;" ng-show="showLoadMoreFavorites">
-			<md-button class="menu-button" ng-click="loadMoreFavorites()">
-				Load more...
-			</md-button>
-		</div>
-	</lx-tab>
+		<lx-tab heading="Favorites">
+			<gallery query="{{queryFavorites}}"></gallery>
+		</lx-tab>
 
-	<lx-tab heading="Galleries">
-		<gallery load-more="loadMoreGalleries()" status="{{status.galleries}}" items="galleries"></gallery>
-		<div style="padding: 10px; text-align: center;" ng-show="showLoadMoreGalleries">
-			<md-button class="menu-button" ng-click="loadMoreGalleries()">
-				Load more...
-			</md-button>
-		</div>
-	</lx-tab>
+		<lx-tab heading="Galleries">
+			<gallery query="{{queryGalleries}}"></gallery>
+		</lx-tab>
 
-	<lx-tab heading="Profile">
+		<lx-tab heading="Profile">
 
-		<div style="margin-left: 30px; margin-right: 30px; margin-top: 8px; margin-bottom: 8px;" layout="row" layout-margin>
-
-			<div flex="33"><img image="{{buddyIconLarge}}"></div>
-			<div flex="66">
-
-				<h1>{{name}}</h1>
-
-				<div layout="row" layout-wrap ng-repeat="element in profile">
-					<div style="width: 120px;"><strong>{{element.key}}:</strong></div>
-					<div flex ng-if="element.isLink === true">
-						<a href="{{element.value}}" target="_blank">{{element.value}}</a>
-					</div>
-					<div flex ng-if="element.isLink !== true">
-						{{element.value}}
-					</div>
-				</div>
-
-			</div>
-
-		</div>
-
-	</lx-tab>
-
-</lx-tabs>
-
-	
-	
-	<!--	
-<div class="tc-white-1" flex-container="row">
-    <div><img image="{{imageUrl}}" class="thumb"></div>
-    <div>
--->	
-	
-	<!--
-	<gallery load-more="loadMorePhotos()" items="photos" status="{{status.photos}}"></gallery>
-	-->
-	
-<!--
-		</div>
-</div>
-		-->
-	<!--
-	<md-tabs md-selected="selectedIndex" flex md-stretch-tabs="always">
-		<md-tab md-on-select="onTabSelected(0)" md-on-deselect="announceDeselected(0)">
-			<md-tab-label>Photostream</md-tab-label>
-				<gallery load-more="loadMorePhotos()" items="photos" status="{{status.photos}}"></gallery>
-
-			
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(1)" md-on-deselect="announceDeselected(1)">
-			<md-tab-label>Albums</md-tab-label>
-				<gallery load-more="loadMoreAlbums()" status="{{status.albums}}" items="albums"></gallery>
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(2)" md-on-deselect="announceDeselected(2)">
-			<md-tab-label>Favorites</md-tab-label>
-			<gallery load-more="loadMoreFavorites()" status="{{status.favorites}}" items="favorites"></gallery>
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(3)" md-on-deselect="announceDeselected(3)">
-			<md-tab-label>Galleries</md-tab-label>
-			<gallery load-more="loadMoreGalleries()" status="{{status.galleries}}" items="galleries"></gallery>
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(4)" md-on-deselect="announceDeselected(4)">
-			<md-tab-label>Profile</md-tab-label>
-			
 			<div style="margin-left: 30px; margin-right: 30px; margin-top: 8px; margin-bottom: 8px;" layout="row" layout-margin>
-			
-				<div flex="33"><img image="{{buddyIcon}}"></div>
+
+				<div flex="33"><img image="{{buddyIconLarge}}"></div>
 				<div flex="66">
-					
+
 					<h1>{{name}}</h1>
-				
+
 					<div layout="row" layout-wrap ng-repeat="element in profile">
 						<div style="width: 120px;"><strong>{{element.key}}:</strong></div>
 						<div flex ng-if="element.isLink === true">
@@ -153,12 +45,12 @@
 							{{element.value}}
 						</div>
 					</div>
-				
+
 				</div>
-		
+
 			</div>
-				
-		</md-tab>
-	</md-tabs>-->
-	
+
+		</lx-tab>
+
+	</lx-tabs>
 </md-content>

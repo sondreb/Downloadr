@@ -164,7 +164,7 @@
 						if ($scope.photos.length === 0)
 						{
 							$scope.findProfile();
-							$scope.findPhotos();
+							//$scope.findPhotos();
 						}
 						
 						$rootScope.state.showLicenses = true;
@@ -175,7 +175,7 @@
 						
 						if ($scope.albums.length === 0)
 						{
-							$scope.findAlbums();
+							//$scope.findAlbums();
 						}
 						
 						$rootScope.state.showLicenses = false;
@@ -186,7 +186,7 @@
 					
 						if ($scope.favorites.length === 0)
 						{
-							$scope.findFavorites();
+							//$scope.findFavorites();
 						}
 						
 						$rootScope.state.showLicenses = false;
@@ -197,7 +197,7 @@
 						
 						if ($scope.galleries.length === 0)
 						{
-							$scope.findGalleries();
+							//$scope.findGalleries();
 						}
 						
 						$rootScope.state.showLicenses = false;
@@ -212,142 +212,47 @@
 				console.log('onTabSelected: ', index);
 			};
 			
-			$scope.findFavorites = function() {
-			
-				var query = flickr.createMessage('flickr.favorites.getList', {
-					user_id: $scope.userId,
-					per_page: '20',
-					page: '' + $scope.favoritesPage + '',
-					extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-				});
-				
-				//'usage, 
-				
-				flickr.query(query, $scope.listFavorites, $scope.error);
-			
+			$scope.queryPhotos = {
+				method: 'flickr.photos.search',
+				arguments: {
+						text: '',
+						user_id: $scope.userId,
+						safe_search: settings.values.safe,
+						sort: settings.values.sort,
+						license: settings.values.license,
+						per_page: '20',
+						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+					}
 			};
 			
-			$scope.listFavorites = function(data) {
-			
-				$scope.favoritesStatus = '';
-				
-				if (!data.ok)
-				{
-					$scope.albumStatus = 'Failed to retreive favorites.';
-					return;
-				}
-				else if (data.total === 0)
-				{
-					$scope.favoritesStatus = 'User haven\'t favorited any photos yet.';
-					return;
-				}
-				
-				data.items.forEach(function (item) {
-					
-					//item.name = item.title;
-					//item.url = item.url_m; // consider using _s for smaller size.
-					//item.link = 'https://www.flickr.com/photos/' + item.owner + '/' + item.id;
-					//item.type = 'photo';
-					
-					$scope.favorites.push(item);
-				});
-				
-				if (data.page === data.pages || data.total === 0)
-				{
-					$scope.showLoadMoreFavorites = false;
-				}
-				else
-				{
-					$scope.showLoadMoreFavorites = true;
-				}
-			};
-			
-			$scope.findAlbums = function() {
-			
-				var query = flickr.createMessage('flickr.photosets.getList', {
+			$scope.queryAlbums = {
+				method: 'flickr.photosets.getList',
+				arguments: {
 					user_id: $scope.userId,
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
 					per_page: '20',
-					page: '' + $scope.albumsPage + '',
 					primary_photo_extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
-				});
-				
-				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-				
-				flickr.query(query, $scope.listAlbums, $scope.error);
-			};
-			
-			$scope.listAlbums = function(data) {
-			
-				console.log(data);
-				
-				$scope.albumStatus = '';
-				
-				if (!data.ok)
-				{
-					$scope.albumStatus = 'Failed to retreive albums.';
-					return;
-				}
-				
-				//else if (data.total === 0)
-				//{
-				//	$scope.albumStatus = 'User haven\'t created any albums yet.';
-				//	return;
-				//}
-				
-				data.items.forEach(function (item) {
-					$scope.albums.push(item);
-				});
-				
-				if (data.page === data.pages || data.total === 0)
-				{
-					$scope.showLoadMoreAlbums = false;
-				}
-				else
-				{
-					$scope.showLoadMoreAlbums = true;
 				}
 			};
 			
-			$scope.showLoadMorePhotos = true;
-			$scope.photosPage = 1;
-			
-			$scope.showLoadMoreAlbums = true;
-			$scope.albumsPage = 1;
-			
-			$scope.showLoadMoreFavorites = true;
-			$scope.favoritesPage = 1;
-			
-			$scope.showLoadMoreGalleries = true;
-			$scope.galleriesPage = 1;
-			
-			$scope.loadMorePhotos = function() {
-			
-				$scope.photosPage++;
-				$scope.findPhotos();
-				
+			$scope.queryFavorites = {
+				method: 'flickr.favorites.getList',
+				arguments: {
+						user_id: $scope.userId,
+						per_page: '20',
+						extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				}
 			};
 			
-			$scope.loadMoreAlbums = function() {
-			
-				$scope.albumsPage++;
-				$scope.findAlbums();
-				
-			};
-			
-			$scope.loadMoreFavorites = function() {
-			
-				$scope.favoritesPage++;
-				$scope.findFavorites();
-				
-			};
-			
-			$scope.loadMoreGalleries = function() {
-			
-				$scope.galleriesPage++;
-				$scope.findGalleries();
-				
+			$scope.queryGalleries = {
+				method: 'flickr.galleries.getList',
+				arguments: {
+					user_id: $scope.userId,
+					per_page: '20',
+					page: '' + $scope.galleriesPage + '',
+					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+				}
 			};
 			
 			$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
@@ -359,9 +264,9 @@
 				//console.log($scope.photos);
 				//$scope.clearObjectURLs($scope.photos);
 				
-				$scope.photos = [];
+				//$scope.photos = [];
 				
-				$scope.findPhotos();
+				//$scope.findPhotos();
 				
 				//$scope.performSearch($rootScope.state.searchText);
 
@@ -383,102 +288,6 @@
 				$scope.photos = [];
 				
 			};*/
-			
-			$scope.findPhotos = function() {
-				
-				var query = flickr.createMessage('flickr.photos.search', {
-						text: '',
-						user_id: $scope.userId,
-						safe_search: settings.values.safe,
-						sort: settings.values.sort,
-						license: settings.values.license,
-						per_page: '20',
-						page: '' + $scope.photosPage + '',
-						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-					});
-				
-				flickr.query(query, $scope.listPhotos, $scope.error);
-			};
-			
-			$scope.listPhotos = function(data) {
-			
-				console.log(data);
-				
-				$scope.status.photos = '';
-				
-				if (!data.ok)
-				{
-					$scope.status.photos = 'Failed to retreive photostreams.';
-					return;
-				}
-				
-				//else if (data.total === 0)
-				//{
-				//	$scope.status.photos = ''; //'User haven\'t uploaded any photos yet.';
-				//	return;
-				//}
-				
-				data.items.forEach(function (item) {
-					$scope.photos.push(item);
-				});
-				
-				if (data.page === data.pages || data.total === 0)
-				{
-					$scope.showLoadMorePhotos = false;
-				}
-				else
-				{
-					$scope.showLoadMorePhotos = true;
-				}
-			}
-			
-			$scope.findGalleries = function() {
-			
-				var query = flickr.createMessage('flickr.galleries.getList', {
-					user_id: $scope.userId,
-					per_page: '20',
-					page: '' + $scope.galleriesPage + '',
-					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
-				});
-				
-				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-				
-				flickr.query(query, $scope.listGalleries, $scope.error);
-			};
-			
-			$scope.galleryStatus = '';
-			
-			$scope.listGalleries = function(data) {
-			
-				$scope.status.galleries = '';
-				
-				if (!data.ok)
-				{
-					$scope.status.photos = 'Failed to retreive photostreams.';
-					return;
-				}
-				
-				//else if (data.total === 0)
-				//{
-				//	$scope.status.galleries = 'User haven\'t created any galleries yet.';
-				//}
-				
-				console.log('ListGalleries: ', data);
-				
-				data.items.forEach(function (item) {
-					$scope.galleries.push(item);
-				});
-				
-				if (data.page === data.pages || data.total === 0)
-				{
-					$scope.showLoadMoreGalleries = false;
-				}
-				else
-				{
-					$scope.showLoadMoreGalleries = true;
-				}
-				
-			};
 			
 			$scope.downloadAlbumArt = function()
 			{
@@ -514,11 +323,6 @@
 			$scope.findError = function() {
 			
 				console.log('Find Albums Error!');
-			};
-			
-			$scope.albumsTab = function() {
-			
-				console.log('albums TAB!');
 			};
 			
 			$scope.findProfile = function() {
@@ -976,7 +780,7 @@
 			};
 
 			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
-			$scope.selectPhoto = function (photo) {
+			/*$scope.selectPhoto = function (photo) {
 
 				if (photo.selected === true) {
 					photo.selected = false;
@@ -993,7 +797,7 @@
 				});
 
 				console.log('Select photo: ', photo);
-			};
+			};*/
 
 			// for each image with no imageUrl, start a new loader
 			$scope.loadImages = function () {
@@ -1400,8 +1204,8 @@
     }]);
 
 
-	controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings', '$location',
-		function ($scope, $rootScope, settings, $location) {
+	controllers.controller('ActionsController', ['$scope', '$rootScope', 'settings', '$location', 'downloadManager',
+		function ($scope, $rootScope, settings, $location, downloadManager) {
 
 			$scope.sorting = {
 				'relevance': 'Relevant',
@@ -1441,6 +1245,7 @@
 
 			console.log($scope.settings);
 
+			/*
 			$scope.$on('Event:SelectedPhotosChanged', function (event, data) {
 				
 				console.log('Event:SelectedPhotosChanged: ', data);
@@ -1468,7 +1273,7 @@
 					$scope.total = data.total;
 				}
 
-			});
+			});*/
 
 			$scope.selectLicense = function (license) {
 				settings.values.license = license;
@@ -1535,25 +1340,33 @@
 			};
 
 			$scope.clearSelection = function () {
+				
+				// Clear any selected items from the manager.
+				downloadManager.clear();
+				
+				//$rootScope.state.selectedPhotos.forEach(function (photo) {
+				//	photo.selected = false;
+				//});
 
-				$rootScope.state.selectedPhotos.forEach(function (photo) {
-					photo.selected = false;
-				});
-
-				$rootScope.state.selectedPhotos = [];
-				$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-					photos: $rootScope.state.selectedPhotos
-				});
+				//$rootScope.state.selectedPhotos = [];
+				
+				//$rootScope.$broadcast('Event:SelectedPhotosChanged', {
+				//	photos: $rootScope.state.selectedPhotos
+				//});
 			};
-
-			
-
     }]);
 
 
-	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog',
-		function ($scope, $rootScope, notify, settings, $mdDialog) {
-
+	// The download controller is responsible for handling the downloading of photos, albums and galleries.
+	// This controller supports proper paging and downloads are processed one page at a time, to support downloading
+	// of unlimted number of photos without any memory issues.
+	
+	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog', 'flickr',
+		function ($scope, $rootScope, notify, settings, $mdDialog, flickr) {
+			
+			// This is the continue method that is executed whenever a page is completely downloaded.
+			$scope.continue = null;
+			
 			$rootScope.state.background = 'wallpaper-light';
 
 			$rootScope.$broadcast('status', {
@@ -1575,7 +1388,7 @@
 				xhr.open('GET', item.getUrl(size), true);
 				xhr.send();
 			};
-
+			
 			$scope.count = 0;
 			$scope.photoIndex = 0;
 			$scope.photoNumber = 1;
@@ -1724,19 +1537,21 @@
 				}
 			
 			};
+			
+			// Get a reference to the user selected photo size.
+			$scope.photoSize = settings.values.size;
+			
+			// Get a reference to the folder object.
+			$scope.entry = $rootScope.state.targetEntry;
 
 			$scope.processPhoto = function () {
+				
 				// Get a reference to the photo object.
 				var photo = $rootScope.state.selectedPhotos[$scope.photoIndex];
-
-				// Get a reference to the folder object.
-				var entry = $rootScope.state.targetEntry;
-
-				// Get a reference to the user selected photo size.
-				var size = settings.values.size;
-
-				console.log('PHOTO SIZE: ', size);
-
+				
+				console.log('PHOTO SIZE: ', $scope.photoSize);
+				//console.log('Photo for downloading: ', photo);
+				
 				if (photo === null || photo === undefined) // checks null or undefined
 				{
 					$scope.$apply(function () {
@@ -1747,30 +1562,100 @@
 
 					return;
 				}
-
+				
 				console.log('INDEX: ', $scope.photoIndex);
 				console.log('Process Photo: ', photo);
+				
+				if (photo.type === 'photo')
+				{
+					// Download the photo
+					$scope.loadImage(photo, $scope.photoSize, function (blob_uri, originalItem) {
 
-				// Download the photo
-				$scope.loadImage(photo, size, function (blob_uri, originalItem) {
+						console.log('blob_uri: ', blob_uri);
 
-					console.log('blob_uri: ', blob_uri);
+						var fileName = photo.getFileName($scope.photoSize);
 
-					var fileName = photo.getFileName(size);
+						$scope.writeFile($scope.photoIndex, fileName, $scope.entry, blob_uri);
 
-					$scope.writeFile($scope.photoIndex, fileName, entry, blob_uri);
-
+					});
+				}
+				else if (photo.type === 'photoset')
+				{
+					$scope.photosetId = photo.id;
+					$scope.queryPhotoset();
+				}
+				else
+				{
+					console.log('Unhandled file type to download...', photo);
+				}
+				
+			};
+			
+			$scope.queryPhotoset = function() {
+			
+				var query = flickr.createMessage('flickr.photosets.getPhotos', {
+					photoset_id: $scope.photosetId,
+					media: 'photos',
+					per_page: '20',
+					page: '' + $scope.photosetPage + '',
+					extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
 				});
+
+				// license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o
+				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+
+				flickr.query(query, $scope.listPhotoset, $scope.error);
+
+			};
+			
+			$scope.photosetPage = 1;
+			$scope.photosetId = null;
+			
+			$scope.listPhotoset = function(data) {
+			
+				console.log(data);
+				
+				data.items.forEach(function (item) {
+					
+					// Download the photo
+					$scope.loadImage(item, $scope.photoSize, function (blob_uri, originalItem) {
+
+						console.log('blob_uri: ', blob_uri);
+						var fileName = photo.getFileName($scope.photoSize);
+						$scope.writeFile($scope.photoIndex, fileName, entry, blob_uri);
+
+					});
+					
+				});
+				
+			
+				if (data.page === data.pages)
+				{
+					// This means there is no more paging to be done.
+				}
+				else
+				{
+					$scope.photosetPage++;
+					$scope.queryPhotoset();
+				}
+				
+			};
+			
+			$scope.error = function(err) {
+			
+				console.log('Failed in download process...', err);
+				
 			};
 
 			// Start the download immediately when the view is loaded.
 			$scope.$on('$viewContentLoaded', function () {
-
+				
+				// This can be photo, albums and galleries.
 				var photos = $rootScope.state.selectedPhotos;
-
+				
 				// Set the image count.
 				$scope.count = photos.length;
-
+				
 				$scope.photoIndex = 0;
 
 				$scope.processPhoto();

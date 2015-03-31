@@ -229,21 +229,83 @@
 		};
 	}]);
 
-	directives.directive('gallery', ['$location', function ($location) {
+	directives.directive('gallery', ['$location','flickr', function ($location, flickr) {
 
 		return {
 			restrict: 'E',
 			scope: {
-				items: '=',
 				class: '@',
 				value: '=',
 				target: '@',
 				eventHandler: '&ngSearch',
 				loadMore: '&',
-				status: '@'
+				status: '@',
+				query: '@'
 			},
 			controller: function ($scope, $rootScope) {
 
+				// Do we need to initialize items here?
+				$scope.items = [];
+				$scope.page = 1;
+				
+				var onError = function(err) {
+					console.log('something bad happened...', err);
+				};
+				
+				var onData = function(data) {
+				
+					$scope.showStatus = false;
+					$scope.status = '';
+					
+					if (!data.ok)
+					{
+						console.log('ERROR OCCURRED: ', data); // Consider showing the error to users.
+						$scope.albumStatus = 'Failed to retreive items.';
+						return;
+					}
+					else if (data.total === 0)
+					{
+						$scope.favoritesStatus = 'Nothing to see here.';
+						return;
+					}
+					
+					data.items.forEach(function (item) {
+						$scope.items.push(item);
+					});
+					
+					if (data.page === data.pages || data.total === 0)
+					{
+						$scope.showLoadMore = false;
+					}
+					else
+					{
+						$scope.showLoadMore = true;
+					}
+					
+					if ($scope.status !== null && $scope.status !== '') {
+						$scope.showStatus = true;
+					}
+					
+				};
+				
+				var loadItems = function() {
+					
+					console.log('CHECK THIS QUERY!');
+				
+					var input = JSON.parse($scope.query);
+					console.log(input);
+					
+					// Set the page to query for.
+					input.arguments.page = '' + $scope.page + '';
+					
+					var query = flickr.createMessage(input.method, input.arguments);
+					flickr.query(query, onData, onError);
+				};
+				
+				// Load the first page of items.
+				loadItems();
+
+				/*
 				$scope.showStatus = false;
 
 				$scope.setStatus = function (text) {
@@ -254,7 +316,7 @@
 						$scope.showStatus = true;
 					}
 
-				};
+				};*/
 
 				$scope.menu = function (item) {
 					var url = item.link;
@@ -263,7 +325,11 @@
 				
 				$scope.loadMore = function () {
 
-					//console.log('loadMore');
+					
+					console.log('loadMore');
+					$scope.page++;
+					
+					loadItems();
 					
 				};
 				
@@ -278,15 +344,16 @@
 					if (item.selected === true) {
 						item.selected = false;
 						
-						$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
+						//$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, item);
 
 					} else {
 						item.selected = true;
-						$rootScope.state.selectedPhotos.push(item);
+						//$rootScope.state.selectedPhotos.push(item);
 					}
 					
-					$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-						photos: $rootScope.state.selectedPhotos
+					$rootScope.$broadcast('Event:SelectedItemChanged', {
+						item: item,
+						selected: item.selected
 					});
 					
 					//console.log('Select item: ', item);
@@ -303,6 +370,7 @@
 					//URL.revokeObjectURL($scope.uri);
 				});	
 				
+				/*
 				attrs.$observe('status', function (value) {
 
 					if (value === '' || value === null) {
@@ -312,7 +380,7 @@
 					{
 						$scope.showStatus = true;
 					}
-				});
+				});*/
 				
 				// Click Handler handles when user clicks the
 				// search button, then we will navigate and perform search.

@@ -1,5 +1,13 @@
 <div id="gallery" class="thumbs grid">
 
+	<gallery items="photos" status="{{searchStatus}}"></gallery>
+	<div style="padding: 10px; text-align: center;" ng-show="showLoadMore">
+		<md-button class="menu-button" ng-click="loadMore()">
+			Load more...
+		</md-button>
+	</div>
+	
+	<!--
 	<figure ng-repeat="photo in photos" class="effect-winston" ng-class="{selectedThumbnail: photo.selected}" ng-click="selectPhoto(photo)" md-swipe-left="selectPhoto(photo)" md-swipe-right="selectPhoto(photo)">
 		<img ng-src="{{photo.url}}" class="thumb" title="{{photo.title}}" alt="{{photo.title}}">
 		<figcaption>
@@ -9,7 +17,7 @@
 			</p>
 		</figcaption>
 	</figure>
-
+	
 	<div class="clear"></div>
 
 	<div style="padding: 10px;" ng-show="showLoadMore">
@@ -21,5 +29,5 @@
 	<div style="padding: 10px; color: white;" ng-show="searchStatus !== ''">
 		{{searchStatus}}
 	</div>
-
+-->
 </div>
