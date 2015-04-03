@@ -2,11 +2,25 @@
 
 	<div class="content middle">
 
-		<h2 ng-hide="completed"><i class="fa fa-file-photo-o"></i> Downloaded {{photoNumber}} of {{count}}</h2>
-		<h2 ng-show="completed"><i class="fa fa-photo"></i> Downloaded {{count}} photos successfully</h2>
+		
+		<h2 ng-hide="completed"><i class="fa fa-file-photo-o"></i> Downloaded {{current}} of {{count}}</h2>
+		
+		<h2 ng-show="completed">
+		
+			<span ng-hide="skipped > 0">
+			<i class="fa fa-photo"></i> Downloaded {{count}} photos successfully</span>
+			</span>
+		
+			<span ng-show="skipped > 0">
+			<i class="fa fa-photo"></i> Downloaded {{count - skipped}} photos successfully and skipped {{skipped}} photos <br>due to license or permission restriction</span>
+			</span>
+			
+		</h2>
+		
 		<button ng-click="pause()" ng-hide="completed">{{pauseResumeText}}</button>
 		<button ng-click="cancel()" ng-hide="completed">Cancel</button>
 		<p ng-show="completed">
+			<br>
 			<a href="#/">Search again</a>
 		</p>
 

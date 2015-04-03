@@ -1,9 +1,7 @@
 <md-content class="content">
 
-	<md-tabs md-selected="selectedIndex" flex md-stretch-tabs="always">
-		<md-tab md-on-select="onTabSelected(tab)" md-on-deselect="announceDeselected(tab)">
-			<md-tab-label>Version</md-tab-label>
-
+	<lx-tabs links-tc="light" active-tab="activeTab" links-bgc="light-blue-500" indicator="white">
+		<lx-tab heading="Version">
 			<div class="page" layout="column" layout-fill layout-align="space-around center">
 
 				<div class="app-banner">
@@ -38,11 +36,9 @@
 				</a>
 				<br>
 			</div>
-
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(tab)" md-on-deselect="announceDeselected(tab)">
-			<md-tab-label>Learn</md-tab-label>
-
+		</lx-tab>
+		
+		<lx-tab heading="Learn">
 			<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<h3>Search and Download</h3>
@@ -53,6 +49,20 @@
 				<h3>Type</h3>
 				<p>
 					It's possible to either search free text on all photos, or by selecting the "User" option in the dropdown to search for a specific user. A user can be found either with e-mail address or username.
+				</p>
+				
+				<h3>Sizes</h3>
+				<p>
+					On the folder selection screen, you can also decide what size you want to download. The options are as followed:<br>
+					Original - Any size<br>
+					Large - 1024x768 pixels<br>
+					Medium - 640x480 pixels<br>
+					Small - 320x240 pixels<br>
+					Square - 75x75 pixels<br>
+					
+				</p>
+				<p>
+				If you choose a download size larger than what is available, then you will get the closest photo available.
 				</p>
 
 				<h3>Files and Folders</h3>
@@ -89,12 +99,10 @@
 					<br>
 				</div><br>
 			</div>
-
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(tab)" md-on-deselect="announceDeselected(tab)">
-			<md-tab-label>Licenses</md-tab-label>
-
-			<div class="page" layout="column" layout-fill layout-align="space-around">
+		</lx-tab>
+		
+		<lx-tab heading="Licenses">
+						<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<h3>Photo Licenses</h3>
 				<p>
@@ -151,12 +159,10 @@
 				<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 				<br>
 			</div>
-
-		</md-tab>
-		<md-tab md-on-select="onTabSelected(tab)" md-on-deselect="announceDeselected(tab)">
-			<md-tab-label>Releases</md-tab-label>
-
-			<div class="page" layout="column" layout-fill layout-align="space-around">
+		</lx-tab>
+		
+		<lx-tab heading="Releases">
+					<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<div layout="row" class="page-row">
 					<div class="release-number">
@@ -166,7 +172,7 @@
 					<ul flex>
 						<li>Added: Logged on user profile with photostream, albums, favorites and galleries.</li>
 						<li>Improved: User search results now shows albums, favorites, galleries and profile, in addition to photostream.</li>
-						<li>Improved: Animations between page switching on tabs.</li>
+						<li>Improved: Fixed bugs and generally improved stability.</li>
 						<li>Changed: File names include photo license, e.g. "by" (Attribution) and "by-sa" (Attribution-ShareAlike).</li>
 						<li>Downloads: Albums and galleries are all downloaded in a flat structure. This will be improved in the future.</li>
 						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.104" target="_blank">Release Notes</a>
@@ -333,6 +339,8 @@
 					</ul>
 				</div>
 			</div>
-		</md-tab>
-	</md-tabs>
+		</lx-tab>
+		
+	</lx-tabs>
+	
 </md-content>

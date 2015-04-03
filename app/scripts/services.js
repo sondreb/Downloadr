@@ -122,7 +122,9 @@
 		// This is the complete collection of items to be downloaded, including photos, albums and galleries.
 		var items = [];
 		
-		var count = 0;
+		var state = {
+			count: 0
+		};
 					  
 		var license = settings.values.license;
 		
@@ -151,7 +153,7 @@
 			items = [];
 			
 			// Update the count to zero.
-			count = 0;
+			state.count = 0;
 		
 		};
 		
@@ -168,11 +170,32 @@
 			{
 				remove(data.item);
 			}
+			
+			console.log('Currently Selected: ');
+			
+			var selectedCount = 0;
+			
+			items.forEach(function (item) {
+				console.log(item);
+				
+				if (item.count !== undefined)
+				{
+					selectedCount += item.count;
+				}
+				else
+				{
+					selectedCount += 1;
+				}
+				
+			});
+			
+			state.count = selectedCount;
+			
 		});
 		
 		return {
+			state: state,
 			items : items,
-			count: count,
 			add : add,
 			remove: remove,
 			clear: clear,
@@ -185,7 +208,7 @@
 	
 	downloadr.factory('fileManager', function () {
 
-		var download = function (url, success, error) {
+		var download = function (url, success, error, metadata) {
 
 			console.log('File Manager Download: ', url);
 			
@@ -200,9 +223,9 @@
 						//console.log(xhr.response);
 						//window.console.log("response: "+xhr.response);
 						//callback(JSON.parse(xhr.response));
-						success(window.URL.createObjectURL(xhr.response), url, xhr.response);
+						success(window.URL.createObjectURL(xhr.response), url, xhr.response, metadata);
 					} else {
-						error(xhr.statusText);
+						error(xhr.statusText, metadata);
 						console.error(xhr.statusText);
 					}
 				}
@@ -234,7 +257,7 @@
 
 		};
 		
-		var downloadAsText = function (url, success, error) {
+		var downloadAsText = function (url, success, error, metadata) {
 
 			console.log('File Manager Download: ', url);
 			
@@ -257,12 +280,12 @@
 						var data = biStr.join('');
 						var base64 = window.btoa(data);
 						
-						success(base64, url);
+						success(base64, url, metadata);
 						
 					} else {
 						
 						console.error(xhr.statusText);
-						error(xhr.statusText);
+						error(xhr.statusText, metadata);
 						
 					}
 				}
@@ -576,7 +599,7 @@ var Base64 = {
 		var parseToken = function (message) {
 			this.token = message.oauthToken;
 			this.secret = message.oauthTokenSecret;
-			this.userId = message.userNsId;
+			this.userId = message.userNsId.replace('%40', '@');
 			this.userName = message.userName;
 			this.fullName = message.fullName;
 		};
@@ -670,6 +693,7 @@ var Base64 = {
 					var items = [];
 					var container = null;
 					var itemType = '';
+					var userId = null;
 					
 					if (result.photos !== undefined)
 					{
@@ -681,6 +705,7 @@ var Base64 = {
 					{
 						container = result.photoset;
 						items = result.photoset.photo;
+						userId = result.photoset.owner;
 						itemType = 'photo';
 					}
 					else if(result.photosets !== undefined)
@@ -705,6 +730,13 @@ var Base64 = {
 					{
 						throw new Exception('Unable to parse results.');
 					}
+					
+					
+					if (userId === null)
+					{
+						userId = container.user_id;
+					}
+					
 					
 					if (itemType !== 'person')
 					{
@@ -742,6 +774,15 @@ var Base64 = {
 								{
 									item.can_download = item.license == '0' ? 0 : 1;
 								}
+								
+								console.log('$rootScope.state.userId: ', $rootScope.state.userId);
+								console.log('userId: ', userId);
+								
+								// If the owner is the same as logged on user, always allow download of self-owned photos.
+								if (userId !== null && $rootScope.state.userId === userId)
+								{
+									item.can_download = 1;
+								}
 							}
 
 							item.type = itemType;
@@ -757,7 +798,7 @@ var Base64 = {
 						pages: parseInt(container.pages),
 						perpage: (container.per_page !== undefined) ? parseInt(container.per_page) : parseInt(container.perpage), /* perpage for photos, per_page for galleries */
 						total: parseInt(container.total),
-						user_id: container.user_id,
+						user_id: userId,
 						items: items
 						
 					};

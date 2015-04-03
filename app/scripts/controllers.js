@@ -123,7 +123,7 @@
 				galleries: ''
 			};
 			
-			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.userId.replace('%40', '@');
+			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.userId;
 			
 			$rootScope.$broadcast('status', {
 					message: 'Showing profile for ' + $scope.userId + '.'
@@ -1315,13 +1315,34 @@
 	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog', 'flickr', 'downloadManager', 'fileManager',
 		function ($scope, $rootScope, notify, settings, $mdDialog, flickr, downloadManager, fileManager) {
 			
+			$rootScope.state.background = 'wallpaper-light';
+			
 			// This is the continue method that is executed whenever a page is completely downloaded.
 			$scope.continue = null;
 			$scope.queue = [];
 			$scope.items = downloadManager.items;
 			
-			$rootScope.state.background = 'wallpaper-light';
-
+			$scope.count = 0; // The total count user selected.
+			$scope.current = 0; // The current photo.
+			$scope.skipped = 0; // Number of skipped photos due to invalid license/permission.
+			
+			//$scope.photoIndex = 0;
+			//$scope.photoNumber = 1;
+			$scope.completed = false;
+			$scope.paused = false;
+			$scope.pauseResumeText = 'Pause';
+			
+			$scope.photosetPage = 1;
+			$scope.photosetId = null;
+			
+			$scope.galleryPage = 1;
+			$scope.galleryId = null;
+			
+			$scope.queueIndex = 0;
+			
+			//$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
+			$scope.sizes = ['o', 'l', 'z', 'n', 'sq'];
+			
 			$rootScope.$broadcast('status', {
 					message: 'Downloading...'
 			});
@@ -1360,6 +1381,7 @@
 
 			};
 			
+			/*
 			$scope.getFileName = function (photo, photoSize) {
 							
 				var url = $scope.getUrl(photo, photoSize);
@@ -1368,6 +1390,18 @@
 				var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
 				var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
 				var newFullName = newFileName + '_' + $scope.getLicenseName(photo.license).toLowerCase() + newFileNameExt;
+				
+				return newFullName;
+			};*/
+			
+			$scope.getFileName = function (url, license) {
+				
+				//var url = $scope.getUrl(photo, photoSize);
+				var fileName = url.replace(/^.*[\\\/]/, '');
+
+				var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+				var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
+				var newFullName = newFileName + '_' + $scope.getLicenseName(license).toLowerCase() + newFileNameExt;
 				
 				return newFullName;
 			};
@@ -1397,15 +1431,6 @@
 				xhr.send();
 			};*/
 			
-			$scope.count = 0;
-			$scope.photoIndex = 0;
-			$scope.photoNumber = 1;
-			$scope.completed = false;
-			$scope.paused = false;
-			$scope.pauseResumeText = 'Pause';
-			$scope.photosetPage = 1;
-			$scope.photosetId = null;
-			
 			$scope.pause = function() {
 			
 				$scope.paused = !$scope.paused;
@@ -1419,8 +1444,10 @@
 					$scope.pauseResumeText = 'Pause';
 					
 					// Continue processing.
-					$scope.photoIndex = $scope.photoIndex + 1;
-					$scope.processPhoto();
+					$scope.processQueue();
+					
+					//$scope.photoIndex = $scope.photoIndex + 1;
+					//$scope.processPhoto();
 				}
 			};
 			
@@ -1428,7 +1455,7 @@
 				$scope.paused = true;
 				
 				// Set the count, so we'll only display the number that was downloaded before canceling.
-				$scope.count = ($scope.photoIndex + 1);
+				$scope.count = $scope.current;
 				
 				$scope.downloadCompleted('Download canceled.');
 			}
@@ -1450,7 +1477,7 @@
 
 			};
 
-			$scope.writeFile = function (fileName, entry, blob_uri, retry) {
+			$scope.writeFile = function (fileName, entry, blob, retry) {
 				console.log('Write file: ', fileName);
 
 				// Create the file on disk.
@@ -1470,17 +1497,21 @@
 							// We need to run apply here, cause in the loop it's called
 							// from outside the angular scope.
 							$scope.$apply(function () {
-								$scope.photoNumber = (index + 1);
+								// Update the current photo ID that we just downloaded.
+								$scope.current++;
 							});
-
-							var percentage = $scope.photoNumber * 100 / $scope.count;
+							
+							/*$scope.$apply(function () {
+								$scope.photoNumber = (index + 1);
+							});*/
+							
+							var percentage = $scope.current * 100 / $scope.count;
 
 							if (settings.values.progress) {
 								// Should we do Pause/Cancel buttons for this notification?
-								notify('progress', 'progress', 'Downloaded ' + $scope.photoNumber + ' of ' + $scope.count,
+								notify('progress', 'progress', 'Downloaded ' + $scope.current + ' of ' + $scope.count,
 									'You will be notified when download is completed.',
 									function (id) {}, Math.round(percentage));
-
 							}
 
 							// Process the next photo
@@ -1488,15 +1519,10 @@
 							{
 								// Send message to process queue, which will call processItems if empty.
 								$scope.processQueue();
-								
-								
-								$scope.photoIndex = $scope.photoIndex + 1;
-								$scope.processPhoto();
 							}
-							
 						};
 
-						writer.write(new Blob([blob_uri], {
+						writer.write(new Blob([blob], {
 							type: 'image/jpeg'
 						}));
 
@@ -1512,7 +1538,7 @@
 						console.log('Unable to write file to disk... Retry with new filename: ', newFullName);
 
 						// Retry with new filename.
-						$scope.writeFile(index, newFullName, entry, blob_uri, true);
+						$scope.writeFile(newFullName, entry, blob, true);
 					} else {
 						console.log(photo);
 
@@ -1530,28 +1556,6 @@
 				return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 			};
 			
-			$scope.downloadCompleted = function(message) {
-
-				// Reset everything to empty state.
-				$rootScope.state.searchText = '';
-				$rootScope.state.selectedPhotos = [];
-				$scope.completed = true;
-
-				$rootScope.$broadcast('status', {
-					message: message
-				});
-
-				if (settings.values.completed) {
-
-					notify('success', 'basic', message,
-						'All ' + $scope.count + ' photos have been saved successfully.',
-						function (id) {
-							// Launch the local file browser at the target destination.
-						});
-				}
-			
-			};
-			
 			// Get a reference to the user selected photo size.
 			$scope.photoSize = settings.values.size;
 			
@@ -1560,54 +1564,37 @@
 
 			$scope.processPhoto = function (photo) {
 				
-				// Get a reference to the photo object.
-				//var photo = $rootScope.state.selectedPhotos[$scope.photoIndex];
-				//var photo = downloadManager.items[$scope.photoIndex];
-				
 				console.log('PHOTO SIZE: ', $scope.photoSize);
 				console.log('Process Photo: ', photo);
-				//console.log('Photo for downloading: ', photo);
 				
 				if (photo === null || photo === undefined) // checks null or undefined
 				{
 					$scope.$apply(function () {
 						$scope.downloadCompleted('Downloading completed.');
 					});
-
-					return;
 				}
-				
-				//console.log('INDEX: ', $scope.photoIndex);
-				
-				var url = $scope.getUrl(photo, $scope.photoSize);
-				
-				console.log('Downloading this URL: ', url);
-				
-				// Download the photo
-				fileManager.download(url, $scope.downloaded, $scope.error, photo);
-				
-				/*
-				$scope.loadImage(photo, $scope.photoSize, function (blob_uri, originalItem) {
+				else if (photo.can_download === 0) // Photo cannot be downloaded.
+				{
+					console.log('User cannot download this photo.');
+					$scope.skipped++;
+					$scope.processQueue();
+				}
+				else
+				{
+					var url = $scope.getUrl(photo, $scope.photoSize);
 
-					console.log('blob_uri: ', blob_uri);
-
-					var fileName = photo.getFileName($scope.photoSize);
-
-					$scope.writeFile($scope.photoIndex, fileName, $scope.entry, blob_uri);
-
-				});*/
-				
+					// Download the photo
+					fileManager.download(url, $scope.downloaded, $scope.error, photo);
+				}
 			};
 			
 			$scope.downloaded = function(uri, url, response, photo) {
 				
 				console.log('blob_uri: ', uri);
 				
-				var fileName = $scope.getFileName(photo, $scope.photoSize);
+				var fileName = $scope.getFileName(url, photo.license);
 				
-				console.log('FileName: ', fileName);
-				
-				$scope.writeFile(fileName, $scope.entry, uri);
+				$scope.writeFile(fileName, $scope.entry, response);
 			
 			};
 			
@@ -1628,8 +1615,21 @@
 
 			};
 			
+			$scope.queryGallery = function() {
 			
-			$scope.queueIndex = 0;
+				var query = flickr.createMessage('flickr.galleries.getPhotos', {
+					gallery_id: $scope.galleryId,
+					per_page: '50', // 50 is the current Flickr limit for galleries, default value is 100 if not supplied.
+					page: '' + $scope.galleryPage + '',
+					extras: 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				});
+
+				// license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o
+				//'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+
+				flickr.query(query, $scope.listGallery, $scope.error);
+
+			};
 			
 			$scope.processQueue = function() {
 			
@@ -1663,10 +1663,12 @@
 				if (item === undefined)
 				{
 					// We are all done, notify about success!
+					$scope.downloadCompleted('Downloading completed.');
 				}
-				
-				$scope.processItem(item);
-				
+				else
+				{
+					$scope.processItem(item);
+				}
 			};
 			
 			$scope.processItem = function(item) {
@@ -1681,9 +1683,14 @@
 					$scope.photosetId = item.id;
 					$scope.queryPhotoset();
 				}
+				else if (item.type === 'gallery')
+				{
+					$scope.galleryId = item.id;
+					$scope.queryGallery();
+				}
 				else
 				{
-					console.log('Unhandled file type to download...', photo);
+					console.log('Unhandled file type to download...', item);
 				}
 			
 			};
@@ -1702,6 +1709,9 @@
 					// Process the next item in the full list in DownloadManager.
 					$scope.continue = null;
 					
+					// Remember to reset the photoset page for next photoset in the processing queue.
+					$scope.photosetPage = 1;
+					
 					// Process the queue to complete this album/gallery.
 					$scope.processQueue();
 				}
@@ -1718,30 +1728,79 @@
 				}
 			};
 			
+			$scope.listGallery = function(data) {
+				
+				console.log(data);
+				
+				data.items.forEach(function (item) {
+					// Populate the queue with a batch of photos to process.
+					$scope.queue.push(item);
+				});
+				
+				if (data.page === data.pages)
+				{
+					// Process the next item in the full list in DownloadManager.
+					$scope.continue = null;
+					
+					// Remember to reset the photoset page for next photoset in the processing queue.
+					$scope.galleryPage = 1;
+					
+					// Process the queue to complete this album/gallery.
+					$scope.processQueue();
+				}
+				else
+				{
+					// Register the callback for continue operation when queue is processed.
+					$scope.continue = function(){
+						$scope.galleryPage++;
+						$scope.queryGallery();
+					};
+					
+					// Process the queue of all the photos we just added.
+					$scope.processQueue();
+				}
+			};
+			
 			$scope.error = function(err) {
 			
 				console.log('Failed in download process...', err);
 				
 			};
+			
+			$scope.downloadCompleted = function(message) {
+
+				// Clean up the download manager.
+				downloadManager.clear();
+				
+				// Reset everything to empty state.
+				$rootScope.state.searchText = '';
+				$scope.completed = true;
+				
+				$rootScope.$broadcast('status', {
+					message: message
+				});
+				
+				// Notify if the user have selected to get the Chrome notification.
+				if (settings.values.completed) {
+
+					notify('success', 'basic', message,
+						'' + $scope.count - $scope.skipped + ' photos of ' + $scope.count + ' have been saved successfully. ' + $scope.skipped + ' photos was skipped due to invalid license or access.',
+						function (id) {
+							// Launch the local file browser at the target destination.
+						});
+				}
+			};
 
 			// Start the download immediately when the view is loaded.
 			$scope.$on('$viewContentLoaded', function () {
 				
-				// This can be photo, albums and galleries.
-				//var photos = $rootScope.state.selectedPhotos;
-				
-				// Set the image count.
-				//$scope.count = photos.length;
+				console.log('$scope.$on($viewContentLoaded)');
 				
 				// Set the total count generated by the download manager.
 				$scope.count = downloadManager.state.count;
 				
 				// Start processing of items.
 				$scope.processItems();
-				
-				//$scope.photoIndex = 0;
-				//$scope.processPhoto();
-
 			});
     }]);
 

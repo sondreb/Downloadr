@@ -548,7 +548,7 @@
 			{
 				// The username returned from service is url encoded, so we'll need to convert.
 				var query = flickr.createMessage('flickr.people.getInfo', {
-					user_id: flickr.userId.replace('%40', '@')
+					user_id: flickr.userId
 				});
 				
 				flickr.query(query, function(data) {
