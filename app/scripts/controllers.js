@@ -17,13 +17,13 @@
 
 	controllers.controller('StatusController', ['$scope', '$rootScope', 
 		function ($scope, $rootScope) {
-
+			
 			console.log('STATUS CONTROLLER!');
-
+			
 			$rootScope.state.statusMessage = 'Welcome! Login to enable additional features.';
 			
 			$scope.message = $rootScope.state.statusMessage;
-
+			
 			$scope.$on('status', function (event, args) {
 
 				console.log('Status: ', args.message);
@@ -186,7 +186,7 @@
 						license: settings.values.license,
 						per_page: '20',
 						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-					}
+				}
 			};
 			
 			$scope.queryAlbums = {
@@ -213,7 +213,7 @@
 				method: 'flickr.galleries.getList',
 				arguments: {
 					user_id: $scope.userId,
-					per_page: '20',
+					per_page: '50',
 					page: '' + $scope.galleriesPage + '',
 					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
 				}
@@ -1567,13 +1567,7 @@
 				console.log('PHOTO SIZE: ', $scope.photoSize);
 				console.log('Process Photo: ', photo);
 				
-				if (photo === null || photo === undefined) // checks null or undefined
-				{
-					$scope.$apply(function () {
-						$scope.downloadCompleted('Downloading completed.');
-					});
-				}
-				else if (photo.can_download === 0) // Photo cannot be downloaded.
+				if (photo.can_download === 0) // Photo cannot be downloaded.
 				{
 					console.log('User cannot download this photo.');
 					$scope.skipped++;
@@ -1636,8 +1630,12 @@
 				// Pop an item.
 				var photo = $scope.queue.pop();
 				
+				console.log('processQueue: ', photo);
+				
 				if (photo === undefined)
 				{
+					console.log($scope.continue);
+					
 					if ($scope.continue != null)
 					{
 						// We are all done, call the continue handler.
@@ -1662,6 +1660,8 @@
 				
 				if (item === undefined)
 				{
+					console.log('NO MORE ITEMS, COMPLETED!!');
+					
 					// We are all done, notify about success!
 					$scope.downloadCompleted('Downloading completed.');
 				}
@@ -1769,17 +1769,25 @@
 			
 			$scope.downloadCompleted = function(message) {
 
+				console.log('Running clear...');
+
 				// Clean up the download manager.
 				downloadManager.clear();
+
+				$scope.$apply(function() {
 				
-				// Reset everything to empty state.
-				$rootScope.state.searchText = '';
-				$scope.completed = true;
+					// Reset everything to empty state.
+					$rootScope.state.searchText = '';
+					$scope.completed = true;
+					
+				});
 				
+				console.log('Completed set to true...');
+
 				$rootScope.$broadcast('status', {
 					message: message
 				});
-				
+
 				// Notify if the user have selected to get the Chrome notification.
 				if (settings.values.completed) {
 
@@ -1789,6 +1797,7 @@
 							// Launch the local file browser at the target destination.
 						});
 				}
+
 			};
 
 			// Start the download immediately when the view is loaded.

@@ -233,7 +233,7 @@
 	// NOTE: Currently the LumX tabs control does not raise $destroy event on the tab control, but it
 	// re-created the directive within the tab page on each navigation. Look into this in the future
 	// as this is a memory leak right now.
-	directives.directive('gallery', ['$location','flickr', function ($location, flickr) {
+	directives.directive('gallery', ['$location', 'flickr', '$timeout', 'settings', function ($location, flickr, $timeout, settings) {
 
 		return {
 			restrict: 'E',
@@ -244,11 +244,33 @@
 				eventHandler: '&ngSearch',
 				loadMore: '&',
 				status: '@',
-				query: '@'
+				query: '&'
 			},
 			controller: function ($scope, $rootScope) {
 
 				console.log('CONTROLLER on GALLERY WAS CALLED!');
+				
+				$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
+					
+					console.log('Event:Filter: ', event);
+					
+					//$scope.clearPhotos();
+					//console.log('User changed filter...');
+					//$scope.performSearch($rootScope.state.searchText);
+					
+					console.log('User changed filter... calling loadItems...');
+					
+					$scope.items = [];
+					$scope.page = 1;
+					
+					// This event handler is triggered before the settings are saved,
+					// that means the filter value won't be available yet. Therefore it
+					// must be executed in a $timeout.
+					$timeout(function() {
+						loadItems();
+					}, 1);
+					
+				});
 				
 				// Do we need to initialize items here?
 				$scope.items = [];
@@ -296,13 +318,24 @@
 				
 				var loadItems = function() {
 					
-					console.log('CHECK THIS QUERY!');
-				
-					var input = JSON.parse($scope.query);
+					var input = $scope.query();
+					
+					if (input === undefined)
+					{
+						return;
+					}
+					
 					console.log(input);
+					
+					//var input = JSON.parse(query);
+					//console.log(input);
 					
 					// Set the page to query for.
 					input.arguments.page = '' + $scope.page + '';
+					
+					input.arguments.sort = settings.values.sort;
+					
+					input.arguments.license = settings.values.license;
 					
 					var query = flickr.createMessage(input.method, input.arguments);
 					flickr.query(query, onData, onError);
@@ -331,7 +364,6 @@
 				
 				$scope.loadMore = function () {
 
-					
 					console.log('loadMore');
 					$scope.page++;
 					
