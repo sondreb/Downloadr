@@ -201,7 +201,6 @@
 
 	<div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
 		
-		
 		<div layout="row" layout-align="end" nav-menu="selected">
 		
 			<!--
@@ -291,7 +290,7 @@
 			</div>-->
 
 			<!-- For user simplicity, we will hide most of the size options. -->
-			<div ng-show="state.actionTarget != 'folder'" style="margin-right: 10px;">
+			<div ng-show="state.showSizes" style="margin-right: 10px;">
 				
 			<!--
 				Icons for future use: md-view-headline, md-view-list, md-view-module
@@ -341,11 +340,11 @@ md-close
 				{{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
 			</div>-->
 			
-			<div class="counter" ng-show="managerState.count">
+			<div class="counter" ng-show="state.showCounter && managerState.count > 0">
 				{{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
 			</div>
 
-			<div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-hide="managerState.count">
+			<div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-show="state.showCounter && managerState.count == 0">
 				{{total}}<a href="" class="counter-total"><i class="fa fa-check"></i></a>
 			</div>
 			

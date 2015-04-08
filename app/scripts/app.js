@@ -69,6 +69,10 @@
 				showLicenses: true,
 				
 				showSorting: true,
+				
+				showSizes: false,
+				
+				showCounter: true,
 
 				actionTarget: 'folder',
 

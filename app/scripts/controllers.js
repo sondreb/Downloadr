@@ -112,9 +112,12 @@
 			});	
 			
 			$rootScope.state.background = 'wallpaper-3';
+			
 			$rootScope.state.showActions = true;
 			$rootScope.state.showLicenses = true;
 			$rootScope.state.showSorting = true;
+			$rootScope.state.showSizes = false;
+			$rootScope.state.showCounter = true;
 			
 			$scope.status = {
 				photos: '',
@@ -1169,6 +1172,7 @@
 			$scope.managerState = downloadManager.state;
 			//$scope.count = downloadManager.state.count;
 			
+			
 			$scope.$watch(function () {
 				return settings.values;
 			}, function (newVal, oldVal) {
@@ -1818,8 +1822,13 @@
 
 			$rootScope.state.background = 'wallpaper-light';
 			$rootScope.state.actionTarget = 'download';
+			
 			$rootScope.state.showActions = true;
-
+			$rootScope.state.showLicenses = false;
+			$rootScope.state.showSorting = false;
+			$rootScope.state.showSizes = true;
+			$rootScope.state.showCounter = false;
+			
 			$scope.count = downloadManager.state.count;
 			$scope.path = '';
 			
