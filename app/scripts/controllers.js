@@ -118,6 +118,7 @@
 			$rootScope.state.showSorting = true;
 			$rootScope.state.showSizes = false;
 			$rootScope.state.showCounter = true;
+			$rootScope.state.actionTarget = 'folder';
 			
 			$scope.status = {
 				photos: '',
@@ -199,7 +200,7 @@
 					safe_search: settings.values.safe,
 					sort: settings.values.sort,
 					per_page: '20',
-					primary_photo_extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+					primary_photo_extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				}
 			};
 			
@@ -218,7 +219,7 @@
 					user_id: $scope.userId,
 					per_page: '50',
 					page: '' + $scope.galleriesPage + '',
-					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+					primary_photo_extras: 'date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				}
 			};
 			
@@ -628,24 +629,28 @@
     'flickr', 'settings', 'HOST',
 		function ($scope, $rootScope, $location, $http, $timeout, flickr, settings, HOST) {
 
-			$rootScope.state.background = 'wallpaper-dark';
+			//$rootScope.state.background = 'wallpaper-dark';
+			$rootScope.state.background = 'wallpaper-3';
+			
 			$rootScope.state.showActions = true;
 			$rootScope.state.actionTarget = 'folder';
 			$rootScope.state.showLicenses = true;
 			$rootScope.state.showSorting = true;
 			
-			$scope.photos = [];
-			$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
-			$scope.total = 0;
-			$scope.page = 1;
-			$scope.showLoadMore = true;
+			//$scope.photos = [];
+			//$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
+			//$scope.sizes = ['o', 'l', 'z', 'n', 'sq'];
+			
+			//$scope.total = 0;
+			//$scope.page = 1;
+			//$scope.showLoadMore = true;
 			$scope.searchStatus = '';
-
+			
 			$scope.$on('$destroy', function (event) {
 
 				console.log('Destroy: SearchController... Cleaning up Resources...');
 
-				$scope.showLoadMore = true;
+				//$scope.showLoadMore = true;
 				$scope.searchStatus = '';
 				
 				// Whenever the user navigates away from SearchController, make sure
@@ -653,9 +658,9 @@
 				//$scope.clearPhotos();
 
 				// Remove global event listeners.
-				$scope.onSearchEvent();
-				$scope.onFilterEvent();
-				$scope.onPagingEvent();
+				//$scope.onSearchEvent();
+				//$scope.onFilterEvent();
+				//$scope.onPagingEvent();
 
 			});
 
@@ -677,6 +682,19 @@
 				
 			});*/
 
+			$scope.queryPhotos = {
+				method: 'flickr.photos.search',
+				arguments: {
+						text: $rootScope.state.searchText,
+						safe_search: settings.values.safe,
+						sort: settings.values.sort,
+						license: settings.values.license,
+						per_page: '25',
+						extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
+				}
+			};
+			
+			/*
 			$scope.onSearchEvent = $rootScope.$on('Event:Search', function (event, data) {
 
 				console.log('User did a new search...');
@@ -709,6 +727,7 @@
 			$scope.loadMore = function () {
 				$rootScope.$broadcast('Event:Paging');
 			}
+			*/
 
 			/*
 			$scope.loadImage = function (item, callback) {
@@ -752,7 +771,7 @@
 			};*/
 
 			// for each image with no imageUrl, start a new loader
-			$scope.loadImages = function () {
+			/*$scope.loadImages = function () {
 
 				var photos = $scope.photos;
 
@@ -787,7 +806,7 @@
 					});
 
 				}
-			};
+			};/*
 			
 			$scope.performSearchByUserId = function()
 			{
@@ -814,8 +833,8 @@
 				
 				console.log('Sign URL message: ', query);
 				var url = HOST + '/search';
-				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);*/
-			}
+				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+			}*/
 			
 			$scope.currentUserId = '';
 			
@@ -861,7 +880,8 @@
 				});
 				
 			}
-			
+
+			/*
 			$scope.onUrlSigned = function (message) {
 
 				console.log('Message Received: ', message);
@@ -988,10 +1008,12 @@
 				});
 
 			};
+			*/
 
 			// Register handler for callbacks of signing URLs.
 			//socket.on('urlSigned', $scope.onUrlSigned);
 
+			/*
 			$scope.clearPhotos = function () {
 				// Remove existing downloaded photos to avoid memory leak.
 				$scope.clearObjectURLs();
@@ -1000,7 +1022,7 @@
 				//$scope.photos = [];
 				
 				$scope.page = 1;
-			}
+			}*/
 
 			// Clears up all the blob files that was previously downloaded. For future
 			// informational reference, the blob-links under "Resources" in the Developer Tools
@@ -1009,6 +1031,7 @@
 			// This task is important to avoid memory leak.
 			//
 			// TODO: Create a cleanup method on this controller and make sure it's called when needed.
+			/*
 			$scope.clearObjectURLs = function () {
 				if ($scope.photos) {
 
@@ -1022,7 +1045,7 @@
 
 					$scope.photos = [];
 				}
-			};
+			};*/
 			
 			$scope.performSearch = function (searchTerm) {
 				
@@ -1059,6 +1082,8 @@
 				{
 					// Get a prepared message that includes token.
 					// Until we know exactly what metadata we need, we'll ask for all extras.
+					
+					/*
 					message = flickr.createMessage('flickr.photos.search', {
 						text: searchTerm,
 						safe_search: settings.values.safe,
@@ -1072,6 +1097,7 @@
 					console.log('Sign URL message: ', message);
 					var url = HOST + '/search';
 					$http.post(url, message).success($scope.onUrlSigned).error($scope.onUrlSignedError);
+					*/
 				}
 			};
 			
@@ -1316,15 +1342,27 @@
 	// This controller supports proper paging and downloads are processed one page at a time, to support downloading
 	// of unlimted number of photos without any memory issues.
 	
-	controllers.controller('DownloadController', ['$scope', '$rootScope', 'notify', 'settings', '$mdDialog', 'flickr', 'downloadManager', 'fileManager',
-		function ($scope, $rootScope, notify, settings, $mdDialog, flickr, downloadManager, fileManager) {
+	controllers.controller('DownloadController', [
+		'$scope', 
+		'$rootScope', 
+		'notify', 
+		'settings', 
+		'$mdDialog', 
+		'flickr', 
+		'downloadManager', 
+		'fileManager',
+		'$timeout',
+		function ($scope, $rootScope, notify, settings, $mdDialog, flickr, downloadManager, fileManager, $timeout) {
 			
 			$rootScope.state.background = 'wallpaper-light';
 			
 			// This is the continue method that is executed whenever a page is completely downloaded.
 			$scope.continue = null;
 			$scope.queue = [];
-			$scope.items = downloadManager.items;
+			
+			console.log('SETTING $SCOPE.ITEMS FROM DOWNLOADMANAGER.ITEMS!, ', downloadManager.items);
+			
+			//$scope.items = downloadManager.items;
 			
 			$scope.count = 0; // The total count user selected.
 			$scope.current = 0; // The current photo.
@@ -1345,7 +1383,8 @@
 			$scope.queueIndex = 0;
 			
 			//$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
-			$scope.sizes = ['o', 'l', 'z', 'n', 'sq'];
+			//$scope.sizes = ['o', 'l', 'z', 'n', 'sq'];
+			$scope.sizes = ['o', 'l', 'z', 'n', 'q'];
 			
 			$rootScope.$broadcast('status', {
 					message: 'Downloading...'
@@ -1511,6 +1550,12 @@
 							
 							var percentage = $scope.current * 100 / $scope.count;
 
+							// Happens sometimes when download is canceled and current is higher than count.
+							if (percentage > 100)
+							{
+								percentage = 100;
+							}
+							
 							if (settings.values.progress) {
 								// Should we do Pause/Cancel buttons for this notification?
 								notify('progress', 'progress', 'Downloaded ' + $scope.current + ' of ' + $scope.count,
@@ -1603,7 +1648,7 @@
 					media: 'photos',
 					per_page: '20',
 					page: '' + $scope.photosetPage + '',
-					extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+					extras: 'license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
 				});
 
 				// license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o
@@ -1660,7 +1705,7 @@
 			
 			$scope.processItems = function() {
 			
-				var item = $scope.items.pop();
+				var item = downloadManager.items.pop();
 				
 				if (item === undefined)
 				{
@@ -1777,15 +1822,17 @@
 
 				// Clean up the download manager.
 				downloadManager.clear();
-
-				$scope.$apply(function() {
 				
+				$scope.completed = true;
+				
+				$timeout(function() {
+
 					// Reset everything to empty state.
 					$rootScope.state.searchText = '';
 					$scope.completed = true;
 					
-				});
-				
+				}, 0);
+
 				console.log('Completed set to true...');
 
 				$rootScope.$broadcast('status', {

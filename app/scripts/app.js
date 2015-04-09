@@ -413,7 +413,7 @@
 
 				console.log('Logout Initialized...');
 				
-				storage.set('token', null, function () {
+				storage.remove('token', function () {
 					// Notify that we saved.
 					console.log('Token removed');
 				});
@@ -427,7 +427,6 @@
 				// Make sure we get a new login url.
 				//socket.emit('getUrl');
 			});
-
 			
 			if (runtime === 'chrome')
 			{

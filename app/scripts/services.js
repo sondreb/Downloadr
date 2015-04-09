@@ -144,13 +144,16 @@
 		
 		var clear = function() {
 			
+			console.log('CLEAR WAS CALLED ON DOWNLOAD MANAGER!');
+			
 			// First make sure we remove selection to update the UI.
 			items.forEach(function (item) {
 				item.selected = false;
 			});
 			
 			// Remove all items by clearing the array.
-			items = [];
+			//items = [];
+			items.length = 0;
 			
 			// Update the count to zero.
 			state.count = 0;
