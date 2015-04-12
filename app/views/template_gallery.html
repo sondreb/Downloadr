@@ -1,6 +1,5 @@
 <div id="gallery" class="thumbs grid">
 	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: item.selected}" ng-click="select(item)" md-swipe-left="select(item)" md-swipe-right="select(item)">
-		<!--<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">-->
 		<img image="{{item.url}}" class="thumb" title="{{item.name}}" alt="{{item.name}}">
 		<figcaption>
 			

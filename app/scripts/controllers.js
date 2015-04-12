@@ -98,8 +98,6 @@
 	controllers.controller('ProfileController', ['$scope', '$rootScope', 'settings', 'flickr', 'HOST', '$http', 'fileManager', '$routeParams', 
 		function ($scope, $rootScope, settings, flickr, HOST, $http, fileManager, $routeParams) {
 		
-			console.log('$routeParams: ', $routeParams.userId);
-			
 			// Cleanup of resources is now handled by the image directive itself.
 			$scope.$on('$destroy', function() {
 				console.log("ProfileController: destroy");
@@ -127,7 +125,7 @@
 				galleries: ''
 			};
 			
-			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.userId;
+			$scope.userId = ($routeParams.userId !== undefined) ? $routeParams.userId : flickr.state.userId;
 			
 			$rootScope.$broadcast('status', {
 					message: 'Showing profile for ' + $scope.userId + '.'
