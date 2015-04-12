@@ -50,6 +50,16 @@ var search = function (text) {
 var signUrl = function (token, secret, method, args, cb) {
 	console.log("Requesting to sign URL");
 	console.log(args);
+    
+    if (token === undefined || token === null)
+    {
+        token = '';
+    }
+    
+    if (secret === undefined || secret === null)
+    {
+        secret = '';
+    }
 
 	var args = {
 		method: method,

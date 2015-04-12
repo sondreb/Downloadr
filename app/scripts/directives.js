@@ -229,11 +229,16 @@
 		};
 	}]);
 
-	
 	// NOTE: Currently the LumX tabs control does not raise $destroy event on the tab control, but it
 	// re-created the directive within the tab page on each navigation. Look into this in the future
 	// as this is a memory leak right now.
-	directives.directive('gallery', ['$location', 'flickr', '$timeout', 'settings', function ($location, flickr, $timeout, settings) {
+	directives.directive('gallery', ['$location', 
+                                     'flickr', 
+                                     '$timeout', 
+                                     'settings', function ($location, 
+                                                            flickr, 
+                                                            $timeout, 
+                                                            settings) {
 
 		return {
 			restrict: 'E',
@@ -246,7 +251,7 @@
 				status: '@',
 				query: '&'
 			},
-			controller: function ($scope, $rootScope) {
+			controller: ['$scope', '$rootScope', function ($scope, $rootScope) {
 
 				console.log('CONTROLLER on GALLERY WAS CALLED!');
 				
@@ -397,7 +402,7 @@
 					//console.log('Select item: ', item);
 				};
 
-			},
+			}],
 			templateUrl: 'views/template_gallery.html',
 			link: function ($scope, element, attrs) {
 

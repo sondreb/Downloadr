@@ -587,36 +587,41 @@ var Base64 = {
 
 	downloadr.service('flickr', ['$rootScope', '$http', 'HOST', function ($rootScope, $http, HOST) {
 
-		var that = this;
-		
-		var token = '';
-		var secret = '';
-		var userId = '';
-		var userName = '';
-		var fullName = '';
+        var state = {
+        
+            token: '',
+            secret: '',
+            userId: '',
+            userName: '',
+            fullName: ''
+        
+        };
 
 		var removeToken = function () {
-			this.token = '';
-			this.secret = '';
-			this.userId = '';
-			this.userName = '';
-			this.fullName = '';
+			state.token = '';
+			state.secret = '';
+			state.userId = '';
+			state.userName = '';
+			state.fullName = '';
 		};
 
 		var parseToken = function (message) {
-			this.token = message.oauthToken;
-			this.secret = message.oauthTokenSecret;
-			this.userId = message.userNsId.replace('%40', '@');
-			this.userName = message.userName;
-			this.fullName = message.fullName;
+            
+            console.log('PARSING TOKEN: ', message);
+            
+			state.token = message.oauthToken;
+			state.secret = message.oauthTokenSecret;
+			state.userId = message.userNsId.replace('%40', '@');
+			state.userName = message.userName;
+			state.fullName = message.fullName;
 		};
 
 		var createMessage = function (method, args) {
 			var message = {
 				method: method,
 				args: args,
-				token: this.token,
-				secret: this.secret
+				token: state.token,
+				secret: state.secret
 			};
 
 			return message;
@@ -641,25 +646,6 @@ var Base64 = {
 			$http(request).success(ok).error(fail);
 		};
 		
-		/*
-		var onUrlSignedError = function(data, status, headers, config)
-		{
-			console.log('Unable to sign search request: ', status);
-			console.log('Error Data: ', data);
-			console.log('Error Data: ', headers);
-
-			$rootScope.$broadcast('status', {
-				message: 'Service is unavailable. Please try again later. Code: ' + status
-			});
-		};*/
-		
-		/*
-		var onUrlSigned = function (message) {
-			$rootScope.$broadcast('flickr:urlsigned', {
-				message: message
-			});
-		};*/
-		
 		var queryService = function(message, ok, fail) {
 			var url = 'https://' + message.hostname + message.path;
 			
@@ -673,7 +659,6 @@ var Base64 = {
 		var queryUserId = null;
 		
 		var signAndQuery = function(query, ok, fail) {
-			
 			
 			console.log('flickr: signAndQuery');
 			
@@ -867,8 +852,7 @@ var Base64 = {
 			parseToken: parseToken,
 			removeToken: removeToken,
 			createMessage: createMessage,
-			userId: userId,
-			userName: userName,
+            state: state,
 			signUrl: signUrl,
 			getUrl: getUrl,
 			getPhotoUrl: getPhotoUrl,

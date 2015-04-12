@@ -53,7 +53,7 @@ window.console = console;
 	downloadr.value('HOST', 'http://flickr-downloadr.com');
 	//downloadr.value('HOST', 'http://localhost:3000');
 	
-	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage',
+	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage', 
 		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime, fileManager, storage) {
 			
 			$rootScope.state = {
@@ -551,7 +551,7 @@ window.console = console;
 			{
 				// The username returned from service is url encoded, so we'll need to convert.
 				var query = flickr.createMessage('flickr.people.getInfo', {
-					user_id: flickr.userId
+					user_id: flickr.state.userId
 				});
 				
 				flickr.query(query, function(data) {
@@ -586,40 +586,38 @@ window.console = console;
 			
 			$rootScope.authenticationState = function(token)
 			{
-				if (token === null)
-				{
-					flickr.removeToken();
-					$rootScope.state.isAnonymous = true;
+                if (token === null)
+                {
+                    flickr.removeToken();
+                    $rootScope.state.isAnonymous = true;
 
-					// Ensure we delete the buddy icon.
-					storage.removeLocal('buddyicon', function() { console.log('Buddy icon removed'); });
-					$rootScope.state.buddyIcon = 'images/buddyicon.gif';			
-					
-				}
-				else
-				{
-					console.log('Token: ', token);
-					
-					flickr.parseToken(token);
+                    // Ensure we delete the buddy icon.
+                    storage.removeLocal('buddyicon', function() { console.log('Buddy icon removed'); });
+                    $rootScope.state.buddyIcon = 'images/buddyicon.gif';			
 
-					$rootScope.state.userId = flickr.userId;
-					$rootScope.state.userName = flickr.userName;
+                }
+                else
+                {
+                    console.log('Token: ', token);
 
-					console.log('$rootScope.state.userName: ', flickr.userId);
-					
-					// Load or download the users buddy icon.
-					$rootScope.loadBuddyIcon();
-					
-					$rootScope.state.isAnonymous = false;
+                    flickr.parseToken(token);
 
-					$rootScope.state.statusMessage = 'Authorized. Hi ' + flickr.userName + '!';
-					
-					$rootScope.$broadcast('status', {
-						message: 'Authorized. Hi ' + flickr.userName + '!'
-					});
-					
-					
-				}
+                    $rootScope.state.userId = flickr.state.userId;
+                    $rootScope.state.userName = flickr.state.userName;
+
+                    console.log('$rootScope.state.userName: ', flickr.state.userId);
+
+                    // Load or download the users buddy icon.
+                    $rootScope.loadBuddyIcon();
+
+                    $rootScope.state.isAnonymous = false;
+
+                    $rootScope.state.statusMessage = 'Authorized. Hi ' + flickr.state.userName + '!';
+
+                    $rootScope.$broadcast('status', {
+                        message: 'Authorized. Hi ' + flickr.state.userName + '!'
+                    });
+                }
 			};
     }]);
 
