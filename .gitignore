@@ -19,6 +19,7 @@ app/fonts/material*
 node_modules
 temp
 .tmp
+.tscache
 dist
 .sass-cache
 app/bower_components

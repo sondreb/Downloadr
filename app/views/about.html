@@ -1,6 +1,6 @@
 <md-content class="content">
 
-	<lx-tabs links-tc="light" links-bgc="light-blue-500" indicator="yellow-500" no-divider="true" z-depth="1">
+	<lx-tabs links-tc="light" active-tab="activeTab" links-bgc="light-blue-500" indicator="white">
 		<lx-tab heading="Version">
 			<div class="page" layout="column" layout-fill layout-align="space-around center">
 
@@ -21,6 +21,7 @@
 					<p>Support: <a href="mailto:tickets@nobrain.uservoice.com" target="_blank">tickets@nobrain.uservoice.com</a>
 						<br>Feedback: <a href="http://nobrain.uservoice.com/" target="_blank">nobrain.uservoice.com</a>
 						<br>Website: <a href="http://www.flickr-downloadr.com/" target="_blank">www.flickr-downloadr.com</a>
+						<br>Facebook: <a href="https://www.facebook.com/downloadr" target="_blank">News, Updates, Previews</a>
 					</p>
 				</md-whiteframe>
 				<p>&nbsp;</p>
@@ -28,14 +29,15 @@
 
 				<h3>Donate to the project</h3>
 				<p>
-				While Flickr Downloadr is completely free for you to download and use, you can help and support the project of developing by donating using the button below. Thank you!
+					While Flickr Downloadr is completely free for you to download and use, you can help and support the project of developing by donating using the button below. Thank you!
 				</p>
 				<br>
-				<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TJQE7CLL433GN&lc=GB&item_name=Flickr%20Downloadr&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"><img src="images/donate.gif" alt="Please Donate" title="Please Donate"></a>
+				<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=TJQE7CLL433GN&lc=GB&item_name=Flickr%20Downloadr&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"><img src="images/donate.gif" alt="Please Donate" title="Please Donate">
+				</a>
 				<br>
 			</div>
 		</lx-tab>
-
+		
 		<lx-tab heading="Learn">
 			<div class="page" layout="column" layout-fill layout-align="space-around">
 
@@ -43,44 +45,81 @@
 				<p>
 					Search, select photos, pick folder, download and wait. You can search multiple times and pick photos from different searches, before you start the download process.
 				</p>
-				
+
 				<h3>Type</h3>
 				<p>
-					It's possible to either search free text on all photos, or by selecting the "User" option in the dropdown to search for a specific user. A user can be found either with
-					e-mail address or username.
+					It's possible to either search free text on all photos, or by selecting the "User" option in the dropdown to search for a specific user. A user can be found either with e-mail address or username.
+				</p>
+				
+				<h3>Sizes</h3>
+				<p>
+					On the folder selection screen, you can also decide what size you want to download. The options are as followed:<br>
+					Original - Any size<br>
+					Large - 1024x768 pixels<br>
+					Medium - 640x480 pixels<br>
+					Small - 320x240 pixels<br>
+					Square - 150x150 pixels<br>
+					
+				</p>
+				<p>
+				If you choose a download size larger than what is available, then you will get the closest photo available.
 				</p>
 
-				<h3>Existing files?</h3>
+				<h3>Files and Folders</h3>
+				<p>
+				As files are stored to your local machine, the file names is a combination of the unique photo id, with the size (e.g. "_m" and "_o") and then with license appended before the file extension (e.g. "_by" and "by-sa").
+				</p>
+				<br>
+				<h4>Existing files?</h4>
 				<p>
 					If there is existing files with the same filename, Flickr Downloadr will append a random four character value to the filename. This ensures no interuption during download.
 				</p>
-
+				
+				<h3>User Profiles</h3>
+				<p>
+				On your personal profile or on other users's profiles, you will be able to see the <strong>photostream</strong>, <strong>albums</strong>, <strong>favorites</strong> and <strong>galleries</strong>.
+				</p><br>
+				<p>The user's <strong>photostream</strong> can be filtered with license and you can search by title.
+				</p><br>
+					<p>
+						The <strong>albums</strong> will all be shown with a thumbnail preview for the user. When you select albums, the downloading will only be allowed for some of the photos. It might happen that
+					you try to download albums with only restricted photos. During the download process, you will be informed about which photos that could not be downloaded. New folder is created for each gallery.
+				</p><br>
+				<p>
+					The <strong>favorites</strong> will returns all photos of all licenses, including those that are unavailable for download. Those photos will be marked with a circle X, indicating not available for download.
+				</p><br>
+			
+				<p><strong>Galleries</strong> are collection of up-to 50 individual photos that one user have selected from his/her own photos, or someone else. Downloading galleries will only save
+				those photos you are licensed to save. New folder is created for each gallery.</p>
+				
 				<h3>Shortcuts</h3>
 				<div>
-					ALT+ENTER: Toggle fullscreen mode.
-					<br>CTRL+S: Perform search
-					<br>
-				</div>
+					ALT+ENTER: Toggle fullscreen mode.<br>
+                    <!--CTRL+S: Perform search.--><br>
+				</div><br>
 			</div>
 		</lx-tab>
-
+		
 		<lx-tab heading="Licenses">
-			<div class="page" layout="column" layout-fill layout-align="space-around">
+						<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<h3>Photo Licenses</h3>
 				<p>
-					You are allowed to search and view photos with any licenses, but only those with <a href="http://creativecommons.org/licenses/" target="_blank">Creative Commons license</a> is allowed to be downloaded to your local computer.</p>
+					You are allowed to search and view photos with any licenses, but only those a user allows you to or are allowed to your authenticated user (like all your own photos) is allowed to be downloaded to your local computer.</p>
+				<br>
 				<p>
-					The default selection will only show photos that can be downloaded, but in the bottom options you can enable showing search results of photos that are not downloadable. You can right-click on those photos, to take you directly to the Flickr page where you can send a message to the user, asking them to change permissions.</p>
+					The default selection will only show photos that can be downloaded, but in the bottom options you can enable showing search results of photos that are not downloadable. You can click on the "..." button on those photos, to take you directly to the Flickr page where you can send a message to the user, asking them to change permissions.</p>
+				<br>
 				<p>This is useful as many using Flickr is doing it with the intention of sharing memories, but doesn't necessary understand all the licensing issues.
 				</p>
+				<br>
 				<p>
 					Photos have their respective licenses appended to the file name, here is a description of the license types:
 				</p>
 
 				<br>
 
-				<table>
+				<table style="width: 100%;">
 					<tr class="table-header">
 						<td>Icons</td>
 						<td>License</td>
@@ -117,16 +156,31 @@
 				<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 
 				<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-
+				<br>
 			</div>
 		</lx-tab>
-
+		
 		<lx-tab heading="Releases">
-			<div class="page" layout="column" layout-fill layout-align="space-around">
+					<div class="page" layout="column" layout-fill layout-align="space-around">
 
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger"><span app-version></span></strong>
+						<br>2015-04-30
+					</div>
+					<ul flex>
+						<li>Added: Logged on user profile with photostream, albums, favorites and galleries.</li>
+						<li>Improved: User search results now shows albums, favorites, galleries and profile, in addition to photostream.</li>
+						<li>Improved: Fixed bugs and generally improved stability.</li>
+						<li>Changed: File names include photo license, e.g. "by" (Attribution) and "by-sa" (Attribution-ShareAlike).</li>
+						<li>Downloads: Albums and galleries are all downloaded in a flat structure. This will be improved in the future.</li>
+						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.104" target="_blank">Release Notes</a>
+					</ul>
+				</div>
+				
+				<div layout="row" class="page-row">
+					<div class="release-number">
+						<strong class="bigger">3.0.103</strong>
 						<br>2015-02-28
 					</div>
 					<ul flex>
@@ -135,7 +189,7 @@
 						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.103" target="_blank">Release Notes</a>
 					</ul>
 				</div>
-				
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.102</strong>
@@ -147,7 +201,7 @@
 						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.102" target="_blank">Release Notes</a>
 					</ul>
 				</div>
-				
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.101</strong>
@@ -158,7 +212,7 @@
 						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.101" target="_blank">Release Notes</a>
 					</ul>
 				</div>
-				
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.100</strong>
@@ -172,7 +226,7 @@
 						<li><a href="https://github.com/sondreb/Downloadr/issues?q=milestone%3A3.0.100" target="_blank">Release Notes</a>
 					</ul>
 				</div>
-				
+
 				<div layout="row" class="page-row">
 					<div class="release-number">
 						<strong class="bigger">3.0.76</strong>
@@ -283,9 +337,9 @@
 						<li>Release of Flickr Downloadr 1.0</li>
 					</ul>
 				</div>
-
 			</div>
 		</lx-tab>
+		
 	</lx-tabs>
-
+	
 </md-content>

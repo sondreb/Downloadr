@@ -389,7 +389,7 @@ module.exports = function (grunt) {
 					dot: true,
 					cwd: '<%= config.app %>/bower_components/mdi/fonts/',
 					src: ['*.*'],
-					dest: '<%= config.app %>/styles/fonts'
+					dest: '<%= config.app %>/fonts'
 				}]
 			},
 			dist: {

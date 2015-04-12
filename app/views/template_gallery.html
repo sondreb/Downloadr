@@ -1,0 +1,29 @@
+<div id="gallery" class="thumbs grid">
+	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: item.selected}" ng-click="select(item)" md-swipe-left="select(item)" md-swipe-right="select(item)">
+		<!--<img ng-src="{{album.uri}}" class="thumb" title="{{album.title}}" alt="{{album.title}}">-->
+		<img image="{{item.url}}" class="thumb" title="{{item.name}}" alt="{{item.name}}">
+		<figcaption>
+			
+			<i ng-show="item.can_download !== 1" class="mdi mdi-close-circle" style="color: white; margin-left: 6px; margin-top: 6px; position: absolute;" title="Not available for download"></i>
+			
+			<h2>{{ item.name | limitTo: 50 }}{{item.name.length > 50 ? '...' : ''}}</h2>
+			<p>
+				<i ng-show="item.count !== undefined" class="mdi mdi-folder-image">{{item.count}}</i>
+				<a ng-click="menu(item)"><i class="mdi mdi-dots-horizontal"></i></a>
+			</p>
+		</figcaption>
+	</figure>
+
+	<div class="clear"></div>
+
+	<div style="padding: 10px;" ng-show="showLoadMore">
+		<md-button class="menu-button" ng-click="loadMore()">
+			Load more...
+		</md-button>
+	</div>
+
+	<div style="padding: 10px;" ng-show="showStatus">
+		{{status}}
+	</div>
+
+</div>

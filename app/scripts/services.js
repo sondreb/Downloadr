@@ -20,11 +20,9 @@
 				
 				if (runtime === 'chrome')
 				{
-					
-					//storage.get('settings', function (result) {
 					chrome.storage.sync.get('settings', function (result) {
 
-						if (result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
+						if (result === undefined || result === null || result.settings === undefined || result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
 						{
 							return;
 						}
@@ -49,14 +47,15 @@
 						}
 
 						console.log('Settings loaded: ', values);
-						$scope.apply();
+						
+						//$rootScope.$apply();
 
 						$rootScope.$broadcast('Settings:Loaded', values);
 
 					});
 				}
 			};
-
+            
 			var save = function () {
 				//storage.set('settings', values, function () {
 				chrome.storage.sync.set({
@@ -114,11 +113,103 @@
 
 		};
 	});
+	
+	
+	downloadr.factory('downloadManager', ['$rootScope', 'settings', function ($rootScope, settings) {
+		
+		// This is the complete collection of items to be downloaded, including photos, albums and galleries.
+		var items = [];
+		
+		var state = {
+			count: 0
+		};
+					  
+		var license = settings.values.license;
+		
+		var size = settings.values.size;
+		
+		var remove = function(item) {
+			
+			items = _.without(items, item);
+			
+		};
+		
+		var add = function(item) {
+			
+			items.push(item);
+			
+		};
+		
+		var clear = function() {
+			
+			console.log('CLEAR WAS CALLED ON DOWNLOAD MANAGER!');
+			
+			// First make sure we remove selection to update the UI.
+			items.forEach(function (item) {
+				item.selected = false;
+			});
+			
+			// Remove all items by clearing the array.
+			//items = [];
+			items.length = 0;
+			
+			// Update the count to zero.
+			state.count = 0;
+		
+		};
+		
+		// The manager will listen to the selection changed event and update accordingly.
+		$rootScope.$on('Event:SelectedItemChanged', function (event, data) {
+		
+			console.log('$on:Event:SelectedItemChanged', data);
+			
+			if (data.selected)
+			{
+				add(data.item);
+			}
+			else
+			{
+				remove(data.item);
+			}
+			
+			console.log('Currently Selected: ');
+			
+			var selectedCount = 0;
+			
+			items.forEach(function (item) {
+				console.log(item);
+				
+				if (item.count !== undefined)
+				{
+					selectedCount += item.count;
+				}
+				else
+				{
+					selectedCount += 1;
+				}
+				
+			});
+			
+			state.count = selectedCount;
+			
+		});
+		
+		return {
+			state: state,
+			items : items,
+			add : add,
+			remove: remove,
+			clear: clear,
+			license: license,
+			size: size
+		};
+		
+	}]);
 
 	
 	downloadr.factory('fileManager', function () {
 
-		var download = function (url, success, error) {
+		var download = function (url, success, error, metadata) {
 
 			console.log('File Manager Download: ', url);
 			
@@ -130,12 +221,12 @@
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						
-						console.log(xhr.response);
+						//console.log(xhr.response);
 						//window.console.log("response: "+xhr.response);
 						//callback(JSON.parse(xhr.response));
-						success(window.webkitURL.createObjectURL(xhr.response), url, xhr.response);
+						success(window.URL.createObjectURL(xhr.response), url, xhr.response, metadata);
 					} else {
-						error(xhr.statusText);
+						error(xhr.statusText, metadata);
 						console.error(xhr.statusText);
 					}
 				}
@@ -153,12 +244,16 @@
 			};
 			
 			xhr.onerror = function(){
+                
+                console.log(xhr.statusText);
+                
+                /*
 				console.error("error: "+xhr.statusText);
 				
 				if (error !== undefined)
 				{
 					error("error: "+xhr.statusText);
-				}
+				}*/
 				
 			}
 			
@@ -167,7 +262,7 @@
 
 		};
 		
-		var downloadAsText = function (url, success, error) {
+		var downloadAsText = function (url, success, error, metadata) {
 
 			console.log('File Manager Download: ', url);
 			
@@ -181,8 +276,7 @@
 						
 						console.log(xhr.response);
 						
-						
-						var uInt8Array = new Uint8Array(this.response);
+						var uInt8Array = new Uint8Array(xhr.response);
 						var i = uInt8Array.length;
 						var biStr = new Array(i);
 						while (i--)
@@ -191,14 +285,13 @@
 						var data = biStr.join('');
 						var base64 = window.btoa(data);
 						
-						success(base64, url);
+						success(base64, url, metadata);
 						
-						//window.console.log("response: "+xhr.response);
-						//callback(JSON.parse(xhr.response));
-						//success(window.webkitURL.createObjectURL(xhr.response), url, xhr.response);
 					} else {
-						error(xhr.statusText);
+						
 						console.error(xhr.statusText);
+						error(xhr.statusText, metadata);
+						
 					}
 				}
 				
@@ -389,7 +482,9 @@ var Base64 = {
 
 			if (runtime === 'chrome')
 			{
-				chrome.storage.sync.set({key: data}, callback);
+                var json = {};
+                json[key] = data;
+				chrome.storage.sync.set(json, callback);
 			}
 			else
 			{
@@ -492,6 +587,8 @@ var Base64 = {
 
 	downloadr.service('flickr', ['$rootScope', '$http', 'HOST', function ($rootScope, $http, HOST) {
 
+		var that = this;
+		
 		var token = '';
 		var secret = '';
 		var userId = '';
@@ -509,7 +606,7 @@ var Base64 = {
 		var parseToken = function (message) {
 			this.token = message.oauthToken;
 			this.secret = message.oauthTokenSecret;
-			this.userId = message.userNsId;
+			this.userId = message.userNsId.replace('%40', '@');
 			this.userName = message.userName;
 			this.fullName = message.fullName;
 		};
@@ -518,26 +615,33 @@ var Base64 = {
 			var message = {
 				method: method,
 				args: args,
-				token: token,
-				secret: secret
+				token: this.token,
+				secret: this.secret
 			};
 
 			return message;
 		};
 		
-		var signUrl = function(path, query, callback)
-		{
+		var signUrl = function(path, query, ok, fail) {
 			var url = HOST + path;
 			
 			// We'll support a specified callback or broadcast.
-			if (callback === undefined || callback === null)
+			if (ok === undefined || ok === null)
 			{
-				callback = onUrlSigned
+				ok = onUrlSigned
 			}
 			
-			$http.post(url, query).success(callback).error(onUrlSignedError);
-		}
+			var request = {
+				method: 'POST',
+				url: url,
+				data: query,
+				cache: true
+			};
+			
+			$http(request).success(ok).error(fail);
+		};
 		
+		/*
 		var onUrlSignedError = function(data, status, headers, config)
 		{
 			console.log('Unable to sign search request: ', status);
@@ -547,23 +651,217 @@ var Base64 = {
 			$rootScope.$broadcast('status', {
 				message: 'Service is unavailable. Please try again later. Code: ' + status
 			});
-		};
+		};*/
 		
+		/*
 		var onUrlSigned = function (message) {
 			$rootScope.$broadcast('flickr:urlsigned', {
 				message: message
 			});
-		};
+		};*/
 		
-		var query = function(message, ok, fail)
-		{
+		var queryService = function(message, ok, fail) {
 			var url = 'https://' + message.hostname + message.path;
 			
 			console.log('Query URL: ', url);
 			console.log('Query Data: ', message);
 			
 			$http.post(url).success(ok).error(fail);
-		}
+		};
+		
+		// If the search contains user id in query, we'll store it in this property for links generation and more.
+		var queryUserId = null;
+		
+		var signAndQuery = function(query, ok, fail) {
+			
+			
+			console.log('flickr: signAndQuery');
+			
+			// Construct the URL to sign queries.
+			var url = HOST + '/sign';
+			
+			var request = {
+				method: 'POST',
+				url: url,
+				data: query,
+				cache: true
+			};
+			
+			// Remember the user ID, if specified in the query.
+			queryUserId = (request.data.user_id !== undefined) ? request.data.user_id : null;
+			
+			$http(request).success(function(data,status,headers,config) {
+				
+				queryService(data, function(result) {
+									
+					console.log('queryService: ', result);
+					
+					// This method processes the results to make them unified for binding and other operations.
+					var items = [];
+					var container = null;
+					var itemType = '';
+					var userId = null;
+					
+					if (result.photos !== undefined)
+					{
+						container = result.photos;
+						items = result.photos.photo;
+						itemType = 'photo';
+					}
+					else if(result.photoset !== undefined) // When user have selected album for downloading, the query will return a single photoset.
+					{
+						container = result.photoset;
+						items = result.photoset.photo;
+						userId = result.photoset.owner;
+						itemType = 'photo';
+					}
+					else if(result.photosets !== undefined)
+					{
+						container = result.photosets;
+						items = result.photosets.photoset;
+						itemType = 'photoset';
+					}
+					else if(result.galleries !== undefined)
+					{
+						container = result.galleries;
+						items = result.galleries.gallery;
+						itemType = 'gallery';
+					}
+					else if (result.person !== undefined)
+					{
+						container = result.person;
+						items = result.person;
+						itemType = 'person';
+                        userId = result.person.id;
+                        
+                        container.page = 1;
+                        container.pages = 1;
+                        container.per_page = 1;
+                        container.total = 1;
+                        
+					}
+					else
+					{
+						throw new Exception('Unable to parse results.');
+					}
+					
+					
+					if (userId === null)
+					{
+						userId = container.user_id;
+					}
+					
+					
+					if (itemType !== 'person')
+					{
+						items.forEach(function (item) {
+
+							item.name = (item.title._content !== undefined) ? item.title._content : item.title;
+
+							if (itemType === 'photoset')
+							{
+								item.link = getUrl(itemType, item.primary_photo_extras.pathalias, item.id);
+								item.count = parseInt(item.photos);
+								item.url = item.primary_photo_extras.url_m;
+								item.can_download = 1;
+							}
+							else if (itemType === 'gallery')
+							{
+								var id = item.id.split('-')[1]; // For galleries, the format is "1484401-72157649041530344". We need last part for URL.
+								item.link = getUrl(itemType, item.owner, id);
+								item.count = parseInt(item.count_photos) + parseInt(item.count_videos);
+								item.url = item.primary_photo_extras.url_m;
+								item.can_download = 1;
+							}
+							else if (queryUserId !== null)
+							{
+								item.link = getUrl(itemType, queryUserId, item.id);
+								item.url = item.url_m;
+							}
+							else
+							{
+								item.link = getUrl(itemType, item.owner, item.id);
+								item.url = item.url_m;
+
+								// Favorites does not have can_download like photostream, so check license.
+								if (item.can_download === undefined)
+								{
+									item.can_download = item.license == '0' ? 0 : 1;
+								}
+								
+								console.log('$rootScope.state.userId: ', $rootScope.state.userId);
+								console.log('userId: ', userId);
+								
+								// If the owner is the same as logged on user, always allow download of self-owned photos.
+								if (userId !== null && $rootScope.state.userId === userId)
+								{
+									item.can_download = 1;
+								}
+							}
+
+							item.type = itemType;
+
+						});
+					}
+					
+					var queryResult = {
+					
+						ok: (result.stat === "ok"),
+						type: itemType,
+						page: parseInt(container.page),
+						pages: parseInt(container.pages),
+						perpage: (container.per_page !== undefined) ? parseInt(container.per_page) : parseInt(container.perpage), /* perpage for photos, per_page for galleries */
+						total: parseInt(container.total),
+						user_id: userId,
+						items: items
+						
+					};
+					
+					ok(queryResult);
+				
+				}, function(data, status, headers, config) {
+					
+					console.log('Status: ', status);
+					
+					fail(); });
+			
+			}).error(fail);
+		};
+		
+		var getUrl = function(type, userId, id) {
+			switch(type)
+			{
+				case 'photostream':
+					return 'https://www.flickr.com/photos/' + userId + '/';
+				case 'profile':
+					return 'https://www.flickr.com/people/' + userId + '/';
+				case 'photo':
+					return 'https://www.flickr.com/photos/' + userId + '/' + id + '';
+				case 'photosets':
+					return 'https://www.flickr.com/photos/' + userId + '/sets/';
+				case 'photoset':
+					return 'https://www.flickr.com/photos/' + userId + '/sets/' + id + '';
+				case 'gallery':
+					return 'https://www.flickr.com/photos/' + userId + '/galleries/' + id + '/';
+			}
+		};
+		
+		// Generates URL for different photo sizes.
+		// Size: [mstzbo]
+		var getPhotoUrl = function(size, photo) {
+			if (size === null)
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg';
+			}
+			else if (size === 'o')
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.originalsecret + '_o.' + photo.originalformat + '';
+			}
+			else
+			{
+				return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_' + size + '.jpg';
+			}
+		};
 
 		return {
 			parseToken: parseToken,
@@ -572,7 +870,9 @@ var Base64 = {
 			userId: userId,
 			userName: userName,
 			signUrl: signUrl,
-			query: query
+			getUrl: getUrl,
+			getPhotoUrl: getPhotoUrl,
+			query: signAndQuery
 		};
 
 	}]);

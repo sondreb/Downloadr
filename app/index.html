@@ -9,6 +9,8 @@
 	<!-- build:css styles/libraries.css -->
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css" />
+	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.min.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -17,7 +19,7 @@
 	<link rel="stylesheet" href="styles/app.css">
 	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
 	<link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
-	<link rel="stylesheet" href="bower_components/mdi/materialdesignicons.css">
+	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css">
 	<!-- endbuild -->
 
 </head>
@@ -98,17 +100,21 @@
 
 		</div>
 		
-		
+        
 		<!-- We override the padding here to avoid dynamic resize of the toolbar. -->
 		<div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
 			<div class="toolbar__left mr">
 				<button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
 					<i class="mdi mdi-menu"></i>
 				</button>
+                
 			</div>
 
 			<span class="toolbar__label fs-title"><a href="#/" class="logo">
 					<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
+                
+                
+                
 				</a></span>
 
 			<div class="toolbar__right" ng-hide="$location.path() == '/'">
@@ -146,19 +152,19 @@
 		
 			<md-toolbar class="bgc-light-blue-500">
 
-			<md-button aria-label="Hide menu" class="close-button" ng-click="closeMenu()" class="md-button">
+			<md-button aria-label="Hide menu" class="menu-button close-button" ng-click="closeMenu()" class="md-button">
 				<icon icon="ic_keyboard_backspace_24px"></icon>
 			</md-button>
 
-			<md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">
+			<md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="#/profile">
 				<img ng-src="{{state.buddyIcon}}" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
-				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
+				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px; font-size: 0.6em;">{{state.userName}}</div>
+				<!--<a href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">...</a>-->
 			</md-button>
 					
 			</md-toolbar>
 
 	<md-divider></md-divider>
-		
 		
 		<md-button class="menu-button" href="#/">
 			<icon icon="ic_home_24px"></icon>
@@ -175,6 +181,7 @@
 			Settings
 		</md-button>
 		
+        
 		<md-button class="menu-button" href="#/login" ng-show="state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
 				</md-button>
@@ -198,7 +205,6 @@
 
 	<div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
 		
-		
 		<div layout="row" layout-align="end" nav-menu="selected">
 		
 			<!--
@@ -207,7 +213,7 @@
 			-->
 			<div flex></div>
 			
-			<div ng-show="showSorting()">
+			<div ng-show="state.showLicenses">
 
 			 <div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="License" tooltip-position="left">
@@ -215,11 +221,11 @@
 					</button>
 
 					<div class="fab__actions fab__actions--up">
-						<button ng-if="state.debug" ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
-						--><button ng-if="state.debug" ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/share.png"></button><!--
+						<button ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Any license" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button><!--
+						--><!--<button ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button>--><!--
 						--><button ng-class="licenseClass('1,2,3,4,5,6,7,8')" ng-click="selectLicense('1,2,3,4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (All)" tooltip-position="right"><img class="cc-icon" src="images/cc.png"></button><!--
-						--><button ng-class="licenseClass('4,5,6,7,8')" ng-click="selectLicense('4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Commercial Use Allowed" tooltip-position="right"><img class="cc-icon" src="images/by.png"><!--
-						--><button  ng-class="licenseClass('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>
+						--><button ng-class="licenseClass('4,5,6,7,8')" ng-click="selectLicense('4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (Commercial use)" tooltip-position="right"><img class="cc-icon" src="images/commercial.png"><!--
+						--><!--<button  ng-class="licenseClass('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>-->
 					</div>
 				</div>
 				
@@ -254,7 +260,7 @@
 				
 			</div>
 
-			<div ng-show="showSorting()" style="margin-left: 10px;">
+			<div ng-show="state.showSorting" style="margin-left: 10px;">
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">
@@ -288,18 +294,17 @@
 			</div>-->
 
 			<!-- For user simplicity, we will hide most of the size options. -->
-			<div ng-show="state.actionTarget != 'folder'" style="margin-right: 10px;">
+			<div ng-show="state.showSizes" style="margin-right: 10px;">
 				
 			<!--
 				Icons for future use: md-view-headline, md-view-list, md-view-module
 				md-open-in-browser
-md-clear
-md-sort
-md-file-download
-md-check
-md-close
-
-				-->
+				md-clear
+				md-sort
+				md-file-download
+				md-check
+				md-close
+			-->
 				
 				<div class="fab">
 					<button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Size" tooltip-position="left">
@@ -307,12 +312,11 @@ md-close
 					</button>
 
 					<div class="fab__actions fab__actions--up">
-						
 						<button ng-class="sizeClass('o')" ng-click="selectSize('o')" class="btn btn--l btn--raised" lx-ripple>Original</button><!--
---><button ng-class="sizeClass('b')" ng-click="selectSize('b')" class="btn btn--l btn--raised" lx-ripple>Large</button><!--
-						--><button  ng-class="sizeClass('z')" ng-click="selectSize('z')" class="btn btn--l btn--raised" lx-ripple>Medium</button><!--
-						--><button  ng-class="sizeClass('n')" ng-click="selectSize('n')" class="btn btn--l btn--raised" lx-ripple>Small</button><!--
-						--><button  ng-class="sizeClass('q')" ng-click="selectSize('q')" class="btn btn--l btn--raised" lx-ripple>Square</button>
+						--><button ng-class="sizeClass('l')" ng-click="selectSize('l')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="1024x768" tooltip-position="left">Large</button><!--
+						--><button  ng-class="sizeClass('z')" ng-click="selectSize('z')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="640x480" tooltip-position="left">Medium</button><!--
+						--><button  ng-class="sizeClass('n')" ng-click="selectSize('n')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="320x240" tooltip-position="left">Small</button><!--
+						--><button  ng-class="sizeClass('q')" ng-click="selectSize('q')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="150x150" tooltip-position="left">Square</button>
 					</div>
 				</div>
 				<!--
@@ -333,20 +337,25 @@ md-close
 					<option ng-if="state.debug" value="s">Square (75x75)</option>
 				</select>-->
 			</div>
-
-			<div class="counter" ng-show="state.actionTarget == 'folder' && count">
-				{{count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
+			
+			<!--
+			<div class="counter" ng-show="state.actionTarget == 'folder' && managerState.count">
+				{{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
+			</div>-->
+			
+			<div class="counter" ng-show="state.showCounter && managerState.count > 0">
+				{{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
 			</div>
 
-			<div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-hide="count">
+			<div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-show="state.showCounter && managerState.count == 0">
 				{{total}}<a href="" class="counter-total"><i class="fa fa-check"></i></a>
 			</div>
-
+			
 			<!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
-			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length > 0">
+			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && managerState.count > 0">
 				<button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
 			</div>
-			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && state.selectedPhotos.length == 0">
+			<div class="not-responsive" ng-show="state.actionTarget == 'folder' && managerState.count == 0">
 				<button ng-click="navigate('/folder')" disabled style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
 			</div>
 			<div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''">
@@ -383,6 +392,7 @@ md-close
 	<script src="bower_components/velocity/velocity.js"></script>
 	<script src="bower_components/velocity/velocity.ui.js"></script>
 	<script src="bower_components/moment/moment.js"></script>
+	<script src="bower_components/angularjs/angular.js"></script>
 	<script src="bower_components/lumx/dist/lumx.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->

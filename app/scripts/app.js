@@ -45,7 +45,7 @@ window.console = console;
 	}
 	else
 	{
-		downloadr.value('version', '3.0.103');
+		downloadr.value('version', '3.0.104');
 		downloadr.value('runtime', 'firefox');
 	}
 	
@@ -65,6 +65,14 @@ window.console = console;
 				background: 'wallpaper',
 
 				showActions: false,
+				
+				showLicenses: true,
+				
+				showSorting: true,
+				
+				showSizes: false,
+				
+				showCounter: true,
 
 				actionTarget: 'folder',
 
@@ -129,7 +137,7 @@ window.console = console;
 				
 				// This ensures any data loaded in the async loading handlers is
 				// updated in the UI.
-				$rootScope.$apply();
+				//$rootScope.$apply();
 				
 				if (loadingStatus.runtime === true)
 				{
@@ -199,43 +207,43 @@ window.console = console;
 				{
 					id: '1',
 					title: 'Attribution-NonCommercial-ShareAlike License',
-					extension: 'CC-BY-NC',
+					extension: 'BY-NC',
 					font: 'c b n'
 				},
 				{
 					id: '2',
 					title: 'Attribution-NonCommercial License',
-					extension: 'CC-BY-NC-SA',
+					extension: 'BY-NC-SA',
 					font: 'c b n a'
 				},
 				{
 					id: '3',
 					title: 'Attribution-NonCommercial-NoDerivs License',
-					extension: 'CC-BY-NC-ND',
+					extension: 'BY-NC-ND',
 					font: 'c b n d'
 				},
 				{
 					id: '4',
 					title: 'Attribution License',
-					extension: 'CC-BY',
+					extension: 'BY',
 					font: 'c b'
 				},
 				{
 					id: '5',
 					title: 'Attribution-ShareAlike License',
-					extension: 'CC-BY-SA',
+					extension: 'BY-SA',
 					font: 'c b a'
 				},
 				{
 					id: '6',
 					title: 'Attribution-NoDerivs License',
-					extension: 'CC-BY-ND',
+					extension: 'BY-ND',
 					font: 'c b d'
 				},
 				{
 					id: '7',
 					title: 'No known copyright restrictions',
-					extension: '',
+					extension: 'NONE',
 					font: ''
 				},
 				{
@@ -258,13 +266,13 @@ window.console = console;
 				$rootScope.state.focused = true;
 				
 				// Do we need apply here?
-				$rootScope.$apply();
+				//$rootScope.$apply();
 				
 			}).blur(function() {
 				$rootScope.state.focused = false;
 				
 				// Do we need apply here?
-				$rootScope.$apply();
+				//$rootScope.$apply();
 			});
 			
 			$rootScope.navigate = function(path)
@@ -405,7 +413,7 @@ window.console = console;
 
 				console.log('Logout Initialized...');
 				
-				storage.set('token', null, function () {
+				storage.remove('token', function () {
 					// Notify that we saved.
 					console.log('Token removed');
 				});
@@ -419,7 +427,6 @@ window.console = console;
 				// Make sure we get a new login url.
 				//socket.emit('getUrl');
 			});
-
 			
 			if (runtime === 'chrome')
 			{
@@ -544,28 +551,24 @@ window.console = console;
 			{
 				// The username returned from service is url encoded, so we'll need to convert.
 				var query = flickr.createMessage('flickr.people.getInfo', {
-					user_id: flickr.userId.replace('%40', '@')
+					user_id: flickr.userId
 				});
 				
-				flickr.signUrl('/sign/url', query, function(message) { 
-
-					flickr.query(message, function(data) {
-
-						console.log(data);
-
-						if (data.stat === 'ok')
-						{
-							var buddyUrl = 'http://farm' + data.person.iconfarm + '.staticflickr.com/' + data.person.iconserver + '/buddyicons/' + data.person.nsid + '.jpg'
-							fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
-						}
-						else
-						{
-							console.log('Failed: ', data.message);
-						}
-
-					}, function() { console.log('Failed to query userInfo.') });
-
-				});
+				flickr.query(query, function(data) {
+					
+					if (data.ok)
+					{
+						var person = data.items;
+						var buddyUrl = 'http://farm' + person.iconfarm + '.staticflickr.com/' + person.iconserver + '/buddyicons/' + person.nsid + '.jpg'
+						fileManager.downloadAsText(buddyUrl, $rootScope.downloadedBuddyIcon);
+					}
+					else
+					{
+						console.log('Failed: ', data.message);
+					}
+					
+				}, function() { console.log('Failed to query userInfo.') });
+				
 			};
 			
 			
@@ -623,7 +626,7 @@ window.console = console;
 	downloadr.config(['$routeProvider', '$mdThemingProvider',
 		function ($routeProvider, $mdThemingProvider)
 		{
-			 $mdThemingProvider.theme('cyan');
+			 $mdThemingProvider.theme('cyan').primaryPalette('cyan');
 			
 			$routeProvider.when('/', {
 				templateUrl: '/views/home.html',
@@ -641,6 +644,10 @@ window.console = console;
 				templateUrl: '/views/logout.html',
 				controller: 'LogoutController'
 			});
+			$routeProvider.when('/profile/:userId?', {
+				templateUrl: '/views/profile.html',
+				controller: 'ProfileController'
+			});
 			$routeProvider.when('/search', {
 				templateUrl: '/views/search.html',
 				controller: 'SearchController'
@@ -648,10 +655,6 @@ window.console = console;
 			$routeProvider.when('/settings', {
 				templateUrl: '/views/settings.html',
 				controller: 'SettingsController'
-			});
-			$routeProvider.when('/profile', {
-				templateUrl: '/views/profile.html',
-				controller: 'ProfileController'
 			});
 			$routeProvider.when('/folder', {
 				templateUrl: '/views/folder.html',

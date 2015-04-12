@@ -1,9 +1,56 @@
-<div class="content padding">
-	<h2>Profile</h2>
+<md-content md-theme="cyan" class="content">
 
-	<p>
-		...
+  <div  flex class="accent-500 bgc-light-blue-500" flex layout="row">
+  	  <img style="height: 64px; width: 64px;" image="{{buddyIcon}}">
+	  
+	  <div layout="column" style="margin-left: 10px;">
+		  <div style="font-size: 1.4em; font-weight: bold;">{{name}}</div>
+		  <div style="font-size: 1.1em;">{{username}}</div>
+	  </div>
+	  
+  </div>
 
-	</p>
+  <lx-tabs links-tc="light" active-tab="activeTab" links-bgc="light-blue-500" indicator="white">
+		<lx-tab heading="Photostream">
+			<gallery query="queryPhotos"></gallery>
+		</lx-tab>
 
-</div>
+		<lx-tab heading="Albums">
+			<gallery query="queryAlbums"></gallery>
+		</lx-tab>
+
+		<lx-tab heading="Favorites">
+			<gallery query="queryFavorites"></gallery>
+		</lx-tab>
+
+		<lx-tab heading="Galleries">
+			<gallery query="queryGalleries"></gallery>
+		</lx-tab>
+
+		<lx-tab heading="Profile">
+
+			<div style="margin-left: 30px; margin-right: 30px; margin-top: 8px; margin-bottom: 8px;" layout="row" layout-margin>
+
+				<div flex="33"><img image="{{buddyIconLarge}}"></div>
+				<div flex="66">
+
+					<h1>{{name}}</h1>
+
+					<div layout="row" layout-wrap ng-repeat="element in profile">
+						<div style="width: 120px;"><strong>{{element.key}}:</strong></div>
+						<div flex ng-if="element.isLink === true">
+							<a href="{{element.value}}" target="_blank">{{element.value}}</a>
+						</div>
+						<div flex ng-if="element.isLink !== true">
+							{{element.value}}
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</lx-tab>
+
+	</lx-tabs>
+</md-content>
