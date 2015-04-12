@@ -345,7 +345,11 @@
 					var proAccount = (person.ispro === 1) ? 'true' : 'false';
 					list.push({ key: 'Pro Account', value: proAccount });
 
-					list.push({ key: 'Timezone', value: person.timezone.label });
+                    if (person.timezone !== undefined)
+                    {
+                        list.push({ key: 'Timezone', value: person.timezone.label });
+                    }
+					
 					list.push({ key: 'Description', value: person.description._content });
 				}
 				else
@@ -473,8 +477,8 @@
 
     }]);
 
-	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'HOST', '$http',
-		function ($scope, $rootScope, $location, HOST, $http) {
+	controllers.controller('LoginController', ['$scope', '$rootScope', '$location', 'HOST', '$http', '$timeout',
+		function ($scope, $rootScope, $location, HOST, $http, $timeout) {
 
 			// Was unable to bind to the src attribute, so have to use DOM.
 			var webview = document.querySelector('webview');
@@ -537,10 +541,10 @@
 
 					console.log('oauth_token: ', oauth_token);
 					console.log('oauth_verifier: ', oauth_verifier);
-
-					$scope.$apply(function () {
-
-						$rootScope.authenticated(oauth_token, oauth_verifier);
+                    
+                    $timeout(function() {
+                    
+                        $rootScope.authenticated(oauth_token, oauth_verifier);
 						
 						// Notify the server so we can transform this token into
 						// a proper access token the user can store permanently.
@@ -553,8 +557,9 @@
 
 						// Navigate to home.
 						$location.path('/#');
-					});
-
+                        
+                    }, 0);
+                   
 				}
 
 				console.log('webview loaded: ' + webview.src);
@@ -636,15 +641,11 @@
 			$rootScope.state.actionTarget = 'folder';
 			$rootScope.state.showLicenses = true;
 			$rootScope.state.showSorting = true;
+            $rootScope.state.showSizes = false;
+            $rootScope.state.showCounter = true;
 			
-			//$scope.photos = [];
-			//$scope.sizes = ['o', 'b', 'c', 'z', '-', 'n', 'm', 't', 'q', 's'];
-			//$scope.sizes = ['o', 'l', 'z', 'n', 'sq'];
-			
-			//$scope.total = 0;
-			//$scope.page = 1;
-			//$scope.showLoadMore = true;
 			$scope.searchStatus = '';
+            $scope.currentUserId = '';
 			
 			$scope.$on('$destroy', function (event) {
 
@@ -694,149 +695,19 @@
 				}
 			};
 			
-			/*
-			$scope.onSearchEvent = $rootScope.$on('Event:Search', function (event, data) {
-
-				console.log('User did a new search...');
-				$rootScope.state.searchText = data.value;
-
-				if (data.clear === true) {
-					$scope.clearPhotos();
-				}
-
-				$scope.performSearch($rootScope.state.searchText);
-
-			});
-
-			$scope.onFilterEvent = $rootScope.$on('Event:Filter', function (event) {
-
-				$scope.clearPhotos();
-
-				console.log('User changed filter...');
-				$scope.performSearch($rootScope.state.searchText);
-
-			});
-
-			$scope.onPagingEvent = $rootScope.$on('Event:Paging', function (event) {
-
-				console.log('User changed paging...');
-				$scope.performSearch($rootScope.state.searchText);
-
-			});
-
-			$scope.loadMore = function () {
-				$rootScope.$broadcast('Event:Paging');
-			}
-			*/
-
-			/*
-			$scope.loadImage = function (item, callback) {
-
-				var xhr = new XMLHttpRequest();
-				xhr.responseType = 'blob';
-
-				xhr.onload = function () {
-					callback(window.URL.createObjectURL(xhr.response), item);
-				};
-
-				xhr.open('GET', item.uri, true);
-				xhr.send();
-
-			};*/
-
 			$scope.showMenu = function (photo) {
 				var url = 'https://www.flickr.com/photos/' + photo.owner + '/' + photo.id;
 				console.log('Open: ', url);
 				window.open(url);
 			};
 
-			// Event handler when user selects a photo. Same event for click on existing selected or new photo.
-			/*$scope.selectPhoto = function (photo) {
-
-				if (photo.selected === true) {
-					photo.selected = false;
-
-					$rootScope.state.selectedPhotos = _.without($rootScope.state.selectedPhotos, photo);
-
-				} else {
-					photo.selected = true;
-					$rootScope.state.selectedPhotos.push(photo);
-				}
-
-				$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-					photos: $rootScope.state.selectedPhotos
-				});
-
-				console.log('Select photo: ', photo);
-			};*/
-
-			// for each image with no imageUrl, start a new loader
-			/*$scope.loadImages = function () {
-
-				var photos = $scope.photos;
-
-				console.log('PHOTOS!!!: ', photos);
-
-				for (var i = 0; i < photos.length; i++) {
-
-					var item = photos[i];
-
-					// Skip all photos already downloaded.
-					if (item.url !== undefined) {
-						continue;
-					}
-
-					item.uri = item.getUrl('m');
-
-					// We are about to download the last photo, we can prepare for next search (scrolling).
-					if (i === (photos.length - 1)) {
-						console.log('i == photos.length!');
-						$scope.page = $scope.page + 1;
-					}
-
-					$scope.loadImage(item, function (blob_uri, originalItem) {
-
-						$timeout(function () {
-
-							console.log('BLOB: ', blob_uri);
-							originalItem.url = blob_uri;
-
-						}, 0);
-
-					});
-
-				}
-			};/*
-			
 			$scope.performSearchByUserId = function()
 			{
 				console.log('performSearchByUserId!!!!!!!!!!!');
-				
-				//$location.path('/Profile/' + $scope.currentUserId);
-				//$location.path('');
-				
 				var url = '/profile/' + $scope.currentUserId;
 				console.log('URL: ', url);
 				$location.path(url);
-				
-				// Get a prepared message that includes token.
-				// Until we know exactly what metadata we need, we'll ask for all extras.
-				/*
-				var query = flickr.createMessage('flickr.people.getPhotos', {
-					user_id: $scope.currentUserId,
-					safe_search: settings.values.safe,
-					sort: settings.values.sort,
-					per_page: '15',
-					page: '' + $scope.page + '',
-					extras: 'usage, description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o'
-				});
-				
-				console.log('Sign URL message: ', query);
-				var url = HOST + '/search';
-				$http.post(url, query).success($scope.onUrlSigned).error($scope.onUrlSignedError);
-			}*/
-			
-			$scope.currentUserId = '';
+			}
 			
 			$scope.onUserSearch = function(message)
 			{
@@ -881,172 +752,6 @@
 				
 			}
 
-			/*
-			$scope.onUrlSigned = function (message) {
-
-				console.log('Message Received: ', message);
-				
-				$scope.showLoadMore = true;
-				$scope.searchStatus = '';
-				
-				var url = 'https://' + message.hostname + message.path;
-
-				$http.post(url).success(function (data, status, headers, config) {
-					// this callback will be called asynchronously
-					// when the response is available
-					console.log('Service results: ', data);
-					console.log('Service HTTP status: ', status);
-
-					var list = data.photos.photo;
-					$scope.total = data.photos.total;
-
-					if ($scope.total === '0')
-					{
-						$scope.showLoadMore = false;
-						$scope.searchStatus = 'Found 0 photos.';
-					}
-					
-					$rootScope.$broadcast('status', {
-						message: 'Found ' + $scope.total + ' photos.'
-					});
-					
-					var paging = data.photos.page > 1;
-
-					// If we are paging, we should not delete the existing photos.
-					if (!paging) {
-						$rootScope.$broadcast('Event:SelectedPhotosChanged', {
-							total: $scope.total,
-							photos: $rootScope.state.selectedPhotos
-						});
-					}
-
-					// Could we perhaps use prototype instead of this silly loop?
-					for (var i = 0; i < list.length; i++) {
-						var item = list[i];
-						//item.url = 'img/loading.gif';
-						item.selected = false;
-						
-						item.type = 'photo';
-
-						// Returns the highest available image URL for the selected
-						// size. Depending on the original photo, not all sizes are
-						// available so this function will search for the largest.
-						item.getUrl = function (photoSize) {
-
-							// If the specified size exists, return that.
-							if (this['url_' + photoSize] !== undefined) {
-								return this['url_' + photoSize];
-							}
-
-							console.log('Find index of ' + photoSize + ' in sizes: ', $scope.sizes);
-
-							var startIndex = $scope.sizes.indexOf(photoSize);
-
-							console.log('Start Index: ', startIndex);
-
-							// Search for the nearest correct size.
-							for (var i = (startIndex + 1); i < $scope.sizes.length; i++) {
-
-								console.log('SEARCHING SIZE: ', $scope.sizes[i]);
-
-								if (this['url_' + $scope.sizes[i]] !== undefined) {
-									return this['url_' + $scope.sizes[i]];
-								}
-							}
-
-							throw new Error('Unable to find photo URL for the specified size');
-
-						};
-						
-						item.getLicenseName = function(license) {
-						
-							for(var i = 0; i < $rootScope.licenses.length; i++)
-							{
-							  if($rootScope.licenses[i].id == license)
-							  {
-								return $rootScope.licenses[i].extension;
-							  }
-							}
-							
-							return '';
-						};
-						
-						item.getFileName = function (photoSize) {
-							
-							var url = this.getUrl(photoSize);
-							var fileName = url.replace(/^.*[\\\/]/, '');
-							
-							var newFileName = fileName.substring(0, fileName.lastIndexOf('.'));
-							var newFileNameExt = fileName.substring(fileName.lastIndexOf('.'));
-							var newFullName = newFileName + '_' + item.getLicenseName(item.license).toLowerCase() + newFileNameExt;
-							
-							console.log(this);
-							console.log(item);
-							
-							return newFullName;
-						};
-					}
-
-					if (!paging) {
-						$scope.clearPhotos();
-
-						// Bind to the UI.
-						$scope.photos = list;
-					} else {
-						// Append new photos to existing list.
-						$scope.photos = $scope.photos.concat(list);
-					}
-
-					// Begin download the thumbnails.
-					$scope.loadImages();
-				}).
-				error(function (data, status, headers, config) {
-					// called asynchronously if an error occurs
-					// or server returns response with an error status.
-					console.log(data);
-					console.log('HTTP Status: ', status);
-				});
-
-			};
-			*/
-
-			// Register handler for callbacks of signing URLs.
-			//socket.on('urlSigned', $scope.onUrlSigned);
-
-			/*
-			$scope.clearPhotos = function () {
-				// Remove existing downloaded photos to avoid memory leak.
-				$scope.clearObjectURLs();
-
-				// Bind to the UI.
-				//$scope.photos = [];
-				
-				$scope.page = 1;
-			}*/
-
-			// Clears up all the blob files that was previously downloaded. For future
-			// informational reference, the blob-links under "Resources" in the Developer Tools
-			// does still list the old blobs, but their binary content is actually deleted.
-			//
-			// This task is important to avoid memory leak.
-			//
-			// TODO: Create a cleanup method on this controller and make sure it's called when needed.
-			/*
-			$scope.clearObjectURLs = function () {
-				if ($scope.photos) {
-
-					$scope.photos.forEach(function (photo) {
-
-						if (photo.url !== undefined) {
-							console.log('Disposing: ', photo.url);
-							//URL.revokeObjectURL(photo.url);
-						}
-					});
-
-					$scope.photos = [];
-				}
-			};*/
-			
 			$scope.performSearch = function (searchTerm) {
 				
 				var message;
@@ -1111,7 +816,6 @@
 					message: 'Service is unavailable. Please try again later. Code: ' + status
 				});
 			};
-			
 			
 			$scope.init = function () {
 
@@ -2008,8 +1712,8 @@
 		}]);
 
 
-	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav',
-		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav) {
+	controllers.controller('ScreenController', ['$rootScope', '$scope', '$http', '$timeout', 'flickr', 'util', '$log', '$location', 'settings', '$mdSidenav', 'storage',
+		function ($rootScope, $scope, $http, $timeout, flickr, util, $log, $location, settings, $mdSidenav, storage) {
 
 			$scope.$on('Event:NavigateBack', function () {
 				$scope.goBack();
@@ -2018,7 +1722,7 @@
 			$scope.expandMenu = function () {
 				$mdSidenav('left').toggle();
 			};
-			
+            
 			$scope.searchType = function(type){
 				// Check for undefined, to support older app versions.
 				if (settings.values.type === undefined || settings.values.type === type) {

@@ -100,17 +100,21 @@
 
 		</div>
 		
-		
+        
 		<!-- We override the padding here to avoid dynamic resize of the toolbar. -->
 		<div class="toolbar bgc-light-blue-500 window-frame" style="height: 64px !important; padding-top: 12px !important; padding-bottom: 12px !important;">
 			<div class="toolbar__left mr">
 				<button ng-click="expandMenu()" class="btn btn--l btn--white btn--icon" lx-ripple>
 					<i class="mdi mdi-menu"></i>
 				</button>
+                
 			</div>
 
 			<span class="toolbar__label fs-title"><a href="#/" class="logo">
 					<img width="100%" style="max-width: 260px;" src="images/downloadr.png">
+                
+                
+                
 				</a></span>
 
 			<div class="toolbar__right" ng-hide="$location.path() == '/'">
@@ -148,20 +152,19 @@
 		
 			<md-toolbar class="bgc-light-blue-500">
 
-			<md-button aria-label="Hide menu" class="close-button" ng-click="closeMenu()" class="md-button">
+			<md-button aria-label="Hide menu" class="menu-button close-button" ng-click="closeMenu()" class="md-button">
 				<icon icon="ic_keyboard_backspace_24px"></icon>
 			</md-button>
 
 			<md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="#/profile">
 				<img ng-src="{{state.buddyIcon}}" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
-				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px;">{{state.userName}}</div>
+				<div style="line-height: 24px; height: 24px; float: left; margin-left: 6px; font-size: 0.6em;">{{state.userName}}</div>
 				<!--<a href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">...</a>-->
 			</md-button>
 					
 			</md-toolbar>
 
 	<md-divider></md-divider>
-		
 		
 		<md-button class="menu-button" href="#/">
 			<icon icon="ic_home_24px"></icon>
@@ -178,6 +181,7 @@
 			Settings
 		</md-button>
 		
+        
 		<md-button class="menu-button" href="#/login" ng-show="state.isAnonymous">
 					<i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
 				</md-button>

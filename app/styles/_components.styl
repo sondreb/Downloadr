@@ -272,7 +272,11 @@ strong.bigger {
 }*/
 
 .menu-button {
+    font-size: 1.1em !important;
 	text-align: left !important;
+    line-height: 2rem !important;
+    margin: 2 0 2 10 !important;
+    padding: 3 3 3 3 !important;
 	padding-left: 32px;
 	display: inline-block;
 	color: $accent-800;
@@ -281,6 +285,14 @@ strong.bigger {
 	margin-left: -28px;
 	margin-top: -60px;
 }
+
+.menu-button.icon {
+
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+    
+}
+
 .menu-button span {
 	/*margin-top: -30px;*/
 }
@@ -294,6 +306,12 @@ strong.bigger {
 .menu-button:visited {
 	color: $accent-800;
 }
+
+.close-button {
+    text-align: center !important;
+}
+
+
 .footer.row {
 	height: 18px;
 	bottom: 0;
@@ -528,13 +546,21 @@ strong.bigger {
 .container
 {
 	padding: 16px 10px 16px 16px;
+    min-height: 200px;
+    
 }
+
+.search-container {
+
+   
+
+}
+
 .search-container h1 {
-	font-size: 1.1em;
-	width: 260px;
+	font-size: 2em;
 	clear: both;
 	display: inline-block;
-	font-size: 2em;
+	/*font-size: 2em;*/
 	color: white;
 	text-shadow: 2px 2px rgba(0, 0, 0, 0.50);
 	margin: 0 !important;
@@ -550,13 +576,15 @@ strong.bigger {
 {
 	text-align: center;
 }
+/*
 .center {
 	position: fixed;
 	top: 50%;
 	left: 50%;
 	margin-top: -100px !important;
 	margin-left: -150px;
-}
+}*/
+
 .app-icon {
 	float: left;
 	margin-right: 20px;
@@ -738,10 +766,11 @@ strong.bigger {
 	margin-top: 0px;
 	margin-left: 10px;
 }
+
 .menu {
 	top: 88px !important;
 	width: 100px !important;
-	text-align: left;
+	/*text-align: left;*/
 }
 
 .menu a {
@@ -750,10 +779,12 @@ strong.bigger {
 	border-radius: 0px !important;
 }
 .menu a:hover {
+    
 	color: black;
 }
 .menu button
 {
+    
 	border-radius: 0px !important;
 }
 
@@ -808,7 +839,7 @@ strong.bigger {
 }
 
 .footer {
-	font-size: 0.7em;
+	font-size: 0.8em;
 	padding-left: 4px;
 	color: white;
 	background-color: $accent-500;

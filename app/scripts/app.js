@@ -7,9 +7,9 @@
 'use strict';
 
 // Remove logging for production use.
-//var console = {};
-//console.log = function(){};
-//window.console = console;
+var console = {};
+console.log = function(){};
+window.console = console;
 
 (function () {
 
@@ -45,13 +45,13 @@
 	}
 	else
 	{
-		downloadr.value('version', '3.0.103');
+		downloadr.value('version', '3.0.104');
 		downloadr.value('runtime', 'firefox');
 	}
 	
 	downloadr.value('author', 'Sondre Bjellås');
-	//downloadr.value('HOST', 'http://flickr-downloadr.com');
-	downloadr.value('HOST', 'http://localhost:3000');
+	downloadr.value('HOST', 'http://flickr-downloadr.com');
+	//downloadr.value('HOST', 'http://localhost:3000');
 	
 	downloadr.run(['$rootScope', '$location', 'flickr', 'settings', 'notify', '$mdSidenav', '$http', 'HOST', 'runtime', 'fileManager', 'storage',
 		function ($rootScope, $location, flickr, settings, notify, $mdSidenav, $http, HOST, runtime, fileManager, storage) {
@@ -137,7 +137,7 @@
 				
 				// This ensures any data loaded in the async loading handlers is
 				// updated in the UI.
-				$rootScope.$apply();
+				//$rootScope.$apply();
 				
 				if (loadingStatus.runtime === true)
 				{
@@ -266,13 +266,13 @@
 				$rootScope.state.focused = true;
 				
 				// Do we need apply here?
-				$rootScope.$apply();
+				//$rootScope.$apply();
 				
 			}).blur(function() {
 				$rootScope.state.focused = false;
 				
 				// Do we need apply here?
-				$rootScope.$apply();
+				//$rootScope.$apply();
 			});
 			
 			$rootScope.navigate = function(path)

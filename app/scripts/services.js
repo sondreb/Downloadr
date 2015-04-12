@@ -20,11 +20,9 @@
 				
 				if (runtime === 'chrome')
 				{
-					
-					//storage.get('settings', function (result) {
 					chrome.storage.sync.get('settings', function (result) {
 
-						if (result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
+						if (result === undefined || result === null || result.settings === undefined || result.settings === null || Object.keys(result.settings).length === 0) // Checks null and undefined
 						{
 							return;
 						}
@@ -50,14 +48,14 @@
 
 						console.log('Settings loaded: ', values);
 						
-						$rootScope.$apply();
+						//$rootScope.$apply();
 
 						$rootScope.$broadcast('Settings:Loaded', values);
 
 					});
 				}
 			};
-
+            
 			var save = function () {
 				//storage.set('settings', values, function () {
 				chrome.storage.sync.set({
@@ -246,12 +244,16 @@
 			};
 			
 			xhr.onerror = function(){
+                
+                console.log(xhr.statusText);
+                
+                /*
 				console.error("error: "+xhr.statusText);
 				
 				if (error !== undefined)
 				{
 					error("error: "+xhr.statusText);
-				}
+				}*/
 				
 			}
 			
@@ -480,7 +482,9 @@ var Base64 = {
 
 			if (runtime === 'chrome')
 			{
-				chrome.storage.sync.set({key: data}, callback);
+                var json = {};
+                json[key] = data;
+				chrome.storage.sync.set(json, callback);
 			}
 			else
 			{
@@ -728,6 +732,13 @@ var Base64 = {
 						container = result.person;
 						items = result.person;
 						itemType = 'person';
+                        userId = result.person.id;
+                        
+                        container.page = 1;
+                        container.pages = 1;
+                        container.per_page = 1;
+                        container.total = 1;
+                        
 					}
 					else
 					{
