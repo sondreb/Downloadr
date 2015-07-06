@@ -512,7 +512,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-stylus');
 	grunt.loadNpmTasks('grunt-svgstore');
 	grunt.loadNpmTasks('grunt-wiredep');
-	grunt.loadNpmTasks('grunt-angular-architecture-graph');
 
 	grunt.registerTask('debug', function (platform) {
 

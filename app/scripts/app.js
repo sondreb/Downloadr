@@ -6,10 +6,68 @@
 
 'use strict';
 
+
+(function () {
+
+    WinJS.Namespace.define("Sample", {
+        mode: {
+            small: {
+                name: 'small',
+                openedDisplayMode: WinJS.UI.SplitView.OpenedDisplayMode.overlay,
+                closedDisplayMode: WinJS.UI.SplitView.ClosedDisplayMode.none,
+            },
+            medium: {
+                name: 'medium',
+                openedDisplayMode: WinJS.UI.SplitView.OpenedDisplayMode.overlay,
+                closedDisplayMode: WinJS.UI.SplitView.ClosedDisplayMode.inline,
+            },
+            large: {
+                name: 'large',
+                openedDisplayMode: WinJS.UI.SplitView.OpenedDisplayMode.inline,
+                closedDisplayMode: WinJS.UI.SplitView.ClosedDisplayMode.inline,
+            }
+        },
+        splitView: null,
+        radioChanged: WinJS.UI.eventHandler(function (ev) {
+            var mode = event.target.value;
+            Sample.updateSplitView(mode);
+        }),
+        updateSplitView: function (size) {
+            // Remove all the size classes
+            Object.keys(Sample.mode).forEach(function (key) {
+                WinJS.Utilities.removeClass(Sample.host, Sample.mode[key].name);
+            });
+
+            // Update the SplitView based on the size
+            Sample.splitView.openedDisplayMode = Sample.mode[size].openedDisplayMode;
+            Sample.splitView.closedDisplayMode = Sample.mode[size].closedDisplayMode;
+
+            Sample.splitView.openedDisplayMode = WinJS.UI.SplitView.OpenedDisplayMode.overlay,
+            Sample.splitView.closedDisplayMode = WinJS.UI.SplitView.ClosedDisplayMode.none,
+
+            // Add the size class
+            WinJS.Utilities.addClass(Sample.host, size);
+        }
+    });
+
+    WinJS.Binding.processAll(null, Sample).then(function () {
+        WinJS.UI.processAll().done(function () {
+            Sample.splitView = document.querySelector(".splitView").winControl;
+            Sample.host = document.querySelector("#app");
+
+            // Temporary workaround: Draw keyboard focus visuals on NavBarCommands
+            new WinJS.UI._WinKeyboard(Sample.splitView.paneElement);
+        });
+    })
+
+})();
+
+
+
 // Remove logging for production use.
-var console = {};
-console.log = function(){};
-window.console = console;
+//var console = {};
+//console.log = function(){};
+//window.console = console;
 
 (function () {
 
@@ -34,7 +92,8 @@ window.console = console;
         'downloadr.services',
         'downloadr.directives',
         'downloadr.controllers',
-		'lumx'
+		'lumx',
+		'winjs'
     ]);
 	
 	if (typeof(chrome) !== 'undefined' && chrome.runtime !== undefined)

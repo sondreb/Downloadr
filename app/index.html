@@ -9,8 +9,8 @@
 	<!-- build:css styles/libraries.css -->
 	<!-- bower:css -->
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css" />
 	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.min.css" />
+	<link rel="stylesheet" href="bower_components/winjs/css/ui-dark.css" />
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -21,6 +21,8 @@
 	<link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
 	<link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css">
 	<!-- endbuild -->
+
+
 
 </head>
 
@@ -140,6 +142,147 @@
 
 	</header>
 
+
+
+ <div class="splitView" data-win-control="WinJS.UI.SplitView" data-win-options="{
+            openedDisplayMode: 'overlay',
+            closedDisplayMode: 'inline'
+         }">
+            <!-- Pane area -->
+            <div>
+                <div class="header">
+                    <button class="win-splitviewpanetoggle"
+                            data-win-control="WinJS.UI.SplitViewPaneToggle"
+                            data-win-options="{ splitView: select('.splitView') }"></button>
+                    <div class="title"> Flickr Downloadr</div>
+                </div>
+
+                <div class="nav-commands">
+                    <!--
+                    <div data-win-control="WinJS.UI.NavBarCommand" ng-link="cargo()" data-win-options="{ label: 'Home', icon: 'home'}"></div>
+                    <div data-win-control="WinJS.UI.NavBarCommand" ng-link="invoice()" data-win-options="{ label: 'Favorite', icon: 'favorite'}"></div>
+                    <div data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Settings', icon: 'settings'}"></div>
+                    -->
+					
+					<a ng-link="cargo()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'About', icon: 'back'}"></a>
+					
+					
+                    <a ng-link="home()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Home', icon: 'home'}"></a>
+                    <a ng-link="cargo()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'About', icon: 'help'}"></a>
+					
+					
+					<a ng-link="cargo()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Profile', icon: 'contact'}"></a>
+					
+					<a ng-link="cargo()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Sign Out', icon: 'contact'}"></a>
+					
+                    <a ng-link="invoice()" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Settings', icon: 'settings'}"></a>
+
+                </div>
+            </div>
+
+            <!-- Content area -->
+            <button class="win-splitviewpanetoggle"
+                    data-win-control="WinJS.UI.SplitViewPaneToggle"
+                    data-win-options="{ splitView: select('.splitView') }"></button>
+            <div class="contenttext"><h2 class="win-h2">SplitView Content area</h2>
+			
+			
+			<input type="text" class="win-textbox" />
+			
+			
+			
+			<div class="groupingToolbar" data-win-control="WinJS.UI.ToolBar">
+    <!-- Primary commands -->
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdEdit',
+            label:'edit',
+            section:'primary',
+            type:'button',
+            icon: 'edit',
+            priority:2,
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdDelete',
+            label:'delete',
+            section:'primary',
+            type:'button',
+            icon: 'delete',
+            priority:2,
+            onclick: Sample.outputCommand}"></button>
+    <hr data-win-control="WinJS.UI.Command" data-win-options="{type:'separator'}" />
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdFavorite',
+            label:'favorite',
+            section:'primary',
+            type:'toggle',
+            icon: 'favorite',
+            priority:3,
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdOpenWith',
+            label:'open with',
+            section:'primary',
+            type:'button',
+            icon: 'openfile',
+            priority:3,
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdDownload',
+            label:'download',
+            section:'primary',
+            type:'button',
+            icon: 'download',
+            priority:3,
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdPin',
+            label:'pin',
+            section:'primary',
+            type:'button',
+            icon: 'pin',
+            priority:3,
+            onclick: Sample.outputCommand}"></button>
+    <hr data-win-control="WinJS.UI.Command" data-win-options="{type:'separator'}" />
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdZoom',
+            label:'zoom',
+            section:'primary',
+            type:'button',
+            icon: 'zoomin',
+            priority:1,
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdFullscreen',
+            label:'full screen',
+            section:'primary',
+            type:'button',
+            icon: 'fullscreen',
+            priority:1,
+            onclick: Sample.outputCommand}"></button>
+
+    <!-- Secondary command -->
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdSettings',
+            label:'settings',
+            section:'secondary',
+            type:'button',
+            onclick: Sample.outputCommand}"></button>
+    <button data-win-control="WinJS.UI.Command" data-win-options="{
+            id:'cmdShare',
+            label:'share',
+            section:'secondary',
+            type:'button',
+            onclick: Sample.outputCommand}"></button>
+</div>
+<div class="status"></div>
+
+			
+			
+            
+            </div>
+        </div>
+
+
 	
 	<div flex layout="row">
 		<md-content class="{{state.background}}" ng-view flex id="presenter"></md-content>
@@ -147,6 +290,11 @@
 	
 
 	<span ng-controller="MenuController">
+		
+		
+		
+		
+		
 		
 	<md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left md-whiteframe-z2 menu">
 		
@@ -394,6 +542,9 @@
 	<script src="bower_components/moment/moment.js"></script>
 	<script src="bower_components/angularjs/angular.js"></script>
 	<script src="bower_components/lumx/dist/lumx.js"></script>
+	<script src="bower_components/winjs/js/base.js"></script>
+	<script src="bower_components/winjs/js/ui.js"></script>
+	<script src="bower_components/angular-winjs/js/angular-winjs.js"></script>
 	<!-- endbower -->
 	<!-- endbuild -->
 
@@ -404,6 +555,19 @@
 	<script src="scripts/controllers.js"></script>
 	<script src="scripts/app.js"></script>
 	<!-- endbuild -->
+	
+	
+	    <script>
+        WinJS.Application.onready = function () {
+
+            // The next line will apply declarative control binding to all elements
+            // (e.g. DIV with attribute: data-win-control="WinJS.UI.Rating")
+            WinJS.UI.processAll();
+        };
+
+        WinJS.Application.start();
+    </script>
+	
 </body>
 
 </html>
