@@ -104,7 +104,7 @@
 	}
 	else
 	{
-		downloadr.value('version', '3.0.104');
+		downloadr.value('version', '3.0.105');
 		downloadr.value('runtime', 'firefox');
 	}
 	
@@ -683,7 +683,7 @@
 	downloadr.config(['$routeProvider', '$mdThemingProvider',
 		function ($routeProvider, $mdThemingProvider)
 		{
-			 $mdThemingProvider.theme('cyan').primaryPalette('cyan');
+			 $mdThemingProvider.theme('light-blue').primaryPalette('light-blue');
 			
 			$routeProvider.when('/', {
 				templateUrl: '/views/home.html',

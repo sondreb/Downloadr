@@ -739,6 +739,8 @@ strong.bigger {
 }
 .loaded #loader-wrapper {
 	visibility: hidden;
+	/* Setting visibility instead of display casued major CPU leak, animation was running in background. */
+	display: none;
 	-webkit-transform: translateY(-100%);
 	/* Chrome, Opera 15+, Safari 3.1+ */
 	-ms-transform: translateY(-100%);
@@ -957,4 +959,48 @@ strong.bigger {
 {
 	stroke: white;
 	fill: white;	
+}
+
+
+/* Overrides the default 320px width of the splitpane menu */
+.win-splitview.win-splitview-pane-opened.win-splitview-placementleft .win-splitview-pane,
+.win-splitview.win-splitview-pane-opened.win-splitview-placementright .win-splitview-pane {
+  width: 220px;
+}
+
+
+.nav-commands a
+{
+	text-decoration: none;
+}
+
+
+.back-button {
+ 
+	left: 1px; 
+	position: absolute; 
+	height: 20px !important; 
+	width: 48px !important;
+	-webkit-app-region: no-drag; 
+	margin: 0 !important; 
+	padding: 0 !important; 
+
+}
+
+.back-button .win-navbarcommand-icon {
+
+	margin-top: 2px;
+	margin-left: 2px;
+	height: 14px;
+	width: 14px;
+	font-size: 14px;
+
+}
+
+.logo img {
+
+	margin-left: 50px;
+	padding-left: 50px;
+	left: 100px;
+
 }
