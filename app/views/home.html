@@ -1,4 +1,11 @@
 <div class="gradient" id="startView">
+	
+	<win-menu anchor="'#menuAnchor'">
+	    <win-menu-command label="'command the first'" type="toggle">TEST</win-menu-command>
+	    <win-menu-command label="'command the second'" type="toggle"></win-menu-command>
+	    <win-menu-command label="'this would be a great place for ng-repeater...'"></win-menu-command>
+	</win-menu>
+	
 	<div class="search-container center" layout="row" flex layout-align="center center">
         
 		<div>
@@ -11,10 +18,18 @@
 				<div class="toolbar">
 					<lx-search-filter model="state.searchText" theme="light" filter-width="100%" placeholder="Search"></lx-search-filter>
 					
+					<div id="menuAnchor" class="">
+						<i class="mdi mdi-dots-vertical"></i>
+					</div>
+					
 					<lx-dropdown position="right" from-top>
 						<button class="btn btn--l btn--icon" lx-ripple lx-dropdown-toggle>
 							<i class="mdi mdi-dots-vertical"></i>
 						</button>
+
+					
+
+
 
 						<lx-dropdown-menu>
 							<ul>

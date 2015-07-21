@@ -7,6 +7,9 @@
 			<div class="radio-group mt">
 				<div class="radio-button">
 					<input type="radio" id="radio1" ng-model="settings.values.safe" name="radio1" value="1" class="radio-button__input">
+					
+			
+					
 					<label for="radio1" class="radio-button__label">SafeSearch on</label>
 				</div>
 
@@ -48,6 +51,10 @@
 		<h3>Notifications</h3>
 		<p>
 			<div class="checkbox mt">
+				
+			<div data-win-control="WinJS.UI.ToggleSwitch" ng-model="settings.values.progress" data-win-options="{title: 'Progress Notification'}">
+            </div>
+				
 				<input type="checkbox" ng-model="settings.values.progress" id="checkbox2" class="checkbox__input">
 				<label for="checkbox2" class="checkbox__label">Progress Notification</label>
 			</div>

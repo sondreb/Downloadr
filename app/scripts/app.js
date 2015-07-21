@@ -59,10 +59,36 @@
             new WinJS.UI._WinKeyboard(Sample.splitView.paneElement);
         });
     })
+	
+	
+  WinJS.Application.onready = function () {
+
+	  console.log('WinJS.Application.onready');
+
+        // The next line will apply declarative control binding to all elements
+        // (e.g. DIV with attribute: data-win-control="WinJS.UI.Rating")
+        WinJS.UI.processAll();
+    };
+	
+	WinJS.Application.start();
+	
+	console.log('WinJS.Application.start');
 
 })();
 
 
+(function () {
+	
+	/*
+	WinJS.UI.processAll().done(function () {
+    var anchor = document.getElementById("showMenuButton");
+    anchor.addEventListener("click", function () {
+        var menu = document.getElementById("menu1").winControl;
+        var placement = document.querySelector("input[type=radio]:checked").value;
+        menu.show(anchor, placement);
+    });*/
+
+})();
 
 // Remove logging for production use.
 //var console = {};
