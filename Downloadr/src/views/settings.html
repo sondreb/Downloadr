@@ -1,0 +1,72 @@
+<md-content id="settingsView" class="container md-padding">
+	<div class="content padding">
+
+		<h3>Safe Search</h3>
+		<p>
+
+			<div class="radio-group mt">
+				<div class="radio-button">
+					<input type="radio" id="radio1" ng-model="settings.values.safe" name="radio1" value="1" class="radio-button__input">
+					
+			
+					
+					<label for="radio1" class="radio-button__label">SafeSearch on</label>
+				</div>
+
+				<div class="radio-button" ng-show="{{state.isAnonymous}}">
+					<input type="radio" id="radio2" disabled ng-model="settings.values.safe" name="radio2" value="2" class="radio-button__input">
+					<label for="radio2" class="radio-button__label">SafeSearch moderate</label>
+				</div>
+
+				<div class="radio-button" ng-show="{{state.isAnonymous}}">
+					<input type="radio" id="radio3" disabled ng-model="settings.values.safe" name="radio3" value="3" class="radio-button__input" checked>
+					<label for="radio3" class="radio-button__label">SafeSearch off</label>
+				</div>
+				
+				<div class="radio-button" ng-hide="{{state.isAnonymous}}">
+					<input type="radio" id="radio4" ng-model="settings.values.safe" name="radio4" value="2" class="radio-button__input">
+					<label for="radio4" class="radio-button__label">SafeSearch moderate</label>
+				</div>
+
+				<div class="radio-button" ng-hide="{{state.isAnonymous}}">
+					<input type="radio" id="radio5" ng-model="settings.values.safe" name="radio5" value="3" class="radio-button__input" checked>
+					<label for="radio5" class="radio-button__label">SafeSearch off</label>
+				</div>
+			</div>
+
+		</p>
+		<p ng-show="state.isAnonymous">
+			<em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service and not the app.</em>
+		</p>
+
+		<!--<br>
+		<h3>Layout</h3>
+		<p>
+			<div class="checkbox mt">
+				<input type="checkbox" ng-model="settings.values.background" id="checkbox1" class="checkbox__input">
+				<label for="checkbox1" class="checkbox__label">Show Background Image</label>
+			</div>
+		</p>-->
+		<br>
+		<h3>Notifications</h3>
+		<p>
+			<div class="checkbox mt">
+				
+			<div data-win-control="WinJS.UI.ToggleSwitch" ng-model="settings.values.progress" data-win-options="{title: 'Progress Notification'}">
+            </div>
+				
+				<input type="checkbox" ng-model="settings.values.progress" id="checkbox2" class="checkbox__input">
+				<label for="checkbox2" class="checkbox__label">Progress Notification</label>
+			</div>
+
+		</p>
+		<p>
+			<div class="checkbox mt">
+				<input type="checkbox" ng-model="settings.values.completed" id="checkbox3" class="checkbox__input">
+				<label for="checkbox3" class="checkbox__label">Completed Notification</label>
+			</div>
+
+		</p>
+
+	</div>
+</md-content>

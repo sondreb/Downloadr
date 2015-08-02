@@ -24,7 +24,7 @@ dist
 .sass-cache
 app/bower_components
 test/bower_components
-
+www/
 
 #################
 ## Eclipse

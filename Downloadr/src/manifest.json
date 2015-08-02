@@ -1,0 +1,44 @@
+{
+    "manifest_version": 2,
+    "default_locale": "en",
+    "name": "Flickr Downloadr",
+    "description": "Simple and elegant photo downloading tool.",
+    "version": "3.1.105",
+    "permissions": [
+        {
+            "fileSystem": [
+                "write",
+                "retainEntries",
+                "directory"
+            ]
+        },
+        "storage",
+        "webview",
+        "system.storage",
+        "unlimitedStorage",
+        "notifications",
+        "fullscreen",
+        "https://api.flickr.com/*",
+        "https://*.staticflickr.com/*",
+        "http://brain.no/*",
+        "http://flickr-downloadr/*",
+        "https://flickr-downloadr/*",
+        "<all_urls>"
+    ],
+    "minimum_chrome_version": "38",
+    "offline_enabled": false,
+    "icons": {
+        "16": "images/icon_16.png",
+        "48": "images/icon_48.png",
+        "128": "images/icon_128.png",
+        "256": "images/icon_256.png"
+    },
+    "app": {
+        "background": {
+            "scripts": [
+                "scripts/main.js",
+                "scripts/chromereload.js"
+            ]
+        }
+    }
+}

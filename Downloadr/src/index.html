@@ -1,0 +1,710 @@
+﻿<!DOCTYPE html>
+<html ng-app="downloadr" ng-csp="">
+<head>
+    <meta charset="utf-8" />
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' http://localhost:9092 ws://localhost:9092 ws://localhost:9090; script-src 'self' 'unsafe-inline' http://localhost:9092">
+    <title>Flickr Downloadr 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" type="text/css" href="/libs/lib.css">
+    <link rel="stylesheet" type="text/css" href="/styles/app.css">
+
+</head>
+<body md-theme="light-blue" layout="column" layout-fill>
+
+    <svg style="display: none;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <symbol viewBox="0 0 18 18" id="icon-close_gray_18px"><title>close_gray_18px</title> <metadata id="close_gray_18px-metadata3783"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="close_gray_18px-namedview3779" showgrid="false" inkscape:zoom="13.111111" inkscape:cx="9" inkscape:cy="9" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="0" inkscape:current-layer="svg3773" /> <path d="M0 0h18v18h-18zm0 0h18v18h-18z" fill="none" id="close_gray_18px-path3775" /> <path d="M14.53 4.53l-1.06-1.06-4.47 4.47-4.47-4.47-1.06 1.06 4.47 4.47-4.47 4.47 1.06 1.06 4.47-4.47 4.47 4.47 1.06-1.06-4.47-4.47z" id="close_gray_18px-path3777" style="fill:#4d4d4d" /> </symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_add_circle_24px"><title>ic_add_circle_24px</title><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_arrow_back_24px"><title>ic_arrow_back_24px</title><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_arrow_forward_24px"><title>ic_arrow_forward_24px</title><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_backspace_24px"><title>ic_backspace_24px</title> <path d="M0 0h24v24h-24z" fill="none" /> <path d="M22 3h-15c-.69 0-1.23.35-1.59.88l-5.41 8.12 5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2zm-3 12.59l-1.41 1.41-3.59-3.59-3.59 3.59-1.41-1.41 3.59-3.59-3.59-3.59 1.41-1.41 3.59 3.59 3.59-3.59 1.41 1.41-3.59 3.59 3.59 3.59z" /> </symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_bug_report_24px"><title>ic_bug_report_24px</title><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_check_24px"><title>ic_check_24px</title><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" /></symbol>
+        <symbol viewBox="0 0 18 18" id="icon-ic_close_18px"><title>ic_close_18px</title><path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_close_24px"><title>ic_close_24px</title><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_expand_less_24px"><title>ic_expand_less_24px</title><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_expand_more_24px"><title>ic_expand_more_24px</title><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_file_download_24px"><title>ic_file_download_24px</title><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_folder_24px"><title>ic_folder_24px</title><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_help_24px"><title>ic_help_24px</title><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_home_24px"><title>ic_home_24px</title><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_keyboard_backspace_24px"><title>ic_keyboard_backspace_24px</title><path d="M21 11H6.83l3.58-3.59L9 6l-6 6 6 6 1.41-1.41L6.83 13H21z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_menu_24px"><title>ic_menu_24px</title><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_more_horiz_24px"><title>ic_more_horiz_24px</title><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_more_vert_24px"><title>ic_more_vert_24px</title><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_refresh_24px"><title>ic_refresh_24px</title><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_remove_24px"><title>ic_remove_24px</title><path d="M19 13H5v-2h14v2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_remove_circle_24px"><title>ic_remove_circle_24px</title><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_schedule_24px"><title>ic_schedule_24px</title><path fill-opacity=".9" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zM12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_search_24px"><title>ic_search_24px</title><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" /></symbol>
+        <symbol viewBox="0 0 24 24" id="icon-ic_settings_24px"><title>ic_settings_24px</title><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" /></symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-close-hover">
+            <title>mac-close-hover</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#D52735" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#F25056" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#9F1D2B" d="M22.6,57.9l35.3-35.3c1.4-1.4,3.6-1.4,5,0l0.1,0.1
+		c1.4,1.4,1.4,3.6,0,5L27.6,62.9c-1.4,1.4-3.6,1.4-5,0l-0.1-0.1C21.2,61.5,21.2,59.2,22.6,57.9L22.6,57.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#9F1D2B" d="M27.6,22.6l35.3,35.3c1.4,1.4,1.4,3.6,0,5l-0.1,0.1
+		c-1.4,1.4-3.6,1.4-5,0L22.6,27.6c-1.4-1.4-1.4-3.6,0-5l0.1-0.1C24,21.2,26.2,21.2,27.6,22.6L27.6,22.6z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-close-nofocus">
+            <title>mac-close-nofocus</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#B4B4B4" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		S0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C7C7C7" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1S3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-close-normal">
+            <title>mac-close-normal</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#D52735" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#F25056" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-close-press">
+            <title>mac-close-press</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#D52735" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#D52735" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#9F1D2B" d="M22.6,57.9l35.3-35.3c1.4-1.4,3.6-1.4,5,0l0.1,0.1
+		c1.4,1.4,1.4,3.6,0,5L27.6,62.9c-1.4,1.4-3.6,1.4-5,0l-0.1-0.1C21.2,61.5,21.2,59.2,22.6,57.9L22.6,57.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#9F1D2B" d="M27.6,22.6l35.3,35.3c1.4,1.4,1.4,3.6,0,5l-0.1,0.1
+		c-1.4,1.4-3.6,1.4-5,0L22.6,27.6c-1.4-1.4-1.4-3.6,0-5l0.1-0.1C24,21.2,26.2,21.2,27.6,22.6L27.6,22.6z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-max-hover">
+            <title>mac-max-hover</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#13C11E" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#39EA49" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1S3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#0B7407" d="M31.2,20.9h26.7c3.6,0,6.5,2.9,6.5,6.5v26.7L31.2,20.9L31.2,20.9z
+		 M54.4,64.6H27.6c-3.6,0-6.5-2.9-6.5-6.5V31.3L54.4,64.6L54.4,64.6z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-max-nofocus">
+            <title>mac-max-nofocus</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#B4B4B4" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C7C7C7" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-max-normal">
+            <title>mac-max-normal</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#13C11E" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#39EA49" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-max-press">
+            <title>mac-max-press</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#13C11E" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#13C11E" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1S3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#0B7407" d="M31.2,20.9h26.7c3.6,0,6.5,2.9,6.5,6.5v26.7L31.2,20.9L31.2,20.9z
+		 M54.4,64.6H27.6c-3.6,0-6.5-2.9-6.5-6.5V31.3L54.4,64.6L54.4,64.6z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-min-hover">
+            <title>mac-min-hover</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#DA9E10" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#FAC536" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#975914" d="M17.8,39.2h49.9c1.9,0,3.5,1.6,3.5,3.5v0.1c0,1.9-1.6,3.5-3.5,3.5
+		H17.8c-1.9,0-3.5-1.6-3.5-3.5v-0.1C14.3,40.8,15.9,39.2,17.8,39.2L17.8,39.2z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-min-nofocus">
+            <title>mac-min-nofocus</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#B4B4B4" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		S0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C7C7C7" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1S3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-min-normal">
+            <title>mac-min-normal</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#DA9E10" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		C19.1,0,0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#FAC536" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 85.5 85.5" id="icon-mac-min-press">
+            <title>mac-min-press</title>
+            <g>
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#FAC536" d="M42.7,85.5c23.6,0,42.7-19.1,42.7-42.7C85.5,19.1,66.3,0,42.7,0
+		S0,19.1,0,42.7C0,66.3,19.1,85.5,42.7,85.5L42.7,85.5z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#FAC536" d="M42.7,81.9c21.6,0,39.1-17.5,39.1-39.1
+		c0-21.6-17.5-39.1-39.1-39.1C21.1,3.6,3.6,21.1,3.6,42.7C3.6,64.3,21.1,81.9,42.7,81.9L42.7,81.9z" />
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#975914" d="M17.8,39.2h49.9c1.9,0,3.5,1.6,3.5,3.5v0.1c0,1.9-1.6,3.5-3.5,3.5
+		H17.8c-1.9,0-3.5-1.6-3.5-3.5v-0.1C14.3,40.8,15.9,39.2,17.8,39.2L17.8,39.2z" />
+            </g>
+        </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-mac_close_18px"><title>mac_close_18px</title> <metadata id="mac_close_18px-metadata3069"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1280" inkscape:window-height="661" id="mac_close_18px-namedview3065" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg3061" /> <path d="M 8.9491525,2.1016949 C 5.1132203,2.1016949 2,5.2149153 2,9.0508475 2,12.88678 5.1132203,16 8.9491525,16 c 3.8359325,0 6.9491525,-3.11322 6.9491525,-6.9491525 0,-3.8359322 -3.11322,-6.9491526 -6.9491525,-6.9491526 z" id="mac_close_18px-path3368" /> <path inkscape:connector-curvature="0" d="M 12.694916,6.1510408 11.950654,5.4067793 9,8.3574328 6.0493462,5.4067793 5.3050847,6.1510408 8.2557385,9.1016948 5.3050847,12.052348 6.0493462,12.79661 9,9.8459558 11.950654,12.79661 12.694916,12.052348 9.7442618,9.1016948 z" id="mac_close_18px-path3347" style="fill:#ffffff" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-mac_maximize_18px"><title>mac_maximize_18px</title> <metadata id="mac_maximize_18px-metadata3069"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1280" inkscape:window-height="661" id="mac_maximize_18px-namedview3065" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg3061" /> <path d="M 8.9491525,2.1016949 C 5.1132203,2.1016949 2,5.2149153 2,9.0508475 2,12.88678 5.1132203,16 8.9491525,16 c 3.8359325,0 6.9491525,-3.11322 6.9491525,-6.9491525 0,-3.8359322 -3.11322,-6.9491526 -6.9491525,-6.9491526 z M 12.423729,9.7457627 H 9.6440678 V 12.525424 H 8.2542373 V 9.7457627 H 5.4745763 V 8.3559322 h 2.779661 v -2.779661 h 1.3898305 v 2.779661 h 2.7796612 v 1.3898305 z" id="mac_maximize_18px-path3063" inkscape:connector-curvature="0" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-mac_minimize_18px"><title>mac_minimize_18px</title> <metadata id="mac_minimize_18px-metadata3013"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1280" inkscape:window-height="661" id="mac_minimize_18px-namedview3009" showgrid="false" inkscape:zoom="19.75" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="svg3005" /> <path d="M 8.8607595,2.278481 C 5.0736203,2.278481 2,5.3521013 2,9.1392405 2,12.92638 5.0736203,16 8.8607595,16 c 3.7871395,0 6.8607595,-3.07362 6.8607595,-6.8607595 0,-3.7871392 -3.07362,-6.8607595 -6.8607595,-6.8607595 z M 12.291139,9.8253165 H 5.4303797 V 8.4531646 h 6.8607593 v 1.3721519 z" id="mac_minimize_18px-path3007" inkscape:connector-curvature="0" /> </symbol>
+        <symbol viewBox="0 0 16 16" id="icon-maximize_restore_16px"><title>maximize_restore_16px</title> <metadata id="maximize_restore_16px-metadata3689"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="847" inkscape:window-height="586" id="maximize_restore_16px-namedview3685" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="250" inkscape:window-y="30" inkscape:window-maximized="0" inkscape:current-layer="svg3681" /> <path d="M 8.4071342,3.9305061 5.1109378,7.226702 6.0513648,8.1671292 9.3475612,4.8709328 10.758201,6.2815733 10.753501,2.5245677 6.9964951,2.5198477 8.4071352,3.9304878 z M 5.110938,13.809691 8.8679432,13.814391 7.4573032,12.40375 10.7535,9.107575 9.8130722,8.1671478 l -3.296196,3.2961962 -1.4106404,-1.41064 0.0047,3.757005 z" id="maximize_restore_16px-path3683" inkscape:connector-curvature="0" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-maximize_restore_18px"><title>maximize_restore_18px</title> <metadata id="maximize_restore_18px-metadata3689"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="847" inkscape:window-height="586" id="maximize_restore_18px-namedview3685" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="250" inkscape:window-y="30" inkscape:window-maximized="0" inkscape:current-layer="svg3681" /> <path d="M 9.7227313,3.6165918 5.4174619,7.9218605 6.6457842,9.1501828 10.951054,4.8449137 12.793536,6.6873972 12.787398,1.7802499 7.8802497,1.774085 9.7227326,3.6165679 z M 5.4174622,16.520116 10.324609,16.526255 8.4821261,14.683771 12.787396,10.37853 11.559073,9.1502076 7.2538038,13.455476 5.4113205,11.612993 l 0.00614,4.907147 z" id="maximize_restore_18px-path3683" inkscape:connector-curvature="0" /> </symbol>
+        <symbol viewBox="0 0 24 24" id="icon-maximize_restore_24px"><title>maximize_restore_24px</title> <metadata id="maximize_restore_24px-metadata3689"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="847" inkscape:window-height="586" id="maximize_restore_24px-namedview3685" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="250" inkscape:window-y="30" inkscape:window-maximized="0" inkscape:current-layer="svg3681" /> <path d="m 12.714193,5.6289652 -4.9568185,4.9568178 1.4142137,1.414214 4.9568188,-4.9568185 2.12132,2.1213204 -0.0071,-5.6497831 -5.649784,-0.0071 2.12132,2.12132 z m -4.9568183,14.8563128 5.6497833,0.0071 -2.121321,-2.121321 4.95682,-4.956818 -1.414215,-1.414214 -4.956818,4.956818 -2.1213204,-2.12132 0.00707,5.649783 z" id="maximize_restore_24px-path3683" inkscape:connector-curvature="0" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-maximize_restore_gray_18px"><title>maximize_restore_gray_18px</title> <metadata id="maximize_restore_gray_18px-metadata3689"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="847" inkscape:window-height="586" id="maximize_restore_gray_18px-namedview3685" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="250" inkscape:window-y="30" inkscape:window-maximized="0" inkscape:current-layer="svg3681" /> <path d="M 9.7227313,3.6165918 5.4174619,7.9218605 6.6457842,9.1501828 10.951054,4.8449137 12.793536,6.6873972 12.787398,1.7802499 7.8802497,1.774085 9.7227326,3.6165679 z M 5.4174622,16.520116 10.324609,16.526255 8.4821261,14.683771 12.787396,10.37853 11.559073,9.1502076 7.2538038,13.455476 5.4113205,11.612993 l 0.00614,4.907147 z" id="maximize_restore_gray_18px-path3683" inkscape:connector-curvature="0" style="fill:#4d4d4d" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-minimize_18px"><title>minimize_18px</title> <metadata id="minimize_18px-metadata3701"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="minimize_18px-namedview3697" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="0" inkscape:window-y="0" inkscape:window-maximized="0" inkscape:current-layer="svg3691" /> <path d="M 16.050847,15.135593 H 2.0508475 v -2 H 16.050847 v 2 z" id="minimize_18px-path3693" inkscape:connector-curvature="0" /> <path d="M 0,-6 H 24 V 18 H 0 z" id="minimize_18px-path3695" inkscape:connector-curvature="0" style="fill:none" /> </symbol>
+        <symbol viewBox="0 0 18 18" id="icon-minimize_gray_18px"><title>minimize_gray_18px</title> <metadata id="minimize_gray_18px-metadata3701"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" /> <dc:title /> </cc:Work> </rdf:RDF> </metadata>  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="640" inkscape:window-height="480" id="minimize_gray_18px-namedview3697" showgrid="false" inkscape:zoom="9.8333333" inkscape:cx="12" inkscape:cy="12" inkscape:window-x="393" inkscape:window-y="14" inkscape:window-maximized="0" inkscape:current-layer="svg3691" /> <path d="M 16.050847,15.135593 H 2.0508475 v -2 H 16.050847 v 2 z" id="minimize_gray_18px-path3693" inkscape:connector-curvature="0" style="fill:#4d4d4d" /> <path d="M 0,-6 H 24 V 18 H 0 z" id="minimize_gray_18px-path3695" inkscape:connector-curvature="0" style="fill:none" /> </symbol>
+        <symbol viewBox="0 0 16 16" id="icon-win-close"><title>win-close</title> <line fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" x1="2.8" y1="13.4" x2="13.6" y2="2.7" /> <line fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" x1="13.6" y1="13.4" x2="2.7" y2="2.6" /> </symbol>
+        <symbol viewBox="0 0 16 16" id="icon-win-max"><title>win-max</title> <rect x="2.5" y="3.1" fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" width="11" height="10.5" /> </symbol>
+        <symbol viewBox="0 0 16 16" id="icon-win-min"><title>win-min</title> <line fill="none" stroke="#000000" stroke-width="1.4" stroke-miterlimit="10" x1="2" y1="13.6" x2="14" y2="13.6" /> </symbol>
+        <symbol viewBox="0 0 16 16" id="icon-win-restore"><title>win-restore</title> <g> <g> <g> <rect x="1.5" y="4.4" fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" width="11" height="10.1" /> </g> </g> </g> <line fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" x1="3.4" y1="4" x2="3.4" y2="1.8" /> <line fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" x1="3.4" y1="2.5" x2="14.4" y2="2.5" /> <line fill="none" stroke="#010101" stroke-width="1.4" stroke-miterlimit="10" x1="14.4" y1="1.8" x2="14.4" y2="13.2" /> <line fill="none" stroke="#010101" stroke-width="1.2" stroke-miterlimit="10" x1="15" y1="12.6" x2="12.5" y2="12.6" /> </symbol>
+    </svg>
+
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+
+
+    <header class="row header accent-500" ng-controller="ScreenController as screen">
+
+        <div class="frame" mousetrap-keypress="keyboard" ng-class="{left: state.showControlsLeft}">
+
+            <!-- Debug Tools - Advanced Settings & Test Runner -->
+            <!--
+            <a href="#/tests" mousetrap-keypress="keyboard" ng-show="state.debug" ng-click="test_view();" id="window-tests" title="Tests">
+                <img style="margin-top: 2px" src="\bower_components\material-design-icons\action\1x_web\ic_schedule_grey600_18dp.png">
+
+            </a>
+            <a href="#/debug" ng-show="state.debug" ng-click="debug_view();" id="window-debug" title="Debug">
+
+                <img style="margin-top: 2px" src="\bower_components\material-design-icons\action\1x_web\ic_bug_report_grey600_18dp.png">
+
+            </a>-->
+            <!-- Mac -->
+            <span ng-show="state.OS == 'mac'" class="mac window-icon-container">
+                <window-icon icon="mac-close" title="Close" ng-click="close();"></window-icon><window-icon icon="mac-min" title="Minimize" ng-click="minimize();"></window-icon><window-icon icon="mac-max" title="Maximize" ng-click="maximize();" ng-hide="isMaximized"></window-icon><window-icon icon="mac-max" title="Restore Down" ng-click="restore();" ng-show="isMaximized" ng-cloak></window-icon>
+            </span>
+
+            <!-- Linux -->
+            <span ng-show="state.OS == 'linux'" class="linux window-icon-container">
+                <a href="" ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a><a href="" ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize"></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a>
+            </span>
+
+            <!-- Windows -->
+            <span ng-show="state.OS == 'win'" class="win window-icon-container">
+
+                <div href="/#"
+                     class="back-button"
+                     data-win-control="WinJS.UI.NavBarCommand"
+                     data-win-options="{ icon: 'back'}"></div>
+
+                <a href="" ng-click="minimize();"><icon icon="win-min" size="12" title="Minimize"></icon></a><a href="" ng-click="maximize();" ng-hide="isMaximized"><icon icon="win-max" size="12" title="Maximize"></icon></a><a href="" ng-click="restore();" ng-show="isMaximized" ng-cloak><icon icon="win-restore" size="12" title="Restore Down"></icon></a><a href="" ng-click="close();"><icon icon="win-close" size="12" title="Close"></icon></a>
+            </span>
+
+        </div>
+
+
+
+    </header>
+
+    <!--
+        <win-split-view>
+        <win-split-view-pane>SplitView Navigation Pane</win-split-view-pane>
+        <win-split-view-content>SplitView Content Area</win-split-view-content>
+    </win-split-view>-->
+
+    <div class="splitView" style="" data-win-control="WinJS.UI.SplitView" data-win-options="{ openedDisplayMode: 'inline', closedDisplayMode: 'inline' }">
+        <!-- Pane area -->
+        <div>
+            <div class="header">
+                <button class="win-splitviewpanetoggle"
+                        data-win-control="WinJS.UI.SplitViewPaneToggle"
+                        data-win-options="{ splitView: select('.splitView') }"></button>
+                <!--<div class="title"> Flickr Downloadr</div>-->
+
+                <span class="toolbar__label fs-title"><a href="#/" class="logo"><img width="100%" style="max-width: 260px;" src="images/downloadr.png"></a></span>
+
+            </div>
+
+            <div class="nav-commands">
+                <!--
+                <div data-win-control="WinJS.UI.NavBarCommand" ng-link="cargo()" data-win-options="{ label: 'Home', icon: 'home'}"></div>
+                <div data-win-control="WinJS.UI.NavBarCommand" ng-link="invoice()" data-win-options="{ label: 'Favorite', icon: 'favorite'}"></div>
+                <div data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Settings', icon: 'settings'}"></div>
+                -->
+
+                <a href="#/" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Home', icon: 'home'}"></a>
+                <a href="#/about" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'About', icon: 'help'}"></a>
+
+                <a href="#/login" ng-show="state.isAnonymous" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Sign In', icon: 'contact'}"></a>
+                <a href="#/logout" ng-show="!state.isAnonymous" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Sign Out', icon: 'contact'}"></a>
+
+                <a href="#/settings" data-win-control="WinJS.UI.NavBarCommand" data-win-options="{ label: 'Settings', icon: 'settings'}"></a>
+
+            </div>
+        </div>
+
+        <!-- Content area -->
+        <button class="win-splitviewpanetoggle"
+                data-win-control="WinJS.UI.SplitViewPaneToggle"
+                data-win-options="{ splitView: select('.splitView') }"></button>
+
+
+        <div class="basicToolbar" data-win-control="WinJS.UI.ToolBar">
+            <!-- Primary commands -->
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdEdit',
+			            label:'edit',
+			            section:'primary',
+			            type:'button',
+			            icon: 'edit',
+			            onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdDelete',
+			            label:'delete',
+			            section:'primary',
+			            type:'button',
+			            icon: 'delete',
+			            onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdFavorite',
+			            label:'favorite',
+			            section:'primary',
+			            type:'toggle',
+			            icon: 'favorite',
+			            onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdOpenWith',
+			            label:'open with',
+			            section:'primary',
+			            type:'button',
+			            icon: 'openfile',
+			            onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdDownload',
+			            label:'download',
+			            section:'primary',
+			            type:'button',
+			            icon: 'download',
+			            onclick: Sample.outputCommand}"></button>
+
+            <div data-win-control="WinJS.UI.AppBarCommand" data-win-options="{ id: 'search', type: 'content'}">
+                <div class="win-interactive" data-win-control="WinJS.UI.AutoSuggestBox" data-win-options="{placeholderText:'Search for songs'}"></div>
+            </div>
+
+
+            <!-- Secondary command -->
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdSettings',
+			            label:'settings',
+			            section:'secondary',
+			            type:'button',
+			            onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+			            id:'cmdShare',
+			            label:'share',
+			            section:'secondary',
+			            type:'button',
+			            onclick: Sample.outputCommand}"></button>
+        </div>
+
+
+        <md-content style="background-color: gray !important;" class="{{state.background}}" ng-view flex id="presenter"></md-content>
+
+        <!--<div class="contenttext"><h2 class="win-h2">SplitView Content area</h2>-->
+        <!--
+        <input type="text" class="win-textbox" />
+
+        Settings control:
+        <div id="wifiToggle" data-win-control="WinJS.UI.ToggleSwitch" data-win-options="{title: 'WiFi', checked: true, onchange: toggleWifi}">
+        </div>
+        -->
+        <!--
+                    <div class="groupingToolbar" data-win-control="WinJS.UI.ToolBar">
+
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdEdit',
+                    label:'edit',
+                    section:'primary',
+                    type:'button',
+                    icon: 'edit',
+                    priority:2,
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdDelete',
+                    label:'delete',
+                    section:'primary',
+                    type:'button',
+                    icon: 'delete',
+                    priority:2,
+                    onclick: Sample.outputCommand}"></button>
+            <hr data-win-control="WinJS.UI.Command" data-win-options="{type:'separator'}" />
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdFavorite',
+                    label:'favorite',
+                    section:'primary',
+                    type:'toggle',
+                    icon: 'favorite',
+                    priority:3,
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdOpenWith',
+                    label:'open with',
+                    section:'primary',
+                    type:'button',
+                    icon: 'openfile',
+                    priority:3,
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdDownload',
+                    label:'download',
+                    section:'primary',
+                    type:'button',
+                    icon: 'download',
+                    priority:3,
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdPin',
+                    label:'pin',
+                    section:'primary',
+                    type:'button',
+                    icon: 'pin',
+                    priority:3,
+                    onclick: Sample.outputCommand}"></button>
+            <hr data-win-control="WinJS.UI.Command" data-win-options="{type:'separator'}" />
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdZoom',
+                    label:'zoom',
+                    section:'primary',
+                    type:'button',
+                    icon: 'zoomin',
+                    priority:1,
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdFullscreen',
+                    label:'full screen',
+                    section:'primary',
+                    type:'button',
+                    icon: 'fullscreen',
+                    priority:1,
+                    onclick: Sample.outputCommand}"></button>
+
+
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdSettings',
+                    label:'settings',
+                    section:'secondary',
+                    type:'button',
+                    onclick: Sample.outputCommand}"></button>
+            <button data-win-control="WinJS.UI.Command" data-win-options="{
+                    id:'cmdShare',
+                    label:'share',
+                    section:'secondary',
+                    type:'button',
+                    onclick: Sample.outputCommand}"></button>
+        </div>-->
+
+
+        <div class="status"></div>
+
+    </div>
+    </div>
+
+
+    <!--
+    <div flex layout="row">
+        <md-content class="{{state.background}}" ng-view flex id="presenter"></md-content>
+    </div>-->
+
+
+    <span ng-controller="MenuController">
+
+
+
+
+
+
+        <md-sidenav ng-cloak layout="column" md-component-id="left" class="md-sidenav-left md-whiteframe-z2 menu">
+
+            <md-toolbar class="bgc-light-blue-500">
+
+                <md-button aria-label="Hide menu" class="menu-button close-button" ng-click="closeMenu()" class="md-button">
+                    <icon icon="ic_keyboard_backspace_24px"></icon>
+                </md-button>
+
+                <md-button ng-hide="state.isAnonymous" class="menu-button bgc-light-blue-500" href="#/profile">
+                    <img ng-src="{{state.buddyIcon}}" style="float: left; width: 24px; height: 24px; vertical-align:middle; margin-top: -3px;">
+                    <div style="line-height: 24px; height: 24px; float: left; margin-left: 6px; font-size: 0.6em;">{{state.userName}}</div>
+                    <!--<a href="https://www.flickr.com/people/{{state.userId}}/" target="_blank">...</a>-->
+                </md-button>
+
+            </md-toolbar>
+
+            <md-divider></md-divider>
+
+            <md-button class="menu-button" href="#/">
+                <icon icon="ic_home_24px"></icon>
+                Home
+            </md-button>
+
+            <md-button class="menu-button" href="#/about">
+                <icon icon="ic_help_24px"></icon>
+                About
+            </md-button>
+
+            <md-button class="menu-button" href="#/settings">
+                <icon icon="ic_settings_24px"></icon>
+                Settings
+            </md-button>
+
+
+            <md-button class="menu-button" href="#/login" ng-show="state.isAnonymous">
+                <i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-in"></i> Sign In
+            </md-button>
+
+            <md-button href="#/logout" class="menu-button" ng-show="!state.isAnonymous">
+                <i style="margin-left: 6px; margin-right: -6px;" class="fa fa-sign-out"></i> Sign out
+            </md-button>
+
+            <span flex></span>
+
+            <md-divider></md-divider>
+            <md-button class="menu-button" href="http://nobrain.uservoice.com" target="_blank">
+                Help &amp; Feedback
+            </md-button>
+            <md-button class="menu-button" href="http://brain.no" target="_blank">
+                brain.no
+            </md-button>
+
+        </md-sidenav>
+    </span>
+
+    <div class="actions row" ng-cloak ng-show="state.showActions" ng-controller="ActionsController as action">
+
+        <div layout="row" layout-align="end" nav-menu="selected">
+
+            <!--
+            // Implement in future release
+            <md-button ng-click="navigateBack()">Back</md-button>
+            -->
+            <div flex></div>
+
+            <div ng-show="state.showLicenses">
+
+                <div class="fab">
+                    <button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="License" tooltip-position="left">
+                        <i style="margin-left: 2px; margin-top: 2px;" class="fa fa-copyright"></i>
+                    </button>
+
+                    <div class="fab__actions fab__actions--up">
+                        _a
+                        <button ng-class="licenseClass('')" ng-click="selectLicense('')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Any license" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button>
+                        <!--
+                        -->
+                        <!--<button ng-class="licenseClass('0')" ng-click="selectLicense('0')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="All Rights Reserved" tooltip-position="right"><img class="cc-icon" src="images/arr.png"></button>-->
+                        <!--
+                        -->
+                        <button ng-class="licenseClass('1,2,3,4,5,6,7,8')" ng-click="selectLicense('1,2,3,4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (All)" tooltip-position="right"><img class="cc-icon" src="images/cc.png"></button>
+                        <!--
+                        -->
+                        <button ng-class="licenseClass('4,5,6,7,8')" ng-click="selectLicense('4,5,6,7,8')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="Creative Commons (Commercial use)" tooltip-position="right">
+                            <img class="cc-icon" src="images/commercial.png">
+         <!--
+                             -
+                            ->
+                            <!--<
+                            button  ng-class="licenseClass
+                            ('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>-->
+                            </div>
+                            </div>
+
+                    </div>
+                    ('1,2,3')" ng-click="selectLicense('1,2,3')" class="btn btn--l btn--fab" lx-ripple lx-tooltip="CC: Non Commercial Allowed" tooltip-position="right"><img class="cc-icon" src="images/nc.png"></button>-->
+                    </div>
+                </div>
+
+                <!--
+                <lx-dropdown from-top="false">
+                    <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dropdown-toggle>
+                        Dropdown toggle
+                    </button>
+
+                    <lx-dropdown-menu>
+                        <ul>
+                            <li><a class="dropdown-link" ng-click="dropdownAlert()">Notification</a></li>
+                            <li><a class="dropdown-link">Another action</a></li>
+                            <li><a class="dropdown-link">Something else here</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><span class="dropdown-link dropdown-link--is-header">Header</span></li>
+                            <li><a class="dropdown-link">Separated link</a></li>
+                        </ul>
+                    </lx-dropdown-menu>
+                </lx-dropdown>-->
+                <!--
+                <label for="select-license" title="License"><i class="fa fa-copyright"></i>
+                </label>
+                <select id="select-license" class="select-dark" ng-model="settings.values.license">
+                    <option ng-if="state.debug" value="">All</option>
+                    <option ng-if="state.debug" value="0">All Rights Reserved</option>
+                    <option value="1,2,3,4,5,6,7,8">Creative Commons</option>
+                    <option value="4,5,6,7,8">CC: Commercial Use Allowed</option>
+                    <option value="1,2,3">CC: Non Commercial Allowed</option>
+                </select>
+                -->
+
+            </div>
+
+            <div ng-show="state.showSorting" style="margin-left: 10px;">
+
+                <div class="fab">
+                    <button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Sorting" tooltip-position="left">
+                        <!--<i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>-->
+                        <i class="mdi mdi-sort"></i>
+                        <i class="mdi mdi-sort"></i>
+                    </button>
+
+                    <div class="fab__actions fab__actions--up">
+                        <button ng-class="sortingClass('relevance')" ng-click="selectSort('relevance')" class="btn btn--l btn--raised" lx-ripple>Relevant</button>
+                        <!--
+                        -->
+                        <button ng-class="sortingClass('date-posted-desc')" ng-click="selectSort('date-posted-desc')" class="btn btn--l btn--raised" lx-ripple>Recent</button>
+                        <!--
+                        -->
+                        <button ng-class="sortingClass('interestingness-desc')" ng-click="selectSort('interestingness-desc')" class="btn btn--l btn--raised" lx-ripple>Interesting</button>
+                    </div>
+                </div>
+
+
+                </label>
+                <!--<select id="select-sort" class="select-dark" ng-model="settings.values.sort" ng-options="k as v for (k,v) in sorting"></select>-->
+            </div>
+
+            <!--
+            Hidden for first release, planned for 3.0.3
+            <div ng-show="state.actionTarget == 'folder'">
+                <label for="select-list" title="View"><i class="fa fa-list-ul"></i>
+                </label>
+                <select id="select-list" class="select-dark" ng-model="settings.values.view">
+                    <option value="large">Large</option>
+                    <option value="small">Small</option>
+                    <option value="list">List</option>
+                </select>
+            </div>-->
+            <!-- For user simplicity, we will hide most of the size options. -->
+            <div ng-show="state.showSizes" style="margin-right: 10px;">
+
+                <!--
+                    Icons for future use: md-view-headline, md-view-list, md-view-module
+                    md-open-in-browser
+                    md-clear
+                    md-sort
+                    md-file-download
+                    md-check
+                    md-close
+                -->
+
+                <div class="fab">
+                    <button class="fab__primary btn btn--xl btn--light-blue btn--fab" lx-ripple lx-tooltip="Size" tooltip-position="left">
+                        <i style="margin-left: 2px; margin-top: 2px;" class="fa fa-arrows-v"></i>
+                    </button>
+
+                    <div class="fab__actions fab__actions--up">
+                        <button ng-class="sizeClass('o')" ng-click="selectSize('o')" class="btn btn--l btn--raised" lx-ripple>Original</button>
+                        <!--
+                        -->
+                        <button ng-class="sizeClass('l')" ng-click="selectSize('l')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="1024x768" tooltip-position="left">Large</button>
+                        <!--
+                        -->
+                        <button ng-class="sizeClass('z')" ng-click="selectSize('z')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="640x480" tooltip-position="left">Medium</button>
+                        <!--
+                        -->
+                        <button ng-class="sizeClass('n')" ng-click="selectSize('n')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="320x240" tooltip-position="left">Small</button>
+                        <!--
+                        -->
+                        <button ng-class="sizeClass('q')" ng-click="selectSize('q')" class="btn btn--l btn--raised" lx-ripple lx-tooltip="150x150" tooltip-position="left">Square</button>
+                    </div>
+                </div>
+                <!--
+
+                <label for="select-size" title="Size"><i class="fa fa-file-photo-o"></i>
+                </label>
+
+                <select id="select-size" class="select-dark" ng-model="settings.values.size">
+                    <option value="o">Original</option>
+                    <option value="b">Large (1024)</option>
+                    <option ng-if="state.debug" value="c">Medium (800)</option>
+                    <option value="z">Medium (640)</option>
+                    <option ng-if="state.debug" value="-">Medium (500)</option>
+                    <option value="n">Small (320)</option>
+                    <option ng-if="state.debug" value="m">Small (240)</option>
+                    <option ng-if="state.debug" value="t">Thumbnail (100)</option>
+                    <option value="q">Square (150x150)</option>
+                    <option ng-if="state.debug" value="s">Square (75x75)</option>
+                </select>-->
+            </div>
+
+            <!--
+            <div class="counter" ng-show="state.actionTarget == 'folder' && managerState.count">
+                {{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
+            </div>-->
+
+            <div class="counter" ng-show="state.showCounter && managerState.count > 0">
+                {{managerState.count}}<a href="" ng-click="clearSelection()" class="counter-remove" lx-tooltip="Clear selection" tooltip-position="left"><i class="fa fa-check"></i></a>
+            </div>
+
+            <div lx-tooltip="Photos founds" tooltip-position="left" class="counter" ng-show="state.showCounter && managerState.count == 0">
+                {{total}}<a href="" class="counter-total"><i class="fa fa-check"></i></a>
+            </div>
+
+            <!-- Due to issues with dynamic links (ng-href) with CSP, we are handling different statesd with ng-show -->
+            <div class="not-responsive" ng-show="state.actionTarget == 'folder' && managerState.count > 0">
+                <button ng-click="navigate('/folder')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
+            </div>
+            <div class="not-responsive" ng-show="state.actionTarget == 'folder' && managerState.count == 0">
+                <button ng-click="navigate('/folder')" disabled style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>NEXT <icon style="margin-top: 4px;" icon="ic_arrow_forward_24px"></icon></button>
+            </div>
+            <div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath != ''">
+                <button ng-click="navigate('/download')" style="height: 52px;" class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
+            </div>
+            <div class="not-responsive" ng-show="state.actionTarget == 'download' && state.targetPath == ''">
+                <button style="height: 52px;" disabled class="btn btn--m btn--light-blue btn--raised" lx-ripple>DOWNLOAD <icon style="margin-top: 4px;" icon="ic_file_download_24px"></icon></button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer" ng-controller="StatusController">
+        {{message}}
+    </footer>
+
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+
+    <script src="libs/lib.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<div id="debugView" class="container">
+	<div class="content padding">
+		<h1>Debug Tools</h1>
+		<p>
+			WARNING: This section is only accessible through special key strokes. It contains tools and options not normally available to end-users. Please take notice that changes here can break the app and stop it from working.
+		</p>
+		<hr>
+		<p>
+			Bytes in use (sync): {{bytesInUseSync}} bytes
+			<br>Bytes in use (local): {{bytesInUseLocal}} bytes
+			<br>Settings: {{userSettings}}
+		</p>
+		<hr>
+		<p>
+			<input id="enableLogConsoleChkBox" type="checkbox" ng-model="enableLogConsole" />
+			<label for="enableLogConsoleChkBox">Show Log Console</label>
+			<br>- <em>Shows all log statements at the bottom of the app.</em>
+		</p>
+		<!--
+        <hr>
+        <p>
+            <input type="checkbox" id="enableAllLicensesChkBox" ng-model="enableAllLicenses" />
+            <label for="enableAllLicensesChkBox">Enable download of all licenses</label><br> - <em>This is only for debug and testing purposes, please respect copyright license on photos.</em>
+        </p>-->
+
+	</div>
+</div>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="18"
+   height="18"
+   viewBox="0 0 18 18"
+   id="svg3061"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="mac_maximize_18px.svg">
+  <metadata
+     id="metadata3069">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3067" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="661"
+     id="namedview3065"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3061" />
+  <path
+     d="M 8.9491525,2.1016949 C 5.1132203,2.1016949 2,5.2149153 2,9.0508475 2,12.88678 5.1132203,16 8.9491525,16 c 3.8359325,0 6.9491525,-3.11322 6.9491525,-6.9491525 0,-3.8359322 -3.11322,-6.9491526 -6.9491525,-6.9491526 z"
+     id="path3368" />
+  <path
+     inkscape:connector-curvature="0"
+     d="M 12.694916,6.1510408 11.950654,5.4067793 9,8.3574328 6.0493462,5.4067793 5.3050847,6.1510408 8.2557385,9.1016948 5.3050847,12.052348 6.0493462,12.79661 9,9.8459558 11.950654,12.79661 12.694916,12.052348 9.7442618,9.1016948 z"
+     id="path3347"
+     style="fill:#ffffff" />
+</svg>

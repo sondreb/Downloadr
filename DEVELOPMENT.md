@@ -9,23 +9,20 @@ developers who want to contribute.
 
 # Tools:
 
-There are some requirements and some suggestions on software you should use
-when developing on this app.
+With the upgrade to Flickr Downloadr 3.1 (from 3.0) there are new requirements 
+for the toolset while developing the app.
+
+The app now supports both Chrome and Windows 10. For Windows 10, the Cordova
+Tools for Visual Studio 2015 is required.
+
+Build script have been converted from Grunt to Gulp, so new requirement is Gulp.
+Additionally moved away from Bower for client packages and only use NPM for
+both server and client libraries.
 
 Requirements:
-- Node.JS
-- Grunt
-- Bower
-
-Suggestions:
-- Brackets (Text editor)
-
-Brackets extensions:
-- JSHint
-- Brackets Git
-- Brackets File Icons
-- QuickDocsJS
-- Stylus Extension for Brackets
+- Visual Studio 2015
+- Node.js
+- Gulp (npm install gulp -g)
 
 ## Icons:
 
