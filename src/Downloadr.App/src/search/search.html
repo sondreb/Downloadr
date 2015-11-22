@@ -47,17 +47,17 @@
 </win-pivot>
 
 <win-tool-bar class="toolbar" ng-show="selectedIndex === 0">
-    <win-tool-bar-command label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command priority="4" label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
-    <win-app-bar-content class="selection-count">
+    <win-app-bar-content priority="3" class="selection-count">
         {{downloadManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
-    <win-tool-bar-command on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command priority="3" on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
 
     <win-tool-bar-separator></win-tool-bar-separator>
 
-    <win-app-bar-content class="toolbar-option">
+    <win-app-bar-content priority="6" class="toolbar-option">
         <select ng-model="search.userSettings.license" ng-change="licenseChanged()">
             <option value="">Any license</option>
             <option value="1,2,3,4,5,6,7,8">Creative Commons</option>
@@ -65,14 +65,14 @@
         </select>
     </win-app-bar-content>
 
-    <win-app-bar-content class="toolbar-option">
+    <win-app-bar-content priority="5" class="toolbar-option">
         <select ng-options="k as v for (k, v) in search.flickr.sortList" ng-model="search.userSettings.sort" ng-change="sortChanged()"></select>
     </win-app-bar-content>
 
     <!--<win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
 
     <win-tool-bar-separator></win-tool-bar-separator>
-    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-command priority="1" on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
 
 </win-tool-bar>
 
@@ -97,19 +97,19 @@
 
 <win-tool-bar class="toolbar" ng-show="selectedIndex === 2">
 
-    <win-tool-bar-command label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
-    <win-app-bar-content class="selection-count">
+    <win-app-bar-content priority="2" class="selection-count">
         {{downloadManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
-    <win-tool-bar-command on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
 
     <!--<win-tool-bar-separator></win-tool-bar-separator>
     <win-tool-bar-command ng-click="moveNext()" label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
     <win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
     <win-tool-bar-separator></win-tool-bar-separator>
-    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-command priority="1" on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
 
     <!--<win-tool-bar-command label="'Select All Visible Items'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
     <win-tool-bar-command label="'This is a ToolBar command'" icon="'add'"></win-tool-bar-command>
