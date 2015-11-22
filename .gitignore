@@ -26,6 +26,7 @@ app/bower_components
 test/bower_components
 www/
 .vs
+cache/
 
 # .gitignore
 [Pp]lugins/android.json

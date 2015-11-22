@@ -1,6 +1,7 @@
 {
   "name": "Downloadr.App",
   "version": "3.0.105",
+  "electronVersion": "0.35.1",
   "description": "Flickr Downloadr App",
   "author": {
     "name": "Sondre Bjellås",
@@ -12,6 +13,11 @@
     "type": "git",
     "url": "https://github.com/sondreb/Downloadr.git"
   },
+  "scripts": {
+    "start": "electron www/electron.js"
+  },
+  "main": "www/electron.js",
+  "private": true,
   "dependencies": {
     "angular": "1.4.7",
     "angular-animate": "1.4.7",
@@ -33,19 +39,24 @@
     "browserify-ngannotate": "1.0.1",
     "browserify-shim": "3.8.11",
     "del": "2.1.0",
+    "electron-prebuilt": "0.35.1",
     "gulp": "3.9.0",
-    "gulp-if": "2.0.0",
+    "gulp-atom-electron": "^1.0.0",
     "gulp-concat": "2.6.0",
     "gulp-debug": "2.1.2",
+    "gulp-electron": "0.0.9",
+    "gulp-if": "2.0.0",
     "gulp-import-css": "0.1.2",
     "gulp-load-plugins": "1.1.0",
     "gulp-minify-css": "1.2.1",
     "gulp-ng-annotate": "1.1.0",
     "gulp-order": "1.1.1",
     "gulp-rename": "1.2.2",
+    "gulp-run": "1.6.11",
     "gulp-sass": "2.1.0",
     "gulp-size": "2.0.0",
     "gulp-sourcemaps": "1.6.0",
+    "gulp-symdest": "^1.0.0",
     "gulp-uglify": "1.5.1",
     "gulp-util": "3.0.7",
     "gulp-watch": "4.3.5",

@@ -129,6 +129,9 @@ for (var i = 0; i < methods.length; i++) {
 }
 ```
 
+### Future additions:
+
+Add electron-connect for reloading: https://github.com/Quramy/electron-connect
 
 # UI:
 

@@ -68,12 +68,61 @@ gulp.task('clean', function () {
     return $.del([appWwwRoot]);
 });
 
+gulp.task('run:electron', function() {
+    return $.run('electron .').exec();
+});
+
+gulp.task('run:chrome', function() {
+    console.log('Not implemented yet.');
+});
+
 gulp.task('package', function (callback) {
     $.runSequence('production', 'clean', 'build', 'package:chrome', callback);
 });
 
 gulp.task('production', function () {
     settings.isProduction = true;
+});
+
+gulp.task('package:atom', function() {
+    
+    return gulp.src('www/**')
+        .pipe($.atomElectron({ version: '0.35.1', platform: 'win32' }))
+        .pipe($.symdest('app'));
+    
+});
+
+gulp.task('package:electron', function() {
+    
+    var packageJson = readConfiguration();
+    
+    gulp.src("")
+    .pipe($.electron({
+        src: './www',
+        packageJson: packageJson,
+        release: './release',
+        cache: './cache',
+        version: 'v0.35.1',
+        packaging: true,
+        platforms: ['win32-ia32', 'darwin-x64'],
+        platformResources: {
+            darwin: {
+                CFBundleDisplayName: packageJson.name,
+                CFBundleIdentifier: packageJson.name,
+                CFBundleName: packageJson.name,
+                CFBundleVersion: packageJson.version,
+                icon: 'gulp-electron.icns'
+            },
+            win: {
+                "version-string": packageJson.version,
+                "file-version": packageJson.version,
+                "product-version": packageJson.version,
+                "icon": 'src/images/icons/downloadr.ico'
+            }
+        }
+    }))
+    .pipe(gulp.dest(""));
+    
 });
 
 gulp.task('package:chrome', function () {
