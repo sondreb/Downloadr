@@ -24,7 +24,18 @@ dist
 .sass-cache
 app/bower_components
 test/bower_components
+www/
+.vs
 
+# .gitignore
+[Pp]lugins/android.json
+[Pp]lugins/windows.json
+[Pp]lugins/wp8.json
+[Pp]lugins/remote_ios.json
+[Pp]latforms/
+
+# TODO: Figure out if plugins should be commited or not.
+[Pp]lugins/
 
 #################
 ## Eclipse

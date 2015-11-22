@@ -1,0 +1,50 @@
+﻿<win-pivot>
+    <win-pivot-item header="'Settings'">
+
+        <div class="flex content-padding">
+
+            <div class="flex-70">
+
+                <h3 class="win-h3">Safe Search</h3>
+
+                <!--<input type='checkbox' class='win-checkbox' />-->
+                <input type='radio' ng-disabled="{{!authenticated}}" ng-model="settings.options.safe" name="radio1" id="radio1" value="1" class='win-radio' />
+                <label for="radio1">SafeSearch on</label>
+                <br />
+                <input type='radio' ng-disabled="{{!authenticated}}" ng-model="settings.options.safe" name="radio1" id="radio2" value="2" class='win-radio' />
+                <label for="radio2">SafeSearch moderate</label>
+                <br />
+                <input type='radio' ng-disabled="{{!authenticated}}" ng-model="settings.options.safe" name="radio1" id="radio3" value="3" class='win-radio' />
+                <label for="radio3">SafeSearch off</label>
+
+                <p ng-show="!settings.authenticated">
+                    <em>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service and not the app.</em>
+                </p>
+
+                <p>
+                    <h3 class="win-h3">Notifications</h3>
+                    <win-toggle-switch checked="settings.options.progress" label-off="'Progress notification'" label-on="'Progress notification'"></win-toggle-switch>
+                    <win-toggle-switch checked="settings.options.completed" label-off="'Completed notification'" label-on="'Completed notification'"></win-toggle-switch>
+                </p>
+
+                <p>
+                    <h3 class="win-h3">UI Options</h3>
+                    <win-toggle-switch checked="settings.options.keepOpen"label-off="'Keep Menu Closed'" label-on="'Keep Menu Open'"></win-toggle-switch>
+                    <!--<win-toggle-switch checked="options.darkTheme" disabled="toggleDisabled" label-off="'Dark Theme'" label-on="'Light Theme'"></win-toggle-switch>-->
+                </p>
+
+            </div>
+            <div class="flex-30">
+
+                <h3 class="win-h3">Safety</h3>
+                <p>You are only allowed to make safe searches when you are not authenticated. This is a restriction in the Flickr service and not the app.</p>
+
+                <h3 class="win-h3">Automatic Save</h3>
+                <p>Whenever you modify any of these settings, they are automatically saved for you and synchronized across your devices.</p>
+
+            </div>
+
+        </div>
+
+    </win-pivot-item>
+</win-pivot>

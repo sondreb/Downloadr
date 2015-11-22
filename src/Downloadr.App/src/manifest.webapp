@@ -1,0 +1,27 @@
+{
+  "version": "3.1.105",
+  "name": "Flickr Downloadr",
+  "description": "Simple and elegant app to download photos from Flickr.com",
+  "launch_path": "/index.html",
+  "icons": {
+     "16": "/images/icon_16.png",
+    "48": "/images/icon_48.png",
+    "128": "/images/icon_128.png",
+    "128": "/images/icon_128.png",
+    "512": "/images/icon_512.png"
+  },
+  "developer": {
+    "name": "brain.no",
+    "url": "http://brain.no"
+  },
+  "type": "privileged",
+  "permissions": {
+    "systemXHR": {
+      "description": "Required to load remote content"
+    }
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "en"
+}

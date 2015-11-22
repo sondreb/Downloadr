@@ -1,0 +1,38 @@
+﻿.icon-star::before {
+    content: "\E082";
+}
+
+.icon-more::before {
+    content: "\E10C";
+}
+
+.icon-cancel::before {
+    content: "\E711";
+}
+
+.icon {
+    font-family: "Segoe MDL2 Assets", "Symbols";
+    font-style: normal;
+    /*font-size: 28px;
+    color: #5729c1;*/
+}
+
+
+@font-face {
+    font-family: 'CreativeCommons';
+    src: url("../fonts/cc-icons.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.cc {
+    font-family: 'CreativeCommons';
+    font-size: 1.2em;
+}
+
+.cc-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-top: 0;
+    margin-left: 10px;
+}

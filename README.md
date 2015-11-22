@@ -1,4 +1,4 @@
-Flickr Downloadr 3 (3.0.104)
+Flickr Downloadr 3 (3.1.105)
 ============
 
 http://flickr-downloadr.com/
@@ -7,8 +7,6 @@ http://flickr-downloadr.com/
 
 Elegant and simple app that allows you to search and download
 photos from Flickr.com photo service.
-
-Flickr Downloadr is currently available to official beta testers only:
 
 Install on the Chrome Web Store: https://chrome.google.com/webstore/detail/flickr-downloadr/fpmonoglnknhfnfgeopdjmhpilpejedj
 
@@ -74,6 +72,26 @@ any changes to the app-code.
 ```sh
 $ grunt debug
 ```
+
+## Platforms
+
+This app is coded and configured in such a way that it compiles to the maximum
+amount of supported platforms.
+
+- Chrome Web App (Windows, Mac, Linux, Chrome OS)
+- Open Web Apps for Desktop (FireFox, Windows, Mac, Linux)
+- Cordova (Windows 10, Android, iOS)
+- Electron (Windows, Mac)
+
+As of now, the app is only distributed on the Chrome Web Store.
+
+### Fonts
+
+For Windows, the application will use Segoe UI font type, and for
+other OS it will use Helvetica Neue if available, or Roboto, which is
+the default font for Chrome OS and is additionally a font that is embedded
+into the application.
+
 
 ## Help:
 

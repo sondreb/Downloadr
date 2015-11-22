@@ -1,0 +1,204 @@
+﻿@import 'variables.scss';
+
+.content, #app {
+    height: 100%;
+}
+
+#app .win-splitviewpanetoggle {
+    float: left;
+}
+
+/* SplitView pane content style*/
+#app .header {
+    white-space: nowrap;
+    height: 48px;
+    width: 48px;
+}
+
+#app .title {
+    font-size: 25px;
+    left: 50px;
+    margin-top: 6px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+/*#app .nav-commands {
+        margin-top: 20px;
+    }*/
+
+.win-splitviewcommand-button {
+    background-color: transparent;
+}
+
+/* Overrides the default 320px width of the splitpane menu */
+.win-splitview.win-splitview-pane-opened.win-splitview-placementleft .win-splitview-pane,
+.win-splitview.win-splitview-pane-opened.win-splitview-placementright .win-splitview-pane {
+    width: 200px;
+}
+
+#app .win-splitview-pane-closed .win-splitviewcommand-label {
+    /*  Make sure pane content doesn't scroll if 
+    SplitViewCommand label receives focus while pane is closed.
+    */
+    visibility: hidden;
+}
+
+/*SplitView content style*/
+#app .win-splitview-content {
+    background-color: rgb(112,112,112);
+    overflow-y: auto;
+    overflow-y: hidden;
+}
+
+#app .contenttext {
+    margin-left: 20px;
+    margin-top: 6px;
+    background-image: url('images/wallpaper-1.jpg');
+}
+
+.nav-middle {
+    overflow-y: auto !important;
+    overflow-x: no-content !important;
+    overflow-x: hidden !important;
+    position: absolute;
+    top: 96px;
+    bottom: 97px;
+    width: 100%;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.nav-top {
+}
+
+.nav-middle {
+}
+
+.nav-bottom {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.win-pivot .win-pivot-header-leftcustom, .win-pivot .win-pivot-header-rightcustom {
+    margin-top: 0;
+}
+
+.toolbar {
+    /*background-color: $background-color;*/
+    /*width:calc(100% - 66px);
+    display:block;
+    position:fixed;
+    bottom:0;
+    left:48px;
+    z-index: 10000;*/
+}
+
+
+
+.win-pivot-header-items {
+    padding: 0 !important;
+}
+
+.win-pivot-right-header {
+    height: 48px !important;
+}
+
+
+.win-pivot-headers button {
+    margin-top: 8px !important;
+    height: 32px !important;
+}
+
+
+
+.win-pivot {
+    /*flex-flow: column !important;
+    justify-content: center !important;
+    align-content: stretch !important;
+    align-items: stretch !important;*/
+}
+
+.win-pivot-title {
+    /*flex: 0 1 auto !important;*/
+}
+
+.win-pivot-header-area {
+    /*flex: 0 1 auto !important;*/
+    background-color: $background-color;
+    /*width:calc(100% - 66px);*/
+    height: 48px;
+    display: block;
+    /*position:fixed;*/
+    /*top:0;
+    left:48px;*/
+    z-index: 10001;
+}
+
+// The main container of the viewport for showing tab content.
+.win-pivot-viewport {
+    /*border: 1px solid red;*/
+    /*flex-flow: row !important;
+    justify-content: center !important;
+    align-content: stretch !important;
+    align-items: stretch !important;*/
+    /*display: flex;
+    flex: 1 1 0% !important;*/
+    /*height: 100%;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: box;
+  
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;*/
+}
+
+// Contains all of the .win-pivot-item.
+.win-pivot-surface {
+    /*display: flex;
+    flex: 1 1 0% !important;*/
+    /*border: 1px solid yellow;
+
+    
+         height: 100%;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: box;
+  
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  box-orient: horizontal;*/
+}
+
+// "Tabpanel" container which holds .win-pivot-item-content.
+.win-pivot-item {
+    /*height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;*/
+    /*-ms-flex: 1;
+     -webkit-box-flex: 1;
+     -moz-box-flex: 1;
+     -ms-box-flex: 1;
+     box-flex: 1;*/
+    /*
+      overflow-y: hidden;*/
+    /*height: 300px;*/
+    //height: 400px;
+    //height: calc(100% - 48px);
+    /*border: 1px solid blue;*/
+}
+
+// Last container of the content.
+.win-pivot-item-content {
+    padding: 0 0 10px 0 !important;
+}

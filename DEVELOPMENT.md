@@ -111,6 +111,12 @@ The bower.json currently is setup to take the latest version of all
 dependencies. While this is good for active development, it might be a problem
 in the future. Consider adding specific versions at a later time.
 
+### Screenshots:
+
+Screenshots taken for the app store is taken at 125% text resolution on the desktop.
+The size of the window should then be 1024x615, which should result in files in the size
+of 1280x800, which is the correct size for Chrome Web Store.
+
 # UI:
 
 The UI have been built on Material-design with AngularJS. Here are some resources

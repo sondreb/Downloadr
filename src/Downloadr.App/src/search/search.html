@@ -1,0 +1,149 @@
+﻿<win-pivot win-control="winTabControl" on-selection-changed="tabChanged()">
+    <win-pivot-right-header>
+        <h3 class="win-h3" style="padding-right: 10px; padding-top: 10px;">"{{search.text}}"</h3>
+    </win-pivot-right-header>
+    <win-pivot-item header="'Photos'">
+        <gallery id="photostreamGallery" query="queryPhotos" select-all-event="Event:SelectAll:Photostream"></gallery>
+    </win-pivot-item>
+    <win-pivot-item header="'People'">
+
+        <div class="content-padding">
+            <div ng-show="search.foundUser">
+
+                <h3 class="win-h3">Found user:</h3>
+
+                <p>
+                    Id: {{search.user.id}}<br />
+                    Username: {{search.user.username._content}}
+                </p>
+                <p>
+                    <input type='button' class='win-button win-button-primary' ui-sref="profile({userId: search.user.id})" value='View profile' />
+                </p>
+
+            </div>
+
+            <div class="margin-top" ng-hide="search.foundUser">
+                {{search.userNotFound}}
+            </div>
+
+            <p>
+                Flickr API does not allow wildcard search for users, click the button below to go to Flickr.com to search for '{{search.text}}' there for more results.
+            </p>
+            <p>
+                <a href="{{search.userSearchUrl}}" class='win-button win-button-primary' target="_blank">Search on Flickr.com</a>
+            </p>
+        </div>
+
+    </win-pivot-item>
+
+    <win-pivot-item header="'Groups'">
+
+        <gallery query="search.queryGroups" select-all-event="Event:SelectAll:Albums"></gallery>
+
+        <div class="margin-top" ng-hide="search.foundGroups">
+            {{search.groupsNotFound}}
+        </div>
+    </win-pivot-item>
+</win-pivot>
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 0">
+    <win-tool-bar-command label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
+
+    <win-tool-bar-separator></win-tool-bar-separator>
+
+    <win-app-bar-content class="toolbar-option">
+        <select ng-model="search.userSettings.license" ng-change="licenseChanged()">
+            <option value="">Any license</option>
+            <option value="1,2,3,4,5,6,7,8">Creative Commons</option>
+            <option value="4,5,6,7,8">CC (Commercial use)</option>
+        </select>
+    </win-app-bar-content>
+
+    <win-app-bar-content class="toolbar-option">
+        <select ng-options="k as v for (k, v) in search.flickr.sortList" ng-model="search.userSettings.sort" ng-change="sortChanged()"></select>
+    </win-app-bar-content>
+
+    <!--<win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
+
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+
+</win-tool-bar>
+
+<!--<win-tool-bar class="toolbar" ng-show="selectedIndex === 1">
+    <win-tool-bar-command label="'Select All Visible Items'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command label="'This is a ToolBar command'" icon="'add'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Sort'" icon="'sort'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Download'" icon="'download'"></win-tool-bar-command>
+    <win-app-bar-content>
+        <win-auto-suggest-box placeholder-text="'Search'"></win-auto-suggest-box>
+    </win-app-bar-content>
+    <win-tool-bar-command label="'Download & Save'" icon="'save'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-content>
+        <win-search-box placeholder-text="'Search'"></win-search-box>
+    </win-tool-bar-content>
+</win-tool-bar>-->
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 2">
+
+    <win-tool-bar-command label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
+    <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+
+    <!--<win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command ng-click="moveNext()" label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+
+    <!--<win-tool-bar-command label="'Select All Visible Items'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command label="'This is a ToolBar command'" icon="'add'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Sort'" icon="'sort'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Download'" icon="'download'"></win-tool-bar-command>
+    <win-app-bar-content>
+        <win-auto-suggest-box placeholder-text="'Search'"></win-auto-suggest-box>
+    </win-app-bar-content>
+    <win-tool-bar-command label="'Download & Save'" icon="'save'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-content>
+        <win-search-box placeholder-text="'Search'"></win-search-box>
+    </win-tool-bar-content>-->
+</win-tool-bar>
+
+<!--<win-tool-bar class="toolbar" ng-show="selectedIndex === 3">
+    <win-tool-bar-command label="'Select All Visible Items'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command label="'This is a ToolBar command'" icon="'add'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Sort'" icon="'sort'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Download'" icon="'download'"></win-tool-bar-command>
+    <win-app-bar-content>
+        <win-auto-suggest-box placeholder-text="'Search'"></win-auto-suggest-box>
+    </win-app-bar-content>
+    <win-tool-bar-command label="'Download & Save'" icon="'save'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-content>
+        <win-search-box placeholder-text="'Search'"></win-search-box>
+    </win-tool-bar-content>
+</win-tool-bar>-->

@@ -1,0 +1,33 @@
+﻿<win-pivot>
+    <win-pivot-item header="title">
+
+        <div class="folder content-padding">
+
+            <div class="content middle">
+
+                <h2 class="win-h2" ng-hide="completed"><i class="fa fa-file-photo-o"></i> Downloaded {{current}} of {{count}}</h2>
+
+                <h2 class="win-h2" ng-show="completed">
+
+                    <span ng-hide="skipped > 0">
+                        <i class="fa fa-photo"></i> Downloaded {{count}} photos successfully.
+                    </span>
+                    </span>
+
+                    <span ng-show="skipped > 0">
+                        <i class="fa fa-photo"></i> Downloaded {{count - skipped}} photos successfully and skipped {{skipped}} photos <br>due to license or permission restriction.
+                    </span>
+                    </span>
+
+                </h2>
+
+                <br>
+                <button ng-click="pause()" class='win-button' ng-hide="completed">{{pauseResumeText}}</button>
+                <button ng-click="cancel()" class='win-button' ng-hide="completed">Cancel</button>
+                <button  ng-show="completed" ng-click="goHome()" class='win-button'>Search again</button>
+
+            </div>
+
+        </div>
+    </win-pivot-item>
+</win-pivot>

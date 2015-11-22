@@ -1,0 +1,27 @@
+﻿<win-pivot>
+    <win-pivot-item header="'Choose Folder'">
+
+        <div class="folder content-padding">
+
+            <input type='button' ng-click="folder.chooseFolder()" class='win-button win-button-primary' value="Choose Folder..." />
+
+            <p>Destination: {{path}}</p>
+
+        </div>
+
+    </win-pivot-item>
+</win-pivot>
+
+<win-tool-bar class="toolbar">
+
+    <!--<win-tool-bar-command label="'Size'" icon="'fullscreen'"></win-tool-bar-command>-->
+    
+    <win-app-bar-content class="toolbar-option">
+        Size:
+        <select ng-options="item.size as item.title for item in folder.sizes" ng-model="folder.userSettings.size"></select>
+    </win-app-bar-content>
+
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command disabled="path === ''" on-click="folder.beginDownload()" label="'Download'" icon="'download'"></win-tool-bar-command>
+    <!--<win-tool-bar-command label="'Download & Save'" icon="'save'"></win-tool-bar-command>-->
+</win-tool-bar>

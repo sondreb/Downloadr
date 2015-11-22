@@ -1,0 +1,182 @@
+﻿
+::-webkit-scrollbar              { /* 1 */ }
+::-webkit-scrollbar-button       { /* 2 */ }
+::-webkit-scrollbar-track        { /* 3 */ }
+::-webkit-scrollbar-track-piece  { /* 4 */ }
+::-webkit-scrollbar-thumb        { /* 5 */ }
+::-webkit-scrollbar-corner       { /* 6 */ }
+::-webkit-resizer                { /* 7 */ }
+
+
+/*
+:horizontal
+:vertical
+:decrement
+:increment
+:start
+:end 
+:double-button
+:single-button
+:no-button
+:corner-present
+:window-inactive
+*/
+
+
+/*::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    background: $background-color;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $frame-hover;
+    -webkit-border-radius: 1ex;
+    -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
+::-webkit-scrollbar-corner {
+    background: #000;
+}*/
+
+::-webkit-scrollbar:hover {
+   /* Select the down or left scroll button when it's being hovered by the mouse */
+   
+   background: rgba(0, 0, 0, 0.20);
+   mix-blend-mode: screen;
+   -webkit-filter: invert(100%); 
+   -webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+ 
+::-webkit-scrollbar-thumb {
+
+    background: rgba(0, 0, 0, 0.70);
+
+    /*background: rgba(0, 0, 0, 0.70);
+    background: rgba(0, 0, 0, 1);
+
+    mix-blend-mode: screen;
+    -webkit-filter: invert(100%); 
+    -webkit-filter: invert(100%);
+    filter: invert(100%);*/
+
+    /*box-shadow: inset 0 0 6px rgba(0,0,0,1); 
+
+    border-radius: 4px;*/
+    /*box-shadow: inset 0 0 6px rgba(0,0,0,1);*/ 
+    /*-webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.5);*/ 
+}
+
+::-webkit-scrollbar-thumb:hover {
+   /* Select the down or left scroll button when it's being hovered by the mouse */
+   background: rgba(0, 0, 0, 0.50);
+    background: rgba(0, 120, 215, 1);
+    /*mix-blend-mode: screen;
+    -webkit-filter: invert(100%); 
+    -webkit-filter: invert(100%);
+    filter: invert(100%);
+    -webkit-filter: grayscale(100%); 
+    -webkit-filter: blur(50px);
+    -webkit-filter: brightness(75%);*/
+
+}
+
+::-webkit-scrollbar-thumb:decrement {
+   /* Select the down or left scroll button when it's being hovered by the mouse */
+   background: rgba(0, 0, 0, 0.50);
+    background: rgba(0, 120, 215, 1);
+   background: yellow;
+    width: 20px;
+}
+
+::-webkit-scrollbar-thumb:increment {
+   /* Select the down or left scroll button when it's being hovered by the mouse */
+   //background: rgba(0, 0, 0, 0.50);
+   // background: rgba(0, 120, 215, 1);
+   background: red;
+    width: 20px;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+   /* Select the thumb when the browser window isn't in focus */
+   background: rgba(0, 0, 0, 0.30);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+ 
+::-webkit-scrollbar-track {
+    /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;*/
+}
+
+
+::-webkit-scrollbar-track-piece:vertical:decrement {
+        -webkit-border-image: url(http://trac.webkit.org/export/41842/trunk/LayoutTests/scrollbars/resources/vertical-track.png) 13 0 13 0;
+        border-color: transparent;
+        border-width: 13px 0 0 0;
+    }
+
+ ::-webkit-scrollbar-track-piece:vertical:increment {
+        -webkit-border-image: url(http://trac.webkit.org/export/41842/trunk/LayoutTests/scrollbars/resources/vertical-track.png) 13 0 13 0;
+        border-color: transparent;
+        border-width: 0 0 13px 0;
+    }
+    
+    
+    
+    ::-moz-scrollbar {
+        width: 10px;
+        height: 6px;
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 6px;
+    }
+
+    ::-moz-scrollbar-button:start:decrement,
+    ::-moz-scrollbar-button:start:decrement {
+        height: 0px;
+        display: block;
+        background-color: black;
+    }
+    ::-webkit-scrollbar-button:start:decrement,
+    ::-webkit-scrollbar-button:end:increment {
+        height: 0px;
+        display: block;
+        background-color: black;
+    }
+    
+    ::-moz-scrollbar-track-piece {
+        background-color: #3b3b3b;          /*Global Track Peice(the slider noob.)*/
+        -webkit-border-radius: 6px;
+    }
+    ::-webkit-scrollbar-track-piece {
+        background-color: #3b3b3b;          /*Global Track Peice(the slider noob.)*/
+        -webkit-border-radius: 6px;
+    }
+
+    ::-moz-scrollbar-thumb:vertical {
+        height: 50px;
+        background-color: #666;            /* Up/Down slider background*/
+        -webkit-border-radius: 6px;
+    }    
+    ::-webkit-scrollbar-thumb:vertical {
+        height: 50px;
+        background-color: #666;            /* Up/Down slider background*/
+        -webkit-border-radius: 6px;
+    }
+
+    ::-moz-scrollbar-thumb:horizontal {
+        width: 50px;
+        background-color: #666;            /* Side/Side slider background*/
+        -webkit-border-radius: 3px;
+    }    
+    ::-webkit-scrollbar-thumb:horizontal {
+        width: 50px;
+        background-color: #666;            /* Side/Side slider background*/
+        -webkit-border-radius: 3px;
+    }

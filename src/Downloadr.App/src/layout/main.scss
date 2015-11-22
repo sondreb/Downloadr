@@ -1,0 +1,216 @@
+﻿@import '../../res/fonts/fonts.scss';
+@import '../../res/fonts/icons.scss';
+@import 'variables.scss';
+
+html{
+    
+    /* Removes touch delay for IE */
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+.win-pivot-item-content {
+    padding: 0 0 10px 0 !important;
+}
+
+body{
+    font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Roboto, sans-serif;
+    font-size: 1.0em !important;
+    -webkit-text-size-adjust: 100%;
+
+    /*-webkit-app-region: no-drag;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+    user-select: none;*/
+
+
+}
+
+button{
+    font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Roboto, sans-serif;
+}
+
+hr {
+    margin: 0px;
+    padding: 0px;
+
+    margin-left: 6px;
+    margin-right: 6px;
+
+    border: 0;
+    height: 1px;
+    background: $frame-pressed;
+    //background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+a {
+    color: #e8e8e8;
+}
+
+a:hover {
+    color: white;
+}
+
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Preferred icon size */
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+    /* Support for IE. */
+    font-feature-settings: 'liga';
+}
+
+
+
+.content {
+    margin-left: 20px;
+    margin-top: 6px;
+}
+
+
+.home {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background: url('../images/wallpaper-1.jpg') no-repeat center center fixed; 
+    background-size: cover;
+
+    text-align: center;
+
+}
+
+.home h1 {
+
+    margin-top: 20%;
+
+}
+
+.app-banner
+{
+    
+}
+
+.app-icon
+{
+    float: left;
+    margin-right: 10px;
+}
+
+.clear
+{
+    clear: both;
+}
+
+
+.release-number h4 {
+    float: right;
+}
+
+.searchInput input {
+    height: 48px;
+}
+
+.noflow {
+    height: 100%;
+    overflow: hidden !important;
+}
+
+.center {
+    text-align: center;
+}
+
+
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-70 {
+    flex-grow: 2;
+    width: 70%;
+}
+
+.flex-60 {
+    flex-grow: 2;
+    width: 70%;
+}
+
+.flex-50 {
+    flex-grow: 1;
+    width: 70%;
+}
+
+.flex-40 {
+    flex-grow: 1;
+    width: 30%;
+}
+
+.flex-30 {
+    flex-grow: 1;
+    width: 30%;
+}
+
+.padding-right-20 {
+    padding-right: 20px;
+}
+
+padding-top-20 {
+    padding-top: 20px;
+}
+
+padding-left-20 {
+    padding-left: 20px;
+}
+
+padding-bottom-20 {
+    padding-bottom: 20px;
+}
+
+padding-bottom-10 {
+    padding-bottom: 10px;
+}
+
+margin-top-20 {
+    margin-top: 20px;
+}
+
+#profileButton {
+    background-repeat: no-repeat;
+    background-size: 32px 32px;
+    background-position: 8px center;
+}
+
+.margin-top {
+    margin-top: 10px !important;
+}
+
+.toolbar-option {
+    font-size: 18px !important;
+    padding: 0 0 !important;
+}
+
+.toolbar-option select {
+    font-size: 18px !important;
+    margin-top: 10px;
+}
+
+.content-padding {
+    margin: 10px 24px 10px 24px !important;
+}

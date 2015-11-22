@@ -1,0 +1,18 @@
+{
+  "settings_title": {
+      "message": "SETTINGS",
+      "description": "Top menu item."
+  },
+  "about_title": {
+      "message": "ABOUT",
+      "description": "Top menu item."
+  },
+  "appName": {
+    "message": "Flickr Downloadr",
+    "description": "The title of the application, displayed in the web store."
+  },
+  "appDesc": {
+    "message": "Simple and elegant photo downloading tool.",
+    "description":"The description of the application, displayed in the web store."
+  }
+}

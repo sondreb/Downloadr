@@ -1,0 +1,69 @@
+/*!
+ * Flickr Downloadr
+ * Copyright: 2007-2015 Sondre Bjellås. http://sondreb.com/
+ * License: MIT
+ */
+
+/**
+ * Listens for the app launching then creates the window
+ *
+ * @see http://developer.chrome.com/trunk/apps/app.runtime.html
+ * @see http://developer.chrome.com/trunk/apps/app.window.html
+ */
+
+'use strict';
+
+chrome.app.runtime.onLaunched.addListener(function () {
+	var width = 834;
+	var height = 612;
+	
+	chrome.app.window.create('index.html', {
+	    id: 'downloadrWindow',
+	    frame: {
+            type: 'chrome',
+            color: '#171717',
+	        activeColor: '#171717',
+	        inactiveColor: '#171717'
+	    },
+		outerBounds: {
+			width: width,
+			height: height,
+			left: Math.round((screen.availWidth - width) / 2),
+      		top: Math.round((screen.availHeight - height)/2),
+			minWidth: 240,
+			minHeight: 240
+		}
+	});
+
+});
+
+chrome.runtime.onSuspend.addListener(function () {
+	// Do some simple clean-up tasks.
+});
+
+
+/*
+"management" api is not available for Chrome Apps. Was unable to find any
+events that can be listened on when app is being uninstalled. Verify if the
+synced Chrome storage is deleted upon uninstall, to ensure that the auth
+tokens does not persist on the users machine.
+*/
+/*
+chrome.management.onUninstalled.addListener(function() {
+  alert("Uninstalling");
+});*/
+
+//chrome.runtime.onUpdateAvailable.addListener(function (details) {
+//    console.log("updating to version " + details.version);
+//    chrome.runtime.reload();
+//});
+
+//chrome.runtime.requestUpdateCheck(function (status) {
+//    if (status == "update_available") {
+//        console.log("update pending...");
+//    } else if (status == "no_update") {
+//        console.log("no update found");
+//    } else if (status == "throttled") {
+//        console.log("Oops, I'm asking too frequently - I need to back off.");
+//    }
+//});

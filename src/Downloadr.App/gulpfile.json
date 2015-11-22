@@ -1,0 +1,6 @@
+{
+  "description": "Flickr Downloadr App",
+  "name": "Downloadr.App",
+  "version": "3.0.104",
+  "files": [ "index.html", "manifest.json", "manifest.webapp", "favicon.ico" ]
+}

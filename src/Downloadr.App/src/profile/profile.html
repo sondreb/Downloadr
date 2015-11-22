@@ -1,0 +1,121 @@
+﻿<win-pivot id="tabProfile" win-control="winTabControl" on-selection-changed="tabChanged()" class="pivot-no-padding">
+    <win-pivot-item header="'Photostream'">
+        <gallery query="queryPhotos" select-all-event="Event:SelectAll:Photostream"></gallery>
+    </win-pivot-item>
+    <win-pivot-item header="'Albums'">
+        <gallery query="queryAlbums" select-all-event="Event:SelectAll:Albums"></gallery>
+    </win-pivot-item>
+    <win-pivot-item header="'Favorites'">
+        <gallery query="queryFavorites" select-all-event="Event:SelectAll:Favorites"></gallery>
+    </win-pivot-item>
+    <win-pivot-item header="'Galleries'">
+        <gallery query="queryGalleries" select-all-event="Event:SelectAll:Galleries"></gallery>
+    </win-pivot-item>
+    <win-pivot-item header="'Profile'">
+
+        <div class="flex padding-top-20 padding-left-20 padding-bottom-10">
+
+            <div class="flex-40 padding-right-20"><img image="{{buddyIconLarge}}" class="buddy-icon-large"></div>
+            <div class="flex-60">
+
+                <h1 class="win-h1">{{name}}</h1>
+
+                <br />
+
+                <div layout="row" layout-wrap ng-repeat="element in profile">
+                    <div style="width: 120px;"><strong>{{element.key}}:</strong></div>
+                    <div flex ng-if="element.isLink === true">
+                        <a href="{{element.value}}" target="_blank">{{element.value}}</a>
+                    </div>
+                    <div flex ng-if="element.isLink !== true">
+                        {{element.value}}
+                    </div>
+                </div>
+
+                <br />
+                <input type='button' ng-show="isCurrentUser" class='win-button' ui-sref="logout" value='Logout' />
+                <br />
+                <br />
+            </div>
+
+        </div>
+
+    </win-pivot-item>
+    <win-pivot-right-header>
+        <img image="{{buddyIcon}}" ng-hide="isCurrentUser" style="width: 48px; height: 48px;">
+        <img ng-src="{{state.buddyIcon}}" ng-show="isCurrentUser" style="width: 48px; height: 48px;">
+        <!--<img src="images/buddyicon.gif" alt="Sondre Bjellås (SondreB)" />-->
+    </win-pivot-right-header>
+</win-pivot>
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 0">
+    <win-tool-bar-command label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
+
+    <!--<win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command ng-click="moveNext()" label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+</win-tool-bar>
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 1">
+
+    <win-tool-bar-command label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
+    <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+
+    <!--<win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command ng-click="moveNext()" label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command on-click="showSortMenu(this)" label="'Sort'" icon="'sort'"></win-tool-bar-command>-->
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+
+    <!--<win-tool-bar-command label="'Select All Visible Items'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
+    <win-tool-bar-command label="'This is a ToolBar command'" icon="'add'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Size'" icon="'fullscreen'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Sort'" icon="'sort'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Download'" icon="'download'"></win-tool-bar-command>
+    <win-app-bar-content>
+        <win-auto-suggest-box placeholder-text="'Search'"></win-auto-suggest-box>
+    </win-app-bar-content>
+    <win-tool-bar-command label="'Download & Save'" icon="'save'"></win-tool-bar-command>
+    <win-tool-bar-command label="'Next'" icon="'forward'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-content>
+        <win-search-box placeholder-text="'Search'"></win-search-box>
+    </win-tool-bar-content>-->
+</win-tool-bar>
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 2">
+    <win-tool-bar-command label="'Select All'" on-click="selectAllFavorites()" icon="'selectall'"></win-tool-bar-command>
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+
+</win-tool-bar>
+
+<win-tool-bar class="toolbar" ng-show="selectedIndex === 3">
+    <win-tool-bar-command label="'Select All'" on-click="selectAllGalleries()" icon="'selectall'"></win-tool-bar-command>
+    <win-app-bar-content class="selection-count">
+        {{downloadManager.state.count}}
+    </win-app-bar-content>
+    <win-tool-bar-command on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
+    <win-tool-bar-separator></win-tool-bar-separator>
+    <win-tool-bar-command on-click="moveNext()" label="'Next'" icon="'forward'"></win-tool-bar-command>
+
+</win-tool-bar>
