@@ -12,16 +12,15 @@ Install on the Chrome Web Store: https://chrome.google.com/webstore/detail/flick
 
 Screenshots
 
-![Home Screen](/web/public/images/Flickr_Downloadr_02.png?raw=true "Home Screen")
+![Home Screen](/web/public/images/store/downloadr-screenshot-05.png?raw=true "Home Screen")
 
-![Results](/web/public/images/Flickr_Downloadr_06.png?raw=true "Results")
+![Results](/web/public/images/store/downloadr-screenshot-06.png?raw=true "Results")
 
 ## Features:
 - Search for photos based upon name, the user account or groups.
 - View and select photos for download.
 - Download originals or high resolution photos to local disk storage.
 - Supports authentication (OAuth) to search for restricted and your private photos.
-
 - Note: The Flickr API restricts downloads to photos licensed under Creative Commons. The All Rights Reserved photos cannot be downloaded.
 
 ## Installation:
@@ -43,7 +42,6 @@ and then run:
 
 ```sh
 $ npm install
-$ bower install
 ```
 
 Then navigate into the "web" folder and run:
@@ -56,7 +54,7 @@ Navigate back into the root of the repository, then run the following command to
 server that is required to communicate for OAuth tokens and live-reload:
 
 ```sh
-$ grunt debug
+$ gulp
 ```
 
 If there is any modules that require node-gyp and you don't have Visual Studio 2010 redist installed,
@@ -70,7 +68,7 @@ it. After you open the Chrome App, it should auto-reload whenever you make
 any changes to the app-code.
 
 ```sh
-$ grunt debug
+$ gulp package
 ```
 
 ## Platforms
@@ -92,29 +90,25 @@ other OS it will use Helvetica Neue if available, or Roboto, which is
 the default font for Chrome OS and is additionally a font that is embedded
 into the application.
 
-
 ## Help:
 
-- Documentation: http://flickrdownloadr.codeplex.com/documentation
-- Issues: http://flickrdownloadr.codeplex.com/workitem/list/basic
-- Discussions: http://flickrdownloadr.codeplex.com/discussions
+- Documentation: https://github.com/sondreb/Downloadr/wiki
+- Issues: https://github.com/sondreb/Downloadr/issues
 
 ## Contribute:
 
 You can contribute by uploading patches in the source code area:
-http://flickrdownloadr.codeplex.com/SourceControl/latest
+https://github.com/sondreb/Downloadr
 
 ## Credits:
 - Developed by Sondre Bjellås: http://brain.no/
-- Icon by HADezign: http://hadezign.com/
-- Mac Icons by synetcon: http://synetcon.deviantart.com/art/OSX-Yosemite-window-buttons-459868391
-- Symbols by Font Awesome: http://fontawesome.io/
-- Image by Ossi Petruska: http://www.flickr.com/photos/10134557@N08/2527630813
+- Icon by [HADezign](http://hadezign.com/)
+- Wallpaper by [Ossi Petruska](https://www.flickr.com/photos/10134557@N08/2527630813)
 - Components: https://angularjs.org/, https://jquery.org/, http://nodejs.org/, http://expressjs.com/, 
 https://github.com/Azure/azure-documentdb-node,
-https://github.com/mattiaserlo/flickr-oauth-and-upload, https://github.com/flatiron/nconf,
-https://github.com/HubSpot/pace, https://github.com/khasinski/angular-mousetrap,
-http://gruntjs.com/, http://ui.lumapps.com/
+https://github.com/mattiaserlo/flickr-oauth-and-upload, https://github.com/flatiron/nconf, 
+https://github.com/khasinski/angular-mousetrap,
+http://gulpjs.com/, https://github.com/winjs/angular-winjs
 
 ## License (MIT):
 
