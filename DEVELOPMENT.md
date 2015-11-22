@@ -117,6 +117,19 @@ Screenshots taken for the app store is taken at 125% text resolution on the desk
 The size of the window should then be 1024x615, which should result in files in the size
 of 1280x800, which is the correct size for Chrome Web Store.
 
+### console.log:
+
+This code should be used to override the console in the release package:
+
+```javascript
+if (!window.console) window.console = {};
+var methods = ["log", "debug", "warn", "info"];
+for (var i = 0; i < methods.length; i++) {
+    console[methods[i]] = function () { };
+}
+```
+
+
 # UI:
 
 The UI have been built on Material-design with AngularJS. Here are some resources
