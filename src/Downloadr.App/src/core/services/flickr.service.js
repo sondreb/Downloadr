@@ -178,8 +178,12 @@ function FlickrApi($rootScope, $http, $q, appSettings, userToken, storage, logge
                     userId = container.user_id;
                 }
 
+                debugger;
+
                 if (itemType !== 'person' && itemType !== 'user') {
                     items.forEach(function (item) {
+
+                        debugger;
 
                         // Groups have .name, others don't.
                         if (item.name == null) {

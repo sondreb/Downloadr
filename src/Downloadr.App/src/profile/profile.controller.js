@@ -1,6 +1,9 @@
 ﻿'use strict';
+
+var flexImages = require('../lib.flex-images.js');
+
 // @ngInject
-function ProfileController($scope, $rootScope, flickr, $state, state, $stateParams, $timeout, licenses, userSettings, logger, downloadManager) {
+function ProfileController($scope, $rootScope, flickr, $state, state, $stateParams, $timeout, licenses, userSettings, logger, selectionManager) {
     
     var log = logger.Create('ProfileController');
 
@@ -11,7 +14,7 @@ function ProfileController($scope, $rootScope, flickr, $state, state, $statePara
     $scope.state = state;
     $scope.profile = [];
     $scope.selections = {};
-    $scope.downloadManager = downloadManager;
+    $scope.selectionManager = selectionManager;
     $scope.userId = userId;
     $scope.isCurrentUser = false;
     $scope.winMenuControl = null;
@@ -33,7 +36,7 @@ function ProfileController($scope, $rootScope, flickr, $state, state, $statePara
     $scope.clearSelection = function () {
         log.debug('Clear selection');
         // Clear any selected items from the manager.
-        downloadManager.clear();
+        selectionManager.clear();
     };
 
     $scope.moveNext = function () {
@@ -73,6 +76,8 @@ function ProfileController($scope, $rootScope, flickr, $state, state, $statePara
             console.log('Load user: ' + userId);
             $scope.findProfile();
         }
+
+        new flexImages({ selector: '.flex-images', rowHeight: 48 });
     });
 
     if (state.authenticated) {

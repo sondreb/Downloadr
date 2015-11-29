@@ -1,6 +1,8 @@
 ﻿<win-pivot>
     <win-pivot-item header="title">
 
+        <div cg-busy="{promise:progress,message:'Downloading...'}"></div>
+
         <div class="folder content-padding">
 
             <div class="content middle">
@@ -12,18 +14,22 @@
                     <span ng-hide="skipped > 0">
                         <i class="fa fa-photo"></i> Downloaded {{count}} photos successfully.
                     </span>
-                    </span>
 
                     <span ng-show="skipped > 0">
                         <i class="fa fa-photo"></i> Downloaded {{count - skipped}} photos successfully and skipped {{skipped}} photos <br>due to license or permission restriction.
-                    </span>
                     </span>
 
                 </h2>
 
                 <br>
-                <button ng-click="pause()" class='win-button' ng-hide="completed">{{pauseResumeText}}</button>
-                <button ng-click="cancel()" class='win-button' ng-hide="completed">Cancel</button>
+                <span ng-hide="completed">
+
+                </span>
+
+                <button ng-click="pause()" class='win-button' ng-hide="paused">Pause</button>
+                <button ng-click="resume()" class='win-button' ng-show="paused">Resume</button>
+                <button ng-click="cancel()" class='win-button'>Cancel</button>
+
                 <button  ng-show="completed" ng-click="goHome()" class='win-button'>Search again</button>
 
             </div>

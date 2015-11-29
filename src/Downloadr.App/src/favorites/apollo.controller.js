@@ -1,8 +1,8 @@
 ﻿'use strict';
 // @ngInject
-function ApolloController($scope, $rootScope, $state, downloadManager, flickr) {
+function ApolloController($scope, $rootScope, $state, selectionManager, flickr) {
     $scope.userId = '136485307@N06';
-    $scope.downloadManager = downloadManager;
+    $scope.selectionManager = selectionManager;
 
     $scope.downloadArchive = function () {
         var query = flickr.createMessage('flickr.people.getInfo', {

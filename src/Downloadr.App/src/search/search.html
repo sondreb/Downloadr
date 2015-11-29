@@ -50,7 +50,7 @@
     <win-tool-bar-command priority="4" label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
     <win-app-bar-content priority="3" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
     <win-tool-bar-command priority="3" on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
@@ -100,7 +100,7 @@
     <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
     <win-app-bar-content priority="2" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
     <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>

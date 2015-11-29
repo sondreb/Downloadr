@@ -1,16 +1,17 @@
 ﻿'use strict';
 // @ngInject
-
 var appSettings = require('./app.constants');
 var angular = require('angular');
 var $ = require('jquery');
 var Mousetrap = require('mousetrap');
+var flexImages = require('./lib.flex-images.js');
 
 // Require the dependencies that does not support returning name from the require.
 require('angular-local-storage');
 require('winjs');
 require('angular-winjs');
 require('angular-busy');
+require('./app.errors');
 
 // @ngInject
 var app = angular.module(appSettings.appName, [
@@ -41,6 +42,7 @@ app.value('cgBusyDefaults', {
     message: 'Loading...',
     templateUrl: 'views/core/templates/angular-busy.html',
     delay: 0,
+    backdrop: false,
     minDuration: 500
 });
 app.config(require('./app.config'));

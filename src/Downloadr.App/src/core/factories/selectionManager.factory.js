@@ -3,7 +3,7 @@
 var _ = require('underscore');
 
 // @ngInject
-function downloadManager($rootScope, userSettings) {
+function selectionManager($rootScope, userSettings) {
 
     // This is the complete collection of items to be downloaded, including photos, albums and galleries.
     var items = [];
@@ -85,4 +85,4 @@ function downloadManager($rootScope, userSettings) {
 
 };
 
-module.exports = downloadManager;
+module.exports = selectionManager;
