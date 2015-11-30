@@ -123,7 +123,7 @@
 
             </win-split-view-pane>
 
-            <win-split-view-content id="splitViewContentElement" ng-class="app.noflow ? 'noflow' : ''">
+            <win-split-view-content id="splitViewContentElement" ng-class="{'noflow': app.noflow}">
                 <ui-view id="uiViewElement"></ui-view>
             </win-split-view-content>
         </win-split-view>

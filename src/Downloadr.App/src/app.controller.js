@@ -22,7 +22,7 @@ function AppController($scope, $rootScope, $window, $state, $timeout, logger, us
     $scope.state = state;
     $scope.searchText = '';
     $scope.flickr = flickr;
-    $scope.isMenuOpen = false;
+    $scope.isMenuOpen = true;
     $scope.closedDisplayMode = 'inline';  // inline/none
     $scope.openedDisplayMode = 'inline'; // inline/overlay
 
