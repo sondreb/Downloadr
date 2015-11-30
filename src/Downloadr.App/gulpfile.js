@@ -55,6 +55,7 @@ var paths = {
 
 gulp.task('default', function (callback) {
     $.runSequence('build', 'watch', 'serve', callback);
+    //$.runSequence('build', 'watch', callback);
 });
 
 gulp.task('watch', ['watch:files', 'watch:views', 'watch:lib', 'watch:app']);

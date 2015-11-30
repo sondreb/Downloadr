@@ -103,6 +103,11 @@ function FolderController($scope, $rootScope, selectionManager, $state, $timeout
         });
     };
 
+    // Check if user have previously selected a target entry.
+    if (state.targetEntry != null) {
+        $scope.path = state.targetPath;
+    }
+
     return $scope;
 };
 

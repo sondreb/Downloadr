@@ -13,6 +13,8 @@ function AppController($scope, $rootScope, $window, $state, $timeout, logger, us
     //console.log('Navigator:');
     //console.log(navigator.onLine);
 
+    $scope.$state = $state;
+
     $scope.userSettings = userSettings;
     $scope.splitViewElement = document.getElementById("splitView");
     $scope.authenticated = false;

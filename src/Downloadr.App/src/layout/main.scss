@@ -214,3 +214,14 @@ margin-top-20 {
 .content-padding {
     margin: 10px 24px 10px 24px !important;
 }
+
+.active {
+    border-left: 4px solid $menu-highlight;
+    box-sizing: border-box;
+}
+
+.active > div > div {
+    padding-left: 12px;
+        color: $menu-highlight !important;
+
+}

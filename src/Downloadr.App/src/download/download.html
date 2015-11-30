@@ -7,30 +7,28 @@
 
             <div class="content middle">
 
-                <h2 class="win-h2" ng-hide="completed"><i class="fa fa-file-photo-o"></i> Downloaded {{current}} of {{count}}</h2>
+                <h2 class="win-h2" ng-hide="download.completed"><i class="fa fa-file-photo-o"></i> Downloaded {{download.current}} of {{download.count}}<span ng-show="download.skipped > 0">, skipped {{download.skipped}}.</span></h2>
 
-                <h2 class="win-h2" ng-show="completed">
+                <h2 class="win-h2" ng-show="download.completed">
 
-                    <span ng-hide="skipped > 0">
-                        <i class="fa fa-photo"></i> Downloaded {{count}} photos successfully.
+                    <span ng-hide="download.skipped > 0">
+                        <i class="fa fa-photo"></i> Downloaded {{download.count}} photos successfully.
                     </span>
 
-                    <span ng-show="skipped > 0">
-                        <i class="fa fa-photo"></i> Downloaded {{count - skipped}} photos successfully and skipped {{skipped}} photos <br>due to license or permission restriction.
+                    <span ng-show="download.skipped > 0">
+                        <i class="fa fa-photo"></i> Downloaded {{download.count - download.skipped}} photos successfully and skipped {{download.skipped}} photos <br>due to license or permission restriction.
                     </span>
 
                 </h2>
 
                 <br>
-                <span ng-hide="completed">
-
+                <span ng-hide="download.completed">
+                    <button ng-click="download.pause()" class='win-button' ng-hide="download.paused">Pause</button>
+                    <button ng-click="download.resume()" class='win-button' ng-show="download.paused">Resume</button>
+                    <button ng-click="download.cancel()" class='win-button'>Cancel</button>
                 </span>
 
-                <button ng-click="pause()" class='win-button' ng-hide="paused">Pause</button>
-                <button ng-click="resume()" class='win-button' ng-show="paused">Resume</button>
-                <button ng-click="cancel()" class='win-button'>Cancel</button>
-
-                <button  ng-show="completed" ng-click="goHome()" class='win-button'>Search again</button>
+                <button ng-show="download.completed" ng-click="download.goHome()" class='win-button'>Search again</button>
 
             </div>
 
