@@ -1,15 +1,15 @@
-﻿@import 'layout/variables.scss';
-@import 'layout/frame.scss';
-@import 'layout/main.scss';
-@import 'layout/animations.scss';
-@import 'layout/winjs.scss';
-@import 'layout/icons.scss';
-@import 'layout/scrollbar.scss';
+﻿@import 'layout/variables';
+@import 'layout/frame';
+@import 'layout/main';
+@import 'layout/animations';
+@import 'layout/winjs';
+@import 'layout/icons';
+@import 'layout/scrollbar';
 
-@import 'auth/auth.scss';
-@import 'profile/profile.scss';
-@import 'favorites/favorites.scss';
-@import 'folder/folder.scss';
+@import 'auth/auth';
+@import 'profile/profile';
+@import 'favorites/favorites';
+@import 'folder/folder';
 
-@import 'core/templates/gallery.scss';
-@import 'core/templates/angular-busy.scss';
+@import 'core/templates/gallery';
+@import 'core/templates/angular-busy';

@@ -8,6 +8,10 @@
     float: left;
 }
 
+button.win-splitviewpanetoggle:after {
+    font-size: 18px;
+}
+
 /* SplitView pane content style*/
 #app .header {
     white-space: nowrap;

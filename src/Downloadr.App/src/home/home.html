@@ -1,26 +1,32 @@
 ﻿<div class="home">
 
-    <h1 class="win-h1">Hi, what are you looking for?</h1>
+    <!--<div cg-busy="{promise:progress,message:'Downloading...'}"></div>
 
-    <div style="width: 350px; margin-left: auto; margin-right: auto; margin-top: 10px;">
-        
-        <win-auto-suggest-box search-history-disabled="true" enter="search()" query-text="home.searchText" class="searchInput" style="float: left; min-width: 250px; width: 250px;" placeholder-text="'Photos, people, or groups...'"></win-auto-suggest-box>
-        
-        <!--<win-app-bar-command icon="'find'" on-click="home.search()" style="float: left;"></win-app-bar-command>-->
-        <win-app-bar-command ng-disabled="!canSearch()" icon="'find'" ui-sref="search({text: home.searchText})" style="float: left;"></win-app-bar-command>
+    <button ng-click="clickButton()">TEST</button>-->
 
-        <!--<win-menu-command  on-click="home.search()" label="'command the first'"></win-menu-command>
-        <input type='button' on-click="home.search()" class='win-button win-button-primary' value='Download Archive Now!' />
+    <div class="search-container">
+        <h1 class="win-h1">Hi, what are you looking for?</h1>
 
-        <win-app-bar-command icon="'find'" on-click="search()" style="float: left;"></win-app-bar-command>
-        <win-menu-command on-click="search()" label="'command the first'"></win-menu-command>
-        <input type='button' on-click="search()" class='win-button win-button-primary' value='Download Archive Now!' />
+        <div class="search-box">
 
-        <win-app-bar-command icon="'find'" ng-click="home.search()" style="float: left;"></win-app-bar-command>
-        <win-menu-command ng-click="home.search()" label="'command the first'"></win-menu-command>
-        <input type='button' ng-click="home.search()" class='win-button win-button-primary' value='Download Archive Now!' />-->
+            <win-auto-suggest-box search-history-disabled="true" enter="search()" query-text="home.searchText" class="searchInput" style="float: left; min-width: 250px; width: 250px;" placeholder-text="'Photos, people, or groups...'"></win-auto-suggest-box>
+
+            <!--<win-app-bar-command icon="'find'" on-click="home.search()" style="float: left;"></win-app-bar-command>-->
+            <win-app-bar-command ng-disabled="!canSearch()" icon="'find'" ui-sref="search({text: home.searchText})" style="float: left;"></win-app-bar-command>
+
+            <!--<win-menu-command  on-click="home.search()" label="'command the first'"></win-menu-command>
+            <input type='button' on-click="home.search()" class='win-button win-button-primary' value='Download Archive Now!' />
+
+            <win-app-bar-command icon="'find'" on-click="search()" style="float: left;"></win-app-bar-command>
+            <win-menu-command on-click="search()" label="'command the first'"></win-menu-command>
+            <input type='button' on-click="search()" class='win-button win-button-primary' value='Download Archive Now!' />
+
+            <win-app-bar-command icon="'find'" ng-click="home.search()" style="float: left;"></win-app-bar-command>
+            <win-menu-command ng-click="home.search()" label="'command the first'"></win-menu-command>
+            <input type='button' ng-click="home.search()" class='win-button win-button-primary' value='Download Archive Now!' />-->
 
 
+        </div>
     </div>
 
 </div>

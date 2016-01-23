@@ -1,6 +1,6 @@
 {
   "name": "Downloadr.App",
-  "version": "3.0.105",
+  "version": "3.1.106",
   "description": "Flickr Downloadr App",
   "author": {
     "name": "Sondre Bjellås",
@@ -15,7 +15,7 @@
   "dependencies": {
     "angular": "1.4.7",
     "angular-animate": "1.4.7",
-    "angular-busy": "4.1.0",
+    "angular-busy": "http://github.com/cgross/angular-busy/tarball/master",
     "angular-local-storage": "0.2.2",
     "angular-ui-router": "0.2.15",
     "angular-winjs": "4.4.0",

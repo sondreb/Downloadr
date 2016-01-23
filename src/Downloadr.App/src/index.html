@@ -103,25 +103,27 @@
 
                 <win-split-view-command on-invoked="app.openMenu()" ng-hide="app.isMenuOpen" label="'Search'" icon="'find'"></win-split-view-command>
                 <win-auto-suggest-box search-history-disabled="true" enter="app.search()" ng-show="app.isMenuOpen" query-text="app.searchText" style="min-width: 188px !important; padding: 6px; height: 36px; min-height: 36px !important; width: 188px !important;" placeholder-text="'Search...'"></win-auto-suggest-box>
+
                 <hr />
 
                 <div class="nav-commands nav-middle">
-                    <win-split-view-command label="'Home'" icon="'home'" ui-sref="home"></win-split-view-command>
-                    <win-split-view-command label="'About'" icon="'help'" ui-sref="about"></win-split-view-command>
+                    <win-split-view-command label="'Home'" icon="'home'" ui-sref="home" ng-class="{active: $state.includes('home')}"></win-split-view-command>
+                    <win-split-view-command label="'About'" icon="'help'" ui-sref="about" ng-class="{active: $state.includes('about')}"></win-split-view-command>
                     <!--<win-split-view-command label="'Recent Photos'" icon="'favorite'" ui-sref="settings"></win-split-view-command>-->
-                    <win-split-view-command label="'Apollo Archive'" icon="'favorite'" ui-sref="favorites/apollo"></win-split-view-command>
+                    <win-split-view-command label="'Apollo Archive'" icon="'favorite'" ui-sref="favorites/apollo" ng-class="{active: $state.includes('favorites/apollo')}"></win-split-view-command>
+                    <win-split-view-command label="'Downloads'" icon="'download'" ui-sref="download" ng-class="{active: $state.includes('download')}"></win-split-view-command>
                 </div>
 
                 <div class="nav-commands nav-bottom">
                     <hr />
-                    <win-split-view-command ng-hide="app.authenticated" label="'Login'" icon="'addfriend'" ui-sref="login"></win-split-view-command>
-                    <win-split-view-command ng-show="app.authenticated" label="app.flickr.state.userName" icon="'blank'" id="profileButton" ui-sref="profile({userId: flickr.state.userId})"></win-split-view-command>
-                    <win-split-view-command label="'Settings'" icon="'settings'" ui-sref="settings"></win-split-view-command>
+                    <win-split-view-command ng-hide="app.authenticated" label="'Login'" icon="'addfriend'" ui-sref="login" ng-class="{active: $state.includes('login')}"></win-split-view-command>
+                    <win-split-view-command ng-show="app.authenticated" label="app.flickr.state.userName" icon="'blank'" id="profileButton" ui-sref="profile({userId: flickr.state.userId})" ng-class="{active: $state.includes('profile')}"></win-split-view-command>
+                    <win-split-view-command label="'Settings'" icon="'settings'" ui-sref="settings" ng-class="{active: $state.includes('settings')}"></win-split-view-command>
                 </div>
 
             </win-split-view-pane>
 
-            <win-split-view-content id="splitViewContentElement" ng-class="app.noflow ? 'noflow' : ''">
+            <win-split-view-content id="splitViewContentElement" ng-class="{'noflow': app.noflow}">
                 <ui-view id="uiViewElement"></ui-view>
             </win-split-view-content>
         </win-split-view>

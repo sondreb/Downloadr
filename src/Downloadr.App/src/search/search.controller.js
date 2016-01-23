@@ -1,6 +1,6 @@
 ﻿'use strict';
 // @ngInject
-function SearchController($scope, $rootScope, flickr, $state, state, $stateParams, userSettings, logger, downloadManager) {
+function SearchController($scope, $rootScope, flickr, $state, state, $stateParams, userSettings, logger, selectionManager) {
 
     var log = logger.Create('SearchController');
 
@@ -9,7 +9,7 @@ function SearchController($scope, $rootScope, flickr, $state, state, $stateParam
     $scope.flickr = flickr;
     $scope.state = state;
     $scope.profile = [];
-    $scope.downloadManager = downloadManager;
+    $scope.selectionManager = selectionManager;
     $scope.userSearchUrl = 'https://www.flickr.com/search/people/?username=' + $scope.text;
     $scope.text = $stateParams.text;
     $scope.selectedItem = null;
@@ -53,7 +53,7 @@ function SearchController($scope, $rootScope, flickr, $state, state, $stateParam
     $scope.clearSelection = function () {
         log.debug('Clear selection');
         // Clear any selected items from the manager.
-        downloadManager.clear();
+        selectionManager.clear();
     };
 
     $scope.searchPeople = function (text) {

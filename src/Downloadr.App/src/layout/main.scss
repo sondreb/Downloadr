@@ -2,8 +2,7 @@
 @import '../../res/fonts/icons.scss';
 @import 'variables.scss';
 
-html{
-    
+html {
     /* Removes touch delay for IE */
     -ms-touch-action: manipulation;
     touch-action: manipulation;
@@ -13,32 +12,27 @@ html{
     padding: 0 0 10px 0 !important;
 }
 
-body{
+body {
     font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Roboto, sans-serif;
     font-size: 1.0em !important;
     -webkit-text-size-adjust: 100%;
-
     /*-webkit-app-region: no-drag;
     -webkit-user-drag: none;
     -moz-user-select: none;
     -ms-user-select: none;
     pointer-events: none;
     user-select: none;*/
-
-
 }
 
-button{
+button {
     font-family: 'Segoe UI', 'Segoe WP', 'Helvetica Neue', Roboto, sans-serif;
 }
 
 hr {
     margin: 0px;
     padding: 0px;
-
     margin-left: 6px;
     margin-right: 6px;
-
     border: 0;
     height: 1px;
     background: $frame-pressed;
@@ -83,38 +77,44 @@ a:hover {
     margin-top: 6px;
 }
 
-
 .home {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
-
-    background: url('../images/wallpaper-1.jpg') no-repeat center center fixed; 
+    background: url('../images/wallpaper-1.jpg') no-repeat center center fixed;
+    background-image: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,0) 200px), url('../images/wallpaper-1.jpg');
     background-size: cover;
+}
 
+.home .search-container {
     text-align: center;
+    width: 90%;
+    margin-top: 16%;
+}
 
+.home .search-box {
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    clear: both;
 }
 
 .home h1 {
-
-    margin-top: 20%;
-
+    margin-left: 10%;
+    margin-right: 10%;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.82);
 }
 
-.app-banner
-{
-    
+.app-banner {
 }
 
-.app-icon
-{
+.app-icon {
     float: left;
     margin-right: 10px;
 }
 
-.clear
-{
+.clear {
     clear: both;
 }
 
@@ -213,4 +213,19 @@ margin-top-20 {
 
 .content-padding {
     margin: 10px 24px 10px 24px !important;
+}
+
+.active {
+    border-left: 4px solid $menu-highlight;
+    box-sizing: border-box;
+}
+
+.active > div > div {
+    padding-left: 12px;
+    color: $menu-highlight;
+}
+
+.active > div > div:active {
+    padding-left: 12px;
+    color: white;
 }

@@ -1,4 +1,13 @@
 <div id="gallery" class="thumbs grid">
+
+    <div class="flex-images">
+        <div class="item" ng-repeat="item in items" data-w="{{item.width_t}}" data-h="{{item.height_t}}">
+            <img image="{{item.url_t}}" title="{{item.name}}" alt="{{item.name}}">
+            <!--<img src="blank.gif" data-src="images/1.jpg">-->
+            <!--<div class="over">{{item.name}}</div>-->
+        </div>
+    </div>
+
 	<figure ng-repeat="item in items" class="effect-winston" ng-class="{selectedThumbnail: item.selected}" ng-click="select(item)" md-swipe-left="select(item)" md-swipe-right="select(item)">
 		<img image="{{item.url}}" class="thumb" title="{{item.name}}" alt="{{item.name}}">
 		<figcaption>

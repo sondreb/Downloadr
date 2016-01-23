@@ -1,10 +1,10 @@
 ﻿'use strict';
 // @ngInject
-function FolderController($scope, $rootScope, downloadManager, $state, $timeout, state, logger, userSettings) {
+function FolderController($scope, $rootScope, selectionManager, $state, $timeout, state, logger, userSettings) {
     var log = logger.Create('FolderController');
 
     $scope.userSettings = userSettings;
-    $scope.count = downloadManager.state.count;
+    $scope.count = selectionManager.state.count;
     $scope.path = '';
 
     $rootScope.$broadcast('status', {
@@ -102,6 +102,11 @@ function FolderController($scope, $rootScope, downloadManager, $state, $timeout,
             log.debug('DIALOG: ', entry);
         });
     };
+
+    // Check if user have previously selected a target entry.
+    if (state.targetEntry != null) {
+        $scope.path = state.targetPath;
+    }
 
     return $scope;
 };

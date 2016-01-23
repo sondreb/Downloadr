@@ -1,6 +1,6 @@
 ﻿'use strict';
 // @ngInject
-function Settings($rootScope, $timeout, storage, runtime, userSettings) {
+function settings($rootScope, $timeout, storage, runtime, userSettings) {
 
     $rootScope.$watch(function () { return userSettings; }, changed, true);
 
@@ -91,4 +91,4 @@ function Settings($rootScope, $timeout, storage, runtime, userSettings) {
 
 };
 
-module.exports = Settings;
+module.exports = settings;

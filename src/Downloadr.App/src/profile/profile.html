@@ -1,5 +1,33 @@
 ﻿<win-pivot id="tabProfile" win-control="winTabControl" on-selection-changed="tabChanged()" class="pivot-no-padding">
     <win-pivot-item header="'Photostream'">
+
+        <!--<div class="flex-images">
+            <div class="item" data-w="219" data-h="180">
+                <img src="blank.gif" data-src="images/1.jpg">
+                <div class="over">Caption 1</div>
+            </div>
+            <div class="item" data-w="279" data-h="180">
+                <img src="blank.gif" data-src="images/2.jpg">
+                <div class="over">Caption 2</div>
+            </div>
+            <div class="item" data-w="270" data-h="180">
+                <img src="blank.gif" data-src="images/3.jpg">
+                <div class="over">Caption 3</div>
+            </div>
+            <div class="item" data-w="270" data-h="180">
+                <img src="blank.gif" data-src="images/4.jpg">
+                <div class="over">Caption 4</div>
+            </div>
+            <div class="item" data-w="147" data-h="180">
+                <img src="blank.gif" data-src="images/5.jpg">
+                <div class="over">Caption 5</div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <br />-->
+
         <gallery query="queryPhotos" select-all-event="Event:SelectAll:Photostream"></gallery>
     </win-pivot-item>
     <win-pivot-item header="'Albums'">
@@ -52,7 +80,7 @@
     <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAll()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
     <win-app-bar-content priority="2" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
     <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear'" icon="'clear'"></win-tool-bar-command>
@@ -69,7 +97,7 @@
     <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAllAlbums()" icon="'selectall'"></win-tool-bar-command>
     <!--<win-tool-bar-command label="'This'" icon="'add'"></win-tool-bar-command>-->
     <win-app-bar-content priority="2" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <!--<win-tool-bar-command label="'Selected'" icon="'accept'"></win-tool-bar-command>-->
     <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
@@ -101,7 +129,7 @@
 <win-tool-bar class="toolbar" ng-show="selectedIndex === 2">
     <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAllFavorites()" icon="'selectall'"></win-tool-bar-command>
     <win-app-bar-content priority="2" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
     <win-tool-bar-separator></win-tool-bar-separator>
@@ -112,7 +140,7 @@
 <win-tool-bar class="toolbar" ng-show="selectedIndex === 3">
     <win-tool-bar-command priority="3" label="'Select All'" on-click="selectAllGalleries()" icon="'selectall'"></win-tool-bar-command>
     <win-app-bar-content priority="2" class="selection-count">
-        {{downloadManager.state.count}}
+        {{selectionManager.state.count}}
     </win-app-bar-content>
     <win-tool-bar-command priority="2" on-click="clearSelection()" label="'Clear selection'" icon="'clear'"></win-tool-bar-command>
     <win-tool-bar-separator></win-tool-bar-separator>
